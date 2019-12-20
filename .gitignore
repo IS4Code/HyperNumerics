@@ -1,0 +1,10 @@
+Test/
+Debug/
+Release/
+bin/
+obj/
+.vs/
+packages/
+Thumbs.db
+*.bat
+*.sh
