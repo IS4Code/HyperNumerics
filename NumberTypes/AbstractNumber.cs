@@ -158,6 +158,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public AbstractNumber Clone(in AbstractNumber num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in AbstractNumber num1, in AbstractNumber num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in AbstractNumber num1, in AbstractNumber num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public AbstractNumber Call(NullaryOperation operation)
             {
                 return new AbstractNumber(HyperMath.Operations.GetOperation(operation));
@@ -243,6 +258,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
+        public static implicit operator PrimitiveAbstractNumber(AbstractNumber num)
+        {
+            return new PrimitiveAbstractNumber(num.Operation);
+        }
+
         public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
         {
             return Operation.Invoke<TNumber, TPrimitive>();
@@ -296,11 +316,6 @@ namespace IS4.HyperNumerics.NumberTypes
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return Operation.ToString();
-        }
-
-        public static implicit operator PrimitiveAbstractNumber(AbstractNumber num)
-        {
-            return new PrimitiveAbstractNumber(num.Operation);
         }
 
         public static bool operator==(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
@@ -357,6 +372,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public bool IsFinite(in PrimitiveAbstractNumber num)
             {
                 return num.IsFinite;
+            }
+
+            public PrimitiveAbstractNumber Clone(in PrimitiveAbstractNumber num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
+            {
+                return num1.CompareTo(num2);
             }
 
             public PrimitiveAbstractNumber Call(NullaryOperation operation)
@@ -444,6 +474,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
+        public static implicit operator UnaryAbstractNumber(AbstractNumber num)
+        {
+            return new UnaryAbstractNumber(num.Operation.AsUnary());
+        }
+
         public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
             return Operation.Invoke<TNumber>(num);
@@ -504,11 +539,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static implicit operator UnaryAbstractNumber(AbstractNumber num)
-        {
-            return new UnaryAbstractNumber(num.Operation.AsUnary());
-        }
-
         public static bool operator==(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
             return a.Equals(in b);
@@ -565,6 +595,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public UnaryAbstractNumber Clone(in UnaryAbstractNumber num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public UnaryAbstractNumber Call(NullaryOperation operation)
             {
                 return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
@@ -616,6 +661,21 @@ namespace IS4.HyperNumerics.NumberTypes
         object ICloneable.Clone()
         {
             return Clone();
+        }
+
+        public static implicit operator PrimitiveUnaryAbstractNumber(AbstractNumber num)
+        {
+            return new PrimitiveUnaryAbstractNumber(num.Operation.AsUnary());
+        }
+
+        public static implicit operator PrimitiveUnaryAbstractNumber(UnaryAbstractNumber num)
+        {
+            return new PrimitiveUnaryAbstractNumber(num.Operation);
+        }
+
+        public static implicit operator PrimitiveUnaryAbstractNumber(PrimitiveAbstractNumber num)
+        {
+            return new PrimitiveUnaryAbstractNumber(num.Operation.AsUnary());
         }
 
         public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -671,21 +731,6 @@ namespace IS4.HyperNumerics.NumberTypes
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return Operation.ToString();
-        }
-
-        public static implicit operator PrimitiveUnaryAbstractNumber(AbstractNumber num)
-        {
-            return new PrimitiveUnaryAbstractNumber(num.Operation.AsUnary());
-        }
-
-        public static implicit operator PrimitiveUnaryAbstractNumber(UnaryAbstractNumber num)
-        {
-            return new PrimitiveUnaryAbstractNumber(num.Operation);
-        }
-
-        public static implicit operator PrimitiveUnaryAbstractNumber(PrimitiveAbstractNumber num)
-        {
-            return new PrimitiveUnaryAbstractNumber(num.Operation.AsUnary());
         }
 
         public static bool operator==(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
@@ -744,6 +789,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public PrimitiveUnaryAbstractNumber Clone(in PrimitiveUnaryAbstractNumber num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public PrimitiveUnaryAbstractNumber Call(NullaryOperation operation)
             {
                 return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
@@ -795,6 +855,16 @@ namespace IS4.HyperNumerics.NumberTypes
         object ICloneable.Clone()
         {
             return Clone();
+        }
+
+        public static implicit operator BinaryAbstractNumber(AbstractNumber num)
+        {
+            return new BinaryAbstractNumber(num.Operation.AsBinary());
+        }
+
+        public static implicit operator BinaryAbstractNumber(UnaryAbstractNumber num)
+        {
+            return new BinaryAbstractNumber(num.Operation.AsBinary());
         }
 
         public TNumber Invoke<TNumber>(in TNumber numArg1, in TNumber numArg2) where TNumber : struct, INumber<TNumber>
@@ -857,11 +927,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static implicit operator BinaryAbstractNumber(AbstractNumber num)
-        {
-            return new BinaryAbstractNumber(num.Operation.AsBinary());
-        }
-
         public static bool operator==(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
             return a.Equals(in b);
@@ -918,6 +983,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public BinaryAbstractNumber Clone(in BinaryAbstractNumber num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public BinaryAbstractNumber Call(NullaryOperation operation)
             {
                 return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
@@ -969,6 +1049,31 @@ namespace IS4.HyperNumerics.NumberTypes
         object ICloneable.Clone()
         {
             return Clone();
+        }
+
+        public static implicit operator PrimitiveBinaryAbstractNumber(AbstractNumber num)
+        {
+            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
+        }
+
+        public static implicit operator PrimitiveBinaryAbstractNumber(UnaryAbstractNumber num)
+        {
+            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
+        }
+
+        public static implicit operator PrimitiveBinaryAbstractNumber(BinaryAbstractNumber num)
+        {
+            return new PrimitiveBinaryAbstractNumber(num.Operation);
+        }
+
+        public static implicit operator PrimitiveBinaryAbstractNumber(PrimitiveUnaryAbstractNumber num)
+        {
+            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
+        }
+
+        public static implicit operator PrimitiveBinaryAbstractNumber(PrimitiveAbstractNumber num)
+        {
+            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
         }
 
         public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg1, in TNumber numArg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -1026,21 +1131,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static implicit operator PrimitiveBinaryAbstractNumber(AbstractNumber num)
-        {
-            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
-        }
-
-        public static implicit operator PrimitiveBinaryAbstractNumber(BinaryAbstractNumber num)
-        {
-            return new PrimitiveBinaryAbstractNumber(num.Operation);
-        }
-
-        public static implicit operator PrimitiveBinaryAbstractNumber(PrimitiveAbstractNumber num)
-        {
-            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
-        }
-
         public static bool operator==(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
         {
             return a.Equals(in b);
@@ -1095,6 +1185,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public bool IsFinite(in PrimitiveBinaryAbstractNumber num)
             {
                 return num.IsFinite;
+            }
+
+            public PrimitiveBinaryAbstractNumber Clone(in PrimitiveBinaryAbstractNumber num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
+            {
+                return num1.CompareTo(num2);
             }
 
             public PrimitiveBinaryAbstractNumber Call(NullaryOperation operation)

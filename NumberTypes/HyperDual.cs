@@ -17,36 +17,45 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperDual<TInner> : IHyperNumber<HyperDual<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        public TInner First { get; }
-        public TInner Second { get; }
+        readonly TInner first;
+        readonly TInner second;
+
+        public TInner First => first;
+        public TInner Second => second;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => CanInv(First);
+        public bool IsInvertible => CanInv(first);
 
-        public bool IsFinite => IsFin(First);
+        public bool IsFinite => IsFin(first);
 
         public HyperDual(in TInner first)
         {
-            First = first;
-            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            this.first = first;
+            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperDual(in TInner first, in TInner second)
         {
-            First = first;
-            Second = second;
+            this.first = first;
+            this.second = second;
+        }
+
+        public HyperDual(in (TInner first, TInner second) tuple)
+        {
+            first = tuple.first;
+            second = tuple.second;
         }
 
         public void Deconstruct(out TInner first, out TInner second)
         {
-            first = First;
-            second = Second;
+            first = this.first;
+            second = this.second;
         }
 
         public HyperDual<TInner> Clone()
         {
-            return new HyperDual<TInner>(First.Clone(), Second.Clone());
+            return new HyperDual<TInner>(first.Clone(), second.Clone());
         }
 
         object ICloneable.Clone()
@@ -56,27 +65,27 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperDual<TInner> WithFirst(in TInner first)
         {
-            return new HyperDual<TInner>(first, Second);
+            return new HyperDual<TInner>(first, second);
         }
 
         public HyperDual<TInner> WithSecond(in TInner second)
         {
-            return new HyperDual<TInner>(First, second);
+            return new HyperDual<TInner>(first, second);
         }
 
-        public static implicit operator HyperDual<TInner>(in TInner first)
+        public static implicit operator HyperDual<TInner>(TInner first)
         {
             return new HyperDual<TInner>(first);
         }
 
-        public static implicit operator HyperDual<TInner>(in (TInner first, TInner second) tuple)
+        public static implicit operator HyperDual<TInner>((TInner first, TInner second) tuple)
         {
-            return new HyperDual<TInner>(tuple.first, tuple.second);
+            return new HyperDual<TInner>(tuple);
         }
 
-        public static implicit operator (TInner first, TInner second)(in HyperDual<TInner> value)
+        public static implicit operator (TInner first, TInner second)(HyperDual<TInner> value)
         {
-            return (value.First, value.Second);
+            return (value.first, value.second);
         }
 
         public HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> other)
@@ -84,17 +93,17 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperDual<TInner>(Add(First, other.First), Add(Second, other.Second));
+                    return new HyperDual<TInner>(Add(first, other.first), Add(second, other.second));
                 case BinaryOperation.Subtract:
-                    return new HyperDual<TInner>(Sub(First, other.First), Sub(Second, other.Second));
+                    return new HyperDual<TInner>(Sub(first, other.first), Sub(second, other.second));
                 case BinaryOperation.Multiply:
-                    return new HyperDual<TInner>(Mul(First, other.First), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                    return new HyperDual<TInner>(Mul(first, other.first), Add(Mul(first, other.second), Mul(second, other.first)));
                 case BinaryOperation.Divide:
-                    if(!CanInv(First) && !CanInv(other.First))
+                    if(!CanInv(first) && !CanInv(other.first))
                     {
-                        return new HyperDual<TInner>(Div(Second, other.Second));
+                        return new HyperDual<TInner>(Div(second, other.second));
                     }
-                    return new HyperDual<TInner>(Div(First, other.First), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), Pow2(other.First)));
+                    return new HyperDual<TInner>(Div(first, other.first), Div(Sub(Mul(second, other.first), Mul(first, other.second)), Pow2(other.first)));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -109,13 +118,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperDual<TInner>(Add(First, other), Second);
+                    return new HyperDual<TInner>(Add(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperDual<TInner>(Sub(First, other), Second);
+                    return new HyperDual<TInner>(Sub(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperDual<TInner>(Mul(First, other), Mul(Second, other));
+                    return new HyperDual<TInner>(Mul(first, other), Mul(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperDual<TInner>(Div(First, other), Div(Second, other));
+                    return new HyperDual<TInner>(Div(first, other), Div(second, other));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -130,37 +139,37 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case UnaryOperation.Negate:
-                    return new HyperDual<TInner>(Neg(First), Neg(Second));
+                    return new HyperDual<TInner>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
-                    return new HyperDual<TInner>(Inc(First), Second);
+                    return new HyperDual<TInner>(Inc(first), second);
                 case UnaryOperation.Decrement:
-                    return new HyperDual<TInner>(Dec(First), Second);
+                    return new HyperDual<TInner>(Dec(first), second);
                 case UnaryOperation.Inverse:
-                    return new HyperDual<TInner>(Inv(First), Div(Neg(Second), Pow2(First)));
+                    return new HyperDual<TInner>(Inv(first), Div(Neg(second), Pow2(first)));
                 case UnaryOperation.Conjugate:
-                    return new HyperDual<TInner>(First, Neg(Second));
+                    return new HyperDual<TInner>(first, Neg(second));
                 case UnaryOperation.Modulus:
-                    return Sqrt(Pow2(First));
+                    return Sqrt(Pow2(first));
                 case UnaryOperation.Double:
-                    return new HyperDual<TInner>(Mul2(First), Mul2(Second));
+                    return new HyperDual<TInner>(Mul2(first), Mul2(second));
                 case UnaryOperation.Half:
-                    return new HyperDual<TInner>(Div2(First), Div2(Second));
+                    return new HyperDual<TInner>(Div2(first), Div2(second));
                 case UnaryOperation.Square:
-                    return new HyperDual<TInner>(Pow2(First), Mul2(Mul(First, Second)));
+                    return new HyperDual<TInner>(Pow2(first), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
-                    var sqrt = Sqrt(First);
-                    return new HyperDual<TInner>(sqrt, Div(Second, Mul2(sqrt)));
+                    var sqrt = Sqrt(first);
+                    return new HyperDual<TInner>(sqrt, Div(second, Mul2(sqrt)));
                 case UnaryOperation.Exponentiate:
-                    var exp = Exp(First);
-                    return new HyperDual<TInner>(exp, Mul(exp, Second));
+                    var exp = Exp(first);
+                    return new HyperDual<TInner>(exp, Mul(exp, second));
                 case UnaryOperation.Logarithm:
-                    return new HyperDual<TInner>(Log(First), Div(Second, First));
+                    return new HyperDual<TInner>(Log(first), Div(second, first));
                 case UnaryOperation.Sine:
-                    return new HyperDual<TInner>(Sin(First), Mul(Cos(First), Second));
+                    return new HyperDual<TInner>(Sin(first), Mul(Cos(first), second));
                 case UnaryOperation.Cosine:
-                    return new HyperDual<TInner>(Cos(First), Mul(Neg(Sin(First)), Second));
+                    return new HyperDual<TInner>(Cos(first), Mul(Neg(Sin(first)), second));
                 case UnaryOperation.Tangent:
-                    return new HyperDual<TInner>(Tan(First), Div(Second, Pow2(Cos(First))));
+                    return new HyperDual<TInner>(Tan(first), Div(second, Pow2(Cos(first))));
                 case UnaryOperation.HyperbolicSine:
                     return SinhDefault(this);
                 case UnaryOperation.HyperbolicCosine:
@@ -168,11 +177,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 case UnaryOperation.HyperbolicTangent:
                     return TanhDefault(this);
                 case UnaryOperation.ArcSine:
-                    return new HyperDual<TInner>(Asin(First), Div(Second, Sqrt(Inc(Neg(Pow2(First))))));
+                    return new HyperDual<TInner>(Asin(first), Div(second, Sqrt(Inc(Neg(Pow2(first))))));
                 case UnaryOperation.ArcCosine:
-                    return new HyperDual<TInner>(Acos(First), Neg(Div(Second, Sqrt(Inc(Neg(Pow2(First)))))));
+                    return new HyperDual<TInner>(Acos(first), Neg(Div(second, Sqrt(Inc(Neg(Pow2(first)))))));
                 case UnaryOperation.ArcTangent:
-                    return new HyperDual<TInner>(Atan(First), Div(Second, Inc(Pow2(First))));
+                    return new HyperDual<TInner>(Atan(first), Div(second, Inc(Pow2(first))));
                 default:
                     throw new NotSupportedException();
             }
@@ -180,22 +189,22 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperDual<TInner> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDual<TInner>(HyperMath.Call(operation, First, other), Second);
+            return new HyperDual<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
         public HyperDual<TInner> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDual<TInner>(First, HyperMath.Call(operation, Second, other));
+            return new HyperDual<TInner>(first, HyperMath.Call(operation, second, other));
         }
 
         public HyperDual<TInner> FirstCall(UnaryOperation operation)
         {
-            return new HyperDual<TInner>(HyperMath.Call(operation, First), Second);
+            return new HyperDual<TInner>(HyperMath.Call(operation, first), second);
         }
 
         public HyperDual<TInner> SecondCall(UnaryOperation operation)
         {
-            return new HyperDual<TInner>(First, HyperMath.Call(operation, Second));
+            return new HyperDual<TInner>(first, HyperMath.Call(operation, second));
         }
 
         public override bool Equals(object other)
@@ -210,7 +219,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in HyperDual<TInner> other)
         {
-            return First.Equals(other.First) && Second.Equals(other.Second);
+            return first.Equals(other.first) && second.Equals(other.second);
         }
 
         public int CompareTo(HyperDual<TInner> other)
@@ -220,23 +229,23 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public int CompareTo(in HyperDual<TInner> other)
         {
-            int value = First.CompareTo(other.First);
-            return value != 0 ? value : Second.CompareTo(other.Second);
+            int value = first.CompareTo(other.first);
+            return value != 0 ? value : second.CompareTo(other.second);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() * 17 + Second.GetHashCode();
+            return first.GetHashCode() * 17 + second.GetHashCode();
         }
 
         public override string ToString()
         {
-            return "Dual(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "Dual(" + first.ToString() + ", " + second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "Dual(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
+            return "Dual(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperDual<TInner> a, in HyperDual<TInner> b)
@@ -295,6 +304,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public HyperDual<TInner> Clone(in HyperDual<TInner> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public HyperDual<TInner> Call(NullaryOperation operation)
             {
                 switch(operation)
@@ -345,36 +369,45 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperDual<TInner, TPrimitive> : IHyperNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        public TInner First { get; }
-        public TInner Second { get; }
+        readonly TInner first;
+        readonly TInner second;
+
+        public TInner First => first;
+        public TInner Second => second;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => CanInv(First);
+        public bool IsInvertible => CanInv(first);
 
-        public bool IsFinite => IsFin(First);
+        public bool IsFinite => IsFin(first);
 
         public HyperDual(in TInner first)
         {
-            First = first;
-            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            this.first = first;
+            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperDual(in TInner first, in TInner second)
         {
-            First = first;
-            Second = second;
+            this.first = first;
+            this.second = second;
+        }
+
+        public HyperDual(in (TInner first, TInner second) tuple)
+        {
+            first = tuple.first;
+            second = tuple.second;
         }
 
         public void Deconstruct(out TInner first, out TInner second)
         {
-            first = First;
-            second = Second;
+            first = this.first;
+            second = this.second;
         }
 
         public HyperDual<TInner, TPrimitive> Clone()
         {
-            return new HyperDual<TInner, TPrimitive>(First.Clone(), Second.Clone());
+            return new HyperDual<TInner, TPrimitive>(first.Clone(), second.Clone());
         }
 
         object ICloneable.Clone()
@@ -384,27 +417,27 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperDual<TInner, TPrimitive> WithFirst(in TInner first)
         {
-            return new HyperDual<TInner, TPrimitive>(first, Second);
+            return new HyperDual<TInner, TPrimitive>(first, second);
         }
 
         public HyperDual<TInner, TPrimitive> WithSecond(in TInner second)
         {
-            return new HyperDual<TInner, TPrimitive>(First, second);
+            return new HyperDual<TInner, TPrimitive>(first, second);
         }
 
-        public static implicit operator HyperDual<TInner, TPrimitive>(in TInner first)
+        public static implicit operator HyperDual<TInner, TPrimitive>(TInner first)
         {
             return new HyperDual<TInner, TPrimitive>(first);
         }
 
-        public static implicit operator HyperDual<TInner, TPrimitive>(in (TInner first, TInner second) tuple)
+        public static implicit operator HyperDual<TInner, TPrimitive>((TInner first, TInner second) tuple)
         {
-            return new HyperDual<TInner, TPrimitive>(tuple.first, tuple.second);
+            return new HyperDual<TInner, TPrimitive>(tuple);
         }
 
-        public static implicit operator (TInner first, TInner second) (in HyperDual<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second)(HyperDual<TInner, TPrimitive> value)
         {
-            return (value.First, value.Second);
+            return (value.first, value.second);
         }
         
         public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDual<TInner, TPrimitive> other)
@@ -412,17 +445,17 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperDual<TInner, TPrimitive>(Add(First, other.First), Add(Second, other.Second));
+                    return new HyperDual<TInner, TPrimitive>(Add(first, other.first), Add(second, other.second));
                 case BinaryOperation.Subtract:
-                    return new HyperDual<TInner, TPrimitive>(Sub(First, other.First), Sub(Second, other.Second));
+                    return new HyperDual<TInner, TPrimitive>(Sub(first, other.first), Sub(second, other.second));
                 case BinaryOperation.Multiply:
-                    return new HyperDual<TInner, TPrimitive>(Mul(First, other.First), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                    return new HyperDual<TInner, TPrimitive>(Mul(first, other.first), Add(Mul(first, other.second), Mul(second, other.first)));
                 case BinaryOperation.Divide:
-                    if(!CanInv(First) && !CanInv(other.First))
+                    if(!CanInv(first) && !CanInv(other.first))
                     {
-                        return new HyperDual<TInner, TPrimitive>(Div(Second, other.Second));
+                        return new HyperDual<TInner, TPrimitive>(Div(second, other.second));
                     }
-                    return new HyperDual<TInner, TPrimitive>(Div(First, other.First), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), Pow2(other.First)));
+                    return new HyperDual<TInner, TPrimitive>(Div(first, other.first), Div(Sub(Mul(second, other.first), Mul(first, other.second)), Pow2(other.first)));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -437,13 +470,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperDual<TInner, TPrimitive>(Add(First, other), Second);
+                    return new HyperDual<TInner, TPrimitive>(Add(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperDual<TInner, TPrimitive>(Sub(First, other), Second);
+                    return new HyperDual<TInner, TPrimitive>(Sub(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperDual<TInner, TPrimitive>(Mul(First, other), Mul(Second, other));
+                    return new HyperDual<TInner, TPrimitive>(Mul(first, other), Mul(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperDual<TInner, TPrimitive>(Div(First, other), Div(Second, other));
+                    return new HyperDual<TInner, TPrimitive>(Div(first, other), Div(second, other));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -458,16 +491,16 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperDual<TInner, TPrimitive>(AddVal(First, other), Second);
+                    return new HyperDual<TInner, TPrimitive>(AddVal(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperDual<TInner, TPrimitive>(SubVal(First, other), Second);
+                    return new HyperDual<TInner, TPrimitive>(SubVal(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperDual<TInner, TPrimitive>(MulVal(First, other), MulVal(Second, other));
+                    return new HyperDual<TInner, TPrimitive>(MulVal(first, other), MulVal(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperDual<TInner, TPrimitive>(DivVal(First, other), DivVal(Second, other));
+                    return new HyperDual<TInner, TPrimitive>(DivVal(first, other), DivVal(second, other));
                 case BinaryOperation.Power:
                     var exp = Std<TInner, TPrimitive>(Dec(Create<TInner, TPrimitive>(other)));
-                    return new HyperDual<TInner, TPrimitive>(PowVal(First, other), Mul(MulVal(PowVal(First, exp), other), Second));
+                    return new HyperDual<TInner, TPrimitive>(PowVal(first, other), Mul(MulVal(PowVal(first, exp), other), second));
                 case BinaryOperation.Atan2:
                     return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
                 default:
@@ -480,37 +513,37 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case UnaryOperation.Negate:
-                    return new HyperDual<TInner, TPrimitive>(Neg(First), Neg(Second));
+                    return new HyperDual<TInner, TPrimitive>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
-                    return new HyperDual<TInner, TPrimitive>(Inc(First), Second);
+                    return new HyperDual<TInner, TPrimitive>(Inc(first), second);
                 case UnaryOperation.Decrement:
-                    return new HyperDual<TInner, TPrimitive>(Dec(First), Second);
+                    return new HyperDual<TInner, TPrimitive>(Dec(first), second);
                 case UnaryOperation.Inverse:
-                    return new HyperDual<TInner, TPrimitive>(Inv(First), Div(Neg(Second), Pow2(First)));
+                    return new HyperDual<TInner, TPrimitive>(Inv(first), Div(Neg(second), Pow2(first)));
                 case UnaryOperation.Conjugate:
-                    return new HyperDual<TInner, TPrimitive>(First, Neg(Second));
+                    return new HyperDual<TInner, TPrimitive>(first, Neg(second));
                 case UnaryOperation.Modulus:
-                    return Sqrt(Pow2(First));
+                    return Sqrt(Pow2(first));
                 case UnaryOperation.Double:
-                    return new HyperDual<TInner, TPrimitive>(Mul2(First), Mul2(Second));
+                    return new HyperDual<TInner, TPrimitive>(Mul2(first), Mul2(second));
                 case UnaryOperation.Half:
-                    return new HyperDual<TInner, TPrimitive>(Div2(First), Div2(Second));
+                    return new HyperDual<TInner, TPrimitive>(Div2(first), Div2(second));
                 case UnaryOperation.Square:
-                    return new HyperDual<TInner, TPrimitive>(Pow2(First), Mul2(Mul(First, Second)));
+                    return new HyperDual<TInner, TPrimitive>(Pow2(first), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
-                    var sqrt = Sqrt(First);
-                    return new HyperDual<TInner, TPrimitive>(sqrt, Div(Second, Mul2(sqrt)));
+                    var sqrt = Sqrt(first);
+                    return new HyperDual<TInner, TPrimitive>(sqrt, Div(second, Mul2(sqrt)));
                 case UnaryOperation.Exponentiate:
-                    var exp = Exp(First);
-                    return new HyperDual<TInner, TPrimitive>(exp, Mul(exp, Second));
+                    var exp = Exp(first);
+                    return new HyperDual<TInner, TPrimitive>(exp, Mul(exp, second));
                 case UnaryOperation.Logarithm:
-                    return new HyperDual<TInner, TPrimitive>(Log(First), Div(Second, First));
+                    return new HyperDual<TInner, TPrimitive>(Log(first), Div(second, first));
                 case UnaryOperation.Sine:
-                    return new HyperDual<TInner, TPrimitive>(Sin(First), Mul(Cos(First), Second));
+                    return new HyperDual<TInner, TPrimitive>(Sin(first), Mul(Cos(first), second));
                 case UnaryOperation.Cosine:
-                    return new HyperDual<TInner, TPrimitive>(Cos(First), Mul(Neg(Sin(First)), Second));
+                    return new HyperDual<TInner, TPrimitive>(Cos(first), Mul(Neg(Sin(first)), second));
                 case UnaryOperation.Tangent:
-                    return new HyperDual<TInner, TPrimitive>(Tan(First), Div(Second, Pow2(Cos(First))));
+                    return new HyperDual<TInner, TPrimitive>(Tan(first), Div(second, Pow2(Cos(first))));
                 case UnaryOperation.HyperbolicSine:
                     return SinhDefault(this);
                 case UnaryOperation.HyperbolicCosine:
@@ -518,11 +551,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 case UnaryOperation.HyperbolicTangent:
                     return TanhDefault(this);
                 case UnaryOperation.ArcSine:
-                    return new HyperDual<TInner, TPrimitive>(Asin(First), Div(Second, Sqrt(Inc(Neg(Pow2(First))))));
+                    return new HyperDual<TInner, TPrimitive>(Asin(first), Div(second, Sqrt(Inc(Neg(Pow2(first))))));
                 case UnaryOperation.ArcCosine:
-                    return new HyperDual<TInner, TPrimitive>(Acos(First), Neg(Div(Second, Sqrt(Inc(Neg(Pow2(First)))))));
+                    return new HyperDual<TInner, TPrimitive>(Acos(first), Neg(Div(second, Sqrt(Inc(Neg(Pow2(first)))))));
                 case UnaryOperation.ArcTangent:
-                    return new HyperDual<TInner, TPrimitive>(Atan(First), Div(Second, Inc(Pow2(First))));
+                    return new HyperDual<TInner, TPrimitive>(Atan(first), Div(second, Inc(Pow2(first))));
                 default:
                     throw new NotSupportedException();
             }
@@ -533,9 +566,9 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case PrimitiveUnaryOperation.AbsoluteValue:
-                    return Abs<TInner, TPrimitive>(First);
+                    return Abs<TInner, TPrimitive>(first);
                 case PrimitiveUnaryOperation.RealValue:
-                    return Std<TInner, TPrimitive>(First);
+                    return Std<TInner, TPrimitive>(first);
                 default:
                     throw new NotSupportedException();
             }
@@ -543,32 +576,32 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperDual<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDual<TInner, TPrimitive>(HyperMath.Call(operation, First, other), Second);
+            return new HyperDual<TInner, TPrimitive>(HyperMath.Call(operation, first, other), second);
         }
 
         public HyperDual<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDual<TInner, TPrimitive>(First, HyperMath.Call(operation, Second, other));
+            return new HyperDual<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
         }
 
         public HyperDual<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperDual<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, First, other), Second);
+            return new HyperDual<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
         public HyperDual<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperDual<TInner, TPrimitive>(First, HyperMath.CallPrimitive(operation, Second, other));
+            return new HyperDual<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
         }
 
         public HyperDual<TInner, TPrimitive> FirstCall(UnaryOperation operation)
         {
-            return new HyperDual<TInner, TPrimitive>(HyperMath.Call(operation, First), Second);
+            return new HyperDual<TInner, TPrimitive>(HyperMath.Call(operation, first), second);
         }
 
         public HyperDual<TInner, TPrimitive> SecondCall(UnaryOperation operation)
         {
-            return new HyperDual<TInner, TPrimitive>(First, HyperMath.Call(operation, Second));
+            return new HyperDual<TInner, TPrimitive>(first, HyperMath.Call(operation, second));
         }
 
         public override bool Equals(object other)
@@ -583,7 +616,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in HyperDual<TInner, TPrimitive> other)
         {
-            return First.Equals(other.First) && Second.Equals(other.Second);
+            return first.Equals(other.first) && second.Equals(other.second);
         }
 
         public int CompareTo(HyperDual<TInner, TPrimitive> other)
@@ -593,23 +626,23 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public int CompareTo(in HyperDual<TInner, TPrimitive> other)
         {
-            int value = First.CompareTo(other.First);
-            return value != 0 ? value : Second.CompareTo(other.Second);
+            int value = first.CompareTo(other.first);
+            return value != 0 ? value : second.CompareTo(other.second);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() * 17 + Second.GetHashCode();
+            return first.GetHashCode() * 17 + second.GetHashCode();
         }
 
         public override string ToString()
         {
-            return "Dual(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "Dual(" + first.ToString() + ", " + second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "Dual(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
+            return "Dual(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperDual<TInner, TPrimitive> a, in HyperDual<TInner, TPrimitive> b)
@@ -673,6 +706,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public HyperDual<TInner, TPrimitive> Clone(in HyperDual<TInner, TPrimitive> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in HyperDual<TInner, TPrimitive> num1, in HyperDual<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in HyperDual<TInner, TPrimitive> num1, in HyperDual<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public HyperDual<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
@@ -724,33 +772,33 @@ namespace IS4.HyperNumerics.NumberTypes
             return value[index];
         }
 
-        int ICollection<TPrimitive>.Count => GetCollectionCount(First) + GetCollectionCount(Second);
+        int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
         bool ICollection<TPrimitive>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(First) + GetReadOnlyCollectionCount(Second);
+        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
 
         TPrimitive IReadOnlyList<TPrimitive>.this[int index]
         {
             get{
-                int offset = GetReadOnlyCollectionCount(First);
+                int offset = GetReadOnlyCollectionCount(first);
                 if(index >= offset)
                 {
-                    return GetReadOnlyListItem(Second, index - offset);
+                    return GetReadOnlyListItem(second, index - offset);
                 }
-                return GetReadOnlyListItem(First, index);
+                return GetReadOnlyListItem(first, index);
             }
         }
 
         TPrimitive IList<TPrimitive>.this[int index]
         {
             get{
-                int offset = GetCollectionCount(First);
+                int offset = GetCollectionCount(first);
                 if(index >= offset)
                 {
-                    return GetListItem(Second, index - offset);
+                    return GetListItem(second, index - offset);
                 }
-                return GetListItem(First, index);
+                return GetListItem(first, index);
             }
             set{
                 throw new NotSupportedException();
@@ -759,11 +807,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int IList<TPrimitive>.IndexOf(TPrimitive item)
         {
-            int index = First.IndexOf(item);
+            int index = first.IndexOf(item);
             if(index == -1)
             {
-                int offset = GetCollectionCount(First);
-                return offset + Second.IndexOf(item);
+                int offset = GetCollectionCount(first);
+                return offset + second.IndexOf(item);
             }
             return index;
         }
@@ -790,14 +838,14 @@ namespace IS4.HyperNumerics.NumberTypes
 
         bool ICollection<TPrimitive>.Contains(TPrimitive item)
         {
-            return First.Contains(item) || Second.Contains(item);
+            return first.Contains(item) || second.Contains(item);
         }
 
         void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
         {
-            First.CopyTo(array, arrayIndex);
-            int offset = GetCollectionCount(First);
-            Second.CopyTo(array, offset + arrayIndex);
+            first.CopyTo(array, arrayIndex);
+            int offset = GetCollectionCount(first);
+            second.CopyTo(array, offset + arrayIndex);
         }
 
         bool ICollection<TPrimitive>.Remove(TPrimitive item)
@@ -807,11 +855,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
         {
-            foreach(var num in First)
+            foreach(var num in first)
             {
                 yield return num;
             }
-            foreach(var num in Second)
+            foreach(var num in second)
             {
                 yield return num;
             }
@@ -819,11 +867,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            foreach(var num in (IEnumerable)First)
+            foreach(var num in (IEnumerable)first)
             {
                 yield return num;
             }
-            foreach(var num in (IEnumerable)Second)
+            foreach(var num in (IEnumerable)second)
             {
                 yield return num;
             }

@@ -53,6 +53,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
+        public static implicit operator BoxedNumber<TInner>(TInner value)
+        {
+            return new BoxedNumber<TInner>(value);
+        }
+
+        public static implicit operator TInner(BoxedNumber<TInner> value)
+        {
+            return value.Reference;
+        }
+
         public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> other)
         {
             return Reference.Call(operation, other.Reference);
@@ -138,16 +148,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.ToString(format, formatProvider);
         }
 
-        public static implicit operator BoxedNumber<TInner>(in TInner value)
-        {
-            return new BoxedNumber<TInner>(value);
-        }
-
-        public static implicit operator TInner(BoxedNumber<TInner> value)
-        {
-            return value.Reference;
-        }
-
         public static bool operator==(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
         {
             return a.Equals(b);
@@ -209,6 +209,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public BoxedNumber<TInner> Clone(in BoxedNumber<TInner> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public BoxedNumber<TInner> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
@@ -262,9 +277,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => Reference.IsFinite;
 
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
         public BoxedNumber(in TInner value)
         {
@@ -285,6 +298,16 @@ namespace IS4.HyperNumerics.NumberTypes
         object ICloneable.Clone()
         {
             return Clone();
+        }
+
+        public static implicit operator BoxedNumber<TInner, TPrimitive>(TInner value)
+        {
+            return new BoxedNumber<TInner, TPrimitive>(value);
+        }
+
+        public static implicit operator TInner(BoxedNumber<TInner, TPrimitive> value)
+        {
+            return value.Reference;
         }
 
         public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> other)
@@ -387,16 +410,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.ToString(format, formatProvider);
         }
 
-        public static implicit operator BoxedNumber<TInner, TPrimitive>(in TInner value)
-        {
-            return new BoxedNumber<TInner, TPrimitive>(value);
-        }
-
-        public static implicit operator TInner(BoxedNumber<TInner, TPrimitive> value)
-        {
-            return value.Reference;
-        }
-
         public static bool operator==(BoxedNumber<TInner, TPrimitive> a, BoxedNumber<TInner, TPrimitive> b)
         {
             return a.Equals(b);
@@ -466,6 +479,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public bool IsFinite(in BoxedNumber<TInner, TPrimitive> num)
             {
                 return num.IsFinite;
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Clone(in BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in BoxedNumber<TInner, TPrimitive> num1, in BoxedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in BoxedNumber<TInner, TPrimitive> num1, in BoxedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(num2);
             }
 
             public BoxedNumber<TInner, TPrimitive> Call(NullaryOperation operation)

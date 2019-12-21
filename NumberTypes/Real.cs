@@ -323,6 +323,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public Real Clone(in Real num)
+            {
+                return num;
+            }
+
+            public bool Equals(in Real num1, in Real num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in Real num1, in Real num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public Real Call(NullaryOperation operation)
             {
                 switch(operation)

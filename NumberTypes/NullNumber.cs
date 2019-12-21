@@ -135,6 +135,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return true;
             }
 
+            public NullNumber Clone(in NullNumber num)
+            {
+                return default;
+            }
+
+            public bool Equals(in NullNumber num1, in NullNumber num2)
+            {
+                return true;
+            }
+
+            public int Compare(in NullNumber num1, in NullNumber num2)
+            {
+                return 0;
+            }
+
             public NullNumber Call(NullaryOperation operation)
             {
                 return default;
@@ -296,6 +311,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public bool IsFinite(in NullNumber<TPrimitive> num)
             {
                 return true;
+            }
+
+            public NullNumber<TPrimitive> Clone(in NullNumber<TPrimitive> num)
+            {
+                return default;
+            }
+
+            public bool Equals(in NullNumber<TPrimitive> num1, in NullNumber<TPrimitive> num2)
+            {
+                return true;
+            }
+
+            public int Compare(in NullNumber<TPrimitive> num1, in NullNumber<TPrimitive> num2)
+            {
+                return 0;
             }
 
             public NullNumber<TPrimitive> Call(NullaryOperation operation)

@@ -309,6 +309,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public ExtendedReal Clone(in ExtendedReal num)
+            {
+                return num;
+            }
+
+            public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public ExtendedReal Call(NullaryOperation operation)
             {
                 switch(operation)

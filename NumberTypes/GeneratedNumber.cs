@@ -11,7 +11,7 @@ namespace IS4.HyperNumerics.NumberTypes
     {
         public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
-        private readonly Func<TInner> generator;
+        readonly Func<TInner> generator;
 
         public Func<TInner> Generator => generator ?? Zero.Generator;
 
@@ -166,6 +166,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public GeneratedNumber<TInner> Clone(in GeneratedNumber<TInner> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public GeneratedNumber<TInner> Call(NullaryOperation operation)
             {
                 return new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(operation));
@@ -188,7 +203,7 @@ namespace IS4.HyperNumerics.NumberTypes
     {
         public static GeneratedNumber<TInner, TPrimitive> Zero => new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
-        private readonly Func<TInner> generator;
+        readonly Func<TInner> generator;
 
         public Func<TInner> Generator => generator ?? Zero.Generator;
 
@@ -357,6 +372,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public bool IsFinite(in GeneratedNumber<TInner, TPrimitive> num)
             {
                 return num.IsFinite;
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Clone(in GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in GeneratedNumber<TInner, TPrimitive> num1, in GeneratedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in GeneratedNumber<TInner, TPrimitive> num1, in GeneratedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(num2);
             }
 
             public GeneratedNumber<TInner, TPrimitive> Call(NullaryOperation operation)

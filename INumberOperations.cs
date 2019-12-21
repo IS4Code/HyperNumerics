@@ -16,6 +16,12 @@ namespace IS4.HyperNumerics
 
         bool IsFinite(in TNumber num);
 
+        TNumber Clone(in TNumber num);
+
+        bool Equals(in TNumber num1, in TNumber num2);
+
+        int Compare(in TNumber num1, in TNumber num2);
+
         new TNumber Call(NullaryOperation operation);
         TNumber Call(UnaryOperation operation, in TNumber num);
         TNumber Call(BinaryOperation operation, in TNumber num1, in TNumber num2);

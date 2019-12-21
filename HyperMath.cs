@@ -263,6 +263,21 @@ namespace IS4.HyperNumerics
             return Call(UnaryOperation.Logarithm, num);
         }
 
+        public static TNumber Clone<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.Clone(num);
+        }
+
+        public static bool Equals<TNumber>(in TNumber num1, in TNumber num2) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.Equals(num1, num2);
+        }
+
+        public static int Compare<TNumber>(in TNumber num1, in TNumber num2) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.Compare(num1, num2);
+        }
+
         public static TNumber Call<TNumber>(NullaryOperation operation) where TNumber : struct, INumber<TNumber>
         {
             return Operations.For<TNumber>.Instance.Call(operation);

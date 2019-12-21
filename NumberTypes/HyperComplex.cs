@@ -17,36 +17,45 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperComplex<TInner> : IHyperNumber<HyperComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        public TInner First { get; }
-        public TInner Second { get; }
+        readonly TInner first;
+        readonly TInner second;
+
+        public TInner First => first;
+        public TInner Second => second;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => CanInv(First) || CanInv(Second);
+        public bool IsInvertible => CanInv(first) || CanInv(second);
 
-        public bool IsFinite => First.IsFinite && Second.IsFinite;
+        public bool IsFinite => IsFin(first) && IsFin(second);
 
         public HyperComplex(in TInner first)
         {
-            First = first;
-            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            this.first = first;
+            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperComplex(in TInner first, in TInner second)
         {
-            First = first;
-            Second = second;
+            this.first = first;
+            this.second = second;
+        }
+
+        public HyperComplex(in (TInner first, TInner second) tuple)
+        {
+            first = tuple.first;
+            second = tuple.second;
         }
 
         public void Deconstruct(out TInner first, out TInner second)
         {
-            first = First;
-            second = Second;
+            first = this.first;
+            second = this.second;
         }
 
         public HyperComplex<TInner> Clone()
         {
-            return new HyperComplex<TInner>(First.Clone(), Second.Clone());
+            return new HyperComplex<TInner>(first.Clone(), second.Clone());
         }
 
         object ICloneable.Clone()
@@ -56,39 +65,39 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperComplex<TInner> WithFirst(in TInner first)
         {
-            return new HyperComplex<TInner>(first, Second);
+            return new HyperComplex<TInner>(first, second);
         }
 
         public HyperComplex<TInner> WithSecond(in TInner second)
         {
-            return new HyperComplex<TInner>(First, second);
+            return new HyperComplex<TInner>(first, second);
         }
 
-        public static implicit operator HyperComplex<TInner>(in TInner first)
+        public static implicit operator HyperComplex<TInner>(TInner first)
         {
             return new HyperComplex<TInner>(first);
         }
 
-        public static implicit operator HyperComplex<TInner>(in (TInner first, TInner second) tuple)
+        public static implicit operator HyperComplex<TInner>((TInner first, TInner second) tuple)
         {
             return new HyperComplex<TInner>(tuple.first, tuple.second);
         }
 
-        public static implicit operator (TInner first, TInner second)(in HyperComplex<TInner> value)
+        public static implicit operator (TInner first, TInner second)(HyperComplex<TInner> value)
         {
-            return (value.First, value.Second);
+            return (value.first, value.second);
         }
 
         public TInner Magnitude()
         {
-            return Sqrt(Add(Pow2(First), Pow2(Second)));
+            return Sqrt(Add(Pow2(first), Pow2(second)));
         }
 
         public TInner Argument()
         {
             if(IsInvertible)
             {
-                return Atan2(Second, First);
+                return Atan2(second, first);
             }
             return HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
@@ -98,14 +107,14 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperComplex<TInner>(Add(First, other.First), Add(Second, other.Second));
+                    return new HyperComplex<TInner>(Add(first, other.first), Add(second, other.second));
                 case BinaryOperation.Subtract:
-                    return new HyperComplex<TInner>(Sub(First, other.First), Sub(Second, other.Second));
+                    return new HyperComplex<TInner>(Sub(first, other.first), Sub(second, other.second));
                 case BinaryOperation.Multiply:
-                    return new HyperComplex<TInner>(Sub(Mul(First, other.First), Mul(Second, other.Second)), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                    return new HyperComplex<TInner>(Sub(Mul(first, other.first), Mul(second, other.second)), Add(Mul(first, other.second), Mul(second, other.first)));
                 case BinaryOperation.Divide:
-                    var denom = Add(Pow2(other.First), Pow2(other.Second));
-                    return new HyperComplex<TInner>(Div(Add(Mul(First, other.First), Mul(Second, other.Second)), denom), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), denom));
+                    var denom = Add(Pow2(other.first), Pow2(other.second));
+                    return new HyperComplex<TInner>(Div(Add(Mul(first, other.first), Mul(second, other.second)), denom), Div(Sub(Mul(second, other.first), Mul(first, other.second)), denom));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -120,13 +129,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperComplex<TInner>(Add(First, other), Second);
+                    return new HyperComplex<TInner>(Add(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperComplex<TInner>(Sub(First, other), Second);
+                    return new HyperComplex<TInner>(Sub(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperComplex<TInner>(Mul(First, other), Mul(Second, other));
+                    return new HyperComplex<TInner>(Mul(first, other), Mul(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperComplex<TInner>(Div(First, other), Div(Second, other));
+                    return new HyperComplex<TInner>(Div(first, other), Div(second, other));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -141,43 +150,43 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case UnaryOperation.Negate:
-                    return new HyperComplex<TInner>(Neg(First), Neg(Second));
+                    return new HyperComplex<TInner>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
-                    return new HyperComplex<TInner>(Inc(First), Second);
+                    return new HyperComplex<TInner>(Inc(first), second);
                 case UnaryOperation.Decrement:
-                    return new HyperComplex<TInner>(Dec(First), Second);
+                    return new HyperComplex<TInner>(Dec(first), second);
                 case UnaryOperation.Inverse:
                 {
-                    var denom = Add(Pow2(First), Pow2(Second));
-                    return new HyperComplex<TInner>(Div(First, denom), Div(Neg(Second), denom));
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperComplex<TInner>(Div(first, denom), Div(Neg(second), denom));
                 }
                 case UnaryOperation.Conjugate:
-                    return new HyperComplex<TInner>(First, Neg(Second));
+                    return new HyperComplex<TInner>(first, Neg(second));
                 case UnaryOperation.Modulus:
                     return Sqrt(Mul(this, Con(this)));
                 case UnaryOperation.Double:
-                    return new HyperComplex<TInner>(Mul2(First), Mul2(Second));
+                    return new HyperComplex<TInner>(Mul2(first), Mul2(second));
                 case UnaryOperation.Half:
-                    return new HyperComplex<TInner>(Div2(First), Div2(Second));
+                    return new HyperComplex<TInner>(Div2(first), Div2(second));
                 case UnaryOperation.Square:
-                    return new HyperComplex<TInner>(Sub(Pow2(First), Pow2(Second)), Mul2(Mul(First, Second)));
+                    return new HyperComplex<TInner>(Sub(Pow2(first), Pow2(second)), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
                     var mag = Sqrt(Magnitude());
                     var arg = Div2(Argument());
                     return new HyperComplex<TInner>(Mul(Cos(arg), mag), Mul(Sin(arg), mag));
                 case UnaryOperation.Exponentiate:
-                    var exp = Exp(First);
-                    return new HyperComplex<TInner>(Mul(Cos(Second), exp), Mul(Sin(Second), exp));
+                    var exp = Exp(first);
+                    return new HyperComplex<TInner>(Mul(Cos(second), exp), Mul(Sin(second), exp));
                 case UnaryOperation.Logarithm:
                     return new HyperComplex<TInner>(Log(Magnitude()), Argument());
                 case UnaryOperation.Sine:
-                    return new HyperComplex<TInner>(Mul(Sin(First), Cosh(Second)), Mul(Cos(First), Sinh(Second)));
+                    return new HyperComplex<TInner>(Mul(Sin(first), Cosh(second)), Mul(Cos(first), Sinh(second)));
                 case UnaryOperation.Cosine:
-                    return new HyperComplex<TInner>(Mul(Cos(First), Sinh(Second)), Neg(Mul(Sin(First), Sinh(Second))));
+                    return new HyperComplex<TInner>(Mul(Cos(first), Sinh(second)), Neg(Mul(Sin(first), Sinh(second))));
                 case UnaryOperation.Tangent:
                 {
-                    var denom = Add(Cos(Mul2(First)), Cosh(Mul2(Second)));
-                    return new HyperComplex<TInner>(Div(Sin(Mul2(First)), denom), Div(Sinh(Mul2(Second)), denom));
+                    var denom = Add(Cos(Mul2(first)), Cosh(Mul2(second)));
+                    return new HyperComplex<TInner>(Div(Sin(Mul2(first)), denom), Div(Sinh(Mul2(second)), denom));
                 }
                 case UnaryOperation.HyperbolicSine:
                     return SinhDefault(this);
@@ -187,19 +196,19 @@ namespace IS4.HyperNumerics.NumberTypes
                     return TanhDefault(this);
                 case UnaryOperation.ArcSine:
                 {
-                    var result = new HyperComplex<TInner>(Neg(Second), First);
+                    var result = new HyperComplex<TInner>(Neg(second), first);
                     result = Log(Add(result, Sqrt(Inc(Neg(Pow2(this))))));
-                    return new HyperComplex<TInner>(result.Second, Neg(result.First));
+                    return new HyperComplex<TInner>(result.second, Neg(result.first));
                 }
                 case UnaryOperation.ArcCosine:
                 {
                     var result = Log(Add(this, Sqrt(Dec(Pow2(this)))));
-                    return new HyperComplex<TInner>(result.Second, Neg(result.First));
+                    return new HyperComplex<TInner>(result.second, Neg(result.first));
                 }
                 case UnaryOperation.ArcTangent:
                 {
-                    var result = Div2(Log(Div(new HyperComplex<TInner>(First, Inc(Second)), new HyperComplex<TInner>(Neg(First), Inc(Neg(Second))))));
-                    return new HyperComplex<TInner>(Neg(result.Second), result.First);
+                    var result = Div2(Log(Div(new HyperComplex<TInner>(first, Inc(second)), new HyperComplex<TInner>(Neg(first), Inc(Neg(second))))));
+                    return new HyperComplex<TInner>(Neg(result.second), result.first);
                 }
                 default:
                     throw new NotSupportedException();
@@ -208,22 +217,22 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperComplex<TInner> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperComplex<TInner>(HyperMath.Call(operation, First, other), Second);
+            return new HyperComplex<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
         public HyperComplex<TInner> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperComplex<TInner>(First, HyperMath.Call(operation, Second, other));
+            return new HyperComplex<TInner>(first, HyperMath.Call(operation, second, other));
         }
 
         public HyperComplex<TInner> FirstCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner>(HyperMath.Call(operation, First), Second);
+            return new HyperComplex<TInner>(HyperMath.Call(operation, first), second);
         }
 
         public HyperComplex<TInner> SecondCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner>(First, HyperMath.Call(operation, Second));
+            return new HyperComplex<TInner>(first, HyperMath.Call(operation, second));
         }
 
         public override bool Equals(object other)
@@ -238,7 +247,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in HyperComplex<TInner> other)
         {
-            return First.Equals(other.First) && Second.Equals(other.Second);
+            return first.Equals(other.first) && second.Equals(other.second);
         }
 
         public int CompareTo(HyperComplex<TInner> other)
@@ -248,23 +257,23 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public int CompareTo(in HyperComplex<TInner> other)
         {
-            int value = First.CompareTo(other.First);
-            return value != 0 ? value : Second.CompareTo(other.Second);
+            int value = first.CompareTo(other.first);
+            return value != 0 ? value : second.CompareTo(other.second);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() * 17 + Second.GetHashCode();
+            return first.GetHashCode() * 17 + second.GetHashCode();
         }
 
         public override string ToString()
         {
-            return "Complex(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "Complex(" + first.ToString() + ", " + second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "Complex(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
+            return "Complex(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperComplex<TInner> a, in HyperComplex<TInner> b)
@@ -323,6 +332,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public HyperComplex<TInner> Clone(in HyperComplex<TInner> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public HyperComplex<TInner> Call(NullaryOperation operation)
             {
                 switch(operation)
@@ -373,36 +397,45 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperComplex<TInner, TPrimitive> : IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        public TInner First { get; }
-        public TInner Second { get; }
+        readonly TInner first;
+        readonly TInner second;
+
+        public TInner First => first;
+        public TInner Second => second;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => First.IsInvertible || Second.IsInvertible;
+        public bool IsInvertible => CanInv(first) || CanInv(second);
 
-        public bool IsFinite => First.IsFinite && Second.IsFinite;
+        public bool IsFinite => IsFin(first) && IsFin(second);
 
         public HyperComplex(in TInner first)
         {
-            First = first;
-            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            this.first = first;
+            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperComplex(in TInner first, in TInner second)
         {
-            First = first;
-            Second = second;
+            this.first = first;
+            this.second = second;
+        }
+
+        public HyperComplex(in (TInner first, TInner second) tuple)
+        {
+            first = tuple.first;
+            second = tuple.second;
         }
 
         public void Deconstruct(out TInner first, out TInner second)
         {
-            first = First;
-            second = Second;
+            first = this.first;
+            second = this.second;
         }
 
         public HyperComplex<TInner, TPrimitive> Clone()
         {
-            return new HyperComplex<TInner, TPrimitive>(First.Clone(), Second.Clone());
+            return new HyperComplex<TInner, TPrimitive>(first.Clone(), second.Clone());
         }
 
         object ICloneable.Clone()
@@ -412,39 +445,39 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperComplex<TInner, TPrimitive> WithFirst(in TInner first)
         {
-            return new HyperComplex<TInner, TPrimitive>(first, Second);
+            return new HyperComplex<TInner, TPrimitive>(first, second);
         }
 
         public HyperComplex<TInner, TPrimitive> WithSecond(in TInner second)
         {
-            return new HyperComplex<TInner, TPrimitive>(First, second);
+            return new HyperComplex<TInner, TPrimitive>(first, second);
         }
 
-        public static implicit operator HyperComplex<TInner, TPrimitive>(in TInner first)
+        public static implicit operator HyperComplex<TInner, TPrimitive>(TInner first)
         {
             return new HyperComplex<TInner, TPrimitive>(first);
         }
 
-        public static implicit operator HyperComplex<TInner, TPrimitive>(in (TInner first, TInner second) tuple)
+        public static implicit operator HyperComplex<TInner, TPrimitive>((TInner first, TInner second) tuple)
         {
             return new HyperComplex<TInner, TPrimitive>(tuple.first, tuple.second);
         }
 
-        public static implicit operator (TInner first, TInner second) (in HyperComplex<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second)(HyperComplex<TInner, TPrimitive> value)
         {
-            return (value.First, value.Second);
+            return (value.first, value.second);
         }
 
         public TInner Magnitude()
         {
-            return Sqrt(Add(Pow2(First), Pow2(Second)));
+            return Sqrt(Add(Pow2(first), Pow2(second)));
         }
 
         public TInner Argument()
         {
             if(IsInvertible)
             {
-                return Atan2(Second, First);
+                return Atan2(second, first);
             }
             return HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
@@ -454,14 +487,14 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperComplex<TInner, TPrimitive>(Add(First, other.First), Add(Second, other.Second));
+                    return new HyperComplex<TInner, TPrimitive>(Add(first, other.first), Add(second, other.second));
                 case BinaryOperation.Subtract:
-                    return new HyperComplex<TInner, TPrimitive>(Sub(First, other.First), Sub(Second, other.Second));
+                    return new HyperComplex<TInner, TPrimitive>(Sub(first, other.first), Sub(second, other.second));
                 case BinaryOperation.Multiply:
-                    return new HyperComplex<TInner, TPrimitive>(Sub(Mul(First, other.First), Mul(Second, other.Second)), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                    return new HyperComplex<TInner, TPrimitive>(Sub(Mul(first, other.first), Mul(second, other.second)), Add(Mul(first, other.second), Mul(second, other.first)));
                 case BinaryOperation.Divide:
-                    var denom = Add(Pow2(other.First), Pow2(other.Second));
-                    return new HyperComplex<TInner, TPrimitive>(Div(Add(Mul(First, other.First), Mul(Second, other.Second)), denom), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), denom));
+                    var denom = Add(Pow2(other.first), Pow2(other.second));
+                    return new HyperComplex<TInner, TPrimitive>(Div(Add(Mul(first, other.first), Mul(second, other.second)), denom), Div(Sub(Mul(second, other.first), Mul(first, other.second)), denom));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -476,13 +509,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperComplex<TInner, TPrimitive>(Add(First, other), Second);
+                    return new HyperComplex<TInner, TPrimitive>(Add(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperComplex<TInner, TPrimitive>(Sub(First, other), Second);
+                    return new HyperComplex<TInner, TPrimitive>(Sub(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperComplex<TInner, TPrimitive>(Mul(First, other), Mul(Second, other));
+                    return new HyperComplex<TInner, TPrimitive>(Mul(first, other), Mul(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperComplex<TInner, TPrimitive>(Div(First, other), Div(Second, other));
+                    return new HyperComplex<TInner, TPrimitive>(Div(first, other), Div(second, other));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -497,13 +530,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperComplex<TInner, TPrimitive>(AddVal(First, other), Second);
+                    return new HyperComplex<TInner, TPrimitive>(AddVal(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperComplex<TInner, TPrimitive>(SubVal(First, other), Second);
+                    return new HyperComplex<TInner, TPrimitive>(SubVal(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperComplex<TInner, TPrimitive>(MulVal(First, other), MulVal(Second, other));
+                    return new HyperComplex<TInner, TPrimitive>(MulVal(first, other), MulVal(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperComplex<TInner, TPrimitive>(DivVal(First, other), DivVal(Second, other));
+                    return new HyperComplex<TInner, TPrimitive>(DivVal(first, other), DivVal(second, other));
                 case BinaryOperation.Power:
                     var mag = PowVal(Magnitude(), other);
                     var arg = MulVal(Argument(), other);
@@ -520,43 +553,43 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case UnaryOperation.Negate:
-                    return new HyperComplex<TInner, TPrimitive>(Neg(First), Neg(Second));
+                    return new HyperComplex<TInner, TPrimitive>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
-                    return new HyperComplex<TInner, TPrimitive>(Inc(First), Second);
+                    return new HyperComplex<TInner, TPrimitive>(Inc(first), second);
                 case UnaryOperation.Decrement:
-                    return new HyperComplex<TInner, TPrimitive>(Dec(First), Second);
+                    return new HyperComplex<TInner, TPrimitive>(Dec(first), second);
                 case UnaryOperation.Inverse:
                 {
-                    var denom = Add(Pow2(First), Pow2(Second));
-                    return new HyperComplex<TInner, TPrimitive>(Div(First, denom), Div(Neg(Second), denom));
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperComplex<TInner, TPrimitive>(Div(first, denom), Div(Neg(second), denom));
                 }
                 case UnaryOperation.Conjugate:
-                    return new HyperComplex<TInner, TPrimitive>(First, Neg(Second));
+                    return new HyperComplex<TInner, TPrimitive>(first, Neg(second));
                 case UnaryOperation.Modulus:
                     return Sqrt(Mul(this, Con(this)));
                 case UnaryOperation.Double:
-                    return new HyperComplex<TInner, TPrimitive>(Mul2(First), Mul2(Second));
+                    return new HyperComplex<TInner, TPrimitive>(Mul2(first), Mul2(second));
                 case UnaryOperation.Half:
-                    return new HyperComplex<TInner, TPrimitive>(Div2(First), Div2(Second));
+                    return new HyperComplex<TInner, TPrimitive>(Div2(first), Div2(second));
                 case UnaryOperation.Square:
-                    return new HyperComplex<TInner, TPrimitive>(Sub(Pow2(First), Pow2(Second)), Mul2(Mul(First, Second)));
+                    return new HyperComplex<TInner, TPrimitive>(Sub(Pow2(first), Pow2(second)), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
                     var mag = Sqrt(Magnitude());
                     var arg = Div2(Argument());
                     return new HyperComplex<TInner, TPrimitive>(Mul(Cos(arg), mag), Mul(Sin(arg), mag));
                 case UnaryOperation.Exponentiate:
-                    var exp = Exp(First);
-                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(Second), exp), Mul(Sin(Second), exp));
+                    var exp = Exp(first);
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(second), exp), Mul(Sin(second), exp));
                 case UnaryOperation.Logarithm:
                     return new HyperComplex<TInner, TPrimitive>(Log(Magnitude()), Argument());
                 case UnaryOperation.Sine:
-                    return new HyperComplex<TInner, TPrimitive>(Mul(Sin(First), Cosh(Second)), Mul(Cos(First), Sinh(Second)));
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Sin(first), Cosh(second)), Mul(Cos(first), Sinh(second)));
                 case UnaryOperation.Cosine:
-                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(First), Sinh(Second)), Neg(Mul(Sin(First), Sinh(Second))));
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(first), Sinh(second)), Neg(Mul(Sin(first), Sinh(second))));
                 case UnaryOperation.Tangent:
                 {
-                    var denom = Add(Cos(Mul2(First)), Cosh(Mul2(Second)));
-                    return new HyperComplex<TInner, TPrimitive>(Div(Sin(Mul2(First)), denom), Div(Sinh(Mul2(Second)), denom));
+                    var denom = Add(Cos(Mul2(first)), Cosh(Mul2(second)));
+                    return new HyperComplex<TInner, TPrimitive>(Div(Sin(Mul2(first)), denom), Div(Sinh(Mul2(second)), denom));
                 }
                 case UnaryOperation.HyperbolicSine:
                     return SinhDefault(this);
@@ -566,19 +599,19 @@ namespace IS4.HyperNumerics.NumberTypes
                     return TanhDefault(this);
                 case UnaryOperation.ArcSine:
                 {
-                    var result = new HyperComplex<TInner, TPrimitive>(Neg(Second), First);
+                    var result = new HyperComplex<TInner, TPrimitive>(Neg(second), first);
                     result = Log(Add(result, Sqrt(Inc(Neg(Pow2(this))))));
-                    return new HyperComplex<TInner, TPrimitive>(result.Second, Neg(result.First));
+                    return new HyperComplex<TInner, TPrimitive>(result.second, Neg(result.first));
                 }
                 case UnaryOperation.ArcCosine:
                 {
                     var result = Log(Add(this, Sqrt(Dec(Pow2(this)))));
-                    return new HyperComplex<TInner, TPrimitive>(result.Second, Neg(result.First));
+                    return new HyperComplex<TInner, TPrimitive>(result.second, Neg(result.first));
                 }
                 case UnaryOperation.ArcTangent:
                 {
-                    var result = Div2(Log(Div(new HyperComplex<TInner, TPrimitive>(First, Inc(Second)), new HyperComplex<TInner, TPrimitive>(Neg(First), Inc(Neg(Second))))));
-                    return new HyperComplex<TInner, TPrimitive>(Neg(result.Second), result.First);
+                    var result = Div2(Log(Div(new HyperComplex<TInner, TPrimitive>(first, Inc(second)), new HyperComplex<TInner, TPrimitive>(Neg(first), Inc(Neg(second))))));
+                    return new HyperComplex<TInner, TPrimitive>(Neg(result.second), result.first);
                 }
                 default:
                     throw new NotSupportedException();
@@ -592,7 +625,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 case PrimitiveUnaryOperation.AbsoluteValue:
                     return Abs<TInner, TPrimitive>(Magnitude());
                 case PrimitiveUnaryOperation.RealValue:
-                    return Std<TInner, TPrimitive>(First);
+                    return Std<TInner, TPrimitive>(first);
                 default:
                     throw new NotSupportedException();
             }
@@ -600,32 +633,32 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, First, other), Second);
+            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, first, other), second);
         }
 
         public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperComplex<TInner, TPrimitive>(First, HyperMath.Call(operation, Second, other));
+            return new HyperComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
         }
 
         public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, First, other), Second);
+            return new HyperComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
         public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperComplex<TInner, TPrimitive>(First, HyperMath.CallPrimitive(operation, Second, other));
+            return new HyperComplex<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
         }
 
         public HyperComplex<TInner, TPrimitive> FirstCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, First), Second);
+            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, first), second);
         }
 
         public HyperComplex<TInner, TPrimitive> SecondCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner, TPrimitive>(First, HyperMath.Call(operation, Second));
+            return new HyperComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second));
         }
 
         public override bool Equals(object other)
@@ -640,7 +673,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in HyperComplex<TInner, TPrimitive> other)
         {
-            return First.Equals(other.First) && Second.Equals(other.Second);
+            return first.Equals(other.first) && second.Equals(other.second);
         }
 
         public int CompareTo(HyperComplex<TInner, TPrimitive> other)
@@ -650,23 +683,23 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public int CompareTo(in HyperComplex<TInner, TPrimitive> other)
         {
-            int value = First.CompareTo(other.First);
-            return value != 0 ? value : Second.CompareTo(other.Second);
+            int value = first.CompareTo(other.first);
+            return value != 0 ? value : second.CompareTo(other.second);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() * 17 + Second.GetHashCode();
+            return first.GetHashCode() * 17 + second.GetHashCode();
         }
 
         public override string ToString()
         {
-            return "Complex(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "Complex(" + first.ToString() + ", " + second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "Complex(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
+            return "Complex(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperComplex<TInner, TPrimitive> a, in HyperComplex<TInner, TPrimitive> b)
@@ -730,6 +763,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public HyperComplex<TInner, TPrimitive> Clone(in HyperComplex<TInner, TPrimitive> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in HyperComplex<TInner, TPrimitive> num1, in HyperComplex<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in HyperComplex<TInner, TPrimitive> num1, in HyperComplex<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public HyperComplex<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
@@ -781,33 +829,33 @@ namespace IS4.HyperNumerics.NumberTypes
             return value[index];
         }
 
-        int ICollection<TPrimitive>.Count => GetCollectionCount(First) + GetCollectionCount(Second);
+        int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
         bool ICollection<TPrimitive>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(First) + GetReadOnlyCollectionCount(Second);
+        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
 
         TPrimitive IReadOnlyList<TPrimitive>.this[int index]
         {
             get{
-                int offset = GetReadOnlyCollectionCount(First);
+                int offset = GetReadOnlyCollectionCount(first);
                 if(index >= offset)
                 {
-                    return GetReadOnlyListItem(Second, index - offset);
+                    return GetReadOnlyListItem(second, index - offset);
                 }
-                return GetReadOnlyListItem(First, index);
+                return GetReadOnlyListItem(first, index);
             }
         }
 
         TPrimitive IList<TPrimitive>.this[int index]
         {
             get{
-                int offset = GetCollectionCount(First);
+                int offset = GetCollectionCount(first);
                 if(index >= offset)
                 {
-                    return GetListItem(Second, index - offset);
+                    return GetListItem(second, index - offset);
                 }
-                return GetListItem(First, index);
+                return GetListItem(first, index);
             }
             set{
                 throw new NotSupportedException();
@@ -816,11 +864,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int IList<TPrimitive>.IndexOf(TPrimitive item)
         {
-            int index = First.IndexOf(item);
+            int index = first.IndexOf(item);
             if(index == -1)
             {
-                int offset = GetCollectionCount(First);
-                return offset + Second.IndexOf(item);
+                int offset = GetCollectionCount(first);
+                return offset + second.IndexOf(item);
             }
             return index;
         }
@@ -847,14 +895,14 @@ namespace IS4.HyperNumerics.NumberTypes
 
         bool ICollection<TPrimitive>.Contains(TPrimitive item)
         {
-            return First.Contains(item) || Second.Contains(item);
+            return first.Contains(item) || second.Contains(item);
         }
 
         void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
         {
-            First.CopyTo(array, arrayIndex);
-            int offset = GetCollectionCount(First);
-            Second.CopyTo(array, offset + arrayIndex);
+            first.CopyTo(array, arrayIndex);
+            int offset = GetCollectionCount(first);
+            second.CopyTo(array, offset + arrayIndex);
         }
 
         bool ICollection<TPrimitive>.Remove(TPrimitive item)
@@ -864,11 +912,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
         {
-            foreach(var num in First)
+            foreach(var num in first)
             {
                 yield return num;
             }
-            foreach(var num in Second)
+            foreach(var num in second)
             {
                 yield return num;
             }
@@ -876,11 +924,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            foreach(var num in (IEnumerable)First)
+            foreach(var num in (IEnumerable)first)
             {
                 yield return num;
             }
-            foreach(var num in (IEnumerable)Second)
+            foreach(var num in (IEnumerable)second)
             {
                 yield return num;
             }

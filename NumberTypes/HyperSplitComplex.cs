@@ -17,36 +17,45 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperSplitComplex<TInner> : IHyperNumber<HyperSplitComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        public TInner First { get; }
-        public TInner Second { get; }
+        readonly TInner first;
+        readonly TInner second;
+
+        public TInner First => first;
+        public TInner Second => second;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => CanInv(Sub(Pow2(First), Pow2(Second)));
+        public bool IsInvertible => CanInv(Sub(Pow2(first), Pow2(second)));
 
-        public bool IsFinite => IsFin(First) && IsFin(Second);
+        public bool IsFinite => IsFin(first) && IsFin(second);
 
         public HyperSplitComplex(in TInner first)
         {
-            First = first;
-            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            this.first = first;
+            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperSplitComplex(in TInner first, in TInner second)
         {
-            First = first;
-            Second = second;
+            this.first = first;
+            this.second = second;
+        }
+
+        public HyperSplitComplex(in (TInner first, TInner second) tuple)
+        {
+            first = tuple.first;
+            second = tuple.second;
         }
 
         public void Deconstruct(out TInner first, out TInner second)
         {
-            first = First;
-            second = Second;
+            first = this.first;
+            second = this.second;
         }
 
         public HyperSplitComplex<TInner> Clone()
         {
-            return new HyperSplitComplex<TInner>(First.Clone(), Second.Clone());
+            return new HyperSplitComplex<TInner>(first.Clone(), second.Clone());
         }
 
         object ICloneable.Clone()
@@ -56,27 +65,27 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperSplitComplex<TInner> WithFirst(in TInner first)
         {
-            return new HyperSplitComplex<TInner>(first, Second);
+            return new HyperSplitComplex<TInner>(first, second);
         }
 
         public HyperSplitComplex<TInner> WithSecond(in TInner second)
         {
-            return new HyperSplitComplex<TInner>(First, second);
+            return new HyperSplitComplex<TInner>(first, second);
         }
 
-        public static implicit operator HyperSplitComplex<TInner>(in TInner first)
+        public static implicit operator HyperSplitComplex<TInner>(TInner first)
         {
             return new HyperSplitComplex<TInner>(first);
         }
 
-        public static implicit operator HyperSplitComplex<TInner>(in (TInner first, TInner second) tuple)
+        public static implicit operator HyperSplitComplex<TInner>((TInner first, TInner second) tuple)
         {
-            return new HyperSplitComplex<TInner>(tuple.first, tuple.second);
+            return new HyperSplitComplex<TInner>(tuple);
         }
 
-        public static implicit operator (TInner first, TInner second)(in HyperSplitComplex<TInner> value)
+        public static implicit operator (TInner first, TInner second)(HyperSplitComplex<TInner> value)
         {
-            return (value.First, value.Second);
+            return (value.first, value.second);
         }
 
         public HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> other)
@@ -84,14 +93,14 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperSplitComplex<TInner>(Add(First, other.First), Add(Second, other.Second));
+                    return new HyperSplitComplex<TInner>(Add(first, other.first), Add(second, other.second));
                 case BinaryOperation.Subtract:
-                    return new HyperSplitComplex<TInner>(Sub(First, other.First), Sub(Second, other.Second));
+                    return new HyperSplitComplex<TInner>(Sub(first, other.first), Sub(second, other.second));
                 case BinaryOperation.Multiply:
-                    return new HyperSplitComplex<TInner>(Add(Mul(First, other.First), Mul(Second, other.Second)), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                    return new HyperSplitComplex<TInner>(Add(Mul(first, other.first), Mul(second, other.second)), Add(Mul(first, other.second), Mul(second, other.first)));
                 case BinaryOperation.Divide:
-                    var denom = Sub(Pow2(other.First), Pow2(other.Second));
-                    return new HyperSplitComplex<TInner>(Div(Sub(Mul(First, other.First), Mul(Second, other.Second)), denom), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), denom));
+                    var denom = Sub(Pow2(other.first), Pow2(other.second));
+                    return new HyperSplitComplex<TInner>(Div(Sub(Mul(first, other.first), Mul(second, other.second)), denom), Div(Sub(Mul(second, other.first), Mul(first, other.second)), denom));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -106,13 +115,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperSplitComplex<TInner>(Add(First, other), Second);
+                    return new HyperSplitComplex<TInner>(Add(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperSplitComplex<TInner>(Sub(First, other), Second);
+                    return new HyperSplitComplex<TInner>(Sub(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperSplitComplex<TInner>(Mul(First, other), Mul(Second, other));
+                    return new HyperSplitComplex<TInner>(Mul(first, other), Mul(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperSplitComplex<TInner>(Div(First, other), Div(Second, other));
+                    return new HyperSplitComplex<TInner>(Div(first, other), Div(second, other));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -127,33 +136,33 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case UnaryOperation.Negate:
-                    return new HyperSplitComplex<TInner>(Neg(First), Neg(Second));
+                    return new HyperSplitComplex<TInner>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
-                    return new HyperSplitComplex<TInner>(Inc(First), Second);
+                    return new HyperSplitComplex<TInner>(Inc(first), second);
                 case UnaryOperation.Decrement:
-                    return new HyperSplitComplex<TInner>(Dec(First), Second);
+                    return new HyperSplitComplex<TInner>(Dec(first), second);
                 case UnaryOperation.Inverse:
                 {
-                    var denom = Sub(Pow2(First), Pow2(Second));
-                    return new HyperSplitComplex<TInner>(Div(First, denom), Div(Neg(Second), denom));
+                    var denom = Sub(Pow2(first), Pow2(second));
+                    return new HyperSplitComplex<TInner>(Div(first, denom), Div(Neg(second), denom));
                 }
                 case UnaryOperation.Conjugate:
-                    return new HyperSplitComplex<TInner>(First, Neg(Second));
+                    return new HyperSplitComplex<TInner>(first, Neg(second));
                 case UnaryOperation.Modulus:
                     return Sqrt(Mul(this, Con(this)));
                 case UnaryOperation.Double:
-                    return new HyperSplitComplex<TInner>(Mul2(First), Mul2(Second));
+                    return new HyperSplitComplex<TInner>(Mul2(first), Mul2(second));
                 case UnaryOperation.Half:
-                    return new HyperSplitComplex<TInner>(Div2(First), Div2(Second));
+                    return new HyperSplitComplex<TInner>(Div2(first), Div2(second));
                 case UnaryOperation.Square:
-                    return new HyperSplitComplex<TInner>(Add(Pow2(First), Pow2(Second)), Mul2(Mul(First, Second)));
+                    return new HyperSplitComplex<TInner>(Add(Pow2(first), Pow2(second)), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
                     throw new NotImplementedException();
                 case UnaryOperation.Exponentiate:
-                    var exp = Exp(First);
-                    return new HyperSplitComplex<TInner>(Mul(Cosh(Second), exp), Mul(Sinh(Second), exp));
+                    var exp = Exp(first);
+                    return new HyperSplitComplex<TInner>(Mul(Cosh(second), exp), Mul(Sinh(second), exp));
                 case UnaryOperation.Logarithm:
-                    return new HyperSplitComplex<TInner>(Div2(Log(Mul(Add(First, Second), Sub(First, Second)))), Div2(Log(Div(Add(First, Second), Sub(First, Second)))));
+                    return new HyperSplitComplex<TInner>(Div2(Log(Mul(Add(first, second), Sub(first, second)))), Div2(Log(Div(Add(first, second), Sub(first, second)))));
                 case UnaryOperation.Sine:
                     throw new NotImplementedException();
                 case UnaryOperation.Cosine:
@@ -179,22 +188,22 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperSplitComplex<TInner> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperSplitComplex<TInner>(HyperMath.Call(operation, First, other), Second);
+            return new HyperSplitComplex<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
         public HyperSplitComplex<TInner> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperSplitComplex<TInner>(First, HyperMath.Call(operation, Second, other));
+            return new HyperSplitComplex<TInner>(first, HyperMath.Call(operation, second, other));
         }
 
         public HyperSplitComplex<TInner> FirstCall(UnaryOperation operation)
         {
-            return new HyperSplitComplex<TInner>(HyperMath.Call(operation, First), Second);
+            return new HyperSplitComplex<TInner>(HyperMath.Call(operation, first), second);
         }
 
         public HyperSplitComplex<TInner> SecondCall(UnaryOperation operation)
         {
-            return new HyperSplitComplex<TInner>(First, HyperMath.Call(operation, Second));
+            return new HyperSplitComplex<TInner>(first, HyperMath.Call(operation, second));
         }
 
         public override bool Equals(object other)
@@ -209,7 +218,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in HyperSplitComplex<TInner> other)
         {
-            return First.Equals(other.First) && Second.Equals(other.Second);
+            return first.Equals(other.first) && second.Equals(other.second);
         }
 
         public int CompareTo(HyperSplitComplex<TInner> other)
@@ -219,23 +228,23 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public int CompareTo(in HyperSplitComplex<TInner> other)
         {
-            int value = First.CompareTo(other.First);
-            return value != 0 ? value : Second.CompareTo(other.Second);
+            int value = first.CompareTo(other.first);
+            return value != 0 ? value : second.CompareTo(other.second);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() * 17 + Second.GetHashCode();
+            return first.GetHashCode() * 17 + second.GetHashCode();
         }
 
         public override string ToString()
         {
-            return "SplitComplex(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "SplitComplex(" + first.ToString() + ", " + second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "SplitComplex(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
+            return "SplitComplex(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperSplitComplex<TInner> a, in HyperSplitComplex<TInner> b)
@@ -294,6 +303,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public HyperSplitComplex<TInner> Clone(in HyperSplitComplex<TInner> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public HyperSplitComplex<TInner> Call(NullaryOperation operation)
             {
                 switch(operation)
@@ -344,36 +368,45 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperSplitComplex<TInner, TPrimitive> : IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        public TInner First { get; }
-        public TInner Second { get; }
+        readonly TInner first;
+        readonly TInner second;
+
+        public TInner First => first;
+        public TInner Second => second;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => CanInv(Sub(Pow2(First), Pow2(Second)));
+        public bool IsInvertible => CanInv(Sub(Pow2(first), Pow2(second)));
 
-        public bool IsFinite => IsFin(First) && IsFin(Second);
+        public bool IsFinite => IsFin(first) && IsFin(second);
 
         public HyperSplitComplex(in TInner first)
         {
-            First = first;
-            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            this.first = first;
+            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperSplitComplex(in TInner first, in TInner second)
         {
-            First = first;
-            Second = second;
+            this.first = first;
+            this.second = second;
+        }
+
+        public HyperSplitComplex(in (TInner first, TInner second) tuple)
+        {
+            first = tuple.first;
+            second = tuple.second;
         }
 
         public void Deconstruct(out TInner first, out TInner second)
         {
-            first = First;
-            second = Second;
+            first = this.first;
+            second = this.second;
         }
 
         public HyperSplitComplex<TInner, TPrimitive> Clone()
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(First.Clone(), Second.Clone());
+            return new HyperSplitComplex<TInner, TPrimitive>(first.Clone(), second.Clone());
         }
 
         object ICloneable.Clone()
@@ -383,27 +416,27 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperSplitComplex<TInner, TPrimitive> WithFirst(in TInner first)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(first, Second);
+            return new HyperSplitComplex<TInner, TPrimitive>(first, second);
         }
 
         public HyperSplitComplex<TInner, TPrimitive> WithSecond(in TInner second)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(First, second);
+            return new HyperSplitComplex<TInner, TPrimitive>(first, second);
         }
 
-        public static implicit operator HyperSplitComplex<TInner, TPrimitive>(in TInner first)
+        public static implicit operator HyperSplitComplex<TInner, TPrimitive>(TInner first)
         {
             return new HyperSplitComplex<TInner, TPrimitive>(first);
         }
 
-        public static implicit operator HyperSplitComplex<TInner, TPrimitive>(in (TInner first, TInner second) tuple)
+        public static implicit operator HyperSplitComplex<TInner, TPrimitive>((TInner first, TInner second) tuple)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(tuple.first, tuple.second);
+            return new HyperSplitComplex<TInner, TPrimitive>(tuple);
         }
 
-        public static implicit operator (TInner first, TInner second) (in HyperSplitComplex<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second)(HyperSplitComplex<TInner, TPrimitive> value)
         {
-            return (value.First, value.Second);
+            return (value.first, value.second);
         }
         
         public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> other)
@@ -411,14 +444,14 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Add(First, other.First), Add(Second, other.Second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Add(first, other.first), Add(second, other.second));
                 case BinaryOperation.Subtract:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Sub(First, other.First), Sub(Second, other.Second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Sub(first, other.first), Sub(second, other.second));
                 case BinaryOperation.Multiply:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Add(Mul(First, other.First), Mul(Second, other.Second)), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Add(Mul(first, other.first), Mul(second, other.second)), Add(Mul(first, other.second), Mul(second, other.first)));
                 case BinaryOperation.Divide:
-                    var denom = Sub(Pow2(other.First), Pow2(other.Second));
-                    return new HyperSplitComplex<TInner, TPrimitive>(Div(Sub(Mul(First, other.First), Mul(Second, other.Second)), denom), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), denom));
+                    var denom = Sub(Pow2(other.first), Pow2(other.second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Div(Sub(Mul(first, other.first), Mul(second, other.second)), denom), Div(Sub(Mul(second, other.first), Mul(first, other.second)), denom));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -433,13 +466,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Add(First, other), Second);
+                    return new HyperSplitComplex<TInner, TPrimitive>(Add(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Sub(First, other), Second);
+                    return new HyperSplitComplex<TInner, TPrimitive>(Sub(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Mul(First, other), Mul(Second, other));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Mul(first, other), Mul(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Div(First, other), Div(Second, other));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Div(first, other), Div(second, other));
                 case BinaryOperation.Power:
                     return PowDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -454,13 +487,13 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new HyperSplitComplex<TInner, TPrimitive>(AddVal(First, other), Second);
+                    return new HyperSplitComplex<TInner, TPrimitive>(AddVal(first, other), second);
                 case BinaryOperation.Subtract:
-                    return new HyperSplitComplex<TInner, TPrimitive>(SubVal(First, other), Second);
+                    return new HyperSplitComplex<TInner, TPrimitive>(SubVal(first, other), second);
                 case BinaryOperation.Multiply:
-                    return new HyperSplitComplex<TInner, TPrimitive>(MulVal(First, other), MulVal(Second, other));
+                    return new HyperSplitComplex<TInner, TPrimitive>(MulVal(first, other), MulVal(second, other));
                 case BinaryOperation.Divide:
-                    return new HyperSplitComplex<TInner, TPrimitive>(DivVal(First, other), DivVal(Second, other));
+                    return new HyperSplitComplex<TInner, TPrimitive>(DivVal(first, other), DivVal(second, other));
                 case BinaryOperation.Power:
                     return PowValDefault(this, other);
                 case BinaryOperation.Atan2:
@@ -475,33 +508,33 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case UnaryOperation.Negate:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Neg(First), Neg(Second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Inc(First), Second);
+                    return new HyperSplitComplex<TInner, TPrimitive>(Inc(first), second);
                 case UnaryOperation.Decrement:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Dec(First), Second);
+                    return new HyperSplitComplex<TInner, TPrimitive>(Dec(first), second);
                 case UnaryOperation.Inverse:
                 {
-                    var denom = Sub(Pow2(First), Pow2(Second));
-                    return new HyperSplitComplex<TInner, TPrimitive>(Div(First, denom), Div(Neg(Second), denom));
+                    var denom = Sub(Pow2(first), Pow2(second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Div(first, denom), Div(Neg(second), denom));
                 }
                 case UnaryOperation.Conjugate:
-                    return new HyperSplitComplex<TInner, TPrimitive>(First, Neg(Second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(first, Neg(second));
                 case UnaryOperation.Modulus:
                     return Sqrt(Mul(this, Con(this)));
                 case UnaryOperation.Double:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Mul2(First), Mul2(Second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Mul2(first), Mul2(second));
                 case UnaryOperation.Half:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Div2(First), Div2(Second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Div2(first), Div2(second));
                 case UnaryOperation.Square:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Add(Pow2(First), Pow2(Second)), Mul2(Mul(First, Second)));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Add(Pow2(first), Pow2(second)), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
                     throw new NotImplementedException();
                 case UnaryOperation.Exponentiate:
-                    var exp = Exp(First);
-                    return new HyperSplitComplex<TInner, TPrimitive>(Mul(Cosh(Second), exp), Mul(Sinh(Second), exp));
+                    var exp = Exp(first);
+                    return new HyperSplitComplex<TInner, TPrimitive>(Mul(Cosh(second), exp), Mul(Sinh(second), exp));
                 case UnaryOperation.Logarithm:
-                    return new HyperSplitComplex<TInner, TPrimitive>(Div2(Log(Mul(Add(First, Second), Sub(First, Second)))), Div2(Log(Div(Add(First, Second), Sub(First, Second)))));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Div2(Log(Mul(Add(first, second), Sub(first, second)))), Div2(Log(Div(Add(first, second), Sub(first, second)))));
                 case UnaryOperation.Sine:
                     throw new NotImplementedException();
                 case UnaryOperation.Cosine:
@@ -530,9 +563,9 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case PrimitiveUnaryOperation.AbsoluteValue:
-                    return Abs<TInner, TPrimitive>(Sqrt(Sub(Pow2(First), Pow2(Second))));
+                    return Abs<TInner, TPrimitive>(Sqrt(Sub(Pow2(first), Pow2(second))));
                 case PrimitiveUnaryOperation.RealValue:
-                    return Std<TInner, TPrimitive>(First);
+                    return Std<TInner, TPrimitive>(first);
                 default:
                     throw new NotSupportedException();
             }
@@ -540,32 +573,32 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public HyperSplitComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call(operation, First, other), Second);
+            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call(operation, first, other), second);
         }
 
         public HyperSplitComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(First, HyperMath.Call(operation, Second, other));
+            return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
         }
 
         public HyperSplitComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, First, other), Second);
+            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
         public HyperSplitComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(First, HyperMath.CallPrimitive(operation, Second, other));
+            return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
         }
 
         public HyperSplitComplex<TInner, TPrimitive> FirstCall(UnaryOperation operation)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call(operation, First), Second);
+            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call(operation, first), second);
         }
 
         public HyperSplitComplex<TInner, TPrimitive> SecondCall(UnaryOperation operation)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(First, HyperMath.Call(operation, Second));
+            return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second));
         }
 
         public override bool Equals(object other)
@@ -580,7 +613,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in HyperSplitComplex<TInner, TPrimitive> other)
         {
-            return First.Equals(other.First) && Second.Equals(other.Second);
+            return first.Equals(other.first) && second.Equals(other.second);
         }
 
         public int CompareTo(HyperSplitComplex<TInner, TPrimitive> other)
@@ -590,23 +623,23 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public int CompareTo(in HyperSplitComplex<TInner, TPrimitive> other)
         {
-            int value = First.CompareTo(other.First);
-            return value != 0 ? value : Second.CompareTo(other.Second);
+            int value = first.CompareTo(other.first);
+            return value != 0 ? value : second.CompareTo(other.second);
         }
 
         public override int GetHashCode()
         {
-            return First.GetHashCode() * 17 + Second.GetHashCode();
+            return first.GetHashCode() * 17 + second.GetHashCode();
         }
 
         public override string ToString()
         {
-            return "SplitComplex(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "SplitComplex(" + first.ToString() + ", " + second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "SplitComplex(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
+            return "SplitComplex(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperSplitComplex<TInner, TPrimitive> a, in HyperSplitComplex<TInner, TPrimitive> b)
@@ -670,6 +703,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.IsFinite;
             }
 
+            public HyperSplitComplex<TInner, TPrimitive> Clone(in HyperSplitComplex<TInner, TPrimitive> num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(in HyperSplitComplex<TInner, TPrimitive> num1, in HyperSplitComplex<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in HyperSplitComplex<TInner, TPrimitive> num1, in HyperSplitComplex<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public HyperSplitComplex<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
@@ -721,33 +769,33 @@ namespace IS4.HyperNumerics.NumberTypes
             return value[index];
         }
 
-        int ICollection<TPrimitive>.Count => GetCollectionCount(First) + GetCollectionCount(Second);
+        int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
         bool ICollection<TPrimitive>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(First) + GetReadOnlyCollectionCount(Second);
+        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
 
         TPrimitive IReadOnlyList<TPrimitive>.this[int index]
         {
             get{
-                int offset = GetReadOnlyCollectionCount(First);
+                int offset = GetReadOnlyCollectionCount(first);
                 if(index >= offset)
                 {
-                    return GetReadOnlyListItem(Second, index - offset);
+                    return GetReadOnlyListItem(second, index - offset);
                 }
-                return GetReadOnlyListItem(First, index);
+                return GetReadOnlyListItem(first, index);
             }
         }
 
         TPrimitive IList<TPrimitive>.this[int index]
         {
             get{
-                int offset = GetCollectionCount(First);
+                int offset = GetCollectionCount(first);
                 if(index >= offset)
                 {
-                    return GetListItem(Second, index - offset);
+                    return GetListItem(second, index - offset);
                 }
-                return GetListItem(First, index);
+                return GetListItem(first, index);
             }
             set{
                 throw new NotSupportedException();
@@ -756,11 +804,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int IList<TPrimitive>.IndexOf(TPrimitive item)
         {
-            int index = First.IndexOf(item);
+            int index = first.IndexOf(item);
             if(index == -1)
             {
-                int offset = GetCollectionCount(First);
-                return offset + Second.IndexOf(item);
+                int offset = GetCollectionCount(first);
+                return offset + second.IndexOf(item);
             }
             return index;
         }
@@ -787,14 +835,14 @@ namespace IS4.HyperNumerics.NumberTypes
 
         bool ICollection<TPrimitive>.Contains(TPrimitive item)
         {
-            return First.Contains(item) || Second.Contains(item);
+            return first.Contains(item) || second.Contains(item);
         }
 
         void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
         {
-            First.CopyTo(array, arrayIndex);
-            int offset = GetCollectionCount(First);
-            Second.CopyTo(array, offset + arrayIndex);
+            first.CopyTo(array, arrayIndex);
+            int offset = GetCollectionCount(first);
+            second.CopyTo(array, offset + arrayIndex);
         }
 
         bool ICollection<TPrimitive>.Remove(TPrimitive item)
@@ -804,11 +852,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
         {
-            foreach(var num in First)
+            foreach(var num in first)
             {
                 yield return num;
             }
-            foreach(var num in Second)
+            foreach(var num in second)
             {
                 yield return num;
             }
@@ -816,11 +864,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            foreach(var num in (IEnumerable)First)
+            foreach(var num in (IEnumerable)first)
             {
                 yield return num;
             }
-            foreach(var num in (IEnumerable)Second)
+            foreach(var num in (IEnumerable)second)
             {
                 yield return num;
             }
