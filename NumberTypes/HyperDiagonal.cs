@@ -1,6 +1,9 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
+using static IS4.HyperNumerics.HyperMath;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
@@ -14,31 +17,19 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperDiagonal<TInner> : IHyperNumber<HyperDiagonal<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        static readonly Lazy<INumberFactory<TInner>> InnerFactoryLazy = new Lazy<INumberFactory<TInner>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner> InnerFactory => InnerFactoryLazy.Value;
-        public static HyperDiagonal<TInner> Zero => new HyperDiagonal<TInner>(InnerFactory.Zero, InnerFactory.Zero);
-        public static HyperDiagonal<TInner> RealOne => new HyperDiagonal<TInner>(InnerFactory.RealOne, InnerFactory.Zero);
-        public static HyperDiagonal<TInner> SpecialOne => new HyperDiagonal<TInner>(InnerFactory.Zero, InnerFactory.RealOne);
-        public static HyperDiagonal<TInner> UnitsOne => new HyperDiagonal<TInner>(InnerFactory.UnitsOne, InnerFactory.RealOne);
-        public static HyperDiagonal<TInner> NonRealUnitsOne => new HyperDiagonal<TInner>(InnerFactory.NonRealUnitsOne, InnerFactory.RealOne);
-        public static HyperDiagonal<TInner> CombinedOne => new HyperDiagonal<TInner>(InnerFactory.Zero, InnerFactory.CombinedOne);
-        public static HyperDiagonal<TInner> AllOne => new HyperDiagonal<TInner>(InnerFactory.AllOne, InnerFactory.AllOne);
-
         public TInner First { get; }
         public TInner Second { get; }
 
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => First.IsInvertible && First.Add(Second).IsInvertible;
+        public bool IsInvertible => CanInv(First) && CanInv(Add(First, Second));
 
-        public bool IsFinite => First.IsFinite && Second.IsFinite;
+        public bool IsFinite => IsFin(First) && IsFin(Second);
 
         public HyperDiagonal(in TInner first)
         {
             First = first;
-            Second = InnerFactory.Zero;
+            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperDiagonal(in TInner first, in TInner second)
@@ -87,192 +78,95 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return (value.First, value.Second);
         }
-
-        public HyperDiagonal<TInner> Add(in HyperDiagonal<TInner> other)
+        public HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> other)
         {
-            return new HyperDiagonal<TInner>(First.Add(other.First), Second.Add(other.Second));
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner>(Add(First, other.First), Add(Second, other.Second));
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner>(Sub(First, other.First), Sub(Second, other.Second));
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner>(Mul(First, other.First), Add(Add(Mul(First, other.Second), Mul(Second, other.First)), Mul(Second, other.Second)));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(other.First), Pow2(other.Second));
+                    return new HyperDiagonal<TInner>(Div(First, other.First), Div(Sub(Second, Div(Mul(First, other.Second), other.First)), Add(other.First, other.Second)));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public HyperDiagonal<TInner> Subtract(in HyperDiagonal<TInner> other)
+        public HyperDiagonal<TInner> Call(BinaryOperation operation, in TInner other)
         {
-            return new HyperDiagonal<TInner>(First.Subtract(other.First), Second.Subtract(other.Second));
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner>(Add(First, other), Second);
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner>(Sub(First, other), Second);
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner>(Mul(First, other), Mul(Second, other));
+                case BinaryOperation.Divide:
+                    return new HyperDiagonal<TInner>(Div(First, other), Div(Second, other));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public HyperDiagonal<TInner> Multiply(in HyperDiagonal<TInner> other)
+        public HyperDiagonal<TInner> Call(UnaryOperation operation)
         {
-            return new HyperDiagonal<TInner>(First.Multiply(other.First), First.Multiply(other.Second).Add(Second.Multiply(other.First).Add(Second.Multiply(other.Second))));
+            switch(operation)
+            {
+                case UnaryOperation.Negate:
+                    return new HyperDiagonal<TInner>(Neg(First), Neg(Second));
+                case UnaryOperation.Increment:
+                    return new HyperDiagonal<TInner>(Inc(First), Second);
+                case UnaryOperation.Decrement:
+                    return new HyperDiagonal<TInner>(Dec(First), Second);
+                case UnaryOperation.Inverse:
+                    return new HyperDiagonal<TInner>(Inv(First), Div(Neg(Second), Mul(Add(First, Second), First)));
+                case UnaryOperation.Conjugate:
+                    return new HyperDiagonal<TInner>(First, Neg(Second));
+                case UnaryOperation.Modulus:
+                    return Mul(Add(First, Second), First);
+                case UnaryOperation.Double:
+                    return new HyperDiagonal<TInner>(Mul2(First), Mul2(Second));
+                case UnaryOperation.Half:
+                    return new HyperDiagonal<TInner>(Div2(First), Div2(Second));
+                case UnaryOperation.Square:
+                    return new HyperDiagonal<TInner>(Pow2(First), Add(Mul2(Mul(First, Second)), Pow2(Second)));
+                default:
+                    var first = Call<TInner>(operation, First);
+                    return new HyperDiagonal<TInner>(first, Sub(Call<TInner>(operation, Add(First, Second)), first));
+            }
         }
 
-        public HyperDiagonal<TInner> Divide(in HyperDiagonal<TInner> other)
+        public HyperDiagonal<TInner> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDiagonal<TInner>(First.Divide(other.First), Second.Subtract(First.Multiply(other.Second).Divide(other.First)).Divide(other.First.Add(other.Second)));
+            return new HyperDiagonal<TInner>(HyperMath.Call(operation, First, other), Second);
         }
 
-        public HyperDiagonal<TInner> Power(in HyperDiagonal<TInner> other)
+        public HyperDiagonal<TInner> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
+            return new HyperDiagonal<TInner>(First, HyperMath.Call(operation, Second, other));
         }
 
-        public HyperDiagonal<TInner> Add(in TInner other)
+        public HyperDiagonal<TInner> FirstCall(UnaryOperation operation)
         {
-            return new HyperDiagonal<TInner>(First.Add(other), Second);
+            return new HyperDiagonal<TInner>(HyperMath.Call(operation, First), Second);
         }
 
-        public HyperDiagonal<TInner> Subtract(in TInner other)
+        public HyperDiagonal<TInner> SecondCall(UnaryOperation operation)
         {
-            return new HyperDiagonal<TInner>(First.Subtract(other), Second);
-        }
-
-        public HyperDiagonal<TInner> Multiply(in TInner other)
-        {
-            return new HyperDiagonal<TInner>(First.Multiply(other), Second.Multiply(other));
-        }
-
-        public HyperDiagonal<TInner> Divide(in TInner other)
-        {
-            return new HyperDiagonal<TInner>(First.Divide(other), Second.Divide(other));
-        }
-
-        public HyperDiagonal<TInner> Power(in TInner other)
-        {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
-        }
-
-        public HyperDiagonal<TInner> SecondAdd(in TInner other)
-        {
-            return new HyperDiagonal<TInner>(First, Second.Add(other));
-        }
-
-        public HyperDiagonal<TInner> SecondSubtract(in TInner other)
-        {
-            return new HyperDiagonal<TInner>(First, Second.Subtract(other));
-        }
-
-        public HyperDiagonal<TInner> Negate()
-        {
-            return new HyperDiagonal<TInner>(First.Negate(), Second.Negate());
-        }
-
-        public HyperDiagonal<TInner> Increment()
-        {
-            return new HyperDiagonal<TInner>(First.Increment(), Second);
-        }
-
-        public HyperDiagonal<TInner> Decrement()
-        {
-            return new HyperDiagonal<TInner>(First.Decrement(), Second);
-        }
-
-        public HyperDiagonal<TInner> SecondIncrement()
-        {
-            return new HyperDiagonal<TInner>(First, Second.Increment());
-        }
-
-        public HyperDiagonal<TInner> SecondDecrement()
-        {
-            return new HyperDiagonal<TInner>(First, Second.Decrement());
-        }
-
-        public HyperDiagonal<TInner> Inverse()
-        {
-            return new HyperDiagonal<TInner>(First.Inverse(), Second.Negate().Divide(First.Add(Second).Multiply(First)));
-        }
-
-        public HyperDiagonal<TInner> Conjugate()
-        {
-            return new HyperDiagonal<TInner>(First, Second.Negate());
-        }
-
-        public HyperDiagonal<TInner> Modulus()
-        {
-            return First.Add(Second).Multiply(First);
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Double()
-        {
-            return new HyperDiagonal<TInner>(First.Double(), Second.Double());
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Half()
-        {
-            return new HyperDiagonal<TInner>(First.Half(), Second.Half());
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Square()
-        {
-            return new HyperDiagonal<TInner>(First.Square(), First.Multiply(Second).Double().Add(Second.Square()));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.SquareRoot()
-        {
-            var first = First.SquareRoot();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).SquareRoot().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Exponentiate()
-        {
-            var first = First.Exponentiate();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).Exponentiate().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Logarithm()
-        {
-            var first = First.Logarithm();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).Logarithm().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Sine()
-        {
-            var first = First.Sine();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).Sine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Cosine()
-        {
-            var first = First.Cosine();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).Cosine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.Tangent()
-        {
-            var first = First.Tangent();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).Tangent().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.HyperbolicSine()
-        {
-            var first = First.HyperbolicSine();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).HyperbolicSine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.HyperbolicCosine()
-        {
-            var first = First.HyperbolicCosine();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).HyperbolicCosine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.HyperbolicTangent()
-        {
-            var first = First.HyperbolicTangent();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).HyperbolicTangent().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.ArcSine()
-        {
-            var first = First.ArcSine();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).ArcSine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.ArcCosine()
-        {
-            var first = First.ArcCosine();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).ArcCosine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>>.ArcTangent()
-        {
-            var first = First.ArcTangent();
-            return new HyperDiagonal<TInner>(first, First.Add(Second).ArcTangent().Subtract(first));
+            return new HyperDiagonal<TInner>(First, HyperMath.Call(operation, Second));
         }
 
         public override bool Equals(object other)
@@ -308,72 +202,12 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public override string ToString()
         {
-            return "Weird(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "Diagonal(" + First.ToString() + ", " + Second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "Weird(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
-        }
-
-        public static HyperDiagonal<TInner> operator+(in HyperDiagonal<TInner> a, in HyperDiagonal<TInner> b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner> operator-(in HyperDiagonal<TInner> a, in HyperDiagonal<TInner> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperDiagonal<TInner> operator*(in HyperDiagonal<TInner> a, in HyperDiagonal<TInner> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperDiagonal<TInner> operator/(in HyperDiagonal<TInner> a, in HyperDiagonal<TInner> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperDiagonal<TInner> operator^(in HyperDiagonal<TInner> a, in HyperDiagonal<TInner> b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperDiagonal<TInner> operator+(in HyperDiagonal<TInner> a, in TInner b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner> operator+(in TInner b, in HyperDiagonal<TInner> a)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner> operator-(in HyperDiagonal<TInner> a, in TInner b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperDiagonal<TInner> operator*(in HyperDiagonal<TInner> a, in TInner b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperDiagonal<TInner> operator/(in HyperDiagonal<TInner> a, in TInner b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperDiagonal<TInner> operator^(in HyperDiagonal<TInner> a, in TInner b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperDiagonal<TInner> operator-(in HyperDiagonal<TInner> a)
-        {
-            return a.Negate();
+            return "Diagonal(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperDiagonal<TInner> a, in HyperDiagonal<TInner> b)
@@ -406,33 +240,67 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<HyperDiagonal<TInner>> INumber<HyperDiagonal<TInner>>.GetFactory()
+        INumberOperations<HyperDiagonal<TInner>> INumber<HyperDiagonal<TInner>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<HyperDiagonal<TInner>>
+        class Operations : NumberOperations<HyperDiagonal<TInner>>, INumberOperations<HyperDiagonal<TInner>>
         {
-            public static readonly Factory Instance = new Factory();
-            public HyperDiagonal<TInner> Zero => HyperDiagonal<TInner>.Zero;
-            public HyperDiagonal<TInner> RealOne => HyperDiagonal<TInner>.RealOne;
-            public HyperDiagonal<TInner> SpecialOne => HyperDiagonal<TInner>.SpecialOne;
-            public HyperDiagonal<TInner> UnitsOne => HyperDiagonal<TInner>.UnitsOne;
-            public HyperDiagonal<TInner> NonRealUnitsOne => HyperDiagonal<TInner>.NonRealUnitsOne;
-            public HyperDiagonal<TInner> CombinedOne => HyperDiagonal<TInner>.CombinedOne;
-            public HyperDiagonal<TInner> AllOne => HyperDiagonal<TInner>.AllOne;
-            INumber INumberFactory.Zero => HyperDiagonal<TInner>.Zero;
-            INumber INumberFactory.RealOne => HyperDiagonal<TInner>.RealOne;
-            INumber INumberFactory.SpecialOne => HyperDiagonal<TInner>.SpecialOne;
-            INumber INumberFactory.UnitsOne => HyperDiagonal<TInner>.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => HyperDiagonal<TInner>.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => HyperDiagonal<TInner>.CombinedOne;
-            INumber INumberFactory.AllOne => HyperDiagonal<TInner>.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
+
+            public bool IsInvertible(in HyperDiagonal<TInner> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in HyperDiagonal<TInner> num)
+            {
+                return num.IsFinite;
+            }
+
+            public HyperDiagonal<TInner> Call(NullaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case NullaryOperation.Zero:
+                    {
+                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        return new HyperDiagonal<TInner>(zero, zero);
+                    }
+                    case NullaryOperation.RealOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                    case NullaryOperation.SpecialOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.UnitsOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.NonRealUnitsOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.CombinedOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                    case NullaryOperation.AllOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            public HyperDiagonal<TInner> Call(UnaryOperation operation, in HyperDiagonal<TInner> num)
+            {
+                return num.Call(operation);
+            }
+
+            public HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
     }
 
@@ -448,31 +316,19 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperDiagonal<TInner, TPrimitive> : IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        static readonly Lazy<INumberFactory<TInner, TPrimitive>> InnerFactoryLazy = new Lazy<INumberFactory<TInner, TPrimitive>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner, TPrimitive> InnerFactory => InnerFactoryLazy.Value;
-        public static HyperDiagonal<TInner, TPrimitive> Zero => new HyperDiagonal<TInner, TPrimitive>(InnerFactory.Zero, InnerFactory.Zero);
-        public static HyperDiagonal<TInner, TPrimitive> RealOne => new HyperDiagonal<TInner, TPrimitive>(InnerFactory.RealOne, InnerFactory.Zero);
-        public static HyperDiagonal<TInner, TPrimitive> SpecialOne => new HyperDiagonal<TInner, TPrimitive>(InnerFactory.Zero, InnerFactory.RealOne);
-        public static HyperDiagonal<TInner, TPrimitive> UnitsOne => new HyperDiagonal<TInner, TPrimitive>(InnerFactory.UnitsOne, InnerFactory.RealOne);
-        public static HyperDiagonal<TInner, TPrimitive> NonRealUnitsOne => new HyperDiagonal<TInner, TPrimitive>(InnerFactory.NonRealUnitsOne, InnerFactory.RealOne);
-        public static HyperDiagonal<TInner, TPrimitive> CombinedOne => new HyperDiagonal<TInner, TPrimitive>(InnerFactory.Zero, InnerFactory.CombinedOne);
-        public static HyperDiagonal<TInner, TPrimitive> AllOne => new HyperDiagonal<TInner, TPrimitive>(InnerFactory.AllOne, InnerFactory.AllOne);
-
         public TInner First { get; }
         public TInner Second { get; }
+        
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
+        public bool IsInvertible => CanInv(First) && CanInv(Add(First, Second));
 
-        public bool IsInvertible => First.IsInvertible && First.Add(Second).IsInvertible;
-
-        public bool IsFinite => First.IsFinite && Second.IsFinite;
+        public bool IsFinite => IsFin(First) && IsFin(Second);
 
         public HyperDiagonal(in TInner first)
         {
             First = first;
-            Second = InnerFactory.Zero;
+            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperDiagonal(in TInner first, in TInner second)
@@ -507,11 +363,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDiagonal<TInner, TPrimitive>(First, second);
         }
 
-        public static HyperDiagonal<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(InnerFactory.Create(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), InnerFactory.Create(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
-        }
-
         public static implicit operator HyperDiagonal<TInner, TPrimitive>(in TInner first)
         {
             return new HyperDiagonal<TInner, TPrimitive>(first);
@@ -526,238 +377,138 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return (value.First, value.Second);
         }
-
-        public HyperDiagonal<TInner, TPrimitive> Add(in HyperDiagonal<TInner, TPrimitive> other)
+        public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Add(other.First), Second.Add(other.Second));
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner, TPrimitive>(Add(First, other.First), Add(Second, other.Second));
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner, TPrimitive>(Sub(First, other.First), Sub(Second, other.Second));
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner, TPrimitive>(Mul(First, other.First), Add(Add(Mul(First, other.Second), Mul(Second, other.First)), Mul(Second, other.Second)));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(other.First), Pow2(other.Second));
+                    return new HyperDiagonal<TInner, TPrimitive>(Div(First, other.First), Div(Sub(Second, Div(Mul(First, other.Second), other.First)), Add(other.First, other.Second)));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Subtract(in HyperDiagonal<TInner, TPrimitive> other)
+        public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Subtract(other.First), Second.Subtract(other.Second));
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner, TPrimitive>(Add(First, other), Second);
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner, TPrimitive>(Sub(First, other), Second);
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner, TPrimitive>(Mul(First, other), Mul(Second, other));
+                case BinaryOperation.Divide:
+                    return new HyperDiagonal<TInner, TPrimitive>(Div(First, other), Div(Second, other));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Multiply(in HyperDiagonal<TInner, TPrimitive> other)
+        public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Multiply(other.First), First.Multiply(other.Second).Add(Second.Multiply(other.First).Add(Second.Multiply(other.Second))));
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner, TPrimitive>(AddVal(First, other), Second);
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner, TPrimitive>(SubVal(First, other), Second);
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner, TPrimitive>(MulVal(First, other), MulVal(Second, other));
+                case BinaryOperation.Divide:
+                    return new HyperDiagonal<TInner, TPrimitive>(DivVal(First, other), DivVal(Second, other));
+                case BinaryOperation.Power:
+                    var first = PowVal(First, other);
+                    return new HyperDiagonal<TInner, TPrimitive>(first, Sub(PowVal(Add(First, Second), other), first));
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Divide(in HyperDiagonal<TInner, TPrimitive> other)
+        public HyperDiagonal<TInner, TPrimitive> Call(UnaryOperation operation)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Divide(other.First), Second.Subtract(First.Multiply(other.Second).Divide(other.First)).Divide(other.First.Add(other.Second)));
+            switch(operation)
+            {
+                case UnaryOperation.Negate:
+                    return new HyperDiagonal<TInner, TPrimitive>(Neg(First), Neg(Second));
+                case UnaryOperation.Increment:
+                    return new HyperDiagonal<TInner, TPrimitive>(Inc(First), Second);
+                case UnaryOperation.Decrement:
+                    return new HyperDiagonal<TInner, TPrimitive>(Dec(First), Second);
+                case UnaryOperation.Inverse:
+                    return new HyperDiagonal<TInner, TPrimitive>(Inv(First), Div(Neg(Second), Mul(Add(First, Second), First)));
+                case UnaryOperation.Conjugate:
+                    return new HyperDiagonal<TInner, TPrimitive>(First, Neg(Second));
+                case UnaryOperation.Modulus:
+                    return Mul(Add(First, Second), First);
+                case UnaryOperation.Double:
+                    return new HyperDiagonal<TInner, TPrimitive>(Mul2(First), Mul2(Second));
+                case UnaryOperation.Half:
+                    return new HyperDiagonal<TInner, TPrimitive>(Div2(First), Div2(Second));
+                case UnaryOperation.Square:
+                    return new HyperDiagonal<TInner, TPrimitive>(Pow2(First), Add(Mul2(Mul(First, Second)), Pow2(Second)));
+                default:
+                    var first = Call<TInner>(operation, First);
+                    return new HyperDiagonal<TInner, TPrimitive>(first, Sub(Call<TInner>(operation, Add(First, Second)), first));
+            }
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Power(in HyperDiagonal<TInner, TPrimitive> other)
+        public TPrimitive Call(PrimitiveUnaryOperation operation)
         {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
+            switch(operation)
+            {
+                case PrimitiveUnaryOperation.RealValue:
+                    return Std<TInner, TPrimitive>(First);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Add(in TInner other)
+        public HyperDiagonal<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Add(other), Second);
+            return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call(operation, First, other), Second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Subtract(in TInner other)
+        public HyperDiagonal<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Subtract(other), Second);
+            return new HyperDiagonal<TInner, TPrimitive>(First, HyperMath.Call(operation, Second, other));
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Multiply(in TInner other)
+        public HyperDiagonal<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Multiply(other), Second.Multiply(other));
+            return new HyperDiagonal<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, First, other), Second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Divide(in TInner other)
+        public HyperDiagonal<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Divide(other), Second.Divide(other));
+            return new HyperDiagonal<TInner, TPrimitive>(First, HyperMath.CallPrimitive(operation, Second, other));
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Power(in TInner other)
+        public HyperDiagonal<TInner, TPrimitive> FirstCall(UnaryOperation operation)
         {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
+            return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call(operation, First), Second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> SecondAdd(in TInner other)
+        public HyperDiagonal<TInner, TPrimitive> SecondCall(UnaryOperation operation)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(First, Second.Add(other));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> SecondSubtract(in TInner other)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First, Second.Subtract(other));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Add(TPrimitive other)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Add(other), Second);
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Subtract(TPrimitive other)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Subtract(other), Second);
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> SecondAdd(TPrimitive other)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First, Second.Add(other));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> SecondSubtract(TPrimitive other)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First, Second.Subtract(other));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Multiply(TPrimitive other)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Multiply(other), Second.Multiply(other));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Divide(TPrimitive other)
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Divide(other), Second.Divide(other));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Power(TPrimitive other)
-        {
-            var first = First.Power(other);
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).Power(other).Subtract(first));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Negate()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Negate(), Second.Negate());
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Increment()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Increment(), Second);
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Decrement()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Decrement(), Second);
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> SecondIncrement()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First, Second.Increment());
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> SecondDecrement()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First, Second.Decrement());
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Inverse()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Inverse(), Second.Negate().Divide(First.Add(Second).Multiply(First)));
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Conjugate()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First, Second.Negate());
-        }
-
-        public HyperDiagonal<TInner, TPrimitive> Modulus()
-        {
-            return First.Add(Second).Multiply(First);
-        }
-
-        TPrimitive INumber<HyperDiagonal<TInner, TPrimitive>, TPrimitive>.AbsoluteValue()
-        {
-            throw new NotImplementedException();
-        }
-
-        TPrimitive INumber<HyperDiagonal<TInner, TPrimitive>, TPrimitive>.RealValue()
-        {
-            return First.RealValue();
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Double()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Double(), Second.Double());
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Half()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Half(), Second.Half());
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Square()
-        {
-            return new HyperDiagonal<TInner, TPrimitive>(First.Square(), First.Multiply(Second).Double().Add(Second.Square()));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.SquareRoot()
-        {
-            var first = First.SquareRoot();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).SquareRoot().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Exponentiate()
-        {
-            var first = First.Exponentiate();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).Exponentiate().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Logarithm()
-        {
-            var first = First.Logarithm();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).Logarithm().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Sine()
-        {
-            var first = First.Sine();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).Sine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Cosine()
-        {
-            var first = First.Cosine();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).Cosine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.Tangent()
-        {
-            var first = First.Tangent();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).Tangent().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.HyperbolicSine()
-        {
-            var first = First.HyperbolicSine();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).HyperbolicSine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.HyperbolicCosine()
-        {
-            var first = First.HyperbolicCosine();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).HyperbolicCosine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.HyperbolicTangent()
-        {
-            var first = First.HyperbolicTangent();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).HyperbolicTangent().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.ArcSine()
-        {
-            var first = First.ArcSine();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).ArcSine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.ArcCosine()
-        {
-            var first = First.ArcCosine();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).ArcCosine().Subtract(first));
-        }
-
-        HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>>.ArcTangent()
-        {
-            var first = First.ArcTangent();
-            return new HyperDiagonal<TInner, TPrimitive>(first, First.Add(Second).ArcTangent().Subtract(first));
+            return new HyperDiagonal<TInner, TPrimitive>(First, HyperMath.Call(operation, Second));
         }
 
         public override bool Equals(object other)
@@ -793,107 +544,12 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public override string ToString()
         {
-            return "Weird(" + First.ToString() + ", " + Second.ToString() + ")";
+            return "Diagonal(" + First.ToString() + ", " + Second.ToString() + ")";
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "Weird(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator+(in HyperDiagonal<TInner, TPrimitive> a, in HyperDiagonal<TInner, TPrimitive> b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator-(in HyperDiagonal<TInner, TPrimitive> a, in HyperDiagonal<TInner, TPrimitive> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator*(in HyperDiagonal<TInner, TPrimitive> a, in HyperDiagonal<TInner, TPrimitive> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator/(in HyperDiagonal<TInner, TPrimitive> a, in HyperDiagonal<TInner, TPrimitive> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator^(in HyperDiagonal<TInner, TPrimitive> a, in HyperDiagonal<TInner, TPrimitive> b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator+(in HyperDiagonal<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator+(in TInner b, in HyperDiagonal<TInner, TPrimitive> a)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator-(in HyperDiagonal<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator*(in HyperDiagonal<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator/(in HyperDiagonal<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator^(in HyperDiagonal<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator+(in HyperDiagonal<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator+(TPrimitive b, in HyperDiagonal<TInner, TPrimitive> a)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator-(in HyperDiagonal<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator*(in HyperDiagonal<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator*(TPrimitive b, in HyperDiagonal<TInner, TPrimitive> a)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator/(in HyperDiagonal<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator^(in HyperDiagonal<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperDiagonal<TInner, TPrimitive> operator-(in HyperDiagonal<TInner, TPrimitive> a)
-        {
-            return a.Negate();
+            return "Diagonal(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
         }
 
         public static bool operator==(in HyperDiagonal<TInner, TPrimitive> a, in HyperDiagonal<TInner, TPrimitive> b)
@@ -926,39 +582,87 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<HyperDiagonal<TInner, TPrimitive>> INumber<HyperDiagonal<TInner, TPrimitive>>.GetFactory()
+        INumberOperations<HyperDiagonal<TInner, TPrimitive>> INumber<HyperDiagonal<TInner, TPrimitive>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<HyperDiagonal<TInner, TPrimitive>, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>, TPrimitive>.GetFactory()
+        INumberOperations<HyperDiagonal<TInner, TPrimitive>, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>, TPrimitive>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<HyperDiagonal<TInner, TPrimitive>, TPrimitive>
+        class Operations : NumberOperations<HyperDiagonal<TInner, TPrimitive>>, INumberOperations<HyperDiagonal<TInner, TPrimitive>, TPrimitive>
         {
-            public static readonly Factory Instance = new Factory();
-            public HyperDiagonal<TInner, TPrimitive> Zero => HyperDiagonal<TInner, TPrimitive>.Zero;
-            public HyperDiagonal<TInner, TPrimitive> RealOne => HyperDiagonal<TInner, TPrimitive>.RealOne;
-            public HyperDiagonal<TInner, TPrimitive> SpecialOne => HyperDiagonal<TInner, TPrimitive>.SpecialOne;
-            public HyperDiagonal<TInner, TPrimitive> UnitsOne => HyperDiagonal<TInner, TPrimitive>.UnitsOne;
-            public HyperDiagonal<TInner, TPrimitive> NonRealUnitsOne => HyperDiagonal<TInner, TPrimitive>.NonRealUnitsOne;
-            public HyperDiagonal<TInner, TPrimitive> CombinedOne => HyperDiagonal<TInner, TPrimitive>.CombinedOne;
-            public HyperDiagonal<TInner, TPrimitive> AllOne => HyperDiagonal<TInner, TPrimitive>.AllOne;
-            INumber INumberFactory.Zero => HyperDiagonal<TInner, TPrimitive>.Zero;
-            INumber INumberFactory.RealOne => HyperDiagonal<TInner, TPrimitive>.RealOne;
-            INumber INumberFactory.SpecialOne => HyperDiagonal<TInner, TPrimitive>.SpecialOne;
-            INumber INumberFactory.UnitsOne => HyperDiagonal<TInner, TPrimitive>.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => HyperDiagonal<TInner, TPrimitive>.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => HyperDiagonal<TInner, TPrimitive>.CombinedOne;
-            INumber INumberFactory.AllOne => HyperDiagonal<TInner, TPrimitive>.AllOne;
-            public HyperDiagonal<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined) => HyperDiagonal<TInner, TPrimitive>.Create(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
+
+            public bool IsInvertible(in HyperDiagonal<TInner, TPrimitive> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in HyperDiagonal<TInner, TPrimitive> num)
+            {
+                return num.IsFinite;
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Call(NullaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case NullaryOperation.Zero:
+                    {
+                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        return new HyperDiagonal<TInner, TPrimitive>(zero, zero);
+                    }
+                    case NullaryOperation.RealOne:
+                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                    case NullaryOperation.SpecialOne:
+                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.UnitsOne:
+                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.NonRealUnitsOne:
+                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.CombinedOne:
+                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                    case NullaryOperation.AllOne:
+                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Call(UnaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num1, in HyperDiagonal<TInner, TPrimitive> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public TPrimitive Call(PrimitiveUnaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num1, TPrimitive num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            }
         }
 
         static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>

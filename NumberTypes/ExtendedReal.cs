@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -50,204 +51,136 @@ namespace IS4.HyperNumerics.NumberTypes
             return this;
         }
 
-        public ExtendedReal Add(in ExtendedReal other)
+        public ExtendedReal Call(BinaryOperation operation, in ExtendedReal other)
         {
-            return new ExtendedReal(Value + other.Value);
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other.Value;
+                case BinaryOperation.Subtract:
+                    return Value - other.Value;
+                case BinaryOperation.Multiply:
+                    return Value * other.Value;
+                case BinaryOperation.Divide:
+                    return Value / other.Value;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other.Value);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other.Value);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public ExtendedReal Subtract(in ExtendedReal other)
+        public ExtendedReal Call(BinaryOperation operation, double other)
         {
-            return new ExtendedReal(Value - other.Value);
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other;
+                case BinaryOperation.Subtract:
+                    return Value - other;
+                case BinaryOperation.Multiply:
+                    return Value * other;
+                case BinaryOperation.Divide:
+                    return Value / other;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public ExtendedReal Multiply(in ExtendedReal other)
+        public ExtendedReal Call(BinaryOperation operation, float other)
         {
-            return new ExtendedReal(Value * other.Value);
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other;
+                case BinaryOperation.Subtract:
+                    return Value - other;
+                case BinaryOperation.Multiply:
+                    return Value * other;
+                case BinaryOperation.Divide:
+                    return Value / other;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public ExtendedReal Divide(in ExtendedReal other)
+        public ExtendedReal Call(UnaryOperation operation)
         {
-            return new ExtendedReal(Value / other.Value);
+            switch(operation)
+            {
+                case UnaryOperation.Negate:
+                    return -Value;
+                case UnaryOperation.Increment:
+                    return Value + 1;
+                case UnaryOperation.Decrement:
+                    return Value - 1;
+                case UnaryOperation.Inverse:
+                    return 1.0 / Value;
+                case UnaryOperation.Conjugate:
+                    return Value;
+                case UnaryOperation.Modulus:
+                    return Math.Abs(Value);
+                case UnaryOperation.Double:
+                    return Value * 2.0;
+                case UnaryOperation.Half:
+                    return Value * 0.5;
+                case UnaryOperation.Square:
+                    return Value * Value;
+                case UnaryOperation.SquareRoot:
+                    return Math.Sqrt(Value);
+                case UnaryOperation.Exponentiate:
+                    return Math.Exp(Value);
+                case UnaryOperation.Logarithm:
+                    return Math.Log(Value);
+                case UnaryOperation.Sine:
+                    return Math.Sin(Value);
+                case UnaryOperation.Cosine:
+                    return Math.Cos(Value);
+                case UnaryOperation.Tangent:
+                    return Math.Tan(Value);
+                case UnaryOperation.HyperbolicSine:
+                    return Math.Sinh(Value);
+                case UnaryOperation.HyperbolicCosine:
+                    return Math.Cosh(Value);
+                case UnaryOperation.HyperbolicTangent:
+                    return Math.Tanh(Value);
+                case UnaryOperation.ArcSine:
+                    return Math.Asin(Value);
+                case UnaryOperation.ArcCosine:
+                    return Math.Acos(Value);
+                case UnaryOperation.ArcTangent:
+                    return Math.Atan(Value);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public ExtendedReal Power(in ExtendedReal other)
+        public double Call(PrimitiveUnaryOperation operation)
         {
-            return new ExtendedReal(Math.Pow(Value, other.Value));
+            switch(operation)
+            {
+                case PrimitiveUnaryOperation.AbsoluteValue:
+                    return Math.Abs(Value);
+                case PrimitiveUnaryOperation.RealValue:
+                    return Value;
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public ExtendedReal Add(double other)
-        {
-            return new ExtendedReal(Value + other);
-        }
-
-        public ExtendedReal Subtract(double other)
-        {
-            return new ExtendedReal(Value - other);
-        }
-
-        public ExtendedReal Multiply(double other)
-        {
-            return new ExtendedReal(Value * other);
-        }
-
-        public ExtendedReal Divide(double other)
-        {
-            return new ExtendedReal(Value / other);
-        }
-
-        public ExtendedReal Power(double other)
-        {
-            return new ExtendedReal(Math.Pow(Value, other));
-        }
-
-        public ExtendedReal Add(float other)
-        {
-            return new ExtendedReal(Value + other);
-        }
-
-        public ExtendedReal Subtract(float other)
-        {
-            return new ExtendedReal(Value - other);
-        }
-
-        public ExtendedReal Multiply(float other)
-        {
-            return new ExtendedReal(Value * other);
-        }
-
-        public ExtendedReal Divide(float other)
-        {
-            return new ExtendedReal(Value / other);
-        }
-
-        public ExtendedReal Power(float other)
-        {
-            return new ExtendedReal(Math.Pow(Value, other));
-        }
-
-        public ExtendedReal Negate()
-        {
-            return new ExtendedReal(-Value);
-        }
-
-        public ExtendedReal Increment()
-        {
-            return new ExtendedReal(Value + 1);
-        }
-
-        public ExtendedReal Decrement()
-        {
-            return new ExtendedReal(Value - 1);
-        }
-
-        public ExtendedReal Inverse()
-        {
-            return new ExtendedReal(1.0 / Value);
-        }
-
-        double INumber<ExtendedReal, double>.AbsoluteValue()
-        {
-            return Math.Abs(Value);
-        }
-
-        float INumber<ExtendedReal, float>.AbsoluteValue()
+        float INumber<ExtendedReal, float>.Call(PrimitiveUnaryOperation operation)
         {
             return (float)Math.Abs(Value);
-        }
-
-        double INumber<ExtendedReal, double>.RealValue()
-        {
-            return Value;
-        }
-
-        float INumber<ExtendedReal, float>.RealValue()
-        {
-            return (float)Value;
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Conjugate()
-        {
-            return this;
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Modulus()
-        {
-            return new ExtendedReal(Math.Abs(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Half()
-        {
-            return new ExtendedReal(Value / 2.0);
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Double()
-        {
-            return new ExtendedReal(Value * 2.0);
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Square()
-        {
-            return new ExtendedReal(Value * Value);
-        }
-
-        ExtendedReal INumber<ExtendedReal>.SquareRoot()
-        {
-            return new ExtendedReal(Math.Sqrt(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Exponentiate()
-        {
-            return new ExtendedReal(Math.Exp(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Logarithm()
-        {
-            return new ExtendedReal(Math.Log(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Sine()
-        {
-            return new ExtendedReal(Math.Sin(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Cosine()
-        {
-            return new ExtendedReal(Math.Cos(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.Tangent()
-        {
-            return new ExtendedReal(Math.Tan(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.HyperbolicSine()
-        {
-            return new ExtendedReal(Math.Sinh(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.HyperbolicCosine()
-        {
-            return new ExtendedReal(Math.Cosh(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.HyperbolicTangent()
-        {
-            return new ExtendedReal(Math.Tanh(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.ArcSine()
-        {
-            return new ExtendedReal(Math.Asin(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.ArcCosine()
-        {
-            return new ExtendedReal(Math.Acos(Value));
-        }
-
-        ExtendedReal INumber<ExtendedReal>.ArcTangent()
-        {
-            return new ExtendedReal(Math.Atan(Value));
         }
 
         public override bool Equals(object obj)
@@ -310,116 +243,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return (float)value.Value;
         }
 
-        public static ExtendedReal operator+(ExtendedReal a, ExtendedReal b)
-        {
-            return a.Add(b);
-        }
-
-        public static ExtendedReal operator-(ExtendedReal a, ExtendedReal b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static ExtendedReal operator*(ExtendedReal a, ExtendedReal b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static ExtendedReal operator/(ExtendedReal a, ExtendedReal b)
-        {
-            return a.Divide(b);
-        }
-
-        public static ExtendedReal operator^(ExtendedReal a, ExtendedReal b)
-        {
-            return a.Power(b);
-        }
-
-        public static ExtendedReal operator+(ExtendedReal a, double b)
-        {
-            return a.Add(b);
-        }
-
-        public static ExtendedReal operator+(double b, ExtendedReal a)
-        {
-            return a.Add(b);
-        }
-
-        public static ExtendedReal operator-(ExtendedReal a, double b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static ExtendedReal operator*(ExtendedReal a, double b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static ExtendedReal operator*(double b, ExtendedReal a)
-        {
-            return a.Multiply(b);
-        }
-
-        public static ExtendedReal operator/(ExtendedReal a, double b)
-        {
-            return a.Divide(b);
-        }
-
-        public static ExtendedReal operator^(ExtendedReal a, double b)
-        {
-            return a.Power(b);
-        }
-        
-        public static ExtendedReal operator+(ExtendedReal a, float b)
-        {
-            return a.Add(b);
-        }
-
-        public static ExtendedReal operator+(float b, ExtendedReal a)
-        {
-            return a.Add(b);
-        }
-
-        public static ExtendedReal operator-(ExtendedReal a, float b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static ExtendedReal operator*(ExtendedReal a, float b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static ExtendedReal operator*(float b, ExtendedReal a)
-        {
-            return a.Multiply(b);
-        }
-
-        public static ExtendedReal operator/(ExtendedReal a, float b)
-        {
-            return a.Divide(b);
-        }
-
-        public static ExtendedReal operator^(ExtendedReal a, float b)
-        {
-            return a.Power(b);
-        }
-
-        public static ExtendedReal operator-(ExtendedReal a)
-        {
-            return a.Negate();
-        }
-
-        public static ExtendedReal operator++(ExtendedReal a)
-        {
-            return a.Increment();
-        }
-
-        public static ExtendedReal operator--(ExtendedReal a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(ExtendedReal a, ExtendedReal b)
         {
             return a.Equals(in b);
@@ -450,45 +273,98 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<ExtendedReal> INumber<ExtendedReal>.GetFactory()
+        INumberOperations<ExtendedReal> INumber<ExtendedReal>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<ExtendedReal, double> INumber<ExtendedReal, double>.GetFactory()
+        INumberOperations<ExtendedReal, double> INumber<ExtendedReal, double>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<ExtendedReal, float> INumber<ExtendedReal, float>.GetFactory()
+        INumberOperations<ExtendedReal, float> INumber<ExtendedReal, float>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<ExtendedReal, double>, INumberFactory<ExtendedReal, float>
+        class Operations : NumberOperations<ExtendedReal>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>
         {
-            public static readonly Factory Instance = new Factory();
-            public ExtendedReal Zero => ExtendedReal.Zero;
-            public ExtendedReal RealOne => ExtendedReal.One;
-            public ExtendedReal SpecialOne => ExtendedReal.Zero;
-            public ExtendedReal UnitsOne => ExtendedReal.One;
-            public ExtendedReal NonRealUnitsOne => ExtendedReal.Zero;
-            public ExtendedReal CombinedOne => ExtendedReal.Zero;
-            public ExtendedReal AllOne => ExtendedReal.One;
-            INumber INumberFactory.Zero => ExtendedReal.Zero;
-            INumber INumberFactory.RealOne => ExtendedReal.One;
-            INumber INumberFactory.SpecialOne => ExtendedReal.Zero;
-            INumber INumberFactory.UnitsOne => ExtendedReal.One;
-            INumber INumberFactory.NonRealUnitsOne => ExtendedReal.Zero;
-            INumber INumberFactory.CombinedOne => ExtendedReal.Zero;
-            INumber INumberFactory.AllOne => ExtendedReal.One;
-            public ExtendedReal Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined) => new ExtendedReal(realUnit);
-            ExtendedReal INumberFactory<ExtendedReal, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined) => new ExtendedReal(realUnit);
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => 0;
+
+            public bool IsInvertible(in ExtendedReal num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in ExtendedReal num)
+            {
+                return num.IsFinite;
+            }
+
+            public ExtendedReal Call(NullaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case NullaryOperation.RealOne:
+                    case NullaryOperation.UnitsOne:
+                    case NullaryOperation.AllOne:
+                        return 1.0;
+                    case NullaryOperation.SpecialOne:
+                    case NullaryOperation.NonRealUnitsOne:
+                    case NullaryOperation.CombinedOne:
+                        return 0.0;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            public ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
+            {
+                return num.Call(operation);
+            }
+
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public double Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            {
+                return num.Call(operation);
+            }
+
+            float INumberOperations<ExtendedReal, float>.Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            {
+                return (float)num.Call(operation);
+            }
+
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, double num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, float num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public ExtendedReal Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined)
+            {
+                return new ExtendedReal(realUnit);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
+            {
+                return new ExtendedReal(realUnit);
+            }
         }
 
         int ICollection<double>.Count => 1;

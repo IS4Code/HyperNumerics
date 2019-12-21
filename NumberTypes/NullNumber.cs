@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,132 +29,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return default(NullNumber);
         }
 
-        public NullNumber Add(in NullNumber other)
+        public NullNumber Call(BinaryOperation operation, in NullNumber other)
         {
             return default;
         }
 
-        public NullNumber Subtract(in NullNumber other)
-        {
-            return default;
-        }
-
-        public NullNumber Multiply(in NullNumber other)
-        {
-            return default;
-        }
-
-        public NullNumber Divide(in NullNumber other)
-        {
-            return default;
-        }
-
-        public NullNumber Power(in NullNumber other)
-        {
-            return default;
-        }
-
-        public NullNumber Negate()
-        {
-            return default;
-        }
-
-        public NullNumber Increment()
-        {
-            return default;
-        }
-
-        public NullNumber Decrement()
-        {
-            return default;
-        }
-
-        public NullNumber Inverse()
-        {
-            return default;
-        }
-
-        public NullNumber Conjugate()
-        {
-            return default;
-        }
-
-        public NullNumber Modulus()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Half()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Double()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Square()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.SquareRoot()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Exponentiate()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Logarithm()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Sine()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Cosine()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.Tangent()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.HyperbolicSine()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.HyperbolicCosine()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.HyperbolicTangent()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.ArcSine()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.ArcCosine()
-        {
-            return default;
-        }
-
-        NullNumber INumber<NullNumber>.ArcTangent()
+        public NullNumber Call(UnaryOperation operation)
         {
             return default;
         }
@@ -198,31 +79,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Null";
         }
 
-        public static NullNumber operator+(NullNumber a, NullNumber b)
-        {
-            return default;
-        }
-
-        public static NullNumber operator-(NullNumber a, NullNumber b)
-        {
-            return default;
-        }
-
-        public static NullNumber operator*(NullNumber a, NullNumber b)
-        {
-            return default;
-        }
-
-        public static NullNumber operator/(NullNumber a, NullNumber b)
-        {
-            return default;
-        }
-
-        public static NullNumber operator-(NullNumber a)
-        {
-            return default;
-        }
-
         public static bool operator==(NullNumber a, NullNumber b)
         {
             return true;
@@ -253,34 +109,46 @@ namespace IS4.HyperNumerics.NumberTypes
             return true;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<NullNumber> INumber<NullNumber>.GetFactory()
+        INumberOperations<NullNumber> INumber<NullNumber>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<NullNumber>
+        class Operations : NumberOperations<NullNumber>, INumberOperations<NullNumber>
         {
-            public static readonly Factory Instance = new Factory();
-            public NullNumber Zero => default;
-            public NullNumber RealOne => default;
-            public NullNumber SpecialOne => default;
-            public NullNumber UnitsOne => default;
-            public NullNumber NonRealUnitsOne => default;
-            public NullNumber CombinedOne => default;
-            public NullNumber AllOne => default;
-            static readonly INumber Default = default(NullNumber);
-            INumber INumberFactory.Zero => Default;
-            INumber INumberFactory.RealOne => Default;
-            INumber INumberFactory.SpecialOne => Default;
-            INumber INumberFactory.UnitsOne => Default;
-            INumber INumberFactory.NonRealUnitsOne => Default;
-            INumber INumberFactory.CombinedOne => Default;
-            INumber INumberFactory.AllOne => Default;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => 0;
+
+            public bool IsInvertible(in NullNumber num)
+            {
+                return true;
+            }
+
+            public bool IsFinite(in NullNumber num)
+            {
+                return true;
+            }
+
+            public NullNumber Call(NullaryOperation operation)
+            {
+                return default;
+            }
+
+            public NullNumber Call(UnaryOperation operation, in NullNumber num)
+            {
+                return default;
+            }
+
+            public NullNumber Call(BinaryOperation operation, in NullNumber num1, in NullNumber num2)
+            {
+                return default;
+            }
         }
     }
 
@@ -309,172 +177,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return default(NullNumber<TPrimitive>);
         }
 
-        public NullNumber<TPrimitive> Add(in NullNumber<TPrimitive> other)
+        public NullNumber<TPrimitive> Call(BinaryOperation operation, in NullNumber<TPrimitive> other)
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> Subtract(in NullNumber<TPrimitive> other)
+        public NullNumber<TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> Multiply(in NullNumber<TPrimitive> other)
+        public NullNumber<TPrimitive> Call(UnaryOperation operation)
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> Divide(in NullNumber<TPrimitive> other)
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Power(in NullNumber<TPrimitive> other)
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Add(TPrimitive other)
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Subtract(TPrimitive other)
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Multiply(TPrimitive other)
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Divide(TPrimitive other)
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Power(TPrimitive other)
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Negate()
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Increment()
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Decrement()
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Inverse()
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Conjugate()
-        {
-            return default;
-        }
-
-        public NullNumber<TPrimitive> Modulus()
-        {
-            return default;
-        }
-
-        TPrimitive INumber<NullNumber<TPrimitive>, TPrimitive>.AbsoluteValue()
-        {
-            return default;
-        }
-
-        TPrimitive INumber<NullNumber<TPrimitive>, TPrimitive>.RealValue()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Half()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Double()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>, TPrimitive>.Power(TPrimitive other)
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Square()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.SquareRoot()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Exponentiate()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Logarithm()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Sine()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Cosine()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.Tangent()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.HyperbolicSine()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.HyperbolicCosine()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.HyperbolicTangent()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.ArcSine()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.ArcCosine()
-        {
-            return default;
-        }
-
-        NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>>.ArcTangent()
+        public TPrimitive Call(PrimitiveUnaryOperation operation)
         {
             return default;
         }
@@ -519,31 +237,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Null";
         }
 
-        public static NullNumber<TPrimitive> operator+(NullNumber<TPrimitive> a, NullNumber<TPrimitive> b)
-        {
-            return default;
-        }
-
-        public static NullNumber<TPrimitive> operator-(NullNumber<TPrimitive> a, NullNumber<TPrimitive> b)
-        {
-            return default;
-        }
-
-        public static NullNumber<TPrimitive> operator*(NullNumber<TPrimitive> a, NullNumber<TPrimitive> b)
-        {
-            return default;
-        }
-
-        public static NullNumber<TPrimitive> operator/(NullNumber<TPrimitive> a, NullNumber<TPrimitive> b)
-        {
-            return default;
-        }
-
-        public static NullNumber<TPrimitive> operator-(NullNumber<TPrimitive> a)
-        {
-            return default;
-        }
-
         public static bool operator==(NullNumber<TPrimitive> a, NullNumber<TPrimitive> b)
         {
             return true;
@@ -574,40 +267,66 @@ namespace IS4.HyperNumerics.NumberTypes
             return true;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<NullNumber<TPrimitive>> INumber<NullNumber<TPrimitive>>.GetFactory()
+        INumberOperations<NullNumber<TPrimitive>> INumber<NullNumber<TPrimitive>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<NullNumber<TPrimitive>, TPrimitive> INumber<NullNumber<TPrimitive>, TPrimitive>.GetFactory()
+        INumberOperations<NullNumber<TPrimitive>, TPrimitive> INumber<NullNumber<TPrimitive>, TPrimitive>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<NullNumber<TPrimitive>, TPrimitive>
+        class Operations : NumberOperations<NullNumber<TPrimitive>>, INumberOperations<NullNumber<TPrimitive>, TPrimitive>
         {
-            public static readonly Factory Instance = new Factory();
-            public NullNumber<TPrimitive> Zero => default;
-            public NullNumber<TPrimitive> RealOne => default;
-            public NullNumber<TPrimitive> SpecialOne => default;
-            public NullNumber<TPrimitive> UnitsOne => default;
-            public NullNumber<TPrimitive> NonRealUnitsOne => default;
-            public NullNumber<TPrimitive> CombinedOne => default;
-            public NullNumber<TPrimitive> AllOne => default;
-            static readonly INumber Default = default(NullNumber<TPrimitive>);
-            INumber INumberFactory.Zero => Default;
-            INumber INumberFactory.RealOne => Default;
-            INumber INumberFactory.SpecialOne => Default;
-            INumber INumberFactory.UnitsOne => Default;
-            INumber INumberFactory.NonRealUnitsOne => Default;
-            INumber INumberFactory.CombinedOne => Default;
-            INumber INumberFactory.AllOne => Default;
-            public NullNumber<TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined) => default;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => 0;
+
+            public bool IsInvertible(in NullNumber<TPrimitive> num)
+            {
+                return true;
+            }
+
+            public bool IsFinite(in NullNumber<TPrimitive> num)
+            {
+                return true;
+            }
+
+            public NullNumber<TPrimitive> Call(NullaryOperation operation)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Call(UnaryOperation operation, in NullNumber<TPrimitive> num)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Call(BinaryOperation operation, in NullNumber<TPrimitive> num1, in NullNumber<TPrimitive> num2)
+            {
+                return default;
+            }
+
+            public TPrimitive Call(PrimitiveUnaryOperation operation, in NullNumber<TPrimitive> num)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Call(BinaryOperation operation, in NullNumber<TPrimitive> num1, TPrimitive num2)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return default;
+            }
         }
 
         int ICollection<TPrimitive>.Count => 0;

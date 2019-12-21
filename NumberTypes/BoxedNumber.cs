@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,8 +12,6 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct BoxedNumber<TInner> : IExtendedNumber<BoxedNumber<TInner>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner>
     {
-        static readonly Lazy<INumberFactory<TInner>> InnerFactoryLazy = new Lazy<INumberFactory<TInner>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner> InnerFactory => InnerFactoryLazy.Value;
         static TInner defaultValue;
 
         readonly Instance instance;
@@ -26,6 +25,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return ref defaultValue;
             }
         }
+
+        public bool IsInvertible => Reference.IsInvertible;
+
+        public bool IsFinite => Reference.IsFinite;
+
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
         public BoxedNumber(in TInner value)
         {
@@ -48,297 +53,29 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public bool IsInvertible => Reference.IsInvertible;
-
-        public bool IsFinite => Reference.IsFinite;
-
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
-
-        public BoxedNumber<TInner> Add(in BoxedNumber<TInner> other)
+        public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> other)
         {
-            return Reference.Add(other.Reference);
+            return Reference.Call(operation, other.Reference);
         }
 
-        public BoxedNumber<TInner> Subtract(in BoxedNumber<TInner> other)
+        public BoxedNumber<TInner> Call(BinaryOperation operation, in TInner other)
         {
-            return Reference.Subtract(other.Reference);
+            return Reference.Call(operation, other);
         }
 
-        public BoxedNumber<TInner> Multiply(in BoxedNumber<TInner> other)
+        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
         {
-            return Reference.Multiply(other.Reference);
+            return Reference.Call(operation, other);
         }
 
-        public BoxedNumber<TInner> Divide(in BoxedNumber<TInner> other)
+        public BoxedNumber<TInner> Call(UnaryOperation operation)
         {
-            return Reference.Divide(other.Reference);
+            return Reference.Call(operation);
         }
 
-        public BoxedNumber<TInner> Power(in BoxedNumber<TInner> other)
+        TInner INumber<TInner>.Call(UnaryOperation operation)
         {
-            return Reference.Power(other.Reference);
-        }
-
-        public BoxedNumber<TInner> Add(in TInner other)
-        {
-            return Reference.Add(other);
-        }
-
-        public BoxedNumber<TInner> Subtract(in TInner other)
-        {
-            return Reference.Subtract(other);
-        }
-
-        public BoxedNumber<TInner> Multiply(in TInner other)
-        {
-            return Reference.Multiply(other);
-        }
-
-        public BoxedNumber<TInner> Divide(in TInner other)
-        {
-            return Reference.Divide(other);
-        }
-
-        public BoxedNumber<TInner> Power(in TInner other)
-        {
-            return Reference.Power(other);
-        }
-
-        TInner INumber<TInner>.Add(in TInner other)
-        {
-            return Reference.Add(other);
-        }
-
-        TInner INumber<TInner>.Subtract(in TInner other)
-        {
-            return Reference.Subtract(other);
-        }
-
-        TInner INumber<TInner>.Multiply(in TInner other)
-        {
-            return Reference.Multiply(other);
-        }
-
-        TInner INumber<TInner>.Divide(in TInner other)
-        {
-            return Reference.Divide(other);
-        }
-
-        TInner INumber<TInner>.Power(in TInner other)
-        {
-            return Reference.Power(other);
-        }
-
-        public BoxedNumber<TInner> Negate()
-        {
-            return Reference.Negate();
-        }
-
-        public BoxedNumber<TInner> Increment()
-        {
-            return Reference.Increment();
-        }
-
-        public BoxedNumber<TInner> Decrement()
-        {
-            return Reference.Decrement();
-        }
-
-        public BoxedNumber<TInner> Inverse()
-        {
-            return Reference.Inverse();
-        }
-
-        public BoxedNumber<TInner> Conjugate()
-        {
-            return Reference.Conjugate();
-        }
-
-        public BoxedNumber<TInner> Modulus()
-        {
-            return Reference.Modulus();
-        }
-
-        TInner INumber<TInner>.Negate()
-        {
-            return Reference.Negate();
-        }
-
-        TInner INumber<TInner>.Increment()
-        {
-            return Reference.Increment();
-        }
-
-        TInner INumber<TInner>.Decrement()
-        {
-            return Reference.Decrement();
-        }
-
-        TInner INumber<TInner>.Inverse()
-        {
-            return Reference.Inverse();
-        }
-
-        TInner INumber<TInner>.Conjugate()
-        {
-            return Reference.Conjugate();
-        }
-
-        TInner INumber<TInner>.Modulus()
-        {
-            return Reference.Modulus();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Half()
-        {
-            return Reference.Half();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Double()
-        {
-            return Reference.Double();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Square()
-        {
-            return Reference.Square();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.SquareRoot()
-        {
-            return Reference.SquareRoot();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Exponentiate()
-        {
-            return Reference.Exponentiate();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Logarithm()
-        {
-            return Reference.Logarithm();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Sine()
-        {
-            return Reference.Sine();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Cosine()
-        {
-            return Reference.Cosine();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.Tangent()
-        {
-            return Reference.Tangent();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.HyperbolicSine()
-        {
-            return Reference.HyperbolicSine();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.HyperbolicCosine()
-        {
-            return Reference.HyperbolicCosine();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.HyperbolicTangent()
-        {
-            return Reference.HyperbolicTangent();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.ArcSine()
-        {
-            return Reference.ArcSine();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.ArcCosine()
-        {
-            return Reference.ArcCosine();
-        }
-
-        BoxedNumber<TInner> INumber<BoxedNumber<TInner>>.ArcTangent()
-        {
-            return Reference.ArcTangent();
-        }
-
-        TInner INumber<TInner>.Half()
-        {
-            return Reference.Half();
-        }
-
-        TInner INumber<TInner>.Double()
-        {
-            return Reference.Double();
-        }
-
-        TInner INumber<TInner>.Square()
-        {
-            return Reference.Square();
-        }
-
-        TInner INumber<TInner>.SquareRoot()
-        {
-            return Reference.SquareRoot();
-        }
-
-        TInner INumber<TInner>.Exponentiate()
-        {
-            return Reference.Exponentiate();
-        }
-
-        TInner INumber<TInner>.Logarithm()
-        {
-            return Reference.Logarithm();
-        }
-
-        TInner INumber<TInner>.Sine()
-        {
-            return Reference.Sine();
-        }
-
-        TInner INumber<TInner>.Cosine()
-        {
-            return Reference.Cosine();
-        }
-
-        TInner INumber<TInner>.Tangent()
-        {
-            return Reference.Tangent();
-        }
-
-        TInner INumber<TInner>.HyperbolicSine()
-        {
-            return Reference.HyperbolicSine();
-        }
-
-        TInner INumber<TInner>.HyperbolicCosine()
-        {
-            return Reference.HyperbolicCosine();
-        }
-
-        TInner INumber<TInner>.HyperbolicTangent()
-        {
-            return Reference.HyperbolicTangent();
-        }
-
-        TInner INumber<TInner>.ArcSine()
-        {
-            return Reference.ArcSine();
-        }
-
-        TInner INumber<TInner>.ArcCosine()
-        {
-            return Reference.ArcCosine();
-        }
-
-        TInner INumber<TInner>.ArcTangent()
-        {
-            return Reference.ArcTangent();
+            return Reference.Call(operation);
         }
 
         public override bool Equals(object obj)
@@ -411,36 +148,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return value.Reference;
         }
 
-        public static BoxedNumber<TInner> operator+(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
-        {
-            return a.Add(b);
-        }
-
-        public static BoxedNumber<TInner> operator-(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static BoxedNumber<TInner> operator*(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static BoxedNumber<TInner> operator/(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static BoxedNumber<TInner> operator^(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
-        {
-            return a.Power(b);
-        }
-
-        public static BoxedNumber<TInner> operator-(BoxedNumber<TInner> a)
-        {
-            return a.Negate();
-        }
-
         public static bool operator==(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
         {
             return a.Equals(b);
@@ -471,38 +178,51 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<BoxedNumber<TInner>> INumber<BoxedNumber<TInner>>.GetFactory()
+        INumberOperations<BoxedNumber<TInner>> INumber<BoxedNumber<TInner>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<TInner> INumber<TInner>.GetFactory()
+        INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
-            return Reference.GetFactory();
+            return HyperMath.Operations.For<TInner>.Instance;
         }
 
-        class Factory : INumberFactory<BoxedNumber<TInner>>
+        class Operations : NumberOperations<BoxedNumber<TInner>>, INumberOperations<BoxedNumber<TInner>>
         {
-            public static readonly Factory Instance = new Factory();
-            public BoxedNumber<TInner> Zero => InnerFactory.Zero;
-            public BoxedNumber<TInner> RealOne => InnerFactory.RealOne;
-            public BoxedNumber<TInner> SpecialOne => InnerFactory.SpecialOne;
-            public BoxedNumber<TInner> UnitsOne => InnerFactory.UnitsOne;
-            public BoxedNumber<TInner> NonRealUnitsOne => InnerFactory.NonRealUnitsOne;
-            public BoxedNumber<TInner> CombinedOne => InnerFactory.CombinedOne;
-            public BoxedNumber<TInner> AllOne => InnerFactory.AllOne;
-            INumber INumberFactory.Zero => InnerFactory.Zero;
-            INumber INumberFactory.RealOne => InnerFactory.RealOne;
-            INumber INumberFactory.SpecialOne => InnerFactory.SpecialOne;
-            INumber INumberFactory.UnitsOne => InnerFactory.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => InnerFactory.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => InnerFactory.CombinedOne;
-            INumber INumberFactory.AllOne => InnerFactory.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
+
+            public bool IsInvertible(in BoxedNumber<TInner> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in BoxedNumber<TInner> num)
+            {
+                return num.IsFinite;
+            }
+
+            public BoxedNumber<TInner> Call(NullaryOperation operation)
+            {
+                return HyperMath.Call<TInner>(operation);
+            }
+
+            public BoxedNumber<TInner> Call(UnaryOperation operation, in BoxedNumber<TInner> num)
+            {
+                return num.Call(operation);
+            }
+
+            public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
 
         class Instance
@@ -524,8 +244,6 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct BoxedNumber<TInner, TPrimitive> : IExtendedNumber<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        static readonly Lazy<INumberFactory<TInner, TPrimitive>> InnerFactoryLazy = new Lazy<INumberFactory<TInner, TPrimitive>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner, TPrimitive> InnerFactory => InnerFactoryLazy.Value;
         static TInner defaultValue;
 
         readonly Instance instance;
@@ -539,6 +257,14 @@ namespace IS4.HyperNumerics.NumberTypes
                 return ref defaultValue;
             }
         }
+
+        public bool IsInvertible => Reference.IsInvertible;
+
+        public bool IsFinite => Reference.IsFinite;
+
+        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
+        public static int Dimension => DimensionLazy.Value;
+        int INumber.Dimension => Dimension;
 
         public BoxedNumber(in TInner value)
         {
@@ -561,367 +287,44 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public bool IsInvertible => Reference.IsInvertible;
-
-        public bool IsFinite => Reference.IsFinite;
-
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
-
-        public BoxedNumber<TInner, TPrimitive> Add(in BoxedNumber<TInner, TPrimitive> other)
-        {
-            return Reference.Add(other.Reference);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Subtract(in BoxedNumber<TInner, TPrimitive> other)
-        {
-            return Reference.Subtract(other.Reference);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Multiply(in BoxedNumber<TInner, TPrimitive> other)
-        {
-            return Reference.Multiply(other.Reference);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Divide(in BoxedNumber<TInner, TPrimitive> other)
-        {
-            return Reference.Divide(other.Reference);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Power(in BoxedNumber<TInner, TPrimitive> other)
-        {
-            return Reference.Power(other.Reference);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Add(in TInner other)
-        {
-            return Reference.Add(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Subtract(in TInner other)
-        {
-            return Reference.Subtract(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Multiply(in TInner other)
-        {
-            return Reference.Multiply(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Divide(in TInner other)
-        {
-            return Reference.Divide(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Power(in TInner other)
-        {
-            return Reference.Power(other);
-        }
-
-        TInner INumber<TInner>.Add(in TInner other)
-        {
-            return Reference.Add(other);
-        }
-
-        TInner INumber<TInner>.Subtract(in TInner other)
-        {
-            return Reference.Subtract(other);
-        }
-
-        TInner INumber<TInner>.Multiply(in TInner other)
-        {
-            return Reference.Multiply(other);
-        }
-
-        TInner INumber<TInner>.Divide(in TInner other)
-        {
-            return Reference.Divide(other);
-        }
-
-        TInner INumber<TInner>.Power(in TInner other)
-        {
-            return Reference.Power(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Add(TPrimitive other)
-        {
-            return Reference.Add(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Subtract(TPrimitive other)
-        {
-            return Reference.Subtract(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Multiply(TPrimitive other)
-        {
-            return Reference.Multiply(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Divide(TPrimitive other)
-        {
-            return Reference.Divide(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Power(TPrimitive other)
-        {
-            return Reference.Power(other);
-        }
-
-        TInner INumber<TInner, TPrimitive>.Add(TPrimitive other)
-        {
-            return Reference.Add(other);
-        }
-
-        TInner INumber<TInner, TPrimitive>.Subtract(TPrimitive other)
-        {
-            return Reference.Subtract(other);
-        }
-
-        TInner INumber<TInner, TPrimitive>.Multiply(TPrimitive other)
-        {
-            return Reference.Multiply(other);
-        }
-
-        TInner INumber<TInner, TPrimitive>.Divide(TPrimitive other)
-        {
-            return Reference.Divide(other);
-        }
-
-        TInner INumber<TInner, TPrimitive>.Power(TPrimitive other)
-        {
-            return Reference.Power(other);
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Negate()
-        {
-            return Reference.Negate();
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Increment()
-        {
-            return Reference.Increment();
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Decrement()
-        {
-            return Reference.Decrement();
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Inverse()
-        {
-            return Reference.Inverse();
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Conjugate()
-        {
-            return Reference.Conjugate();
-        }
-
-        public BoxedNumber<TInner, TPrimitive> Modulus()
-        {
-            return Reference.Modulus();
-        }
-
-        TInner INumber<TInner>.Negate()
-        {
-            return Reference.Negate();
-        }
-
-        TInner INumber<TInner>.Increment()
-        {
-            return Reference.Increment();
-        }
-
-        TInner INumber<TInner>.Decrement()
-        {
-            return Reference.Decrement();
-        }
-
-        TInner INumber<TInner>.Inverse()
-        {
-            return Reference.Inverse();
-        }
-
-        TInner INumber<TInner>.Conjugate()
-        {
-            return Reference.Conjugate();
-        }
-
-        TInner INumber<TInner>.Modulus()
-        {
-            return Reference.Modulus();
-        }
-
-        TPrimitive INumber<BoxedNumber<TInner, TPrimitive>, TPrimitive>.AbsoluteValue()
-        {
-            return Reference.AbsoluteValue();
-        }
-
-        TPrimitive INumber<BoxedNumber<TInner, TPrimitive>, TPrimitive>.RealValue()
-        {
-            return Reference.RealValue();
-        }
-
-        TPrimitive INumber<TInner, TPrimitive>.AbsoluteValue()
-        {
-            return Reference.AbsoluteValue();
-        }
-
-        TPrimitive INumber<TInner, TPrimitive>.RealValue()
-        {
-            return Reference.RealValue();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Half()
-        {
-            return Reference.Half();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Double()
-        {
-            return Reference.Double();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Square()
-        {
-            return Reference.Square();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.SquareRoot()
-        {
-            return Reference.SquareRoot();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Exponentiate()
-        {
-            return Reference.Exponentiate();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Logarithm()
-        {
-            return Reference.Logarithm();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Sine()
-        {
-            return Reference.Sine();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Cosine()
-        {
-            return Reference.Cosine();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.Tangent()
-        {
-            return Reference.Tangent();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.HyperbolicSine()
-        {
-            return Reference.HyperbolicSine();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.HyperbolicCosine()
-        {
-            return Reference.HyperbolicCosine();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.HyperbolicTangent()
-        {
-            return Reference.HyperbolicTangent();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.ArcSine()
-        {
-            return Reference.ArcSine();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.ArcCosine()
-        {
-            return Reference.ArcCosine();
-        }
-
-        BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>>.ArcTangent()
-        {
-            return Reference.ArcTangent();
-        }
-
-        TInner INumber<TInner>.Half()
-        {
-            return Reference.Half();
-        }
-
-        TInner INumber<TInner>.Double()
-        {
-            return Reference.Double();
-        }
-
-        TInner INumber<TInner>.Square()
-        {
-            return Reference.Square();
-        }
-
-        TInner INumber<TInner>.SquareRoot()
-        {
-            return Reference.SquareRoot();
-        }
-
-        TInner INumber<TInner>.Exponentiate()
-        {
-            return Reference.Exponentiate();
-        }
-
-        TInner INumber<TInner>.Logarithm()
-        {
-            return Reference.Logarithm();
-        }
-
-        TInner INumber<TInner>.Sine()
-        {
-            return Reference.Sine();
-        }
-
-        TInner INumber<TInner>.Cosine()
+        public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> other)
         {
-            return Reference.Cosine();
+            return Reference.Call(operation, other.Reference);
         }
 
-        TInner INumber<TInner>.Tangent()
+        public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
         {
-            return Reference.Tangent();
+            return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner>.HyperbolicSine()
+        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
         {
-            return Reference.HyperbolicSine();
+            return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner>.HyperbolicCosine()
+        public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
-            return Reference.HyperbolicCosine();
+            return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner>.HyperbolicTangent()
+        TInner INumber<TInner, TPrimitive>.Call(BinaryOperation operation, TPrimitive other)
         {
-            return Reference.HyperbolicTangent();
+            return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner>.ArcSine()
+        public BoxedNumber<TInner, TPrimitive> Call(UnaryOperation operation)
         {
-            return Reference.ArcSine();
+            return Reference.Call(operation);
         }
 
-        TInner INumber<TInner>.ArcCosine()
+        TInner INumber<TInner>.Call(UnaryOperation operation)
         {
-            return Reference.ArcCosine();
+            return Reference.Call(operation);
         }
 
-        TInner INumber<TInner>.ArcTangent()
+        public TPrimitive Call(PrimitiveUnaryOperation operation)
         {
-            return Reference.ArcTangent();
+            return Reference.Call(operation);
         }
 
         public override bool Equals(object obj)
@@ -991,37 +394,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static implicit operator TInner(BoxedNumber<TInner, TPrimitive> value)
         {
-            return (TInner)value.Reference;
-        }
-
-        public static BoxedNumber<TInner, TPrimitive> operator+(BoxedNumber<TInner, TPrimitive> a, BoxedNumber<TInner, TPrimitive> b)
-        {
-            return a.Add(b);
-        }
-
-        public static BoxedNumber<TInner, TPrimitive> operator-(BoxedNumber<TInner, TPrimitive> a, BoxedNumber<TInner, TPrimitive> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static BoxedNumber<TInner, TPrimitive> operator*(BoxedNumber<TInner, TPrimitive> a, BoxedNumber<TInner, TPrimitive> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static BoxedNumber<TInner, TPrimitive> operator/(BoxedNumber<TInner, TPrimitive> a, BoxedNumber<TInner, TPrimitive> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static BoxedNumber<TInner, TPrimitive> operator^(BoxedNumber<TInner, TPrimitive> a, BoxedNumber<TInner, TPrimitive> b)
-        {
-            return a.Power(b);
-        }
-
-        public static BoxedNumber<TInner, TPrimitive> operator-(BoxedNumber<TInner, TPrimitive> a)
-        {
-            return a.Negate();
+            return value.Reference;
         }
 
         public static bool operator==(BoxedNumber<TInner, TPrimitive> a, BoxedNumber<TInner, TPrimitive> b)
@@ -1054,49 +427,76 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<BoxedNumber<TInner, TPrimitive>> INumber<BoxedNumber<TInner, TPrimitive>>.GetFactory()
+        INumberOperations<BoxedNumber<TInner, TPrimitive>> INumber<BoxedNumber<TInner, TPrimitive>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<BoxedNumber<TInner, TPrimitive>, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>, TPrimitive>.GetFactory()
+        INumberOperations<BoxedNumber<TInner, TPrimitive>, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<TInner> INumber<TInner>.GetFactory()
+        INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
-            return Reference.GetFactory();
+            return Reference.GetOperations();
         }
 
-        INumberFactory<TInner, TPrimitive> INumber<TInner, TPrimitive>.GetFactory()
+        INumberOperations<TInner, TPrimitive> INumber<TInner, TPrimitive>.GetOperations()
         {
-            return Reference.GetFactory();
+            return Reference.GetOperations();
         }
 
-        class Factory : INumberFactory<BoxedNumber<TInner, TPrimitive>, TPrimitive>
+        class Operations : NumberOperations<BoxedNumber<TInner, TPrimitive>>, INumberOperations<BoxedNumber<TInner, TPrimitive>, TPrimitive>
         {
-            public static readonly Factory Instance = new Factory();
-            public BoxedNumber<TInner, TPrimitive> Zero => InnerFactory.Zero;
-            public BoxedNumber<TInner, TPrimitive> RealOne => InnerFactory.RealOne;
-            public BoxedNumber<TInner, TPrimitive> SpecialOne => InnerFactory.SpecialOne;
-            public BoxedNumber<TInner, TPrimitive> UnitsOne => InnerFactory.UnitsOne;
-            public BoxedNumber<TInner, TPrimitive> NonRealUnitsOne => InnerFactory.NonRealUnitsOne;
-            public BoxedNumber<TInner, TPrimitive> CombinedOne => InnerFactory.CombinedOne;
-            public BoxedNumber<TInner, TPrimitive> AllOne => InnerFactory.AllOne;
-            INumber INumberFactory.Zero => InnerFactory.Zero;
-            INumber INumberFactory.RealOne => InnerFactory.RealOne;
-            INumber INumberFactory.SpecialOne => InnerFactory.SpecialOne;
-            INumber INumberFactory.UnitsOne => InnerFactory.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => InnerFactory.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => InnerFactory.CombinedOne;
-            INumber INumberFactory.AllOne => InnerFactory.AllOne;
-            public BoxedNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined) => InnerFactory.Create(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
+
+            public bool IsInvertible(in BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num.IsFinite;
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
+            {
+                return HyperMath.Call<TInner>(operation);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Call(UnaryOperation operation, in BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> num1, in BoxedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public TPrimitive Call(PrimitiveUnaryOperation operation, in BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> num1, TPrimitive num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            }
         }
 
         class Instance

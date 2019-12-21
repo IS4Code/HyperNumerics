@@ -9,14 +9,6 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct AbstractNumber : INumber<AbstractNumber>, INumberOperation, IDynamicMetaObjectProvider
     {
-        public static AbstractNumber Zero => default;
-        public static AbstractNumber RealOne => new AbstractNumber(HyperMath.Operations.RealOne);
-        public static AbstractNumber SpecialOne => new AbstractNumber(HyperMath.Operations.SpecialOne);
-        public static AbstractNumber UnitsOne => new AbstractNumber(HyperMath.Operations.UnitsOne);
-        public static AbstractNumber NonRealUnitsOne => new AbstractNumber(HyperMath.Operations.NonRealUnitsOne);
-        public static AbstractNumber CombinedOne => new AbstractNumber(HyperMath.Operations.CombinedOne);
-        public static AbstractNumber AllOne => new AbstractNumber(HyperMath.Operations.AllOne);
-
         private readonly INumberOperation operation;
 
         public INumberOperation Operation => operation ?? HyperMath.Operations.Zero;
@@ -60,134 +52,14 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TPrimitive>();
         }
 
-        public AbstractNumber Add(in AbstractNumber other)
+        public AbstractNumber Call(BinaryOperation operation, in AbstractNumber other)
         {
-            return new AbstractNumber(HyperMath.Operations.Add.Apply(Operation, other.Operation));
+            return new AbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public AbstractNumber Subtract(in AbstractNumber other)
+        public AbstractNumber Call(UnaryOperation operation)
         {
-            return new AbstractNumber(HyperMath.Operations.Sub.Apply(Operation, other.Operation));
-        }
-
-        public AbstractNumber Multiply(in AbstractNumber other)
-        {
-            return new AbstractNumber(HyperMath.Operations.Mul.Apply(Operation, other.Operation));
-        }
-
-        public AbstractNumber Divide(in AbstractNumber other)
-        {
-            return new AbstractNumber(HyperMath.Operations.Div.Apply(Operation, other.Operation));
-        }
-
-        public AbstractNumber Power(in AbstractNumber other)
-        {
-            return new AbstractNumber(HyperMath.Operations.Pow.Apply(Operation, other.Operation));
-        }
-
-        public AbstractNumber Negate()
-        {
-            return new AbstractNumber(HyperMath.Operations.Neg.Apply(Operation));
-        }
-
-        public AbstractNumber Increment()
-        {
-            return new AbstractNumber(HyperMath.Operations.Inc.Apply(Operation));
-        }
-
-        public AbstractNumber Decrement()
-        {
-            return new AbstractNumber(HyperMath.Operations.Dec.Apply(Operation));
-        }
-
-        public AbstractNumber Inverse()
-        {
-            return new AbstractNumber(HyperMath.Operations.Inv.Apply(Operation));
-        }
-
-        public AbstractNumber Conjugate()
-        {
-            return new AbstractNumber(HyperMath.Operations.Con.Apply(Operation));
-        }
-
-        public AbstractNumber Modulus()
-        {
-            return new AbstractNumber(HyperMath.Operations.Mods.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Half()
-        {
-            return new AbstractNumber(HyperMath.Operations.Div2.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Double()
-        {
-            return new AbstractNumber(HyperMath.Operations.Mul2.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Square()
-        {
-            return new AbstractNumber(HyperMath.Operations.Pow2.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.SquareRoot()
-        {
-            return new AbstractNumber(HyperMath.Operations.Sqrt.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Exponentiate()
-        {
-            return new AbstractNumber(HyperMath.Operations.Exp.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Logarithm()
-        {
-            return new AbstractNumber(HyperMath.Operations.Log.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Sine()
-        {
-            return new AbstractNumber(HyperMath.Operations.Sin.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Cosine()
-        {
-            return new AbstractNumber(HyperMath.Operations.Cos.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.Tangent()
-        {
-            return new AbstractNumber(HyperMath.Operations.Tan.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.HyperbolicSine()
-        {
-            return new AbstractNumber(HyperMath.Operations.Sinh.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.HyperbolicCosine()
-        {
-            return new AbstractNumber(HyperMath.Operations.Cosh.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.HyperbolicTangent()
-        {
-            return new AbstractNumber(HyperMath.Operations.Tanh.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.ArcSine()
-        {
-            return new AbstractNumber(HyperMath.Operations.Asin.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.ArcCosine()
-        {
-            return new AbstractNumber(HyperMath.Operations.Acos.Apply(Operation));
-        }
-
-        AbstractNumber INumber<AbstractNumber>.ArcTangent()
-        {
-            return new AbstractNumber(HyperMath.Operations.Atan.Apply(Operation));
+            return new AbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
@@ -230,46 +102,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static AbstractNumber operator+(AbstractNumber a, AbstractNumber b)
-        {
-            return a.Add(b);
-        }
-
-        public static AbstractNumber operator-(AbstractNumber a, AbstractNumber b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static AbstractNumber operator*(AbstractNumber a, AbstractNumber b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static AbstractNumber operator/(AbstractNumber a, AbstractNumber b)
-        {
-            return a.Divide(b);
-        }
-
-        public static AbstractNumber operator^(AbstractNumber a, AbstractNumber b)
-        {
-            return a.Power(b);
-        }
-
-        public static AbstractNumber operator-(AbstractNumber a)
-        {
-            return a.Negate();
-        }
-
-        public static AbstractNumber operator++(AbstractNumber a)
-        {
-            return a.Increment();
-        }
-
-        public static AbstractNumber operator--(AbstractNumber a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(AbstractNumber a, AbstractNumber b)
         {
             return a.Equals(in b);
@@ -300,33 +132,46 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<AbstractNumber> INumber<AbstractNumber>.GetFactory()
+        INumberOperations<AbstractNumber> INumber<AbstractNumber>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<AbstractNumber>
+        class Operations : NumberOperations<AbstractNumber>, INumberOperations<AbstractNumber>
         {
-            public static readonly Factory Instance = new Factory();
-            public AbstractNumber Zero => AbstractNumber.Zero;
-            public AbstractNumber RealOne => AbstractNumber.RealOne;
-            public AbstractNumber SpecialOne => AbstractNumber.SpecialOne;
-            public AbstractNumber UnitsOne => AbstractNumber.UnitsOne;
-            public AbstractNumber NonRealUnitsOne => AbstractNumber.NonRealUnitsOne;
-            public AbstractNumber CombinedOne => AbstractNumber.CombinedOne;
-            public AbstractNumber AllOne => AbstractNumber.AllOne;
-            INumber INumberFactory.Zero => AbstractNumber.Zero;
-            INumber INumberFactory.RealOne => AbstractNumber.RealOne;
-            INumber INumberFactory.SpecialOne => AbstractNumber.SpecialOne;
-            INumber INumberFactory.UnitsOne => AbstractNumber.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => AbstractNumber.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => AbstractNumber.CombinedOne;
-            INumber INumberFactory.AllOne => AbstractNumber.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => -1;
+
+            public bool IsInvertible(in AbstractNumber num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in AbstractNumber num)
+            {
+                return num.IsFinite;
+            }
+
+            public AbstractNumber Call(NullaryOperation operation)
+            {
+                return new AbstractNumber(HyperMath.Operations.GetOperation(operation));
+            }
+
+            public AbstractNumber Call(UnaryOperation operation, in AbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
+            public AbstractNumber Call(BinaryOperation operation, in AbstractNumber num1, in AbstractNumber num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
 
         DynamicMetaObject IDynamicMetaObjectProvider.GetMetaObject(Expression parameter)
@@ -365,14 +210,6 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct PrimitiveAbstractNumber : INumber<PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
     {
-        public static PrimitiveAbstractNumber Zero => default;
-        public static PrimitiveAbstractNumber RealOne => new PrimitiveAbstractNumber(HyperMath.Operations.RealOne);
-        public static PrimitiveAbstractNumber SpecialOne => new PrimitiveAbstractNumber(HyperMath.Operations.SpecialOne);
-        public static PrimitiveAbstractNumber UnitsOne => new PrimitiveAbstractNumber(HyperMath.Operations.UnitsOne);
-        public static PrimitiveAbstractNumber NonRealUnitsOne => new PrimitiveAbstractNumber(HyperMath.Operations.NonRealUnitsOne);
-        public static PrimitiveAbstractNumber CombinedOne => new PrimitiveAbstractNumber(HyperMath.Operations.CombinedOne);
-        public static PrimitiveAbstractNumber AllOne => new PrimitiveAbstractNumber(HyperMath.Operations.AllOne);
-
         private readonly IPrimitiveNumberOperation operation;
 
         public IPrimitiveNumberOperation Operation => operation ?? HyperMath.Operations.Zero;
@@ -411,134 +248,14 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TPrimitive>();
         }
 
-        public PrimitiveAbstractNumber Add(in PrimitiveAbstractNumber other)
+        public PrimitiveAbstractNumber Call(BinaryOperation operation, in PrimitiveAbstractNumber other)
         {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Add.Apply(Operation, other.Operation));
+            return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public PrimitiveAbstractNumber Subtract(in PrimitiveAbstractNumber other)
+        public PrimitiveAbstractNumber Call(UnaryOperation operation)
         {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Sub.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveAbstractNumber Multiply(in PrimitiveAbstractNumber other)
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Mul.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveAbstractNumber Divide(in PrimitiveAbstractNumber other)
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Div.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveAbstractNumber Power(in PrimitiveAbstractNumber other)
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Pow.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveAbstractNumber Negate()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Neg.Apply(Operation));
-        }
-
-        public PrimitiveAbstractNumber Increment()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Inc.Apply(Operation));
-        }
-
-        public PrimitiveAbstractNumber Decrement()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Dec.Apply(Operation));
-        }
-
-        public PrimitiveAbstractNumber Inverse()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Inv.Apply(Operation));
-        }
-
-        public PrimitiveAbstractNumber Conjugate()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Con.Apply(Operation));
-        }
-
-        public PrimitiveAbstractNumber Modulus()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Mods.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Half()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Div2.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Double()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Mul2.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Square()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Pow2.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.SquareRoot()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Sqrt.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Exponentiate()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Exp.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Logarithm()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Log.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Sine()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Sin.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Cosine()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Cos.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.Tangent()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Tan.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.HyperbolicSine()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Sinh.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.HyperbolicCosine()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Cosh.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.HyperbolicTangent()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Tanh.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.ArcSine()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Asin.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.ArcCosine()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Acos.Apply(Operation));
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber>.ArcTangent()
-        {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.Atan.Apply(Operation));
+            return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
@@ -586,46 +303,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveAbstractNumber(num.Operation);
         }
 
-        public static PrimitiveAbstractNumber operator+(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.Add(b);
-        }
-
-        public static PrimitiveAbstractNumber operator-(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static PrimitiveAbstractNumber operator*(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static PrimitiveAbstractNumber operator/(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.Divide(b);
-        }
-
-        public static PrimitiveAbstractNumber operator^(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.Power(b);
-        }
-
-        public static PrimitiveAbstractNumber operator-(PrimitiveAbstractNumber a)
-        {
-            return a.Negate();
-        }
-
-        public static PrimitiveAbstractNumber operator++(PrimitiveAbstractNumber a)
-        {
-            return a.Increment();
-        }
-
-        public static PrimitiveAbstractNumber operator--(PrimitiveAbstractNumber a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
         {
             return a.Equals(in b);
@@ -656,33 +333,46 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber>.GetFactory()
+        INumberOperations<PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<PrimitiveAbstractNumber>
+        class Operations : NumberOperations<PrimitiveAbstractNumber>, INumberOperations<PrimitiveAbstractNumber>
         {
-            public static readonly Factory Instance = new Factory();
-            public PrimitiveAbstractNumber Zero => PrimitiveAbstractNumber.Zero;
-            public PrimitiveAbstractNumber RealOne => PrimitiveAbstractNumber.RealOne;
-            public PrimitiveAbstractNumber SpecialOne => PrimitiveAbstractNumber.SpecialOne;
-            public PrimitiveAbstractNumber UnitsOne => PrimitiveAbstractNumber.UnitsOne;
-            public PrimitiveAbstractNumber NonRealUnitsOne => PrimitiveAbstractNumber.NonRealUnitsOne;
-            public PrimitiveAbstractNumber CombinedOne => PrimitiveAbstractNumber.CombinedOne;
-            public PrimitiveAbstractNumber AllOne => PrimitiveAbstractNumber.AllOne;
-            INumber INumberFactory.Zero => PrimitiveAbstractNumber.Zero;
-            INumber INumberFactory.RealOne => PrimitiveAbstractNumber.RealOne;
-            INumber INumberFactory.SpecialOne => PrimitiveAbstractNumber.SpecialOne;
-            INumber INumberFactory.UnitsOne => PrimitiveAbstractNumber.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => PrimitiveAbstractNumber.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => PrimitiveAbstractNumber.CombinedOne;
-            INumber INumberFactory.AllOne => PrimitiveAbstractNumber.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => -1;
+
+            public bool IsInvertible(in PrimitiveAbstractNumber num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in PrimitiveAbstractNumber num)
+            {
+                return num.IsFinite;
+            }
+
+            public PrimitiveAbstractNumber Call(NullaryOperation operation)
+            {
+                return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation));
+            }
+
+            public PrimitiveAbstractNumber Call(UnaryOperation operation, in PrimitiveAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
+            public PrimitiveAbstractNumber Call(BinaryOperation operation, in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
 
         DynamicMetaObject IDynamicMetaObjectProvider.GetMetaObject(Expression parameter)
@@ -721,14 +411,6 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct UnaryAbstractNumber : INumber<UnaryAbstractNumber>, IUnaryNumberOperation
     {
-        public static UnaryAbstractNumber Zero => default;
-        public static UnaryAbstractNumber RealOne => new UnaryAbstractNumber(HyperMath.Operations.RealOne.AsUnary());
-        public static UnaryAbstractNumber SpecialOne => new UnaryAbstractNumber(HyperMath.Operations.SpecialOne.AsUnary());
-        public static UnaryAbstractNumber UnitsOne => new UnaryAbstractNumber(HyperMath.Operations.UnitsOne.AsUnary());
-        public static UnaryAbstractNumber NonRealUnitsOne => new UnaryAbstractNumber(HyperMath.Operations.NonRealUnitsOne.AsUnary());
-        public static UnaryAbstractNumber CombinedOne => new UnaryAbstractNumber(HyperMath.Operations.CombinedOne.AsUnary());
-        public static UnaryAbstractNumber AllOne => new UnaryAbstractNumber(HyperMath.Operations.AllOne.AsUnary());
-
         private readonly IUnaryNumberOperation operation;
 
         public IUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsUnary();
@@ -772,134 +454,14 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TPrimitive>(num);
         }
 
-        public UnaryAbstractNumber Add(in UnaryAbstractNumber other)
+        public UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber other)
         {
-            return new UnaryAbstractNumber(HyperMath.Operations.Add.Apply(Operation, other.Operation));
+            return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public UnaryAbstractNumber Subtract(in UnaryAbstractNumber other)
+        public UnaryAbstractNumber Call(UnaryOperation operation)
         {
-            return new UnaryAbstractNumber(HyperMath.Operations.Sub.Apply(Operation, other.Operation));
-        }
-
-        public UnaryAbstractNumber Multiply(in UnaryAbstractNumber other)
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Mul.Apply(Operation, other.Operation));
-        }
-
-        public UnaryAbstractNumber Divide(in UnaryAbstractNumber other)
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Div.Apply(Operation, other.Operation));
-        }
-
-        public UnaryAbstractNumber Power(in UnaryAbstractNumber other)
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Pow.Apply(Operation, other.Operation));
-        }
-
-        public UnaryAbstractNumber Negate()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Neg.Apply(Operation));
-        }
-
-        public UnaryAbstractNumber Increment()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Inc.Apply(Operation));
-        }
-
-        public UnaryAbstractNumber Decrement()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Dec.Apply(Operation));
-        }
-
-        public UnaryAbstractNumber Inverse()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Inv.Apply(Operation));
-        }
-
-        public UnaryAbstractNumber Conjugate()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Con.Apply(Operation));
-        }
-
-        public UnaryAbstractNumber Modulus()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Mods.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Half()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Div2.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Double()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Mul2.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Square()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Pow2.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.SquareRoot()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Sqrt.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Exponentiate()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Exp.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Logarithm()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Log.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Sine()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Sin.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Cosine()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Cos.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.Tangent()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Tan.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.HyperbolicSine()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Sinh.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.HyperbolicCosine()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Cosh.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.HyperbolicTangent()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Tanh.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.ArcSine()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Asin.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.ArcCosine()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Acos.Apply(Operation));
-        }
-
-        UnaryAbstractNumber INumber<UnaryAbstractNumber>.ArcTangent()
-        {
-            return new UnaryAbstractNumber(HyperMath.Operations.Atan.Apply(Operation));
+            return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
@@ -947,46 +509,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new UnaryAbstractNumber(num.Operation.AsUnary());
         }
 
-        public static UnaryAbstractNumber operator+(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.Add(b);
-        }
-
-        public static UnaryAbstractNumber operator-(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static UnaryAbstractNumber operator*(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static UnaryAbstractNumber operator/(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.Divide(b);
-        }
-
-        public static UnaryAbstractNumber operator^(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.Power(b);
-        }
-
-        public static UnaryAbstractNumber operator-(UnaryAbstractNumber a)
-        {
-            return a.Negate();
-        }
-
-        public static UnaryAbstractNumber operator++(UnaryAbstractNumber a)
-        {
-            return a.Increment();
-        }
-
-        public static UnaryAbstractNumber operator--(UnaryAbstractNumber a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
             return a.Equals(in b);
@@ -1017,47 +539,52 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<UnaryAbstractNumber> INumber<UnaryAbstractNumber>.GetFactory()
+        INumberOperations<UnaryAbstractNumber> INumber<UnaryAbstractNumber>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<UnaryAbstractNumber>
+        class Operations : NumberOperations<UnaryAbstractNumber>, INumberOperations<UnaryAbstractNumber>
         {
-            public static readonly Factory Instance = new Factory();
-            public UnaryAbstractNumber Zero => UnaryAbstractNumber.Zero;
-            public UnaryAbstractNumber RealOne => UnaryAbstractNumber.RealOne;
-            public UnaryAbstractNumber SpecialOne => UnaryAbstractNumber.SpecialOne;
-            public UnaryAbstractNumber UnitsOne => UnaryAbstractNumber.UnitsOne;
-            public UnaryAbstractNumber NonRealUnitsOne => UnaryAbstractNumber.NonRealUnitsOne;
-            public UnaryAbstractNumber CombinedOne => UnaryAbstractNumber.CombinedOne;
-            public UnaryAbstractNumber AllOne => UnaryAbstractNumber.AllOne;
-            INumber INumberFactory.Zero => UnaryAbstractNumber.Zero;
-            INumber INumberFactory.RealOne => UnaryAbstractNumber.RealOne;
-            INumber INumberFactory.SpecialOne => UnaryAbstractNumber.SpecialOne;
-            INumber INumberFactory.UnitsOne => UnaryAbstractNumber.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => UnaryAbstractNumber.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => UnaryAbstractNumber.CombinedOne;
-            INumber INumberFactory.AllOne => UnaryAbstractNumber.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => -1;
+
+            public bool IsInvertible(in UnaryAbstractNumber num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in UnaryAbstractNumber num)
+            {
+                return num.IsFinite;
+            }
+
+            public UnaryAbstractNumber Call(NullaryOperation operation)
+            {
+                return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
+            }
+
+            public UnaryAbstractNumber Call(UnaryOperation operation, in UnaryAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
+            public UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
     }
     
     [Serializable]
     public readonly struct PrimitiveUnaryAbstractNumber : INumber<PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
     {
-        public static PrimitiveUnaryAbstractNumber Zero => default;
-        public static PrimitiveUnaryAbstractNumber RealOne => new PrimitiveUnaryAbstractNumber(HyperMath.Operations.RealOne.AsUnary());
-        public static PrimitiveUnaryAbstractNumber SpecialOne => new PrimitiveUnaryAbstractNumber(HyperMath.Operations.SpecialOne.AsUnary());
-        public static PrimitiveUnaryAbstractNumber UnitsOne => new PrimitiveUnaryAbstractNumber(HyperMath.Operations.UnitsOne.AsUnary());
-        public static PrimitiveUnaryAbstractNumber NonRealUnitsOne => new PrimitiveUnaryAbstractNumber(HyperMath.Operations.NonRealUnitsOne.AsUnary());
-        public static PrimitiveUnaryAbstractNumber CombinedOne => new PrimitiveUnaryAbstractNumber(HyperMath.Operations.CombinedOne.AsUnary());
-        public static PrimitiveUnaryAbstractNumber AllOne => new PrimitiveUnaryAbstractNumber(HyperMath.Operations.AllOne.AsUnary());
-
         private readonly IPrimitiveUnaryNumberOperation operation;
 
         public IPrimitiveUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsUnary();
@@ -1096,134 +623,14 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TPrimitive>(num);
         }
 
-        public PrimitiveUnaryAbstractNumber Add(in PrimitiveUnaryAbstractNumber other)
+        public PrimitiveUnaryAbstractNumber Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber other)
         {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Add.Apply(Operation, other.Operation));
+            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public PrimitiveUnaryAbstractNumber Subtract(in PrimitiveUnaryAbstractNumber other)
+        public PrimitiveUnaryAbstractNumber Call(UnaryOperation operation)
         {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Sub.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Multiply(in PrimitiveUnaryAbstractNumber other)
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Mul.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Divide(in PrimitiveUnaryAbstractNumber other)
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Div.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Power(in PrimitiveUnaryAbstractNumber other)
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Pow.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Negate()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Neg.Apply(Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Increment()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Inc.Apply(Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Decrement()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Dec.Apply(Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Inverse()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Inv.Apply(Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Conjugate()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Con.Apply(Operation));
-        }
-
-        public PrimitiveUnaryAbstractNumber Modulus()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Mods.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Half()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Div2.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Double()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Mul2.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Square()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Pow2.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.SquareRoot()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Sqrt.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Exponentiate()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Exp.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Logarithm()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Log.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Sine()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Sin.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Cosine()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Cos.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.Tangent()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Tan.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.HyperbolicSine()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Sinh.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.HyperbolicCosine()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Cosh.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.HyperbolicTangent()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Tanh.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.ArcSine()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Asin.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.ArcCosine()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Acos.Apply(Operation));
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber>.ArcTangent()
-        {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.Atan.Apply(Operation));
+            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
@@ -1281,46 +688,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveUnaryAbstractNumber(num.Operation.AsUnary());
         }
 
-        public static PrimitiveUnaryAbstractNumber operator+(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.Add(b);
-        }
-
-        public static PrimitiveUnaryAbstractNumber operator-(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static PrimitiveUnaryAbstractNumber operator*(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static PrimitiveUnaryAbstractNumber operator/(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.Divide(b);
-        }
-
-        public static PrimitiveUnaryAbstractNumber operator^(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.Power(b);
-        }
-
-        public static PrimitiveUnaryAbstractNumber operator-(PrimitiveUnaryAbstractNumber a)
-        {
-            return a.Negate();
-        }
-
-        public static PrimitiveUnaryAbstractNumber operator++(PrimitiveUnaryAbstractNumber a)
-        {
-            return a.Increment();
-        }
-
-        public static PrimitiveUnaryAbstractNumber operator--(PrimitiveUnaryAbstractNumber a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
         {
             return a.Equals(in b);
@@ -1351,47 +718,52 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber>.GetFactory()
+        INumberOperations<PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<PrimitiveUnaryAbstractNumber>
+        class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, INumberOperations<PrimitiveUnaryAbstractNumber>
         {
-            public static readonly Factory Instance = new Factory();
-            public PrimitiveUnaryAbstractNumber Zero => PrimitiveUnaryAbstractNumber.Zero;
-            public PrimitiveUnaryAbstractNumber RealOne => PrimitiveUnaryAbstractNumber.RealOne;
-            public PrimitiveUnaryAbstractNumber SpecialOne => PrimitiveUnaryAbstractNumber.SpecialOne;
-            public PrimitiveUnaryAbstractNumber UnitsOne => PrimitiveUnaryAbstractNumber.UnitsOne;
-            public PrimitiveUnaryAbstractNumber NonRealUnitsOne => PrimitiveUnaryAbstractNumber.NonRealUnitsOne;
-            public PrimitiveUnaryAbstractNumber CombinedOne => PrimitiveUnaryAbstractNumber.CombinedOne;
-            public PrimitiveUnaryAbstractNumber AllOne => PrimitiveUnaryAbstractNumber.AllOne;
-            INumber INumberFactory.Zero => PrimitiveUnaryAbstractNumber.Zero;
-            INumber INumberFactory.RealOne => PrimitiveUnaryAbstractNumber.RealOne;
-            INumber INumberFactory.SpecialOne => PrimitiveUnaryAbstractNumber.SpecialOne;
-            INumber INumberFactory.UnitsOne => PrimitiveUnaryAbstractNumber.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => PrimitiveUnaryAbstractNumber.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => PrimitiveUnaryAbstractNumber.CombinedOne;
-            INumber INumberFactory.AllOne => PrimitiveUnaryAbstractNumber.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => -1;
+
+            public bool IsInvertible(in PrimitiveUnaryAbstractNumber num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in PrimitiveUnaryAbstractNumber num)
+            {
+                return num.IsFinite;
+            }
+
+            public PrimitiveUnaryAbstractNumber Call(NullaryOperation operation)
+            {
+                return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
+            }
+
+            public PrimitiveUnaryAbstractNumber Call(UnaryOperation operation, in PrimitiveUnaryAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
+            public PrimitiveUnaryAbstractNumber Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
     }
     
     [Serializable]
     public readonly struct BinaryAbstractNumber : INumber<BinaryAbstractNumber>, IBinaryNumberOperation
     {
-        public static BinaryAbstractNumber Zero => default;
-        public static BinaryAbstractNumber RealOne => new BinaryAbstractNumber(HyperMath.Operations.RealOne.AsBinary());
-        public static BinaryAbstractNumber SpecialOne => new BinaryAbstractNumber(HyperMath.Operations.SpecialOne.AsBinary());
-        public static BinaryAbstractNumber UnitsOne => new BinaryAbstractNumber(HyperMath.Operations.UnitsOne.AsBinary());
-        public static BinaryAbstractNumber NonRealUnitsOne => new BinaryAbstractNumber(HyperMath.Operations.NonRealUnitsOne.AsBinary());
-        public static BinaryAbstractNumber CombinedOne => new BinaryAbstractNumber(HyperMath.Operations.CombinedOne.AsBinary());
-        public static BinaryAbstractNumber AllOne => new BinaryAbstractNumber(HyperMath.Operations.AllOne.AsBinary());
-
         private readonly IBinaryNumberOperation operation;
 
         public IBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsBinary();
@@ -1435,134 +807,14 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TPrimitive>(numArg1, numArg2);
         }
 
-        public BinaryAbstractNumber Add(in BinaryAbstractNumber other)
+        public BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber other)
         {
-            return new BinaryAbstractNumber(HyperMath.Operations.Add.Apply(Operation, other.Operation));
+            return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public BinaryAbstractNumber Subtract(in BinaryAbstractNumber other)
+        public BinaryAbstractNumber Call(UnaryOperation operation)
         {
-            return new BinaryAbstractNumber(HyperMath.Operations.Sub.Apply(Operation, other.Operation));
-        }
-
-        public BinaryAbstractNumber Multiply(in BinaryAbstractNumber other)
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Mul.Apply(Operation, other.Operation));
-        }
-
-        public BinaryAbstractNumber Divide(in BinaryAbstractNumber other)
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Div.Apply(Operation, other.Operation));
-        }
-
-        public BinaryAbstractNumber Power(in BinaryAbstractNumber other)
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Pow.Apply(Operation, other.Operation));
-        }
-
-        public BinaryAbstractNumber Negate()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Neg.Apply(Operation));
-        }
-
-        public BinaryAbstractNumber Increment()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Inc.Apply(Operation));
-        }
-
-        public BinaryAbstractNumber Decrement()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Dec.Apply(Operation));
-        }
-
-        public BinaryAbstractNumber Inverse()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Inv.Apply(Operation));
-        }
-
-        public BinaryAbstractNumber Conjugate()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Con.Apply(Operation));
-        }
-
-        public BinaryAbstractNumber Modulus()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Mods.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Half()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Div2.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Double()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Mul2.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Square()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Pow2.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.SquareRoot()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Sqrt.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Exponentiate()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Exp.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Logarithm()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Log.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Sine()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Sin.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Cosine()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Cos.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.Tangent()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Tan.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.HyperbolicSine()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Sinh.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.HyperbolicCosine()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Cosh.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.HyperbolicTangent()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Tanh.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.ArcSine()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Asin.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.ArcCosine()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Acos.Apply(Operation));
-        }
-
-        BinaryAbstractNumber INumber<BinaryAbstractNumber>.ArcTangent()
-        {
-            return new BinaryAbstractNumber(HyperMath.Operations.Atan.Apply(Operation));
+            return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
@@ -1610,46 +862,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new BinaryAbstractNumber(num.Operation.AsBinary());
         }
 
-        public static BinaryAbstractNumber operator+(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.Add(b);
-        }
-
-        public static BinaryAbstractNumber operator-(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static BinaryAbstractNumber operator*(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static BinaryAbstractNumber operator/(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.Divide(b);
-        }
-
-        public static BinaryAbstractNumber operator^(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.Power(b);
-        }
-
-        public static BinaryAbstractNumber operator-(BinaryAbstractNumber a)
-        {
-            return a.Negate();
-        }
-
-        public static BinaryAbstractNumber operator++(BinaryAbstractNumber a)
-        {
-            return a.Increment();
-        }
-
-        public static BinaryAbstractNumber operator--(BinaryAbstractNumber a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
             return a.Equals(in b);
@@ -1680,47 +892,52 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<BinaryAbstractNumber> INumber<BinaryAbstractNumber>.GetFactory()
+        INumberOperations<BinaryAbstractNumber> INumber<BinaryAbstractNumber>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<BinaryAbstractNumber>
+        class Operations : NumberOperations<BinaryAbstractNumber>, INumberOperations<BinaryAbstractNumber>
         {
-            public static readonly Factory Instance = new Factory();
-            public BinaryAbstractNumber Zero => BinaryAbstractNumber.Zero;
-            public BinaryAbstractNumber RealOne => BinaryAbstractNumber.RealOne;
-            public BinaryAbstractNumber SpecialOne => BinaryAbstractNumber.SpecialOne;
-            public BinaryAbstractNumber UnitsOne => BinaryAbstractNumber.UnitsOne;
-            public BinaryAbstractNumber NonRealUnitsOne => BinaryAbstractNumber.NonRealUnitsOne;
-            public BinaryAbstractNumber CombinedOne => BinaryAbstractNumber.CombinedOne;
-            public BinaryAbstractNumber AllOne => BinaryAbstractNumber.AllOne;
-            INumber INumberFactory.Zero => BinaryAbstractNumber.Zero;
-            INumber INumberFactory.RealOne => BinaryAbstractNumber.RealOne;
-            INumber INumberFactory.SpecialOne => BinaryAbstractNumber.SpecialOne;
-            INumber INumberFactory.UnitsOne => BinaryAbstractNumber.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => BinaryAbstractNumber.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => BinaryAbstractNumber.CombinedOne;
-            INumber INumberFactory.AllOne => BinaryAbstractNumber.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => -1;
+
+            public bool IsInvertible(in BinaryAbstractNumber num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in BinaryAbstractNumber num)
+            {
+                return num.IsFinite;
+            }
+
+            public BinaryAbstractNumber Call(NullaryOperation operation)
+            {
+                return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
+            }
+
+            public BinaryAbstractNumber Call(UnaryOperation operation, in BinaryAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
+            public BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
     }
     
     [Serializable]
     public readonly struct PrimitiveBinaryAbstractNumber : INumber<PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
     {
-        public static PrimitiveBinaryAbstractNumber Zero => default;
-        public static PrimitiveBinaryAbstractNumber RealOne => new PrimitiveBinaryAbstractNumber(HyperMath.Operations.RealOne.AsBinary());
-        public static PrimitiveBinaryAbstractNumber SpecialOne => new PrimitiveBinaryAbstractNumber(HyperMath.Operations.SpecialOne.AsBinary());
-        public static PrimitiveBinaryAbstractNumber UnitsOne => new PrimitiveBinaryAbstractNumber(HyperMath.Operations.UnitsOne.AsBinary());
-        public static PrimitiveBinaryAbstractNumber NonRealUnitsOne => new PrimitiveBinaryAbstractNumber(HyperMath.Operations.NonRealUnitsOne.AsBinary());
-        public static PrimitiveBinaryAbstractNumber CombinedOne => new PrimitiveBinaryAbstractNumber(HyperMath.Operations.CombinedOne.AsBinary());
-        public static PrimitiveBinaryAbstractNumber AllOne => new PrimitiveBinaryAbstractNumber(HyperMath.Operations.AllOne.AsBinary());
-
         private readonly IPrimitiveBinaryNumberOperation operation;
 
         public IPrimitiveBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsBinary();
@@ -1759,134 +976,14 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TPrimitive>(numArg1, numArg2);
         }
 
-        public PrimitiveBinaryAbstractNumber Add(in PrimitiveBinaryAbstractNumber other)
+        public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber other)
         {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Add.Apply(Operation, other.Operation));
+            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public PrimitiveBinaryAbstractNumber Subtract(in PrimitiveBinaryAbstractNumber other)
+        public PrimitiveBinaryAbstractNumber Call(UnaryOperation operation)
         {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Sub.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Multiply(in PrimitiveBinaryAbstractNumber other)
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Mul.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Divide(in PrimitiveBinaryAbstractNumber other)
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Div.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Power(in PrimitiveBinaryAbstractNumber other)
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Pow.Apply(Operation, other.Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Negate()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Neg.Apply(Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Increment()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Inc.Apply(Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Decrement()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Dec.Apply(Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Inverse()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Inv.Apply(Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Conjugate()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Con.Apply(Operation));
-        }
-
-        public PrimitiveBinaryAbstractNumber Modulus()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Mods.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Half()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Div2.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Double()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Mul2.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Square()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Pow2.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.SquareRoot()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Sqrt.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Exponentiate()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Exp.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Logarithm()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Log.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Sine()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Sin.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Cosine()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Cos.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.Tangent()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Tan.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.HyperbolicSine()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Sinh.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.HyperbolicCosine()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Cosh.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.HyperbolicTangent()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Tanh.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.ArcSine()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Asin.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.ArcCosine()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Acos.Apply(Operation));
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber>.ArcTangent()
-        {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.Atan.Apply(Operation));
+            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
@@ -1944,46 +1041,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
         }
 
-        public static PrimitiveBinaryAbstractNumber operator+(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.Add(b);
-        }
-
-        public static PrimitiveBinaryAbstractNumber operator-(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static PrimitiveBinaryAbstractNumber operator*(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static PrimitiveBinaryAbstractNumber operator/(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.Divide(b);
-        }
-
-        public static PrimitiveBinaryAbstractNumber operator^(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.Power(b);
-        }
-
-        public static PrimitiveBinaryAbstractNumber operator-(PrimitiveBinaryAbstractNumber a)
-        {
-            return a.Negate();
-        }
-
-        public static PrimitiveBinaryAbstractNumber operator++(PrimitiveBinaryAbstractNumber a)
-        {
-            return a.Increment();
-        }
-
-        public static PrimitiveBinaryAbstractNumber operator--(PrimitiveBinaryAbstractNumber a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
         {
             return a.Equals(in b);
@@ -2014,33 +1071,46 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber>.GetFactory()
+        INumberOperations<PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<PrimitiveBinaryAbstractNumber>
+        class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, INumberOperations<PrimitiveBinaryAbstractNumber>
         {
-            public static readonly Factory Instance = new Factory();
-            public PrimitiveBinaryAbstractNumber Zero => PrimitiveBinaryAbstractNumber.Zero;
-            public PrimitiveBinaryAbstractNumber RealOne => PrimitiveBinaryAbstractNumber.RealOne;
-            public PrimitiveBinaryAbstractNumber SpecialOne => PrimitiveBinaryAbstractNumber.SpecialOne;
-            public PrimitiveBinaryAbstractNumber UnitsOne => PrimitiveBinaryAbstractNumber.UnitsOne;
-            public PrimitiveBinaryAbstractNumber NonRealUnitsOne => PrimitiveBinaryAbstractNumber.NonRealUnitsOne;
-            public PrimitiveBinaryAbstractNumber CombinedOne => PrimitiveBinaryAbstractNumber.CombinedOne;
-            public PrimitiveBinaryAbstractNumber AllOne => PrimitiveBinaryAbstractNumber.AllOne;
-            INumber INumberFactory.Zero => PrimitiveBinaryAbstractNumber.Zero;
-            INumber INumberFactory.RealOne => PrimitiveBinaryAbstractNumber.RealOne;
-            INumber INumberFactory.SpecialOne => PrimitiveBinaryAbstractNumber.SpecialOne;
-            INumber INumberFactory.UnitsOne => PrimitiveBinaryAbstractNumber.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => PrimitiveBinaryAbstractNumber.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => PrimitiveBinaryAbstractNumber.CombinedOne;
-            INumber INumberFactory.AllOne => PrimitiveBinaryAbstractNumber.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => -1;
+
+            public bool IsInvertible(in PrimitiveBinaryAbstractNumber num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in PrimitiveBinaryAbstractNumber num)
+            {
+                return num.IsFinite;
+            }
+
+            public PrimitiveBinaryAbstractNumber Call(NullaryOperation operation)
+            {
+                return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
+            }
+
+            public PrimitiveBinaryAbstractNumber Call(UnaryOperation operation, in PrimitiveBinaryAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
+            public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
     }
 }

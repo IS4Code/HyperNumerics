@@ -1,6 +1,9 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
+using static IS4.HyperNumerics.HyperMath;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
@@ -14,31 +17,19 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperComplex<TInner> : IHyperNumber<HyperComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        static readonly Lazy<INumberFactory<TInner>> InnerFactoryLazy = new Lazy<INumberFactory<TInner>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner> InnerFactory => InnerFactoryLazy.Value;
-        public static HyperComplex<TInner> Zero => new HyperComplex<TInner>(InnerFactory.Zero, InnerFactory.Zero);
-        public static HyperComplex<TInner> RealOne => new HyperComplex<TInner>(InnerFactory.RealOne, InnerFactory.Zero);
-        public static HyperComplex<TInner> SpecialOne => new HyperComplex<TInner>(InnerFactory.Zero, InnerFactory.RealOne);
-        public static HyperComplex<TInner> UnitsOne => new HyperComplex<TInner>(InnerFactory.UnitsOne, InnerFactory.RealOne);
-        public static HyperComplex<TInner> NonRealUnitsOne => new HyperComplex<TInner>(InnerFactory.NonRealUnitsOne, InnerFactory.RealOne);
-        public static HyperComplex<TInner> CombinedOne => new HyperComplex<TInner>(InnerFactory.Zero, InnerFactory.CombinedOne);
-        public static HyperComplex<TInner> AllOne => new HyperComplex<TInner>(InnerFactory.AllOne, InnerFactory.AllOne);
-
         public TInner First { get; }
         public TInner Second { get; }
 
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-        public bool IsInvertible => First.IsInvertible || Second.IsInvertible;
+        public bool IsInvertible => CanInv(First) || CanInv(Second);
 
         public bool IsFinite => First.IsFinite && Second.IsFinite;
 
         public HyperComplex(in TInner first)
         {
             First = first;
-            Second = InnerFactory.Zero;
+            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperComplex(in TInner first, in TInner second)
@@ -88,199 +79,151 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.First, value.Second);
         }
 
-        public HyperComplex<TInner> Add(in HyperComplex<TInner> other)
-        {
-            return new HyperComplex<TInner>(First.Add(other.First), Second.Add(other.Second));
-        }
-
-        public HyperComplex<TInner> Subtract(in HyperComplex<TInner> other)
-        {
-            return new HyperComplex<TInner>(First.Subtract(other.First), Second.Subtract(other.Second));
-        }
-
-        public HyperComplex<TInner> Multiply(in HyperComplex<TInner> other)
-        {
-            return new HyperComplex<TInner>(First.Multiply(other.First).Subtract(Second.Multiply(other.Second)), First.Multiply(other.Second).Add(Second.Multiply(other.First)));
-        }
-
-        public HyperComplex<TInner> Divide(in HyperComplex<TInner> other)
-        {
-            var denom = other.First.Square().Add(other.Second.Square());
-            return new HyperComplex<TInner>(First.Multiply(other.First).Add(Second.Multiply(other.Second)).Divide(denom), Second.Multiply(other.First).Subtract(First.Multiply(other.Second)).Divide(denom));
-        }
-
-        public HyperComplex<TInner> Power(in HyperComplex<TInner> other)
-        {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
-        }
-
-        public HyperComplex<TInner> Add(in TInner other)
-        {
-            return new HyperComplex<TInner>(First.Add(other), Second);
-        }
-
-        public HyperComplex<TInner> Subtract(in TInner other)
-        {
-            return new HyperComplex<TInner>(First.Subtract(other), Second);
-        }
-
-        public HyperComplex<TInner> Multiply(in TInner other)
-        {
-            return new HyperComplex<TInner>(First.Multiply(other), Second.Multiply(other));
-        }
-
-        public HyperComplex<TInner> Divide(in TInner other)
-        {
-            return new HyperComplex<TInner>(First.Divide(other), Second.Divide(other));
-        }
-
-        public HyperComplex<TInner> Power(in TInner other)
-        {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
-        }
-
-        public HyperComplex<TInner> SecondAdd(in TInner other)
-        {
-            return new HyperComplex<TInner>(First, Second.Add(other));
-        }
-
-        public HyperComplex<TInner> SecondSubtract(in TInner other)
-        {
-            return new HyperComplex<TInner>(First, Second.Subtract(other));
-        }
-
-        public HyperComplex<TInner> Negate()
-        {
-            return new HyperComplex<TInner>(First.Negate(), Second.Negate());
-        }
-
-        public HyperComplex<TInner> Increment()
-        {
-            return new HyperComplex<TInner>(First.Increment(), Second);
-        }
-
-        public HyperComplex<TInner> Decrement()
-        {
-            return new HyperComplex<TInner>(First.Decrement(), Second);
-        }
-
-        public HyperComplex<TInner> SecondIncrement()
-        {
-            return new HyperComplex<TInner>(First, Second.Increment());
-        }
-
-        public HyperComplex<TInner> SecondDecrement()
-        {
-            return new HyperComplex<TInner>(First, Second.Decrement());
-        }
-
-        public HyperComplex<TInner> Inverse()
-        {
-            var denom = First.Square().Add(Second.Square());
-            return new HyperComplex<TInner>(First.Divide(denom), Second.Negate().Divide(denom));
-        }
-
-        public HyperComplex<TInner> Conjugate()
-        {
-            return new HyperComplex<TInner>(First, Second.Negate());
-        }
-
-        public HyperComplex<TInner> Modulus()
-        {
-            return HyperMath.Sqrt(Multiply(Conjugate()));
-        }
-
         public TInner Magnitude()
         {
-            return First.Square().Add(Second.Square()).SquareRoot();
+            return Sqrt(Add(Pow2(First), Pow2(Second)));
         }
 
         public TInner Argument()
         {
             if(IsInvertible)
             {
-                return HyperMath.Atan2(Second, First);
+                return Atan2(Second, First);
             }
-            return InnerFactory.Zero;
+            return HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Double()
+        public HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> other)
         {
-            return new HyperComplex<TInner>(First.Double(), Second.Double());
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner>(Add(First, other.First), Add(Second, other.Second));
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner>(Sub(First, other.First), Sub(Second, other.Second));
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner>(Sub(Mul(First, other.First), Mul(Second, other.Second)), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(other.First), Pow2(other.Second));
+                    return new HyperComplex<TInner>(Div(Add(Mul(First, other.First), Mul(Second, other.Second)), denom), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Half()
+        public HyperComplex<TInner> Call(BinaryOperation operation, in TInner other)
         {
-            return new HyperComplex<TInner>(First.Half(), Second.Half());
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner>(Add(First, other), Second);
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner>(Sub(First, other), Second);
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner>(Mul(First, other), Mul(Second, other));
+                case BinaryOperation.Divide:
+                    return new HyperComplex<TInner>(Div(First, other), Div(Second, other));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Square()
+        public HyperComplex<TInner> Call(UnaryOperation operation)
         {
-            return new HyperComplex<TInner>(First.Square().Subtract(Second.Square()), First.Multiply(Second).Double());
+            switch(operation)
+            {
+                case UnaryOperation.Negate:
+                    return new HyperComplex<TInner>(Neg(First), Neg(Second));
+                case UnaryOperation.Increment:
+                    return new HyperComplex<TInner>(Inc(First), Second);
+                case UnaryOperation.Decrement:
+                    return new HyperComplex<TInner>(Dec(First), Second);
+                case UnaryOperation.Inverse:
+                {
+                    var denom = Add(Pow2(First), Pow2(Second));
+                    return new HyperComplex<TInner>(Div(First, denom), Div(Neg(Second), denom));
+                }
+                case UnaryOperation.Conjugate:
+                    return new HyperComplex<TInner>(First, Neg(Second));
+                case UnaryOperation.Modulus:
+                    return Sqrt(Mul(this, Con(this)));
+                case UnaryOperation.Double:
+                    return new HyperComplex<TInner>(Mul2(First), Mul2(Second));
+                case UnaryOperation.Half:
+                    return new HyperComplex<TInner>(Div2(First), Div2(Second));
+                case UnaryOperation.Square:
+                    return new HyperComplex<TInner>(Sub(Pow2(First), Pow2(Second)), Mul2(Mul(First, Second)));
+                case UnaryOperation.SquareRoot:
+                    var mag = Sqrt(Magnitude());
+                    var arg = Div2(Argument());
+                    return new HyperComplex<TInner>(Mul(Cos(arg), mag), Mul(Sin(arg), mag));
+                case UnaryOperation.Exponentiate:
+                    var exp = Exp(First);
+                    return new HyperComplex<TInner>(Mul(Cos(Second), exp), Mul(Sin(Second), exp));
+                case UnaryOperation.Logarithm:
+                    return new HyperComplex<TInner>(Log(Magnitude()), Argument());
+                case UnaryOperation.Sine:
+                    return new HyperComplex<TInner>(Mul(Sin(First), Cosh(Second)), Mul(Cos(First), Sinh(Second)));
+                case UnaryOperation.Cosine:
+                    return new HyperComplex<TInner>(Mul(Cos(First), Sinh(Second)), Neg(Mul(Sin(First), Sinh(Second))));
+                case UnaryOperation.Tangent:
+                {
+                    var denom = Add(Cos(Mul2(First)), Cosh(Mul2(Second)));
+                    return new HyperComplex<TInner>(Div(Sin(Mul2(First)), denom), Div(Sinh(Mul2(Second)), denom));
+                }
+                case UnaryOperation.HyperbolicSine:
+                    return SinhDefault(this);
+                case UnaryOperation.HyperbolicCosine:
+                    return CoshDefault(this);
+                case UnaryOperation.HyperbolicTangent:
+                    return TanhDefault(this);
+                case UnaryOperation.ArcSine:
+                {
+                    var result = new HyperComplex<TInner>(Neg(Second), First);
+                    result = Log(Add(result, Sqrt(Inc(Neg(Pow2(this))))));
+                    return new HyperComplex<TInner>(result.Second, Neg(result.First));
+                }
+                case UnaryOperation.ArcCosine:
+                {
+                    var result = Log(Add(this, Sqrt(Dec(Pow2(this)))));
+                    return new HyperComplex<TInner>(result.Second, Neg(result.First));
+                }
+                case UnaryOperation.ArcTangent:
+                {
+                    var result = Div2(Log(Div(new HyperComplex<TInner>(First, Inc(Second)), new HyperComplex<TInner>(Neg(First), Inc(Neg(Second))))));
+                    return new HyperComplex<TInner>(Neg(result.Second), result.First);
+                }
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.SquareRoot()
+        public HyperComplex<TInner> FirstCall(BinaryOperation operation, in TInner other)
         {
-            var mag = Magnitude().SquareRoot();
-            var arg = Argument().Half();
-            return new HyperComplex<TInner>(arg.Cosine().Multiply(mag), arg.Sine().Multiply(mag));
+            return new HyperComplex<TInner>(HyperMath.Call(operation, First, other), Second);
         }
 
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Exponentiate()
+        public HyperComplex<TInner> SecondCall(BinaryOperation operation, in TInner other)
         {
-            var exp = First.Exponentiate();
-            return new HyperComplex<TInner>(Second.Cosine().Multiply(exp), Second.Sine().Multiply(exp));
+            return new HyperComplex<TInner>(First, HyperMath.Call(operation, Second, other));
         }
 
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Logarithm()
+        public HyperComplex<TInner> FirstCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner>(Magnitude().Logarithm(), Argument());
+            return new HyperComplex<TInner>(HyperMath.Call(operation, First), Second);
         }
 
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Sine()
+        public HyperComplex<TInner> SecondCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner>(First.Sine().Multiply(Second.HyperbolicCosine()), First.Cosine().Multiply(Second.HyperbolicSine()));
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Cosine()
-        {
-            return new HyperComplex<TInner>(First.Cosine().Multiply(Second.HyperbolicCosine()), First.Sine().Multiply(Second.HyperbolicSine()).Negate());
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.Tangent()
-        {
-            var denom = First.Double().Cosine().Add(Second.Double().HyperbolicCosine());
-            return new HyperComplex<TInner>(First.Double().Sine().Divide(denom), Second.Double().HyperbolicSine().Divide(denom));
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.HyperbolicSine()
-        {
-            return HyperMath.Div2(HyperMath.Exp(this).Subtract(HyperMath.Exp(this.Negate())));
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.HyperbolicCosine()
-        {
-            return HyperMath.Div2(HyperMath.Exp(this).Add(HyperMath.Exp(this.Negate())));
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.HyperbolicTangent()
-        {
-            return HyperMath.Exp(HyperMath.Mul2(this)).Subtract(RealOne).Divide(HyperMath.Exp(HyperMath.Mul2(this)).Add(RealOne));
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.ArcSine()
-        {
-            return HyperMath.Log(Multiply(SpecialOne).Add(HyperMath.Sqrt(RealOne.Subtract(HyperMath.Pow2(this))))).Multiply(SpecialOne).Negate();
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.ArcCosine()
-        {
-            return HyperMath.Log(Add(HyperMath.Sqrt(HyperMath.Pow2(this).Subtract(RealOne)))).Multiply(SpecialOne).Negate();
-        }
-
-        HyperComplex<TInner> INumber<HyperComplex<TInner>>.ArcTangent()
-        {
-            return HyperMath.Div2(HyperMath.Log(SpecialOne.Add(this).Divide(SpecialOne.Subtract(this))).Multiply(SpecialOne));
+            return new HyperComplex<TInner>(First, HyperMath.Call(operation, Second));
         }
 
         public override bool Equals(object other)
@@ -324,66 +267,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Complex(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
         }
 
-        public static HyperComplex<TInner> operator+(in HyperComplex<TInner> a, in HyperComplex<TInner> b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner> operator-(in HyperComplex<TInner> a, in HyperComplex<TInner> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperComplex<TInner> operator*(in HyperComplex<TInner> a, in HyperComplex<TInner> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperComplex<TInner> operator/(in HyperComplex<TInner> a, in HyperComplex<TInner> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperComplex<TInner> operator^(in HyperComplex<TInner> a, in HyperComplex<TInner> b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperComplex<TInner> operator+(in HyperComplex<TInner> a, in TInner b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner> operator+(in TInner b, in HyperComplex<TInner> a)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner> operator-(in HyperComplex<TInner> a, in TInner b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperComplex<TInner> operator*(in HyperComplex<TInner> a, in TInner b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperComplex<TInner> operator/(in HyperComplex<TInner> a, in TInner b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperComplex<TInner> operator^(in HyperComplex<TInner> a, in TInner b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperComplex<TInner> operator-(in HyperComplex<TInner> a)
-        {
-            return a.Negate();
-        }
-
         public static bool operator==(in HyperComplex<TInner> a, in HyperComplex<TInner> b)
         {
             return a.Equals(in b);
@@ -414,33 +297,67 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<HyperComplex<TInner>> INumber<HyperComplex<TInner>>.GetFactory()
+        INumberOperations<HyperComplex<TInner>> INumber<HyperComplex<TInner>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<HyperComplex<TInner>>
+        class Operations : NumberOperations<HyperComplex<TInner>>, INumberOperations<HyperComplex<TInner>>
         {
-            public static readonly Factory Instance = new Factory();
-            public HyperComplex<TInner> Zero => HyperComplex<TInner>.Zero;
-            public HyperComplex<TInner> RealOne => HyperComplex<TInner>.RealOne;
-            public HyperComplex<TInner> SpecialOne => HyperComplex<TInner>.SpecialOne;
-            public HyperComplex<TInner> UnitsOne => HyperComplex<TInner>.UnitsOne;
-            public HyperComplex<TInner> NonRealUnitsOne => HyperComplex<TInner>.NonRealUnitsOne;
-            public HyperComplex<TInner> CombinedOne => HyperComplex<TInner>.CombinedOne;
-            public HyperComplex<TInner> AllOne => HyperComplex<TInner>.AllOne;
-            INumber INumberFactory.Zero => HyperComplex<TInner>.Zero;
-            INumber INumberFactory.RealOne => HyperComplex<TInner>.RealOne;
-            INumber INumberFactory.SpecialOne => HyperComplex<TInner>.SpecialOne;
-            INumber INumberFactory.UnitsOne => HyperComplex<TInner>.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => HyperComplex<TInner>.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => HyperComplex<TInner>.CombinedOne;
-            INumber INumberFactory.AllOne => HyperComplex<TInner>.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
+
+            public bool IsInvertible(in HyperComplex<TInner> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in HyperComplex<TInner> num)
+            {
+                return num.IsFinite;
+            }
+
+            public HyperComplex<TInner> Call(NullaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case NullaryOperation.Zero:
+                    {
+                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        return new HyperComplex<TInner>(zero, zero);
+                    }
+                    case NullaryOperation.RealOne:
+                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                    case NullaryOperation.SpecialOne:
+                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.UnitsOne:
+                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.NonRealUnitsOne:
+                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.CombinedOne:
+                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                    case NullaryOperation.AllOne:
+                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            public HyperComplex<TInner> Call(UnaryOperation operation, in HyperComplex<TInner> num)
+            {
+                return num.Call(operation);
+            }
+
+            public HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
     }
 
@@ -456,22 +373,10 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct HyperComplex<TInner, TPrimitive> : IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        static readonly Lazy<INumberFactory<TInner, TPrimitive>> InnerFactoryLazy = new Lazy<INumberFactory<TInner, TPrimitive>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner, TPrimitive> InnerFactory => InnerFactoryLazy.Value;
-        public static HyperComplex<TInner, TPrimitive> Zero => new HyperComplex<TInner, TPrimitive>(InnerFactory.Zero, InnerFactory.Zero);
-        public static HyperComplex<TInner, TPrimitive> RealOne => new HyperComplex<TInner, TPrimitive>(InnerFactory.RealOne, InnerFactory.Zero);
-        public static HyperComplex<TInner, TPrimitive> SpecialOne => new HyperComplex<TInner, TPrimitive>(InnerFactory.Zero, InnerFactory.RealOne);
-        public static HyperComplex<TInner, TPrimitive> UnitsOne => new HyperComplex<TInner, TPrimitive>(InnerFactory.UnitsOne, InnerFactory.RealOne);
-        public static HyperComplex<TInner, TPrimitive> NonRealUnitsOne => new HyperComplex<TInner, TPrimitive>(InnerFactory.NonRealUnitsOne, InnerFactory.RealOne);
-        public static HyperComplex<TInner, TPrimitive> CombinedOne => new HyperComplex<TInner, TPrimitive>(InnerFactory.Zero, InnerFactory.CombinedOne);
-        public static HyperComplex<TInner, TPrimitive> AllOne => new HyperComplex<TInner, TPrimitive>(InnerFactory.AllOne, InnerFactory.AllOne);
-
         public TInner First { get; }
         public TInner Second { get; }
 
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
         public bool IsInvertible => First.IsInvertible || Second.IsInvertible;
 
@@ -480,7 +385,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperComplex(in TInner first)
         {
             First = first;
-            Second = InnerFactory.Zero;
+            Second = HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
         public HyperComplex(in TInner first, in TInner second)
@@ -515,11 +420,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperComplex<TInner, TPrimitive>(First, second);
         }
 
-        public static HyperComplex<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
-        {
-            return new HyperComplex<TInner, TPrimitive>(InnerFactory.Create(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), InnerFactory.Create(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
-        }
-
         public static implicit operator HyperComplex<TInner, TPrimitive>(in TInner first)
         {
             return new HyperComplex<TInner, TPrimitive>(first);
@@ -530,251 +430,202 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperComplex<TInner, TPrimitive>(tuple.first, tuple.second);
         }
 
-        public static implicit operator (TInner first, TInner second)(in HyperComplex<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second) (in HyperComplex<TInner, TPrimitive> value)
         {
             return (value.First, value.Second);
         }
 
-        public HyperComplex<TInner, TPrimitive> Add(in HyperComplex<TInner, TPrimitive> other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Add(other.First), Second.Add(other.Second));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Subtract(in HyperComplex<TInner, TPrimitive> other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Subtract(other.First), Second.Subtract(other.Second));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Multiply(in HyperComplex<TInner, TPrimitive> other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Multiply(other.First).Subtract(Second.Multiply(other.Second)), First.Multiply(other.Second).Add(Second.Multiply(other.First)));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Divide(in HyperComplex<TInner, TPrimitive> other)
-        {
-            var denom = other.First.Square().Add(other.Second.Square());
-            return new HyperComplex<TInner, TPrimitive>(First.Multiply(other.First).Add(Second.Multiply(other.Second)).Divide(denom), Second.Multiply(other.First).Subtract(First.Multiply(other.Second)).Divide(denom));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Power(in HyperComplex<TInner, TPrimitive> other)
-        {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Add(in TInner other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Add(other), Second);
-        }
-
-        public HyperComplex<TInner, TPrimitive> Subtract(in TInner other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Subtract(other), Second);
-        }
-
-        public HyperComplex<TInner, TPrimitive> Multiply(in TInner other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Multiply(other), Second.Multiply(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Divide(in TInner other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Divide(other), Second.Divide(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Power(in TInner other)
-        {
-            return HyperMath.Exp(HyperMath.Log(this).Multiply(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> SecondAdd(in TInner other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First, Second.Add(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> SecondSubtract(in TInner other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First, Second.Subtract(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Add(TPrimitive other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Add(other), Second);
-        }
-
-        public HyperComplex<TInner, TPrimitive> Subtract(TPrimitive other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Subtract(other), Second);
-        }
-
-        public HyperComplex<TInner, TPrimitive> Multiply(TPrimitive other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Multiply(other), Second.Multiply(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Divide(TPrimitive other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Divide(other), Second.Divide(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Power(TPrimitive other)
-        {
-            var mag = Magnitude().Power(other);
-            var arg = Argument().Multiply(other);
-            return new HyperComplex<TInner, TPrimitive>(arg.Cosine().Multiply(mag), arg.Sine().Multiply(mag));
-        }
-
-        public HyperComplex<TInner, TPrimitive> SecondAdd(TPrimitive other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First, Second.Add(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> SecondSubtract(TPrimitive other)
-        {
-            return new HyperComplex<TInner, TPrimitive>(First, Second.Subtract(other));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Negate()
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Negate(), Second.Negate());
-        }
-
-        public HyperComplex<TInner, TPrimitive> Increment()
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Increment(), Second);
-        }
-
-        public HyperComplex<TInner, TPrimitive> Decrement()
-        {
-            return new HyperComplex<TInner, TPrimitive>(First.Decrement(), Second);
-        }
-
-        public HyperComplex<TInner, TPrimitive> SecondIncrement()
-        {
-            return new HyperComplex<TInner, TPrimitive>(First, Second.Increment());
-        }
-
-        public HyperComplex<TInner, TPrimitive> SecondDecrement()
-        {
-            return new HyperComplex<TInner, TPrimitive>(First, Second.Decrement());
-        }
-
-        public HyperComplex<TInner, TPrimitive> Inverse()
-        {
-            var denom = First.Square().Add(Second.Square());
-            return new HyperComplex<TInner, TPrimitive>(First.Divide(denom), Second.Negate().Divide(denom));
-        }
-
-        public HyperComplex<TInner, TPrimitive> Conjugate()
-        {
-            return new HyperComplex<TInner, TPrimitive>(First, Second.Negate());
-        }
-
-        public HyperComplex<TInner, TPrimitive> Modulus()
-        {
-            return HyperMath.Sqrt(Multiply(Conjugate()));
-        }
-
         public TInner Magnitude()
         {
-            return First.Square().Add(Second.Square()).SquareRoot();
+            return Sqrt(Add(Pow2(First), Pow2(Second)));
         }
 
         public TInner Argument()
         {
             if(IsInvertible)
             {
-                return HyperMath.Atan2(Second, First);
+                return Atan2(Second, First);
             }
-            return InnerFactory.Zero;
+            return HyperMath.Call<TInner>(NullaryOperation.Zero);
         }
 
-        TPrimitive INumber<HyperComplex<TInner, TPrimitive>, TPrimitive>.AbsoluteValue()
+        public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> other)
         {
-            return Magnitude().AbsoluteValue();
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner, TPrimitive>(Add(First, other.First), Add(Second, other.Second));
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner, TPrimitive>(Sub(First, other.First), Sub(Second, other.Second));
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner, TPrimitive>(Sub(Mul(First, other.First), Mul(Second, other.Second)), Add(Mul(First, other.Second), Mul(Second, other.First)));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(other.First), Pow2(other.Second));
+                    return new HyperComplex<TInner, TPrimitive>(Div(Add(Mul(First, other.First), Mul(Second, other.Second)), denom), Div(Sub(Mul(Second, other.First), Mul(First, other.Second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        TPrimitive INumber<HyperComplex<TInner, TPrimitive>, TPrimitive>.RealValue()
+        public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
         {
-            return First.RealValue();
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner, TPrimitive>(Add(First, other), Second);
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner, TPrimitive>(Sub(First, other), Second);
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner, TPrimitive>(Mul(First, other), Mul(Second, other));
+                case BinaryOperation.Divide:
+                    return new HyperComplex<TInner, TPrimitive>(Div(First, other), Div(Second, other));
+                case BinaryOperation.Power:
+                    return PowDefault(this, other);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Double()
+        public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperComplex<TInner, TPrimitive>(First.Double(), Second.Double());
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner, TPrimitive>(AddVal(First, other), Second);
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner, TPrimitive>(SubVal(First, other), Second);
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner, TPrimitive>(MulVal(First, other), MulVal(Second, other));
+                case BinaryOperation.Divide:
+                    return new HyperComplex<TInner, TPrimitive>(DivVal(First, other), DivVal(Second, other));
+                case BinaryOperation.Power:
+                    var mag = PowVal(Magnitude(), other);
+                    var arg = MulVal(Argument(), other);
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(arg), mag), Mul(Sin(arg), mag));
+                case BinaryOperation.Atan2:
+                    return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Half()
+        public HyperComplex<TInner, TPrimitive> Call(UnaryOperation operation)
         {
-            return new HyperComplex<TInner, TPrimitive>(First.Half(), Second.Half());
+            switch(operation)
+            {
+                case UnaryOperation.Negate:
+                    return new HyperComplex<TInner, TPrimitive>(Neg(First), Neg(Second));
+                case UnaryOperation.Increment:
+                    return new HyperComplex<TInner, TPrimitive>(Inc(First), Second);
+                case UnaryOperation.Decrement:
+                    return new HyperComplex<TInner, TPrimitive>(Dec(First), Second);
+                case UnaryOperation.Inverse:
+                {
+                    var denom = Add(Pow2(First), Pow2(Second));
+                    return new HyperComplex<TInner, TPrimitive>(Div(First, denom), Div(Neg(Second), denom));
+                }
+                case UnaryOperation.Conjugate:
+                    return new HyperComplex<TInner, TPrimitive>(First, Neg(Second));
+                case UnaryOperation.Modulus:
+                    return Sqrt(Mul(this, Con(this)));
+                case UnaryOperation.Double:
+                    return new HyperComplex<TInner, TPrimitive>(Mul2(First), Mul2(Second));
+                case UnaryOperation.Half:
+                    return new HyperComplex<TInner, TPrimitive>(Div2(First), Div2(Second));
+                case UnaryOperation.Square:
+                    return new HyperComplex<TInner, TPrimitive>(Sub(Pow2(First), Pow2(Second)), Mul2(Mul(First, Second)));
+                case UnaryOperation.SquareRoot:
+                    var mag = Sqrt(Magnitude());
+                    var arg = Div2(Argument());
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(arg), mag), Mul(Sin(arg), mag));
+                case UnaryOperation.Exponentiate:
+                    var exp = Exp(First);
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(Second), exp), Mul(Sin(Second), exp));
+                case UnaryOperation.Logarithm:
+                    return new HyperComplex<TInner, TPrimitive>(Log(Magnitude()), Argument());
+                case UnaryOperation.Sine:
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Sin(First), Cosh(Second)), Mul(Cos(First), Sinh(Second)));
+                case UnaryOperation.Cosine:
+                    return new HyperComplex<TInner, TPrimitive>(Mul(Cos(First), Sinh(Second)), Neg(Mul(Sin(First), Sinh(Second))));
+                case UnaryOperation.Tangent:
+                {
+                    var denom = Add(Cos(Mul2(First)), Cosh(Mul2(Second)));
+                    return new HyperComplex<TInner, TPrimitive>(Div(Sin(Mul2(First)), denom), Div(Sinh(Mul2(Second)), denom));
+                }
+                case UnaryOperation.HyperbolicSine:
+                    return SinhDefault(this);
+                case UnaryOperation.HyperbolicCosine:
+                    return CoshDefault(this);
+                case UnaryOperation.HyperbolicTangent:
+                    return TanhDefault(this);
+                case UnaryOperation.ArcSine:
+                {
+                    var result = new HyperComplex<TInner, TPrimitive>(Neg(Second), First);
+                    result = Log(Add(result, Sqrt(Inc(Neg(Pow2(this))))));
+                    return new HyperComplex<TInner, TPrimitive>(result.Second, Neg(result.First));
+                }
+                case UnaryOperation.ArcCosine:
+                {
+                    var result = Log(Add(this, Sqrt(Dec(Pow2(this)))));
+                    return new HyperComplex<TInner, TPrimitive>(result.Second, Neg(result.First));
+                }
+                case UnaryOperation.ArcTangent:
+                {
+                    var result = Div2(Log(Div(new HyperComplex<TInner, TPrimitive>(First, Inc(Second)), new HyperComplex<TInner, TPrimitive>(Neg(First), Inc(Neg(Second))))));
+                    return new HyperComplex<TInner, TPrimitive>(Neg(result.Second), result.First);
+                }
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Square()
+        public TPrimitive Call(PrimitiveUnaryOperation operation)
         {
-            return new HyperComplex<TInner, TPrimitive>(First.Square().Subtract(Second.Square()), First.Multiply(Second).Double());
+            switch(operation)
+            {
+                case PrimitiveUnaryOperation.AbsoluteValue:
+                    return Abs<TInner, TPrimitive>(Magnitude());
+                case PrimitiveUnaryOperation.RealValue:
+                    return Std<TInner, TPrimitive>(First);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.SquareRoot()
+        public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
         {
-            var mag = Magnitude().SquareRoot();
-            var arg = Argument().Half();
-            return new HyperComplex<TInner, TPrimitive>(arg.Cosine().Multiply(mag), arg.Sine().Multiply(mag));
+            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, First, other), Second);
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Exponentiate()
+        public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
         {
-            var exp = First.Exponentiate();
-            return new HyperComplex<TInner, TPrimitive>(Second.Cosine().Multiply(exp), Second.Sine().Multiply(exp));
+            return new HyperComplex<TInner, TPrimitive>(First, HyperMath.Call(operation, Second, other));
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Logarithm()
+        public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperComplex<TInner, TPrimitive>(Magnitude().Logarithm(), Argument());
+            return new HyperComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, First, other), Second);
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Sine()
+        public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
         {
-            return new HyperComplex<TInner, TPrimitive>(First.Sine().Multiply(Second.HyperbolicCosine()), First.Cosine().Multiply(Second.HyperbolicSine()));
+            return new HyperComplex<TInner, TPrimitive>(First, HyperMath.CallPrimitive(operation, Second, other));
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Cosine()
+        public HyperComplex<TInner, TPrimitive> FirstCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner, TPrimitive>(First.Cosine().Multiply(Second.HyperbolicCosine()), First.Sine().Multiply(Second.HyperbolicSine()).Negate());
+            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, First), Second);
         }
 
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.Tangent()
+        public HyperComplex<TInner, TPrimitive> SecondCall(UnaryOperation operation)
         {
-            var denom = First.Double().Cosine().Add(Second.Double().HyperbolicCosine());
-            return new HyperComplex<TInner, TPrimitive>(First.Double().Sine().Divide(denom), Second.Double().HyperbolicSine().Divide(denom));
-        }
-
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.HyperbolicSine()
-        {
-            return HyperMath.Div2(HyperMath.Exp(this).Subtract(HyperMath.Exp(this.Negate())));
-        }
-
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.HyperbolicCosine()
-        {
-            return HyperMath.Div2(HyperMath.Exp(this).Add(HyperMath.Exp(this.Negate())));
-        }
-
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.HyperbolicTangent()
-        {
-            return HyperMath.Exp(HyperMath.Mul2(this)).Subtract(RealOne).Divide(HyperMath.Exp(HyperMath.Mul2(this)).Add(RealOne));
-        }
-
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.ArcSine()
-        {
-            return HyperMath.Log(Multiply(SpecialOne).Add(HyperMath.Sqrt(RealOne.Subtract(HyperMath.Pow2(this))))).Multiply(SpecialOne).Negate();
-        }
-
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.ArcCosine()
-        {
-            return HyperMath.Log(Add(HyperMath.Sqrt(HyperMath.Pow2(this).Subtract(RealOne)))).Multiply(SpecialOne).Negate();
-        }
-
-        HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>>.ArcTangent()
-        {
-            return HyperMath.Div2(HyperMath.Log(SpecialOne.Add(this).Divide(SpecialOne.Subtract(this))).Multiply(SpecialOne));
+            return new HyperComplex<TInner, TPrimitive>(First, HyperMath.Call(operation, Second));
         }
 
         public override bool Equals(object other)
@@ -818,101 +669,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Complex(" + First.ToString(format, formatProvider) + ", " + Second.ToString(format, formatProvider) + ")";
         }
 
-        public static HyperComplex<TInner, TPrimitive> operator+(in HyperComplex<TInner, TPrimitive> a, in HyperComplex<TInner, TPrimitive> b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator-(in HyperComplex<TInner, TPrimitive> a, in HyperComplex<TInner, TPrimitive> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator*(in HyperComplex<TInner, TPrimitive> a, in HyperComplex<TInner, TPrimitive> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator/(in HyperComplex<TInner, TPrimitive> a, in HyperComplex<TInner, TPrimitive> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator^(in HyperComplex<TInner, TPrimitive> a, in HyperComplex<TInner, TPrimitive> b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator+(in HyperComplex<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator+(in TInner b, in HyperComplex<TInner, TPrimitive> a)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator-(in HyperComplex<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator*(in HyperComplex<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator/(in HyperComplex<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator^(in HyperComplex<TInner, TPrimitive> a, in TInner b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator+(in HyperComplex<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator+(TPrimitive b, in HyperComplex<TInner, TPrimitive> a)
-        {
-            return a.Add(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator-(in HyperComplex<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator*(in HyperComplex<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator*(TPrimitive b, in HyperComplex<TInner, TPrimitive> a)
-        {
-            return a.Multiply(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator/(in HyperComplex<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Divide(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator^(in HyperComplex<TInner, TPrimitive> a, TPrimitive b)
-        {
-            return a.Power(b);
-        }
-
-        public static HyperComplex<TInner, TPrimitive> operator-(in HyperComplex<TInner, TPrimitive> a)
-        {
-            return a.Negate();
-        }
-
         public static bool operator==(in HyperComplex<TInner, TPrimitive> a, in HyperComplex<TInner, TPrimitive> b)
         {
             return a.Equals(in b);
@@ -943,39 +699,66 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<HyperComplex<TInner, TPrimitive>> INumber<HyperComplex<TInner, TPrimitive>>.GetFactory()
+        INumberOperations<HyperComplex<TInner, TPrimitive>> INumber<HyperComplex<TInner, TPrimitive>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<HyperComplex<TInner, TPrimitive>, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>, TPrimitive>.GetFactory()
+        INumberOperations<HyperComplex<TInner, TPrimitive>, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>, TPrimitive>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<HyperComplex<TInner, TPrimitive>, TPrimitive>
+        class Operations : NumberOperations<HyperComplex<TInner, TPrimitive>>, INumberOperations<HyperComplex<TInner, TPrimitive>, TPrimitive>
         {
-            public static readonly Factory Instance = new Factory();
-            public HyperComplex<TInner, TPrimitive> Zero => HyperComplex<TInner, TPrimitive>.Zero;
-            public HyperComplex<TInner, TPrimitive> RealOne => HyperComplex<TInner, TPrimitive>.RealOne;
-            public HyperComplex<TInner, TPrimitive> SpecialOne => HyperComplex<TInner, TPrimitive>.SpecialOne;
-            public HyperComplex<TInner, TPrimitive> UnitsOne => HyperComplex<TInner, TPrimitive>.UnitsOne;
-            public HyperComplex<TInner, TPrimitive> NonRealUnitsOne => HyperComplex<TInner, TPrimitive>.NonRealUnitsOne;
-            public HyperComplex<TInner, TPrimitive> CombinedOne => HyperComplex<TInner, TPrimitive>.CombinedOne;
-            public HyperComplex<TInner, TPrimitive> AllOne => HyperComplex<TInner, TPrimitive>.AllOne;
-            INumber INumberFactory.Zero => HyperComplex<TInner, TPrimitive>.Zero;
-            INumber INumberFactory.RealOne => HyperComplex<TInner, TPrimitive>.RealOne;
-            INumber INumberFactory.SpecialOne => HyperComplex<TInner, TPrimitive>.SpecialOne;
-            INumber INumberFactory.UnitsOne => HyperComplex<TInner, TPrimitive>.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => HyperComplex<TInner, TPrimitive>.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => HyperComplex<TInner, TPrimitive>.CombinedOne;
-            INumber INumberFactory.AllOne => HyperComplex<TInner, TPrimitive>.AllOne;
-            public HyperComplex<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined) => HyperComplex<TInner, TPrimitive>.Create(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
+
+            public bool IsInvertible(in HyperComplex<TInner, TPrimitive> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in HyperComplex<TInner, TPrimitive> num)
+            {
+                return num.IsFinite;
+            }
+
+            public HyperComplex<TInner, TPrimitive> Call(NullaryOperation operation)
+            {
+                return HyperMath.Call<TInner>(operation);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Call(UnaryOperation operation, in HyperComplex<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> num1, in HyperComplex<TInner, TPrimitive> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public TPrimitive Call(PrimitiveUnaryOperation operation, in HyperComplex<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> num1, TPrimitive num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            }
         }
 
         static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>

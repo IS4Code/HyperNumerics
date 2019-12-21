@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -63,205 +64,137 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return this;
         }
-
-        public Real Add(in Real other)
+        
+        public Real Call(BinaryOperation operation, in Real other)
         {
-            return new Real(Value + other.Value);
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other.Value;
+                case BinaryOperation.Subtract:
+                    return Value - other.Value;
+                case BinaryOperation.Multiply:
+                    return Value * other.Value;
+                case BinaryOperation.Divide:
+                    return Value / other.Value;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other.Value);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other.Value);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public Real Subtract(in Real other)
+        public Real Call(BinaryOperation operation, double other)
         {
-            return new Real(Value - other.Value);
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other;
+                case BinaryOperation.Subtract:
+                    return Value - other;
+                case BinaryOperation.Multiply:
+                    return Value * other;
+                case BinaryOperation.Divide:
+                    return Value / other;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public Real Multiply(in Real other)
+        public Real Call(BinaryOperation operation, float other)
         {
-            return new Real(Value * other.Value);
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other;
+                case BinaryOperation.Subtract:
+                    return Value - other;
+                case BinaryOperation.Multiply:
+                    return Value * other;
+                case BinaryOperation.Divide:
+                    return Value / other;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public Real Divide(in Real other)
+        public Real Call(UnaryOperation operation)
         {
-            return new Real(Value / other.Value);
+            switch(operation)
+            {
+                case UnaryOperation.Negate:
+                    return -Value;
+                case UnaryOperation.Increment:
+                    return Value + 1;
+                case UnaryOperation.Decrement:
+                    return Value - 1;
+                case UnaryOperation.Inverse:
+                    return 1.0 / Value;
+                case UnaryOperation.Conjugate:
+                    return Value;
+                case UnaryOperation.Modulus:
+                    return Math.Abs(Value);
+                case UnaryOperation.Double:
+                    return Value * 2.0;
+                case UnaryOperation.Half:
+                    return Value * 0.5;
+                case UnaryOperation.Square:
+                    return Value * Value;
+                case UnaryOperation.SquareRoot:
+                    return Math.Sqrt(Value);
+                case UnaryOperation.Exponentiate:
+                    return Math.Exp(Value);
+                case UnaryOperation.Logarithm:
+                    return Math.Log(Value);
+                case UnaryOperation.Sine:
+                    return Math.Sin(Value);
+                case UnaryOperation.Cosine:
+                    return Math.Cos(Value);
+                case UnaryOperation.Tangent:
+                    return Math.Tan(Value);
+                case UnaryOperation.HyperbolicSine:
+                    return Math.Sinh(Value);
+                case UnaryOperation.HyperbolicCosine:
+                    return Math.Cosh(Value);
+                case UnaryOperation.HyperbolicTangent:
+                    return Math.Tanh(Value);
+                case UnaryOperation.ArcSine:
+                    return Math.Asin(Value);
+                case UnaryOperation.ArcCosine:
+                    return Math.Acos(Value);
+                case UnaryOperation.ArcTangent:
+                    return Math.Atan(Value);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public Real Power(in Real other)
+        public double Call(PrimitiveUnaryOperation operation)
         {
-            return new Real(Math.Pow(Value, other.Value));
+            switch(operation)
+            {
+                case PrimitiveUnaryOperation.AbsoluteValue:
+                    return Math.Abs(Value);
+                case PrimitiveUnaryOperation.RealValue:
+                    return Value;
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public Real Add(double other)
-        {
-            return new Real(Value + other);
-        }
-
-        public Real Subtract(double other)
-        {
-            return new Real(Value - other);
-        }
-
-        public Real Multiply(double other)
-        {
-            return new Real(Value * other);
-        }
-
-        public Real Divide(double other)
-        {
-            return new Real(Value / other);
-        }
-
-        public Real Power(double other)
-        {
-            return new Real(Math.Pow(Value, other));
-        }
-
-        public Real Add(float other)
-        {
-            return new Real(Value + other);
-        }
-
-        public Real Subtract(float other)
-        {
-            return new Real(Value - other);
-        }
-
-        public Real Multiply(float other)
-        {
-            return new Real(Value * other);
-        }
-
-        public Real Divide(float other)
-        {
-            return new Real(Value / other);
-        }
-
-        public Real Power(float other)
-        {
-            return new Real(Math.Pow(Value, other));
-        }
-
-        public Real Negate()
-        {
-            return new Real(-Value);
-        }
-
-        public Real Increment()
-        {
-            return new Real(Value + 1);
-        }
-
-        public Real Decrement()
-        {
-            return new Real(Value - 1);
-        }
-
-        public Real Inverse()
-        {
-            return new Real(1.0 / Value);
-        }
-
-        double INumber<Real, double>.AbsoluteValue()
-        {
-            return Math.Abs(Value);
-        }
-
-        float INumber<Real, float>.AbsoluteValue()
+        float INumber<Real, float>.Call(PrimitiveUnaryOperation operation)
         {
             return (float)Math.Abs(Value);
-        }
-
-        double INumber<Real, double>.RealValue()
-        {
-            return Value;
-        }
-
-        float INumber<Real, float>.RealValue()
-        {
-            return (float)Value;
-        }
-
-        Real INumber<Real>.Conjugate()
-        {
-            return this;
-        }
-
-        Real INumber<Real>.Modulus()
-        {
-            return new Real(Math.Abs(Value));
-        }
-
-        Real INumber<Real>.Half()
-        {
-            return new Real(Value / 2.0);
-        }
-
-        Real INumber<Real>.Double()
-        {
-            return new Real(Value * 2.0);
-        }
-
-        Real INumber<Real>.Square()
-        {
-            return new Real(Value * Value);
-        }
-
-        Real INumber<Real>.SquareRoot()
-        {
-            return new Real(Math.Sqrt(Value));
-        }
-
-        Real INumber<Real>.Exponentiate()
-        {
-            return new Real(Math.Exp(Value));
-        }
-
-        Real INumber<Real>.Logarithm()
-        {
-            return new Real(Math.Log(Value));
-        }
-
-        Real INumber<Real>.Sine()
-        {
-            return new Real(Math.Sin(Value));
-        }
-
-        Real INumber<Real>.Cosine()
-        {
-            return new Real(Math.Cos(Value));
-        }
-
-        Real INumber<Real>.Tangent()
-        {
-            return new Real(Math.Tan(Value));
-        }
-
-        Real INumber<Real>.HyperbolicSine()
-        {
-            return new Real(Math.Sinh(Value));
-        }
-
-        Real INumber<Real>.HyperbolicCosine()
-        {
-            return new Real(Math.Cosh(Value));
-        }
-
-        Real INumber<Real>.HyperbolicTangent()
-        {
-            return new Real(Math.Tanh(Value));
-        }
-
-        Real INumber<Real>.ArcSine()
-        {
-            return new Real(Math.Asin(Value));
-        }
-
-        Real INumber<Real>.ArcCosine()
-        {
-            return new Real(Math.Acos(Value));
-        }
-
-        Real INumber<Real>.ArcTangent()
-        {
-            return new Real(Math.Atan(Value));
         }
 
         public override bool Equals(object obj)
@@ -324,116 +257,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return (float)value.Value;
         }
 
-        public static Real operator+(Real a, Real b)
-        {
-            return a.Add(b);
-        }
-
-        public static Real operator-(Real a, Real b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static Real operator*(Real a, Real b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static Real operator/(Real a, Real b)
-        {
-            return a.Divide(b);
-        }
-
-        public static Real operator^(Real a, Real b)
-        {
-            return a.Power(b);
-        }
-
-        public static Real operator+(Real a, double b)
-        {
-            return a.Add(b);
-        }
-
-        public static Real operator+(double b, Real a)
-        {
-            return a.Add(b);
-        }
-
-        public static Real operator-(Real a, double b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static Real operator*(Real a, double b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static Real operator*(double b, Real a)
-        {
-            return a.Multiply(b);
-        }
-
-        public static Real operator/(Real a, double b)
-        {
-            return a.Divide(b);
-        }
-
-        public static Real operator^(Real a, double b)
-        {
-            return a.Power(b);
-        }
-        
-        public static Real operator+(Real a, float b)
-        {
-            return a.Add(b);
-        }
-
-        public static Real operator+(float b, Real a)
-        {
-            return a.Add(b);
-        }
-
-        public static Real operator-(Real a, float b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static Real operator*(Real a, float b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static Real operator*(float b, Real a)
-        {
-            return a.Multiply(b);
-        }
-
-        public static Real operator/(Real a, float b)
-        {
-            return a.Divide(b);
-        }
-
-        public static Real operator^(Real a, float b)
-        {
-            return a.Power(b);
-        }
-
-        public static Real operator-(Real a)
-        {
-            return a.Negate();
-        }
-
-        public static Real operator++(Real a)
-        {
-            return a.Increment();
-        }
-
-        public static Real operator--(Real a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(Real a, Real b)
         {
             return a.Equals(in b);
@@ -464,45 +287,98 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<Real> INumber<Real>.GetFactory()
+        INumberOperations<Real> INumber<Real>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<Real, double> INumber<Real, double>.GetFactory()
+        INumberOperations<Real, double> INumber<Real, double>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<Real, float> INumber<Real, float>.GetFactory()
+        INumberOperations<Real, float> INumber<Real, float>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<Real, double>, INumberFactory<Real, float>
+        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>
         {
-            public static readonly Factory Instance = new Factory();
-            public Real Zero => Real.Zero;
-            public Real RealOne => Real.One;
-            public Real SpecialOne => Real.Zero;
-            public Real UnitsOne => Real.One;
-            public Real NonRealUnitsOne => Real.Zero;
-            public Real CombinedOne => Real.Zero;
-            public Real AllOne => Real.One;
-            INumber INumberFactory.Zero => Real.Zero;
-            INumber INumberFactory.RealOne => Real.One;
-            INumber INumberFactory.SpecialOne => Real.Zero;
-            INumber INumberFactory.UnitsOne => Real.One;
-            INumber INumberFactory.NonRealUnitsOne => Real.Zero;
-            INumber INumberFactory.CombinedOne => Real.Zero;
-            INumber INumberFactory.AllOne => Real.One;
-            public Real Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined) => new Real(realUnit);
-            Real INumberFactory<Real, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined) => new Real(realUnit);
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => 0;
+
+            public bool IsInvertible(in Real num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in Real num)
+            {
+                return num.IsFinite;
+            }
+
+            public Real Call(NullaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case NullaryOperation.RealOne:
+                    case NullaryOperation.UnitsOne:
+                    case NullaryOperation.AllOne:
+                        return 1.0;
+                    case NullaryOperation.SpecialOne:
+                    case NullaryOperation.NonRealUnitsOne:
+                    case NullaryOperation.CombinedOne:
+                        return 0.0;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            public Real Call(UnaryOperation operation, in Real num)
+            {
+                return num.Call(operation);
+            }
+
+            public Real Call(BinaryOperation operation, in Real num1, in Real num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public double Call(PrimitiveUnaryOperation operation, in Real num)
+            {
+                return num.Call(operation);
+            }
+
+            float INumberOperations<Real, float>.Call(PrimitiveUnaryOperation operation, in Real num)
+            {
+                return (float)num.Call(operation);
+            }
+
+            public Real Call(BinaryOperation operation, in Real num1, double num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public Real Call(BinaryOperation operation, in Real num1, float num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public Real Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined)
+            {
+                return new Real(realUnit);
+            }
+
+            Real INumberOperations<Real, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
+            {
+                return new Real(realUnit);
+            }
         }
 
         int ICollection<double>.Count => 1;

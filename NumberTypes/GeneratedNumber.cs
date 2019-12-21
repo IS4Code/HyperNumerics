@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -8,15 +9,7 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        static readonly Lazy<INumberFactory<TInner>> InnerFactoryLazy = new Lazy<INumberFactory<TInner>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner> InnerFactory => InnerFactoryLazy.Value;
-        public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => InnerFactory.Zero);
-        public static GeneratedNumber<TInner> RealOne => new GeneratedNumber<TInner>(() => InnerFactory.RealOne);
-        public static GeneratedNumber<TInner> SpecialOne => new GeneratedNumber<TInner>(() => InnerFactory.SpecialOne);
-        public static GeneratedNumber<TInner> UnitsOne => new GeneratedNumber<TInner>(() => InnerFactory.UnitsOne);
-        public static GeneratedNumber<TInner> NonRealUnitsOne => new GeneratedNumber<TInner>(() => InnerFactory.NonRealUnitsOne);
-        public static GeneratedNumber<TInner> CombinedOne => new GeneratedNumber<TInner>(() => InnerFactory.CombinedOne);
-        public static GeneratedNumber<TInner> AllOne => new GeneratedNumber<TInner>(() => InnerFactory.AllOne);
+        public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
         private readonly Func<TInner> generator;
 
@@ -26,9 +19,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => true;
 
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
         public GeneratedNumber(TInner value)
         {
@@ -54,200 +45,24 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public GeneratedNumber<TInner> Add(in GeneratedNumber<TInner> other)
+        public GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> other)
         {
             var gen1 = Generator;
             var gen2 = other.Generator;
-            return new GeneratedNumber<TInner>(() => gen1().Add(gen2()));
+            return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen1(), gen2()));
         }
 
-        public GeneratedNumber<TInner> Subtract(in GeneratedNumber<TInner> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner>(() => gen1().Subtract(gen2()));
-        }
-
-        public GeneratedNumber<TInner> Multiply(in GeneratedNumber<TInner> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner>(() => gen1().Multiply(gen2()));
-        }
-
-        public GeneratedNumber<TInner> Divide(in GeneratedNumber<TInner> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner>(() => gen1().Divide(gen2()));
-        }
-
-        public GeneratedNumber<TInner> Power(in GeneratedNumber<TInner> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner>(() => gen1().Power(gen2()));
-        }
-
-        public GeneratedNumber<TInner> Add(in TInner other)
+        public GeneratedNumber<TInner> Call(BinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
-            return new GeneratedNumber<TInner>(() => gen().Add(value));
+            return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner> Subtract(in TInner other)
+        public GeneratedNumber<TInner> Call(UnaryOperation operation)
         {
             var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner>(() => gen().Subtract(value));
-        }
-
-        public GeneratedNumber<TInner> Multiply(in TInner other)
-        {
-            var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner>(() => gen().Multiply(value));
-        }
-
-        public GeneratedNumber<TInner> Divide(in TInner other)
-        {
-            var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner>(() => gen().Divide(value));
-        }
-
-        public GeneratedNumber<TInner> Power(in TInner other)
-        {
-            var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner>(() => gen().Power(value));
-        }
-
-        public GeneratedNumber<TInner> Negate()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Negate());
-        }
-
-        public GeneratedNumber<TInner> Increment()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Increment());
-        }
-
-        public GeneratedNumber<TInner> Decrement()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Decrement());
-        }
-
-        public GeneratedNumber<TInner> Inverse()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Inverse());
-        }
-
-        public GeneratedNumber<TInner> Conjugate()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Conjugate());
-        }
-
-        public GeneratedNumber<TInner> Modulus()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Modulus());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Half()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Half());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Double()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Double());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Square()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Square());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.SquareRoot()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().SquareRoot());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Exponentiate()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Exponentiate());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Logarithm()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Logarithm());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Sine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Sine());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Cosine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Cosine());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.Tangent()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().Tangent());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.HyperbolicSine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().HyperbolicSine());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.HyperbolicCosine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().HyperbolicCosine());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.HyperbolicTangent()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().HyperbolicTangent());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.ArcSine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().ArcSine());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.ArcCosine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().ArcCosine());
-        }
-
-        GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>>.ArcTangent()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner>(() => gen().ArcTangent());
+            return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen()));
         }
 
         public override bool Equals(object obj)
@@ -295,46 +110,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new GeneratedNumber<TInner>(value);
         }
 
-        public static GeneratedNumber<TInner> operator+(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
-        {
-            return a.Add(b);
-        }
-
-        public static GeneratedNumber<TInner> operator-(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static GeneratedNumber<TInner> operator*(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static GeneratedNumber<TInner> operator/(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static GeneratedNumber<TInner> operator^(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
-        {
-            return a.Power(b);
-        }
-
-        public static GeneratedNumber<TInner> operator-(GeneratedNumber<TInner> a)
-        {
-            return a.Negate();
-        }
-
-        public static GeneratedNumber<TInner> operator++(GeneratedNumber<TInner> a)
-        {
-            return a.Increment();
-        }
-
-        public static GeneratedNumber<TInner> operator--(GeneratedNumber<TInner> a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
         {
             return a.Equals(b);
@@ -365,48 +140,53 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<GeneratedNumber<TInner>> INumber<GeneratedNumber<TInner>>.GetFactory()
+        INumberOperations<GeneratedNumber<TInner>> INumber<GeneratedNumber<TInner>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<GeneratedNumber<TInner>>
+        class Operations : NumberOperations<GeneratedNumber<TInner>>, INumberOperations<GeneratedNumber<TInner>>
         {
-            public static readonly Factory Instance = new Factory();
-            public GeneratedNumber<TInner> Zero => GeneratedNumber<TInner>.Zero;
-            public GeneratedNumber<TInner> RealOne => GeneratedNumber<TInner>.RealOne;
-            public GeneratedNumber<TInner> SpecialOne => GeneratedNumber<TInner>.SpecialOne;
-            public GeneratedNumber<TInner> UnitsOne => GeneratedNumber<TInner>.UnitsOne;
-            public GeneratedNumber<TInner> NonRealUnitsOne => GeneratedNumber<TInner>.NonRealUnitsOne;
-            public GeneratedNumber<TInner> CombinedOne => GeneratedNumber<TInner>.CombinedOne;
-            public GeneratedNumber<TInner> AllOne => GeneratedNumber<TInner>.AllOne;
-            INumber INumberFactory.Zero => GeneratedNumber<TInner>.Zero;
-            INumber INumberFactory.RealOne => GeneratedNumber<TInner>.RealOne;
-            INumber INumberFactory.SpecialOne => GeneratedNumber<TInner>.SpecialOne;
-            INumber INumberFactory.UnitsOne => GeneratedNumber<TInner>.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => GeneratedNumber<TInner>.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => GeneratedNumber<TInner>.CombinedOne;
-            INumber INumberFactory.AllOne => GeneratedNumber<TInner>.AllOne;
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => 0;
+
+            public bool IsInvertible(in GeneratedNumber<TInner> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in GeneratedNumber<TInner> num)
+            {
+                return num.IsFinite;
+            }
+
+            public GeneratedNumber<TInner> Call(NullaryOperation operation)
+            {
+                return new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(operation));
+            }
+
+            public GeneratedNumber<TInner> Call(UnaryOperation operation, in GeneratedNumber<TInner> num)
+            {
+                return num.Call(operation);
+            }
+
+            public GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
+            {
+                return num1.Call(operation, num2);
+            }
         }
     }
     
     [Serializable]
     public readonly struct GeneratedNumber<TInner, TPrimitive> : IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        static readonly Lazy<INumberFactory<TInner, TPrimitive>> InnerFactoryLazy = new Lazy<INumberFactory<TInner, TPrimitive>>(() => default(TInner).GetFactory());
-        static INumberFactory<TInner, TPrimitive> InnerFactory => InnerFactoryLazy.Value;
-        public static GeneratedNumber<TInner, TPrimitive> Zero => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.Zero);
-        public static GeneratedNumber<TInner, TPrimitive> RealOne => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.RealOne);
-        public static GeneratedNumber<TInner, TPrimitive> SpecialOne => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.SpecialOne);
-        public static GeneratedNumber<TInner, TPrimitive> UnitsOne => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.UnitsOne);
-        public static GeneratedNumber<TInner, TPrimitive> NonRealUnitsOne => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.NonRealUnitsOne);
-        public static GeneratedNumber<TInner, TPrimitive> CombinedOne => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.CombinedOne);
-        public static GeneratedNumber<TInner, TPrimitive> AllOne => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.AllOne);
+        public static GeneratedNumber<TInner, TPrimitive> Zero => new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
         private readonly Func<TInner> generator;
 
@@ -416,9 +196,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => true;
 
-        static readonly Lazy<int> DimensionLazy = new Lazy<int>(() => default(TInner).Dimension);
-        public static int Dimension => DimensionLazy.Value;
-        int INumber.Dimension => Dimension;
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
         public GeneratedNumber(TInner value)
         {
@@ -444,240 +222,35 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Add(in GeneratedNumber<TInner, TPrimitive> other)
+        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> other)
         {
             var gen1 = Generator;
             var gen2 = other.Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen1().Add(gen2()));
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen1(), gen2()));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Subtract(in GeneratedNumber<TInner, TPrimitive> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen1().Subtract(gen2()));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Multiply(in GeneratedNumber<TInner, TPrimitive> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen1().Multiply(gen2()));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Divide(in GeneratedNumber<TInner, TPrimitive> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen1().Divide(gen2()));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Power(in GeneratedNumber<TInner, TPrimitive> other)
-        {
-            var gen1 = Generator;
-            var gen2 = other.Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen1().Power(gen2()));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Add(in TInner other)
+        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Add(value));
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Subtract(in TInner other)
+        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Subtract(value));
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitive(operation, gen(), other));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Multiply(in TInner other)
+        public GeneratedNumber<TInner, TPrimitive> Call(UnaryOperation operation)
         {
             var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Multiply(value));
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen()));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Divide(in TInner other)
+        public TPrimitive Call(PrimitiveUnaryOperation operation)
         {
-            var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Divide(value));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Power(in TInner other)
-        {
-            var gen = Generator;
-            var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Power(value));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Add(TPrimitive other)
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Add(other));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Subtract(TPrimitive other)
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Subtract(other));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Multiply(TPrimitive other)
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Multiply(other));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Divide(TPrimitive other)
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Divide(other));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Power(TPrimitive other)
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Power(other));
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Negate()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Negate());
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Increment()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Increment());
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Decrement()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Decrement());
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Inverse()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Inverse());
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Conjugate()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Conjugate());
-        }
-
-        public GeneratedNumber<TInner, TPrimitive> Modulus()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Modulus());
-        }
-
-        TPrimitive INumber<GeneratedNumber<TInner, TPrimitive>, TPrimitive>.AbsoluteValue()
-        {
-            return Generator().AbsoluteValue();
-        }
-
-        TPrimitive INumber<GeneratedNumber<TInner, TPrimitive>, TPrimitive>.RealValue()
-        {
-            return Generator().RealValue();
-        }
-        
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Half()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Half());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Double()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Double());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Square()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Square());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.SquareRoot()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().SquareRoot());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Exponentiate()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Exponentiate());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Logarithm()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Logarithm());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Sine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Sine());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Cosine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Cosine());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.Tangent()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().Tangent());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.HyperbolicSine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().HyperbolicSine());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.HyperbolicCosine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().HyperbolicCosine());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.HyperbolicTangent()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().HyperbolicTangent());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.ArcSine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().ArcSine());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.ArcCosine()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().ArcCosine());
-        }
-
-        GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>>.ArcTangent()
-        {
-            var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => gen().ArcTangent());
+            return HyperMath.Call<TInner, TPrimitive>(operation, Generator());
         }
 
         public override bool Equals(object obj)
@@ -725,46 +298,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new GeneratedNumber<TInner, TPrimitive>(value);
         }
 
-        public static GeneratedNumber<TInner, TPrimitive> operator+(in GeneratedNumber<TInner, TPrimitive> a, in GeneratedNumber<TInner, TPrimitive> b)
-        {
-            return a.Add(b);
-        }
-
-        public static GeneratedNumber<TInner, TPrimitive> operator-(in GeneratedNumber<TInner, TPrimitive> a, in GeneratedNumber<TInner, TPrimitive> b)
-        {
-            return a.Subtract(b);
-        }
-
-        public static GeneratedNumber<TInner, TPrimitive> operator*(in GeneratedNumber<TInner, TPrimitive> a, in GeneratedNumber<TInner, TPrimitive> b)
-        {
-            return a.Multiply(b);
-        }
-
-        public static GeneratedNumber<TInner, TPrimitive> operator/(in GeneratedNumber<TInner, TPrimitive> a, in GeneratedNumber<TInner, TPrimitive> b)
-        {
-            return a.Divide(b);
-        }
-
-        public static GeneratedNumber<TInner, TPrimitive> operator^(in GeneratedNumber<TInner, TPrimitive> a, in GeneratedNumber<TInner, TPrimitive> b)
-        {
-            return a.Power(b);
-        }
-
-        public static GeneratedNumber<TInner, TPrimitive> operator-(in GeneratedNumber<TInner, TPrimitive> a)
-        {
-            return a.Negate();
-        }
-
-        public static GeneratedNumber<TInner, TPrimitive> operator++(in GeneratedNumber<TInner, TPrimitive> a)
-        {
-            return a.Increment();
-        }
-
-        public static GeneratedNumber<TInner, TPrimitive> operator--(in GeneratedNumber<TInner, TPrimitive> a)
-        {
-            return a.Decrement();
-        }
-
         public static bool operator==(in GeneratedNumber<TInner, TPrimitive> a, in GeneratedNumber<TInner, TPrimitive> b)
         {
             return a.Equals(in b);
@@ -795,39 +328,71 @@ namespace IS4.HyperNumerics.NumberTypes
             return a.CompareTo(in b) <= 0;
         }
 
-        INumberFactory INumber.GetFactory()
+        INumberOperations INumber.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<GeneratedNumber<TInner, TPrimitive>> INumber<GeneratedNumber<TInner, TPrimitive>>.GetFactory()
+        INumberOperations<GeneratedNumber<TInner, TPrimitive>> INumber<GeneratedNumber<TInner, TPrimitive>>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        INumberFactory<GeneratedNumber<TInner, TPrimitive>, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>, TPrimitive>.GetFactory()
+        INumberOperations<GeneratedNumber<TInner, TPrimitive>, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
         {
-            return Factory.Instance;
+            return Operations.Instance;
         }
 
-        class Factory : INumberFactory<GeneratedNumber<TInner, TPrimitive>, TPrimitive>
+        class Operations : NumberOperations<GeneratedNumber<TInner, TPrimitive>>, INumberOperations<GeneratedNumber<TInner, TPrimitive>, TPrimitive>
         {
-            public static readonly Factory Instance = new Factory();
-            public GeneratedNumber<TInner, TPrimitive> Zero => GeneratedNumber<TInner, TPrimitive>.Zero;
-            public GeneratedNumber<TInner, TPrimitive> RealOne => GeneratedNumber<TInner, TPrimitive>.RealOne;
-            public GeneratedNumber<TInner, TPrimitive> SpecialOne => GeneratedNumber<TInner, TPrimitive>.SpecialOne;
-            public GeneratedNumber<TInner, TPrimitive> UnitsOne => GeneratedNumber<TInner, TPrimitive>.UnitsOne;
-            public GeneratedNumber<TInner, TPrimitive> NonRealUnitsOne => GeneratedNumber<TInner, TPrimitive>.NonRealUnitsOne;
-            public GeneratedNumber<TInner, TPrimitive> CombinedOne => GeneratedNumber<TInner, TPrimitive>.CombinedOne;
-            public GeneratedNumber<TInner, TPrimitive> AllOne => GeneratedNumber<TInner, TPrimitive>.AllOne;
-            INumber INumberFactory.Zero => GeneratedNumber<TInner, TPrimitive>.Zero;
-            INumber INumberFactory.RealOne => GeneratedNumber<TInner, TPrimitive>.RealOne;
-            INumber INumberFactory.SpecialOne => GeneratedNumber<TInner, TPrimitive>.SpecialOne;
-            INumber INumberFactory.UnitsOne => GeneratedNumber<TInner, TPrimitive>.UnitsOne;
-            INumber INumberFactory.NonRealUnitsOne => GeneratedNumber<TInner, TPrimitive>.NonRealUnitsOne;
-            INumber INumberFactory.CombinedOne => GeneratedNumber<TInner, TPrimitive>.CombinedOne;
-            INumber INumberFactory.AllOne => GeneratedNumber<TInner, TPrimitive>.AllOne;
-            public GeneratedNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined) => new GeneratedNumber<TInner, TPrimitive>(InnerFactory.Create(realUnit, otherUnits, someUnitsCombined, allUnitsCombined));
+            public static readonly Operations Instance = new Operations();
+
+            public override int Dimension => 0;
+
+            public bool IsInvertible(in GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num.IsFinite;
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
+            {
+                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(operation));
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Call(UnaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num1, in GeneratedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public bool IsInvertible(in GeneratedNumber<TInner> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public TPrimitive Call(PrimitiveUnaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num.Call(operation);
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num1, TPrimitive num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined));
+            }
         }
 
         static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>

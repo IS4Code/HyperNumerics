@@ -11,16 +11,9 @@ namespace IS4.HyperNumerics
     {
         static class Constants<TNumber> where TNumber : struct, INumber<TNumber>
         {
-            static readonly INumberFactory<TNumber> Factory = default(TNumber).GetFactory();
-            public static readonly TNumber Zero = Factory.Zero;
-            public static readonly TNumber RealOne = Factory.RealOne;
-            public static readonly TNumber SpecialOne = Factory.SpecialOne;
-            public static readonly TNumber UnitsOne = Factory.UnitsOne;
-            public static readonly TNumber NonRealUnitsOne = Factory.NonRealUnitsOne;
-            public static readonly TNumber CombinedOne = Factory.CombinedOne;
-            public static readonly TNumber AllOne = Factory.AllOne;
-            public static readonly TNumber PI = RealOne.ArcTangent().Double().Double();
-            public static readonly TNumber E = RealOne.Exponentiate();
+            public static readonly TNumber RealOne = Call<TNumber>(NullaryOperation.RealOne);
+            public static readonly TNumber PI = Mul2(Mul2(Atan(RealOne)));
+            public static readonly TNumber E = Exp(RealOne);
         }
 
         /// <summary>
@@ -52,106 +45,257 @@ namespace IS4.HyperNumerics
         /// <returns></returns>
         public static TPrimitive Abs<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
         {
-            return num.AbsoluteValue();
+            return Operations.For<TNumber, TPrimitive>.Instance.Call(PrimitiveUnaryOperation.AbsoluteValue, num);
+        }
+
+        public static TPrimitive Std<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return Operations.For<TNumber, TPrimitive>.Instance.Call(PrimitiveUnaryOperation.RealValue, num);
         }
 
         public static TNumber Mul2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Double();
+            return Call(UnaryOperation.Double, num);
         }
 
         public static TNumber Div2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Half();
+            return Call(UnaryOperation.Half, num);
+        }
+
+        public static TNumber Add<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(BinaryOperation.Add, x, in y);
+        }
+
+        public static TNumber Sub<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(BinaryOperation.Subtract, x, in y);
+        }
+
+        public static TNumber Mul<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(BinaryOperation.Multiply, x, in y);
+        }
+
+        public static TNumber Div<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(BinaryOperation.Divide, x, in y);
         }
 
         public static TNumber Pow<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
         {
-            return x.Power(y);
+            return Call(BinaryOperation.Power, x, in y);
         }
 
-        public static TNumber Pow<TNumber, TPrimitive>(in TNumber x, TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        internal static TNumber PowDefault<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
         {
-            return x.Power(y);
+            return Exp(Mul(Log(x), y));
+        }
+
+        internal static TNumber PowValDefault<TNumber, TPrimitive>(in TNumber x, TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return Exp(MulVal(Log(x), y));
+        }
+
+        public static TNumber AddVal<TNumber, TPrimitive>(in TNumber x, TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitive(BinaryOperation.Add, x, y);
+        }
+
+        public static TNumber SubVal<TNumber, TPrimitive>(in TNumber x, TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitive(BinaryOperation.Subtract, x, y);
+        }
+
+        public static TNumber MulVal<TNumber, TPrimitive>(in TNumber x, TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitive(BinaryOperation.Multiply, x, y);
+        }
+
+        public static TNumber DivVal<TNumber, TPrimitive>(in TNumber x, TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitive(BinaryOperation.Divide, x, y);
+        }
+
+        public static TNumber PowVal<TNumber, TPrimitive>(in TNumber x, TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitive(BinaryOperation.Power, x, y);
+        }
+
+        public static TNumber Neg<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(UnaryOperation.Negate, num);
+        }
+
+        public static TNumber Inc<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(UnaryOperation.Increment, num);
+        }
+
+        public static TNumber Dec<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(UnaryOperation.Decrement, num);
+        }
+
+        public static TNumber Inv<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(UnaryOperation.Inverse, num);
+        }
+
+        public static TNumber Con<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(UnaryOperation.Conjugate, num);
+        }
+
+        public static TNumber Mods<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Call(UnaryOperation.Modulus, num);
+        }
+
+        public static bool CanInv<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.IsInvertible(num);
+        }
+
+        public static bool IsFin<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.IsFinite(num);
         }
 
         public static TNumber Pow2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Square();
+            return Call(UnaryOperation.Square, num);
         }
 
         public static TNumber Sqrt<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.SquareRoot();
+            return Call(UnaryOperation.SquareRoot, num);
         }
 
         public static TNumber Sin<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Sine();
+            return Call(UnaryOperation.Sine, num);
         }
 
         public static TNumber Cos<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Cosine();
+            return Call(UnaryOperation.Cosine, num);
         }
 
         public static TNumber Tan<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Tangent();
+            return Call(UnaryOperation.Tangent, num);
         }
 
         public static TNumber Sinh<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.HyperbolicSine();
+            return Call(UnaryOperation.HyperbolicSine, num);
         }
 
         public static TNumber Cosh<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.HyperbolicCosine();
+            return Call(UnaryOperation.HyperbolicCosine, num);
         }
 
         public static TNumber Tanh<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.HyperbolicTangent();
+            return Call(UnaryOperation.HyperbolicTangent, num);
+        }
+
+        internal static TNumber SinhDefault<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Sub(Div2(Exp(num)), Exp(Neg(num)));
+        }
+
+        internal static TNumber CoshDefault<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Add(Div2(Exp(num)), Exp(Neg(num)));
+        }
+
+        internal static TNumber TanhDefault<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            var denom = Inc(Exp(Mul2(num)));
+            return Div(Dec(Exp(Mul2(num))), denom);
         }
 
         public static TNumber Asin<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.ArcSine();
+            return Call(UnaryOperation.ArcSine, num);
         }
 
         public static TNumber Acos<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.ArcCosine();
+            return Call(UnaryOperation.ArcCosine, num);
         }
 
         public static TNumber Atan<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.ArcTangent();
+            return Call(UnaryOperation.ArcTangent, num);
         }
 
         public static TNumber Atan2<TNumber>(in TNumber y, in TNumber x) where TNumber : struct, INumber<TNumber>
         {
-            if(y.IsInvertible)
+            return Call<TNumber>(BinaryOperation.Atan2, in y, in x);
+        }
+
+        internal static TNumber Atan2Default<TNumber>(in TNumber y, in TNumber x) where TNumber : struct, INumber<TNumber>
+        {
+            if(Operations.For<TNumber>.Instance.IsInvertible(y))
             {
-                return Atan(x.Square().Add(y.Square()).SquareRoot().Subtract(x).Divide(y)).Double();
+                return Mul2(Atan(Div(Sub(Sqrt(Add(Pow2(x), Pow2(y))), x), y)));
             }
-            var value = y.Divide(x).ArcTangent();
-            if(x.Square().SquareRoot().Add(x).IsInvertible)
+            var value = Atan(Div(y, x));
+            if(Operations.For<TNumber>.Instance.IsInvertible(Add(Sqrt(Pow2(x)), x)))
             {
                 return value;
             }
-            return value.Add(PI<TNumber>());
+            return Add(value, PI<TNumber>());
         }
 
         public static TNumber Exp<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Exponentiate();
+            return Call(UnaryOperation.Exponentiate, num);
         }
 
         public static TNumber Log<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return num.Logarithm();
+            return Call(UnaryOperation.Logarithm, num);
+        }
+
+        public static TNumber Call<TNumber>(NullaryOperation operation) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.Call(operation);
+        }
+
+        public static TNumber Call<TNumber>(UnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.Call(operation, num);
+        }
+
+        public static TNumber Call<TNumber>(BinaryOperation operation, in TNumber num1, in TNumber num2) where TNumber : struct, INumber<TNumber>
+        {
+            return Operations.For<TNumber>.Instance.Call(operation, num1, num2);
+        }
+
+        public static TNumber CallInner<TNumber, TInner>(BinaryOperation operation, in TNumber num1, in TInner num2) where TNumber : struct, IExtendedNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
+        {
+            throw new NotImplementedException();
+        }
+
+        public static TNumber CallPrimitive<TNumber, TPrimitive>(BinaryOperation operation, in TNumber num1, TPrimitive num2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num1, num2);
+        }
+
+        public static TPrimitive Call<TNumber, TPrimitive>(PrimitiveUnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num);
+        }
+
+        public static TNumber Create<TNumber, TPrimitive>(TPrimitive realUnit = default, TPrimitive otherUnits = default, TPrimitive someUnitsCombined = default, TPrimitive allUnitsCombined = default) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return Operations.For<TNumber, TPrimitive>.Instance.Create(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
         }
 
         public static TNumber[] GetDerivative<TNumber>(IUnaryNumberOperation func, in TNumber num, int depth) where TNumber : struct, INumber<TNumber>
@@ -172,7 +316,7 @@ namespace IS4.HyperNumerics
         delegate TNumber ValueSelector<TInner, TNumber>(in TInner num) where TInner : struct, INumber<TInner> where TNumber : struct, INumber<TNumber>;
         static TInner GetDerivativeValue<TInner, TNumber>(in TInner num, IUnaryNumberOperation func, TNumber[] arr, int depth, int offset, ValueSelector<TInner, TNumber> valueSelector) where TInner : struct, INumber<TInner> where TNumber : struct, INumber<TNumber>
         {
-            var value = new HyperDual<TInner>(num, default(TInner).GetFactory().RealOne);
+            var value = new HyperDual<TInner>(num, Constants<TInner>.RealOne);
             if(depth == 0)
             {
                 value = func.Invoke(value);
@@ -211,168 +355,147 @@ namespace IS4.HyperNumerics
 
         public static class Operations
         {
-            public static readonly INumberOperation Zero = new ZeroOperation();
-            public static readonly INumberOperation RealOne = new RealOneOperation();
-            public static readonly INumberOperation SpecialOne = new SpecialOneOperation();
-            public static readonly INumberOperation UnitsOne = new UnitsOneOperation();
-            public static readonly INumberOperation NonRealUnitsOne = new NonRealUnitsOneOperation();
-            public static readonly INumberOperation CombinedOne = new CombinedOneOperation();
-            public static readonly INumberOperation AllOne = new AllOneOperation();
+            public static class For<TNumber> where TNumber : struct, INumber<TNumber>
+            {
+                public static readonly INumberOperations<TNumber> Instance = default(TNumber).GetOperations();
+            }
+
+            public static class For<TNumber, TPrimitive> where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            {
+                public static readonly INumberOperations<TNumber, TPrimitive> Instance = default(TNumber).GetOperations();
+            }
+
+            public static readonly INumberOperation Zero = new NumberNullaryOperation(NullaryOperation.Zero);
+            public static readonly INumberOperation RealOne = new NumberNullaryOperation(NullaryOperation.RealOne);
+            public static readonly INumberOperation SpecialOne = new NumberNullaryOperation(NullaryOperation.SpecialOne);
+            public static readonly INumberOperation UnitsOne = new NumberNullaryOperation(NullaryOperation.UnitsOne);
+            public static readonly INumberOperation NonRealUnitsOne = new NumberNullaryOperation(NullaryOperation.NonRealUnitsOne);
+            public static readonly INumberOperation CombinedOne = new NumberNullaryOperation(NullaryOperation.CombinedOne);
+            public static readonly INumberOperation AllOne = new NumberNullaryOperation(NullaryOperation.AllOne);
             public static readonly INumberOperation PI = new PIOperation();
             public static readonly INumberOperation E = new EOperation();
             public static readonly IUnaryNumberOperation Id = new IdOperation();
-            public static readonly IBinaryNumberOperation Add = new AddOperation();
-            public static readonly IBinaryNumberOperation Sub = new SubOperation();
-            public static readonly IBinaryNumberOperation Mul = new MulOperation();
-            public static readonly IBinaryNumberOperation Div = new DivOperation();
-            public static readonly IUnaryNumberOperation Neg = new NegOperation();
-            public static readonly IUnaryNumberOperation Inv = new InvOperation();
-            public static readonly IUnaryNumberOperation Inc = new IncOperation();
-            public static readonly IUnaryNumberOperation Dec = new DecOperation();
-            public static readonly IUnaryNumberOperation Con = new ConOperation();
-            public static readonly IUnaryNumberOperation Mods = new ModsOperation();
-            public static readonly IPrimitiveUnaryNumberFunc<ValueType> Abs = new AbsOperation();
-            public static readonly IUnaryNumberOperation Mul2 = new Mul2Operation();
-            public static readonly IUnaryNumberOperation Div2 = new Div2Operation();
-            public static readonly IBinaryNumberOperation Pow = new PowOperation();
-            public static readonly IUnaryNumberOperation Pow2 = new Pow2Operation();
-            public static readonly IUnaryNumberOperation Sqrt = new SqrtOperation();
-            public static readonly IUnaryNumberOperation Sin = new SinOperation();
-            public static readonly IUnaryNumberOperation Cos = new CosOperation();
-            public static readonly IUnaryNumberOperation Tan = new TanOperation();
-            public static readonly IUnaryNumberOperation Sinh = new SinhOperation();
-            public static readonly IUnaryNumberOperation Cosh = new CoshOperation();
-            public static readonly IUnaryNumberOperation Tanh = new TanhOperation();
-            public static readonly IUnaryNumberOperation Asin = new AsinOperation();
-            public static readonly IUnaryNumberOperation Acos = new AcosOperation();
-            public static readonly IUnaryNumberOperation Atan = new AtanOperation();
-            public static readonly IBinaryNumberOperation Atan2 = new Atan2Operation();
-            public static readonly IUnaryNumberOperation Exp = new ExpOperation();
-            public static readonly IUnaryNumberOperation Log = new LogOperation();
+            public static readonly IBinaryNumberOperation Add = new NumberBinaryOperation(BinaryOperation.Add);
+            public static readonly IBinaryNumberOperation Sub = new NumberBinaryOperation(BinaryOperation.Subtract);
+            public static readonly IBinaryNumberOperation Mul = new NumberBinaryOperation(BinaryOperation.Multiply);
+            public static readonly IBinaryNumberOperation Div = new NumberBinaryOperation(BinaryOperation.Divide);
+            public static readonly IUnaryNumberOperation Neg = new NumberUnaryOperation(UnaryOperation.Negate);
+            public static readonly IUnaryNumberOperation Inv = new NumberUnaryOperation(UnaryOperation.Inverse);
+            public static readonly IUnaryNumberOperation Inc = new NumberUnaryOperation(UnaryOperation.Increment);
+            public static readonly IUnaryNumberOperation Dec = new NumberUnaryOperation(UnaryOperation.Decrement);
+            public static readonly IUnaryNumberOperation Con = new NumberUnaryOperation(UnaryOperation.Conjugate);
+            public static readonly IUnaryNumberOperation Mods = new NumberUnaryOperation(UnaryOperation.Modulus);
+            public static readonly IPrimitiveUnaryNumberFunc<ValueType> Abs = new NumberPrimitiveUnaryOperation(PrimitiveUnaryOperation.AbsoluteValue);
+            public static readonly IUnaryNumberOperation Mul2 = new NumberUnaryOperation(UnaryOperation.Double);
+            public static readonly IUnaryNumberOperation Div2 = new NumberUnaryOperation(UnaryOperation.Half);
+            public static readonly IBinaryNumberOperation Pow = new NumberBinaryOperation(BinaryOperation.Power);
+            public static readonly IUnaryNumberOperation Pow2 = new NumberUnaryOperation(UnaryOperation.Square);
+            public static readonly IUnaryNumberOperation Sqrt = new NumberUnaryOperation(UnaryOperation.SquareRoot);
+            public static readonly IUnaryNumberOperation Sin = new NumberUnaryOperation(UnaryOperation.Sine);
+            public static readonly IUnaryNumberOperation Cos = new NumberUnaryOperation(UnaryOperation.Cosine);
+            public static readonly IUnaryNumberOperation Tan = new NumberUnaryOperation(UnaryOperation.Tangent);
+            public static readonly IUnaryNumberOperation Sinh = new NumberUnaryOperation(UnaryOperation.HyperbolicSine);
+            public static readonly IUnaryNumberOperation Cosh = new NumberUnaryOperation(UnaryOperation.HyperbolicCosine);
+            public static readonly IUnaryNumberOperation Tanh = new NumberUnaryOperation(UnaryOperation.HyperbolicTangent);
+            public static readonly IUnaryNumberOperation Asin = new NumberUnaryOperation(UnaryOperation.ArcSine);
+            public static readonly IUnaryNumberOperation Acos = new NumberUnaryOperation(UnaryOperation.ArcCosine);
+            public static readonly IUnaryNumberOperation Atan = new NumberUnaryOperation(UnaryOperation.ArcTangent);
+            public static readonly IBinaryNumberOperation Atan2 = new NumberBinaryOperation(BinaryOperation.Atan2);
+            public static readonly IUnaryNumberOperation Exp = new NumberUnaryOperation(UnaryOperation.Exponentiate);
+            public static readonly IUnaryNumberOperation Log = new NumberUnaryOperation(UnaryOperation.Logarithm);
 
-            class ZeroOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+            public static INumberOperation GetOperation(NullaryOperation operation)
             {
-                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
+                switch(operation)
                 {
-                    return Constants<TNumber>.Zero;
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Constants<TNumber>.Zero;
-                }
-
-                public override string ToString()
-                {
-                    return "Zero";
+                    case NullaryOperation.Zero:
+                        return Zero;
+                    case NullaryOperation.RealOne:
+                        return RealOne;
+                    case NullaryOperation.SpecialOne:
+                        return SpecialOne;
+                    case NullaryOperation.UnitsOne:
+                        return UnitsOne;
+                    case NullaryOperation.NonRealUnitsOne:
+                        return NonRealUnitsOne;
+                    case NullaryOperation.CombinedOne:
+                        return CombinedOne;
+                    case NullaryOperation.AllOne:
+                        return AllOne;
+                    default:
+                        return new NumberNullaryOperation(operation);
                 }
             }
 
-            class RealOneOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+            public static IUnaryNumberOperation GetOperation(UnaryOperation operation)
             {
-                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
+                switch(operation)
                 {
-                    return Constants<TNumber>.RealOne;
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Constants<TNumber>.RealOne;
-                }
-
-                public override string ToString()
-                {
-                    return "RealOne";
+                    case UnaryOperation.Negate:
+                        return Neg;
+                    case UnaryOperation.Increment:
+                        return Inc;
+                    case UnaryOperation.Decrement:
+                        return Dec;
+                    case UnaryOperation.Inverse:
+                        return Inv;
+                    case UnaryOperation.Conjugate:
+                        return Con;
+                    case UnaryOperation.Modulus:
+                        return Mods;
+                    case UnaryOperation.Double:
+                        return Mul2;
+                    case UnaryOperation.Half:
+                        return Div2;
+                    case UnaryOperation.Square:
+                        return Pow2;
+                    case UnaryOperation.SquareRoot:
+                        return Sqrt;
+                    case UnaryOperation.Exponentiate:
+                        return Exp;
+                    case UnaryOperation.Logarithm:
+                        return Log;
+                    case UnaryOperation.Sine:
+                        return Sin;
+                    case UnaryOperation.Cosine:
+                        return Cos;
+                    case UnaryOperation.Tangent:
+                        return Tan;
+                    case UnaryOperation.HyperbolicSine:
+                        return Sinh;
+                    case UnaryOperation.HyperbolicCosine:
+                        return Cosh;
+                    case UnaryOperation.HyperbolicTangent:
+                        return Tanh;
+                    case UnaryOperation.ArcSine:
+                        return Asin;
+                    case UnaryOperation.ArcCosine:
+                        return Acos;
+                    case UnaryOperation.ArcTangent:
+                        return Atan;
+                    default:
+                        return new NumberUnaryOperation(operation);
                 }
             }
 
-            class SpecialOneOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+            public static IBinaryNumberOperation GetOperation(BinaryOperation operation)
             {
-                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
+                switch(operation)
                 {
-                    return Constants<TNumber>.SpecialOne;
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Constants<TNumber>.SpecialOne;
-                }
-
-                public override string ToString()
-                {
-                    return "SpecialOne";
-                }
-            }
-
-            class UnitsOneOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
-            {
-                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
-                {
-                    return Constants<TNumber>.UnitsOne;
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Constants<TNumber>.UnitsOne;
-                }
-
-                public override string ToString()
-                {
-                    return "UnitsOne";
-                }
-            }
-
-            class NonRealUnitsOneOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
-            {
-                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
-                {
-                    return Constants<TNumber>.NonRealUnitsOne;
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Constants<TNumber>.NonRealUnitsOne;
-                }
-
-                public override string ToString()
-                {
-                    return "NonRealUnitsOne";
-                }
-            }
-
-            class CombinedOneOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
-            {
-                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
-                {
-                    return Constants<TNumber>.CombinedOne;
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Constants<TNumber>.CombinedOne;
-                }
-
-                public override string ToString()
-                {
-                    return "CombinedOne";
-                }
-            }
-
-            class AllOneOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
-            {
-                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
-                {
-                    return Constants<TNumber>.AllOne;
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Constants<TNumber>.AllOne;
-                }
-
-                public override string ToString()
-                {
-                    return "AllOne";
+                    case BinaryOperation.Add:
+                        return Add;
+                    case BinaryOperation.Subtract:
+                        return Sub;
+                    case BinaryOperation.Multiply:
+                        return Mul;
+                    case BinaryOperation.Divide:
+                        return Div;
+                    case BinaryOperation.Power:
+                        return Pow;
+                    case BinaryOperation.Atan2:
+                        return Atan2;
+                    default:
+                        return new NumberBinaryOperation(operation);
                 }
             }
 
@@ -430,502 +553,98 @@ namespace IS4.HyperNumerics
                 }
             }
 
-            class AddOperation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
+            class NumberNullaryOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
             {
+                readonly NullaryOperation type;
+
+                public NumberNullaryOperation(NullaryOperation type)
+                {
+                    this.type = type;
+                }
+
+                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
+                {
+                    return For<TNumber>.Instance.Call(type);
+                }
+
+                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                {
+                    return For<TNumber, TPrimitive>.Instance.Call(type);
+                }
+
+                public override string ToString()
+                {
+                    return type.ToString();
+                }
+            }
+
+            class NumberUnaryOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
+            {
+                readonly UnaryOperation type;
+
+                public NumberUnaryOperation(UnaryOperation type)
+                {
+                    this.type = type;
+                }
+
+                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+                {
+                    return For<TNumber>.Instance.Call(type, num);
+                }
+
+                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                {
+                    return For<TNumber, TPrimitive>.Instance.Call(type, num);
+                }
+
+                public override string ToString()
+                {
+                    return type.ToString();
+                }
+            }
+
+            class NumberBinaryOperation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
+            {
+                readonly BinaryOperation type;
+
+                public NumberBinaryOperation(BinaryOperation type)
+                {
+                    this.type = type;
+                }
+
                 public TNumber Invoke<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
                 {
-                    return x.Add(y);
+                    return For<TNumber>.Instance.Call(type, x, y);
                 }
 
                 public TNumber Invoke<TNumber, TPrimitive>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
                 {
-                    return x.Add(y);
+                    return For<TNumber, TPrimitive>.Instance.Call(type, x, y);
                 }
 
                 public override string ToString()
                 {
-                    return "Add";
+                    return type.ToString();
                 }
             }
 
-            class SubOperation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
+            class NumberPrimitiveUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberFunc<ValueType>>, IPrimitiveUnaryNumberFunc<ValueType>
             {
-                public TNumber Invoke<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
+                readonly PrimitiveUnaryOperation type;
+
+                public NumberPrimitiveUnaryOperation(PrimitiveUnaryOperation type)
                 {
-                    return x.Subtract(y);
+                    this.type = type;
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return x.Subtract(y);
-                }
-
-                public override string ToString()
-                {
-                    return "Sub";
-                }
-            }
-
-            class MulOperation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
-                {
-                    return x.Multiply(y);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return x.Multiply(y);
-                }
-
-                public override string ToString()
-                {
-                    return "Mul";
-                }
-            }
-
-            class DivOperation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
-                {
-                    return x.Divide(y);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return x.Divide(y);
-                }
-
-                public override string ToString()
-                {
-                    return "Div";
-                }
-            }
-
-            class NegOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return num.Negate();
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return num.Negate();
-                }
-
-                public override string ToString()
-                {
-                    return "Neg";
-                }
-            }
-
-            class InvOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return num.Inverse();
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return num.Inverse();
-                }
-
-                public override string ToString()
-                {
-                    return "Inv";
-                }
-            }
-
-            class IncOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return num.Increment();
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return num.Increment();
-                }
-
-                public override string ToString()
-                {
-                    return "Inc";
-                }
-            }
-
-            class DecOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return num.Decrement();
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return num.Decrement();
-                }
-
-                public override string ToString()
-                {
-                    return "Dec";
-                }
-            }
-
-            class ConOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return num.Conjugate();
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return num.Conjugate();
-                }
-
-                public override string ToString()
-                {
-                    return "Con";
-                }
-            }
-
-            class ModsOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return num.Modulus();
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return num.Modulus();
-                }
-
-                public override string ToString()
-                {
-                    return "Mods";
-                }
-            }
-
-            class AbsOperation : DynamicNumberOperation<IPrimitiveUnaryNumberFunc<ValueType>>, IPrimitiveUnaryNumberFunc<ValueType>
-            {
                 public ValueType Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
                 {
-                    return num.AbsoluteValue();
+                    return For<TNumber, TPrimitive>.Instance.Call(type, num);
                 }
 
                 public override string ToString()
                 {
-                    return "Abs";
-                }
-            }
-
-            class Mul2Operation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Mul2(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Mul2(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Mul2";
-                }
-            }
-
-            class Div2Operation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Div2(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Div2(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Div2";
-                }
-            }
-
-            class PowOperation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
-                {
-                    return Pow<TNumber>(x, y);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Pow<TNumber>(x, y);
-                }
-
-                public override string ToString()
-                {
-                    return "Pow";
-                }
-            }
-
-            class Pow2Operation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Pow2(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Pow2(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Pow2";
-                }
-            }
-
-            class SqrtOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Sqrt(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Sqrt(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Sqrt";
-                }
-            }
-
-            class SinOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Sin(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Sin(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Sin";
-                }
-            }
-
-            class CosOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Cos(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Cos(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Cos";
-                }
-            }
-
-            class TanOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Tan(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Tan(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Tan";
-                }
-            }
-
-            class SinhOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Sinh(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Sinh(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Sinh";
-                }
-            }
-
-            class CoshOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Cosh(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Cosh(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Cosh";
-                }
-            }
-
-            class TanhOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Tanh(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Tanh(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Tanh";
-                }
-            }
-
-            class AsinOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Asin(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Asin(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Asin";
-                }
-            }
-
-            class AcosOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Acos(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Acos(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Acos";
-                }
-            }
-
-            class AtanOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Atan(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Atan(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Atan";
-                }
-            }
-
-            class Atan2Operation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber y, in TNumber x) where TNumber : struct, INumber<TNumber>
-                {
-                    return Atan2(y, x);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber y, in TNumber x) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Atan2(y, x);
-                }
-
-                public override string ToString()
-                {
-                    return "Atan2";
-                }
-            }
-
-            class ExpOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Exp(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Exp(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Exp";
-                }
-            }
-
-            class LogOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
-            {
-                public TNumber Invoke<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
-                {
-                    return Log(num);
-                }
-
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    return Log(num);
-                }
-
-                public override string ToString()
-                {
-                    return "Log";
+                    return type.ToString();
                 }
             }
         }

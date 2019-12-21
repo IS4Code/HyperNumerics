@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IS4.HyperNumerics.Operations;
+using System;
 
 namespace IS4.HyperNumerics
 {
@@ -47,31 +48,10 @@ namespace IS4.HyperNumerics
         /// <returns>The new number.</returns>
         TNumber WithSecond(in TInner second);
 
-        /// <summary>
-        /// Calculates the sum of this number and <paramref name="other"/> expressed in terms of the second component.
-        /// </summary>
-        /// <param name="other">The other summand used in the calculation.</param>
-        /// <returns>The sum of the two numbers.</returns>
-        TNumber SecondAdd(in TInner other);
-
-        /// <summary>
-        /// Calculates the sum of this number and <paramref name="other"/> expressed in terms of the second component.
-        /// </summary>
-        /// <param name="other">The other summand used in the calculation.</param>
-        /// <returns>The sum of the two numbers.</returns>
-        TNumber SecondSubtract(in TInner other);
-
-        /// <summary>
-        /// Increments the second component by 1.
-        /// </summary>
-        /// <returns>The value with the second component incremented by 1.</returns>
-        TNumber SecondIncrement();
-
-        /// <summary>
-        /// Decrements the second component by 1.
-        /// </summary>
-        /// <returns>The value with the second component decremented by 1.</returns>
-        TNumber SecondDecrement();
+        TNumber FirstCall(UnaryOperation operation);
+        TNumber FirstCall(BinaryOperation operation, in TInner other);
+        TNumber SecondCall(UnaryOperation operation);
+        TNumber SecondCall(BinaryOperation operation, in TInner other);
     }
 
     /// <summary>
@@ -82,18 +62,7 @@ namespace IS4.HyperNumerics
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     public interface IHyperNumber<TNumber, TInner, TPrimitive> : IHyperNumber<TNumber, TInner>, IExtendedNumber<TNumber, TInner, TPrimitive> where TNumber : struct, IHyperNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-        /// <summary>
-        /// Calculates the sum of this number and <paramref name="other"/> expressed in terms of the second component.
-        /// </summary>
-        /// <param name="other">The other summand used in the calculation.</param>
-        /// <returns>The sum of the two numbers.</returns>
-        TNumber SecondAdd(TPrimitive other);
-
-        /// <summary>
-        /// Calculates the sum of this number and <paramref name="other"/> expressed in terms of the second component.
-        /// </summary>
-        /// <param name="other">The other summand used in the calculation.</param>
-        /// <returns>The sum of the two numbers.</returns>
-        TNumber SecondSubtract(TPrimitive other);
+        TNumber FirstCall(BinaryOperation operation, TPrimitive other);
+        TNumber SecondCall(BinaryOperation operation, TPrimitive other);
     }
 }

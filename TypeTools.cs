@@ -46,9 +46,9 @@ namespace IS4.HyperNumerics
             return type;
         }
 
-        public static INumberFactory GetNumberFactory(Type numberType)
+        public static INumberOperations GetNumberOperations(Type numberType)
         {
-            return ((INumber)Activator.CreateInstance(numberType)).GetFactory();
+            return ((INumber)Activator.CreateInstance(numberType)).GetOperations();
         }
 
         public static Type GetPrimitiveType(Type numberType)
