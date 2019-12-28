@@ -52,6 +52,8 @@ namespace IS4.HyperNumerics
         TNumber FirstCall(BinaryOperation operation, in TInner other);
         TNumber SecondCall(UnaryOperation operation);
         TNumber SecondCall(BinaryOperation operation, in TInner other);
+
+        new IHyperNumberOperations<TNumber, TInner> GetOperations();
     }
 
     /// <summary>
@@ -64,5 +66,7 @@ namespace IS4.HyperNumerics
     {
         TNumber FirstCall(BinaryOperation operation, TPrimitive other);
         TNumber SecondCall(BinaryOperation operation, TPrimitive other);
+
+        new IHyperNumberOperations<TNumber, TInner, TPrimitive> GetOperations();
     }
 }

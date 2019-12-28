@@ -8,6 +8,8 @@ namespace IS4.HyperNumerics
         int Dimension { get; }
 
         INumber Call(NullaryOperation operation);
+        INumber Call(UnaryOperation operation, INumber num);
+        INumber Call(BinaryOperation operation, INumber num1, INumber num2);
     }
 
     public interface INumberOperations<TNumber> : INumberOperations where TNumber : struct, INumber<TNumber>

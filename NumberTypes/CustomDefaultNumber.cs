@@ -259,12 +259,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner> IExtendedNumber<CustomDefaultNumber<TInner, TTraits>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return HyperMath.Operations.For<TInner>.Instance;
         }
 
-        class Operations : NumberOperations<CustomDefaultNumber<TInner, TTraits>>, INumberOperations<CustomDefaultNumber<TInner, TTraits>>
+        class Operations : NumberOperations<CustomDefaultNumber<TInner, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -308,6 +313,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public CustomDefaultNumber<TInner, TTraits> Create(in TInner num)
+            {
+                return new CustomDefaultNumber<TInner, TTraits>(num);
             }
         }
 
@@ -601,6 +616,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return HyperMath.Operations.For<TInner>.Instance;
@@ -611,7 +636,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Operations.For<TInner, TPrimitive>.Instance;
         }
 
-        class Operations : NumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>>, INumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>
+        class Operations : NumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -667,9 +692,19 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            }
+
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in TInner num)
+            {
+                return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(num);
             }
         }
 

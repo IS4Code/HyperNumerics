@@ -232,7 +232,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<ProjectiveNumber<TInner>>, INumberOperations<ProjectiveNumber<TInner>>
+        IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner> IExtendedNumber<ProjectiveNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -277,6 +282,16 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return num1.Call(operation, num2);
             }
+
+            public ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public ProjectiveNumber<TInner> Create(in TInner num)
+            {
+                return new ProjectiveNumber<TInner>(num);
+            }
         }
     }
 
@@ -302,7 +317,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsFinite => !IsInfinity && IsFin(value);
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
-        
+
         public ProjectiveNumber(in TInner value, bool isInfinity = false)
         {
             this.value = value;
@@ -501,32 +516,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return IsInfinity ? "Infinity(" + value.ToString(format, formatProvider) + ")" : value.ToString(format, formatProvider);
         }
 
-        public static bool operator==(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator ==(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.Equals(in b);
         }
 
-        public static bool operator!=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator !=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return !a.Equals(in b);
         }
 
-        public static bool operator>(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator >(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) > 0;
         }
 
-        public static bool operator<(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator <(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) < 0;
         }
 
-        public static bool operator>=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator >=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) >= 0;
         }
 
-        public static bool operator<=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator <=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) <= 0;
         }
@@ -546,7 +561,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<ProjectiveNumber<TInner, TPrimitive>>, INumberOperations<ProjectiveNumber<TInner, TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<ProjectiveNumber<TInner, TPrimitive>>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -602,9 +627,19 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public ProjectiveNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            }
+
+            public ProjectiveNumber<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new ProjectiveNumber<TInner, TPrimitive>(num);
             }
         }
 
@@ -628,15 +663,34 @@ namespace IS4.HyperNumerics.NumberTypes
             return value[index];
         }
 
-        int ICollection<TPrimitive>.Count => GetCollectionCount(value);
+        void ThrowIfInfinity()
+        {
+            if(IsInfinity)
+            {
+                throw new InvalidOperationException("Cannot obtain the numeric representation of an infinity.");
+            }
+        }
+
+        int ICollection<TPrimitive>.Count{
+            get{
+                ThrowIfInfinity();
+                return GetCollectionCount(value);
+            }
+        }
 
         bool ICollection<TPrimitive>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(value);
+        int IReadOnlyCollection<TPrimitive>.Count{
+            get{
+                ThrowIfInfinity();
+                return GetReadOnlyCollectionCount(value);
+            }
+        }
 
         TPrimitive IReadOnlyList<TPrimitive>.this[int index]
         {
             get{
+                ThrowIfInfinity();
                 return GetReadOnlyListItem(value, index);
             }
         }
@@ -644,6 +698,7 @@ namespace IS4.HyperNumerics.NumberTypes
         TPrimitive IList<TPrimitive>.this[int index]
         {
             get{
+                ThrowIfInfinity();
                 return GetListItem(value, index);
             }
             set{
@@ -653,6 +708,10 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int IList<TPrimitive>.IndexOf(TPrimitive item)
         {
+            if(IsInfinity)
+            {
+                return -1;
+            }
             return value.IndexOf(item);
         }
 
@@ -678,11 +737,16 @@ namespace IS4.HyperNumerics.NumberTypes
 
         bool ICollection<TPrimitive>.Contains(TPrimitive item)
         {
+            if(IsInfinity)
+            {
+                return false;
+            }
             return value.Contains(item);
         }
 
         void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
         {
+            ThrowIfInfinity();
             value.CopyTo(array, arrayIndex);
         }
 
@@ -693,11 +757,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
         {
+            ThrowIfInfinity();
             return value.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
+            ThrowIfInfinity();
             return value.GetEnumerator();
         }
     }

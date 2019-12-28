@@ -332,6 +332,7 @@ namespace IS4.HyperNumerics.NumberTypes
                     case NullaryOperation.UnitsOne:
                     case NullaryOperation.AllOne:
                         return 1.0;
+                    case NullaryOperation.Zero:
                     case NullaryOperation.SpecialOne:
                     case NullaryOperation.NonRealUnitsOne:
                     case NullaryOperation.CombinedOne:

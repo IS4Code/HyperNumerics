@@ -21,9 +21,24 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-        public GeneratedNumber(TInner value)
+        public GeneratedNumber(in TInner value)
         {
-            this.generator = () => value;
+            generator = new ConstGenerator(value).Get;
+        }
+
+        class ConstGenerator
+        {
+            readonly TInner value;
+
+            public ConstGenerator(in TInner value)
+            {
+                this.value = value;
+            }
+
+            public TInner Get()
+            {
+                return value;
+            }
         }
 
         public GeneratedNumber(Func<TInner> generator)
@@ -150,7 +165,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<GeneratedNumber<TInner>>, INumberOperations<GeneratedNumber<TInner>>
+        IExtendedNumberOperations<GeneratedNumber<TInner>, TInner> IExtendedNumber<GeneratedNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<GeneratedNumber<TInner>>, IExtendedNumberOperations<GeneratedNumber<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -195,6 +215,16 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return num1.Call(operation, num2);
             }
+
+            public GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public GeneratedNumber<TInner> Create(in TInner num)
+            {
+                return new GeneratedNumber<TInner>(num);
+            }
         }
     }
     
@@ -213,9 +243,24 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-        public GeneratedNumber(TInner value)
+        public GeneratedNumber(in TInner value)
         {
-            this.generator = () => value;
+            generator = new ConstGenerator(value).Get;
+        }
+
+        class ConstGenerator
+        {
+            readonly TInner value;
+
+            public ConstGenerator(in TInner value)
+            {
+                this.value = value;
+            }
+
+            public TInner Get()
+            {
+                return value;
+            }
         }
 
         public GeneratedNumber(Func<TInner> generator)
@@ -358,7 +403,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<GeneratedNumber<TInner, TPrimitive>>, INumberOperations<GeneratedNumber<TInner, TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, TInner> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<GeneratedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -419,9 +474,19 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public GeneratedNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
                 return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined));
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new GeneratedNumber<TInner, TPrimitive>(num);
             }
         }
 

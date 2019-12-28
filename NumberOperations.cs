@@ -1,7 +1,5 @@
 ﻿using IS4.HyperNumerics.Operations;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IS4.HyperNumerics
 {
@@ -9,17 +7,42 @@ namespace IS4.HyperNumerics
     {
         public abstract int Dimension { get; }
 
+        readonly INumberOperations<TNumber> thisOperations;
+
         public NumberOperations()
         {
-            if(!(this is INumberOperations<TNumber>))
+            thisOperations = this as INumberOperations<TNumber>;
+            if(thisOperations == null)
             {
-                throw new TypeLoadException("The type must implement INumberOperations<TNumber>");
+                throw new TypeLoadException("The type must implement " + typeof(INumberOperations<TNumber>));
             }
         }
 
         INumber INumberOperations.Call(NullaryOperation operation)
         {
-            return ((INumberOperations<TNumber>)(object)this).Call(operation);
+            return thisOperations.Call(operation);
+        }
+
+        INumber INumberOperations.Call(UnaryOperation operation, INumber num)
+        {
+            if(!(num is INumber<TNumber> tnum))
+            {
+                throw new ArgumentException("The type of the argument must implement " + typeof(INumber<TNumber>), nameof(num));
+            }
+            return tnum.Call(operation);
+        }
+
+        INumber INumberOperations.Call(BinaryOperation operation, INumber num1, INumber num2)
+        {
+            if(!(num1 is INumber<TNumber> tnum1))
+            {
+                throw new ArgumentException("The type of the argument must implement " + typeof(INumber<TNumber>), nameof(num1));
+            }
+            if(!(num2 is TNumber tnum2))
+            {
+                throw new ArgumentException("The type of the argument must be " + typeof(TNumber), nameof(num2));
+            }
+            return tnum1.Call(operation, tnum2);
         }
     }
 }

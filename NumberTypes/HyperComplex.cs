@@ -316,7 +316,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperComplex<TInner>>, INumberOperations<HyperComplex<TInner>>
+        IExtendedNumberOperations<HyperComplex<TInner>, TInner> IExtendedNumber<HyperComplex<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperComplex<TInner>, TInner> IHyperNumber<HyperComplex<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperComplex<TInner>>, IHyperNumberOperations<HyperComplex<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -381,6 +391,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public HyperComplex<TInner> Create(in TInner num)
+            {
+                return new HyperComplex<TInner>(num);
+            }
+
+            public HyperComplex<TInner> Create(in TInner first, in TInner second)
+            {
+                return new HyperComplex<TInner>(first, second);
             }
         }
     }
@@ -747,7 +772,27 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperComplex<TInner, TPrimitive>>, INumberOperations<HyperComplex<TInner, TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, TInner> IExtendedNumber<HyperComplex<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner> IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -803,9 +848,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public HyperComplex<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return new HyperComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+            }
+
+            public HyperComplex<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new HyperComplex<TInner, TPrimitive>(num);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            {
+                return new HyperComplex<TInner, TPrimitive>(first, second);
             }
         }
 

@@ -173,6 +173,11 @@ namespace IS4.HyperNumerics
             return Call(UnaryOperation.SquareRoot, num);
         }
 
+        internal static TNumber SqrtDefault<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
+        {
+            return Exp(Div2(Log(num)));
+        }
+
         public static TNumber Sin<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
             return Call(UnaryOperation.Sine, num);
@@ -295,7 +300,7 @@ namespace IS4.HyperNumerics
 
         public static TNumber CallInner<TNumber, TInner>(BinaryOperation operation, in TNumber num1, in TInner num2) where TNumber : struct, IExtendedNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
         {
-            throw new NotImplementedException();
+            return Operations.ForExtended<TNumber, TInner>.Instance.Call(operation, num1, num2);
         }
 
         public static TNumber CallPrimitive<TNumber, TPrimitive>(BinaryOperation operation, in TNumber num1, TPrimitive num2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -378,6 +383,26 @@ namespace IS4.HyperNumerics
             public static class For<TNumber, TPrimitive> where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
             {
                 public static readonly INumberOperations<TNumber, TPrimitive> Instance = default(TNumber).GetOperations();
+            }
+
+            public static class ForExtended<TNumber, TInner> where TNumber : struct, IExtendedNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
+            {
+                public static readonly IExtendedNumberOperations<TNumber, TInner> Instance = default(TNumber).GetOperations();
+            }
+
+            public static class ForExtended<TNumber, TInner, TPrimitive> where TNumber : struct, IExtendedNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            {
+                public static readonly IExtendedNumberOperations<TNumber, TInner, TPrimitive> Instance = default(TNumber).GetOperations();
+            }
+
+            public static class ForHyper<TNumber, TInner> where TNumber : struct, IHyperNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
+            {
+                public static readonly IHyperNumberOperations<TNumber, TInner> Instance = default(TNumber).GetOperations();
+            }
+
+            public static class ForHyper<TNumber, TInner, TPrimitive> where TNumber : struct, IHyperNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            {
+                public static readonly IHyperNumberOperations<TNumber, TInner, TPrimitive> Instance = default(TNumber).GetOperations();
             }
 
             public static readonly INumberOperation Zero = new NumberNullaryOperation(NullaryOperation.Zero);

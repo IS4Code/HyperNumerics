@@ -157,7 +157,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 case UnaryOperation.Square:
                     return new HyperSplitComplex<TInner>(Add(Pow2(first), Pow2(second)), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
-                    throw new NotImplementedException();
+                    return SqrtDefault(this);
                 case UnaryOperation.Exponentiate:
                     var exp = Exp(first);
                     return new HyperSplitComplex<TInner>(Mul(Cosh(second), exp), Mul(Sinh(second), exp));
@@ -287,7 +287,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperSplitComplex<TInner>>, INumberOperations<HyperSplitComplex<TInner>>
+        IExtendedNumberOperations<HyperSplitComplex<TInner>, TInner> IExtendedNumber<HyperSplitComplex<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperSplitComplex<TInner>, TInner> IHyperNumber<HyperSplitComplex<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperSplitComplex<TInner>>, IHyperNumberOperations<HyperSplitComplex<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -352,6 +362,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public HyperSplitComplex<TInner> Create(in TInner num)
+            {
+                return new HyperSplitComplex<TInner>(num);
+            }
+
+            public HyperSplitComplex<TInner> Create(in TInner first, in TInner second)
+            {
+                return new HyperSplitComplex<TInner>(first, second);
             }
         }
     }
@@ -687,7 +712,27 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperSplitComplex<TInner, TPrimitive>>, INumberOperations<HyperSplitComplex<TInner, TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner> IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperSplitComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -743,9 +788,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public HyperSplitComplex<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+            }
+
+            public HyperSplitComplex<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new HyperSplitComplex<TInner, TPrimitive>(num);
+            }
+
+            public HyperSplitComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            {
+                return new HyperSplitComplex<TInner, TPrimitive>(first, second);
             }
         }
 

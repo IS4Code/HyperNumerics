@@ -181,7 +181,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<NullableNumber<TInner>>, INumberOperations<NullableNumber<TInner>>
+        IExtendedNumberOperations<NullableNumber<TInner>, TInner> IExtendedNumber<NullableNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<NullableNumber<TInner>>, IExtendedNumberOperations<NullableNumber<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -225,6 +230,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public NullableNumber<TInner> Create(in TInner num)
+            {
+                return new NullableNumber<TInner>(num);
             }
         }
     }
@@ -421,7 +436,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<NullableNumber<TInner, TPrimitive>>, INumberOperations<NullableNumber<TInner, TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, TInner> IExtendedNumber<NullableNumber<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<NullableNumber<TInner, TPrimitive>>, IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -477,9 +502,19 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in NullableNumber<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public NullableNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            }
+
+            public NullableNumber<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new NullableNumber<TInner, TPrimitive>(num);
             }
         }
 
@@ -512,22 +547,22 @@ namespace IS4.HyperNumerics.NumberTypes
         TPrimitive IReadOnlyList<TPrimitive>.this[int index]
         {
             get{
-                if(!Value.HasValue)
+                if(!hasValue)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
-                return GetReadOnlyListItem(Value.Value, index);
+                return GetReadOnlyListItem(value, index);
             }
         }
 
         TPrimitive IList<TPrimitive>.this[int index]
         {
             get {
-                if(!Value.HasValue)
+                if(!hasValue)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
-                return GetListItem(Value.Value, index);
+                return GetListItem(value, index);
             }
             set{
                 throw new NotSupportedException();
@@ -536,7 +571,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int IList<TPrimitive>.IndexOf(TPrimitive item)
         {
-            return Value?.IndexOf(item) ?? -1;
+            if(!hasValue)
+            {
+                return -1;
+            }
+            return value.IndexOf(item);
         }
 
         void IList<TPrimitive>.Insert(int index, TPrimitive item)
@@ -561,12 +600,19 @@ namespace IS4.HyperNumerics.NumberTypes
 
         bool ICollection<TPrimitive>.Contains(TPrimitive item)
         {
-            return Value?.Contains(item) ?? false;
+            if(!hasValue)
+            {
+                return false;
+            }
+            return value.Contains(item);
         }
 
         void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
         {
-            Value?.CopyTo(array, arrayIndex);
+            if(hasValue)
+            {
+                value.CopyTo(array, arrayIndex);
+            }
         }
 
         bool ICollection<TPrimitive>.Remove(TPrimitive item)
@@ -576,12 +622,20 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
         {
-            return Value?.GetEnumerator() ?? Enumerable.Empty<TPrimitive>().GetEnumerator();
+            if(!hasValue)
+            {
+                return Enumerable.Empty<TPrimitive>().GetEnumerator();
+            }
+            return value.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Value?.GetEnumerator() ?? Enumerable.Empty<TPrimitive>().GetEnumerator();
+            if(!hasValue)
+            {
+                return Enumerable.Empty<TPrimitive>().GetEnumerator();
+            }
+            return value.GetEnumerator();
         }
     }
 }

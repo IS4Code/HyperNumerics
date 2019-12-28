@@ -288,7 +288,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDual<TInner>>, INumberOperations<HyperDual<TInner>>
+        IExtendedNumberOperations<HyperDual<TInner>, TInner> IExtendedNumber<HyperDual<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperDual<TInner>, TInner> IHyperNumber<HyperDual<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperDual<TInner>>, IHyperNumberOperations<HyperDual<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -353,6 +363,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in HyperDual<TInner> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public HyperDual<TInner> Create(in TInner num)
+            {
+                return new HyperDual<TInner>(num);
+            }
+
+            public HyperDual<TInner> Create(in TInner first, in TInner second)
+            {
+                return new HyperDual<TInner>(first, second);
             }
         }
     }
@@ -690,7 +715,27 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDual<TInner, TPrimitive>>, INumberOperations<HyperDual<TInner, TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, TInner> IExtendedNumber<HyperDual<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner> IHyperNumber<HyperDual<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperDual<TInner, TPrimitive>>, IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -746,9 +791,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDual<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public HyperDual<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return new HyperDual<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+            }
+
+            public HyperDual<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new HyperDual<TInner, TPrimitive>(num);
+            }
+
+            public HyperDual<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            {
+                return new HyperDual<TInner, TPrimitive>(first, second);
             }
         }
 

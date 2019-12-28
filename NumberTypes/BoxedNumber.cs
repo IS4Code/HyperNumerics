@@ -188,12 +188,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<BoxedNumber<TInner>, TInner> IExtendedNumber<BoxedNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return HyperMath.Operations.For<TInner>.Instance;
         }
 
-        class Operations : NumberOperations<BoxedNumber<TInner>>, INumberOperations<BoxedNumber<TInner>>
+        class Operations : NumberOperations<BoxedNumber<TInner>>, IExtendedNumberOperations<BoxedNumber<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -237,6 +242,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public BoxedNumber<TInner> Create(in TInner num)
+            {
+                return new BoxedNumber<TInner>(num);
             }
         }
 
@@ -455,6 +470,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, TInner> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return Reference.GetOperations();
@@ -465,7 +490,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.GetOperations();
         }
 
-        class Operations : NumberOperations<BoxedNumber<TInner, TPrimitive>>, INumberOperations<BoxedNumber<TInner, TPrimitive>, TPrimitive>
+        class Operations : NumberOperations<BoxedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -521,9 +546,19 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public BoxedNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new BoxedNumber<TInner, TPrimitive>(num);
             }
         }
 

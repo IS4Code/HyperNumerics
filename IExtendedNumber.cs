@@ -13,6 +13,8 @@ namespace IS4.HyperNumerics
     public interface IExtendedNumber<TNumber, TInner> : INumber<TNumber> where TNumber : struct, IExtendedNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
     {
         TNumber Call(BinaryOperation operation, in TInner other);
+
+        new IExtendedNumberOperations<TNumber, TInner> GetOperations();
     }
 
     /// <summary>
@@ -23,6 +25,6 @@ namespace IS4.HyperNumerics
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     public interface IExtendedNumber<TNumber, TInner, TPrimitive> : IExtendedNumber<TNumber, TInner>, INumber<TNumber, TPrimitive> where TNumber : struct, IExtendedNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
-
+        new IExtendedNumberOperations<TNumber, TInner, TPrimitive> GetOperations();
     }
 }

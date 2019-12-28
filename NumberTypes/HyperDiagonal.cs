@@ -259,7 +259,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDiagonal<TInner>>, INumberOperations<HyperDiagonal<TInner>>
+        IExtendedNumberOperations<HyperDiagonal<TInner>, TInner> IExtendedNumber<HyperDiagonal<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperDiagonal<TInner>, TInner> IHyperNumber<HyperDiagonal<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperDiagonal<TInner>>, IHyperNumberOperations<HyperDiagonal<TInner>, TInner>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -324,6 +334,21 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public HyperDiagonal<TInner> Create(in TInner num)
+            {
+                return new HyperDiagonal<TInner>(num);
+            }
+
+            public HyperDiagonal<TInner> Create(in TInner first, in TInner second)
+            {
+                return new HyperDiagonal<TInner>(first, second);
             }
         }
     }
@@ -630,7 +655,27 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDiagonal<TInner, TPrimitive>>, INumberOperations<HyperDiagonal<TInner, TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner> IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<HyperDiagonal<TInner, TPrimitive>>, IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -707,9 +752,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public HyperDiagonal<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Create(in TInner num)
+            {
+                return new HyperDiagonal<TInner, TPrimitive>(num);
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            {
+                return new HyperDiagonal<TInner, TPrimitive>(first, second);
             }
         }
 
