@@ -1,6 +1,7 @@
 ﻿using IS4.HyperNumerics.NumberTypes;
 using System;
 using System.Dynamic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -8,6 +9,14 @@ namespace IS4.HyperNumerics.Operations
 {
     public abstract class DynamicNumberOperation<TInterface> : IDynamicMetaObjectProvider
     {
+        public DynamicNumberOperation()
+        {
+            if(!(this is TInterface))
+            {
+                throw new TypeLoadException("The type must implement " + typeof(TInterface));
+            }
+        }
+
         DynamicMetaObject IDynamicMetaObjectProvider.GetMetaObject(Expression parameter)
         {
             return new MetaObject(parameter, this);
@@ -20,8 +29,8 @@ namespace IS4.HyperNumerics.Operations
 
             private static readonly Type NumberOperation = typeof(INumberOperation);
             private static readonly Type PrimitiveNumberOperation = typeof(IPrimitiveNumberOperation);
-            private static readonly ConstructorInfo Constructor = typeof(AbstractNumber).GetConstructor(new[] { NumberOperation });
-            private static readonly ConstructorInfo PrimitiveConstructor = typeof(PrimitiveAbstractNumber).GetConstructor(new[] { PrimitiveNumberOperation });
+            private static readonly ConstructorInfo AbstractConstructor = typeof(AbstractNumber).GetConstructor(new[] { NumberOperation });
+            private static readonly ConstructorInfo PrimitiveAbstractConstructor = typeof(PrimitiveAbstractNumber).GetConstructor(new[] { PrimitiveNumberOperation });
 
             public MetaObject(Expression expression, DynamicNumberOperation<TInterface> value) : base(expression, BindingRestrictions.GetTypeRestriction(expression, InterfaceType), value)
             {
@@ -36,11 +45,45 @@ namespace IS4.HyperNumerics.Operations
                     var restrictions = BindingRestrictions.GetTypeRestriction(Expression, LimitType);
                     if(NumberOperation.Equals(InterfaceType))
                     {
-                        return new DynamicMetaObject(Expression.Convert(Expression.New(Constructor, Expression.Convert(Expression, NumberOperation)), binder.ReturnType), restrictions);
+                        return new DynamicMetaObject(Expression.Convert(Expression.New(AbstractConstructor, Expression.Convert(Expression, NumberOperation)), binder.ReturnType), restrictions);
                     }
                     if(PrimitiveNumberOperation.Equals(InterfaceType))
                     {
-                        return new DynamicMetaObject(Expression.Convert(Expression.New(PrimitiveConstructor, Expression.Convert(Expression, PrimitiveNumberOperation)), binder.ReturnType), restrictions);
+                        return new DynamicMetaObject(Expression.Convert(Expression.New(PrimitiveAbstractConstructor, Expression.Convert(Expression, PrimitiveNumberOperation)), binder.ReturnType), restrictions);
+                    }
+                    MethodInfo method = null;
+                    foreach(var arg in args)
+                    {
+                        try{
+                            method = Invoke.MakeGenericMethod(arg.LimitType);
+                        }catch(ArgumentException)
+                        {
+
+                        }
+                        if(method != null)
+                        {
+                            break;
+                        }else{
+                            var primitiveType = TypeTools.GetPrimitiveType(arg.LimitType);
+                            if(primitiveType != null)
+                            {
+                                try{
+                                    method = Invoke.MakeGenericMethod(arg.LimitType, primitiveType);
+                                }catch(ArgumentException)
+                                {
+
+                                }
+                                if(method != null)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(method != null)
+                    {
+                        var expression = Expression.Call(Expression.Convert(Expression, InterfaceType), method, args.Select(arg => arg.Expression));
+                        return new DynamicMetaObject(Expression.Convert(expression, binder.ReturnType), restrictions);
                     }
                 }
                 return base.BindInvoke(binder, args);

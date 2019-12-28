@@ -199,7 +199,6 @@ namespace IS4.HyperNumerics.NumberTypes
             private static readonly Type InterfaceType = typeof(INumberOperation);
             private static readonly MethodInfo Invoke = InterfaceType.GetMethod(nameof(INumberOperation.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             private static readonly Type NumberType = typeof(AbstractNumber);
-            private static readonly PropertyInfo OperationProperty = NumberType.GetProperty(nameof(Operation));
 
             public MetaObject(Expression expression, INumber<AbstractNumber> value) : base(expression, BindingRestrictions.GetTypeRestriction(expression, NumberType), value)
             {
@@ -216,7 +215,7 @@ namespace IS4.HyperNumerics.NumberTypes
                     return base.BindConvert(binder);
                 }
                 var restrictions = BindingRestrictions.GetTypeRestriction(Expression, LimitType);
-                var expression = Expression.Call(Expression.Property(Expression.Convert(Expression, NumberType), OperationProperty), method);
+                var expression = Expression.Call(Expression.Convert(Expression, InterfaceType), method);
                 return new DynamicMetaObject(Expression.Convert(expression, binder.ReturnType), restrictions);
             }
         }
@@ -415,7 +414,6 @@ namespace IS4.HyperNumerics.NumberTypes
             private static readonly Type InterfaceType = typeof(IPrimitiveNumberOperation);
             private static readonly MethodInfo Invoke = InterfaceType.GetMethod(nameof(IPrimitiveNumberOperation.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             private static readonly Type NumberType = typeof(PrimitiveAbstractNumber);
-            private static readonly PropertyInfo OperationProperty = NumberType.GetProperty(nameof(Operation));
 
             public MetaObject(Expression expression, INumber<PrimitiveAbstractNumber> value) : base(expression, BindingRestrictions.GetTypeRestriction(expression, NumberType), value)
             {
@@ -432,7 +430,7 @@ namespace IS4.HyperNumerics.NumberTypes
                     return base.BindConvert(binder);
                 }
                 var restrictions = BindingRestrictions.GetTypeRestriction(Expression, LimitType);
-                var expression = Expression.Call(Expression.Property(Expression.Convert(Expression, NumberType), OperationProperty), method);
+                var expression = Expression.Call(Expression.Convert(Expression, InterfaceType), method);
                 return new DynamicMetaObject(Expression.Convert(expression, binder.ReturnType), restrictions);
             }
         }
