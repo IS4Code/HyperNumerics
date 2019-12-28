@@ -8,8 +8,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <summary>
     /// Represents a real number, with its value stored as a <see cref="System.Double"/>.
     /// </summary>
+    /// <remarks>
+    /// Not all possible values of <see cref="System.Double"/> are allowed, namely infinites and NaNs.
+    /// </remarks>
     [Serializable]
-    public readonly struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>
+    public readonly struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>
     {
         public static readonly Real Zero = new Real(0.0);
         public static readonly Real One = new Real(1.0);
@@ -60,12 +63,38 @@ namespace IS4.HyperNumerics.NumberTypes
             return this;
         }
 
+        ExtendedReal INumber<ExtendedReal>.Clone()
+        {
+            return new ExtendedReal(Value);
+        }
+
         object ICloneable.Clone()
         {
             return this;
         }
         
         public Real Call(BinaryOperation operation, in Real other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other.Value;
+                case BinaryOperation.Subtract:
+                    return Value - other.Value;
+                case BinaryOperation.Multiply:
+                    return Value * other.Value;
+                case BinaryOperation.Divide:
+                    return Value / other.Value;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other.Value);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other.Value);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public ExtendedReal Call(BinaryOperation operation, in ExtendedReal other)
         {
             switch(operation)
             {
@@ -107,7 +136,49 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        ExtendedReal INumber<ExtendedReal, double>.Call(BinaryOperation operation, double other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other;
+                case BinaryOperation.Subtract:
+                    return Value - other;
+                case BinaryOperation.Multiply:
+                    return Value * other;
+                case BinaryOperation.Divide:
+                    return Value / other;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public Real Call(BinaryOperation operation, float other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return Value + other;
+                case BinaryOperation.Subtract:
+                    return Value - other;
+                case BinaryOperation.Multiply:
+                    return Value * other;
+                case BinaryOperation.Divide:
+                    return Value / other;
+                case BinaryOperation.Power:
+                    return Math.Pow(Value, other);
+                case BinaryOperation.Atan2:
+                    return Math.Atan2(Value, other);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        ExtendedReal INumber<ExtendedReal, float>.Call(BinaryOperation operation, float other)
         {
             switch(operation)
             {
@@ -179,6 +250,57 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        ExtendedReal INumber<ExtendedReal>.Call(UnaryOperation operation)
+        {
+            switch(operation)
+            {
+                case UnaryOperation.Negate:
+                    return -Value;
+                case UnaryOperation.Increment:
+                    return Value + 1;
+                case UnaryOperation.Decrement:
+                    return Value - 1;
+                case UnaryOperation.Inverse:
+                    return 1.0 / Value;
+                case UnaryOperation.Conjugate:
+                    return Value;
+                case UnaryOperation.Modulus:
+                    return Math.Abs(Value);
+                case UnaryOperation.Double:
+                    return Value * 2.0;
+                case UnaryOperation.Half:
+                    return Value * 0.5;
+                case UnaryOperation.Square:
+                    return Value * Value;
+                case UnaryOperation.SquareRoot:
+                    return Math.Sqrt(Value);
+                case UnaryOperation.Exponentiate:
+                    return Math.Exp(Value);
+                case UnaryOperation.Logarithm:
+                    return Math.Log(Value);
+                case UnaryOperation.Sine:
+                    return Math.Sin(Value);
+                case UnaryOperation.Cosine:
+                    return Math.Cos(Value);
+                case UnaryOperation.Tangent:
+                    return Math.Tan(Value);
+                case UnaryOperation.HyperbolicSine:
+                    return Math.Sinh(Value);
+                case UnaryOperation.HyperbolicCosine:
+                    return Math.Cosh(Value);
+                case UnaryOperation.HyperbolicTangent:
+                    return Math.Tanh(Value);
+                case UnaryOperation.ArcSine:
+                    return Math.Asin(Value);
+                case UnaryOperation.ArcCosine:
+                    return Math.Acos(Value);
+                case UnaryOperation.ArcTangent:
+                    return Math.Atan(Value);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public double Call(PrimitiveUnaryOperation operation)
         {
             switch(operation)
@@ -197,9 +319,14 @@ namespace IS4.HyperNumerics.NumberTypes
             return (float)Math.Abs(Value);
         }
 
+        float INumber<ExtendedReal, float>.Call(PrimitiveUnaryOperation operation)
+        {
+            return (float)Math.Abs(Value);
+        }
+
         public override bool Equals(object obj)
         {
-            return obj is Real value && Equals(in value);
+            return obj is Real value && Equals(in value) ||  new ExtendedReal(Value).Equals(obj);
         }
 
         public bool Equals(Real other)
@@ -212,12 +339,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return Value.Equals(other.Value);
         }
 
+        public bool Equals(ExtendedReal other)
+        {
+            return Equals(in other);
+        }
+
+        public bool Equals(in ExtendedReal other)
+        {
+            return Value.Equals(other.Value);
+        }
+
         public int CompareTo(Real other)
         {
             return CompareTo(in other);
         }
 
         public int CompareTo(in Real other)
+        {
+            return Value.CompareTo(other.Value);
+        }
+
+        public int CompareTo(ExtendedReal other)
+        {
+            return CompareTo(in other);
+        }
+
+        public int CompareTo(in ExtendedReal other)
         {
             return Value.CompareTo(other.Value);
         }
@@ -245,6 +392,11 @@ namespace IS4.HyperNumerics.NumberTypes
         public static implicit operator Real(float value)
         {
             return new Real(value);
+        }
+
+        public static implicit operator ExtendedReal(Real value)
+        {
+            return new ExtendedReal(value.Value);
         }
 
         public static implicit operator double(Real value)
@@ -307,7 +459,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>
+        INumberOperations<ExtendedReal> INumber<ExtendedReal>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<ExtendedReal, double> INumber<ExtendedReal, double>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<ExtendedReal, float> INumber<ExtendedReal, float>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -328,6 +495,21 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num;
             }
 
+            public bool IsInvertible(in ExtendedReal num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in ExtendedReal num)
+            {
+                return num.IsFinite;
+            }
+
+            public ExtendedReal Clone(in ExtendedReal num)
+            {
+                return num;
+            }
+
             public bool Equals(in Real num1, in Real num2)
             {
                 return num1.Equals(num2);
@@ -338,7 +520,35 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.CompareTo(num2);
             }
 
+            public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
             public Real Call(NullaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case NullaryOperation.RealOne:
+                    case NullaryOperation.UnitsOne:
+                    case NullaryOperation.AllOne:
+                        return 1.0;
+                    case NullaryOperation.Zero:
+                    case NullaryOperation.SpecialOne:
+                    case NullaryOperation.NonRealUnitsOne:
+                    case NullaryOperation.CombinedOne:
+                        return 0.0;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal>.Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -386,6 +596,36 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
+            {
+                return num.Call(operation);
+            }
+
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public double Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            {
+                return num.Call(operation);
+            }
+
+            float INumberOperations<ExtendedReal, float>.Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            {
+                return (float)num.Call(operation);
+            }
+
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, double num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, float num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
             public Real Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined)
             {
                 return new Real(realUnit);
@@ -394,6 +634,16 @@ namespace IS4.HyperNumerics.NumberTypes
             Real INumberOperations<Real, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
             {
                 return new Real(realUnit);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, double>.Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined)
+            {
+                return new ExtendedReal(realUnit);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
+            {
+                return new ExtendedReal(realUnit);
             }
         }
 
