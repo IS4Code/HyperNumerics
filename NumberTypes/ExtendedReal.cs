@@ -19,7 +19,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsInvertible => true;
 
-        public bool IsFinite => Double.IsInfinity(Value) || Double.IsNaN(Value);
+        public bool IsFinite => !Double.IsInfinity(Value) && !Double.IsNaN(Value);
 
         int INumber.Dimension => 1;
 
