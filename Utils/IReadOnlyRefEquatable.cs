@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IS4.HyperNumerics
+namespace IS4.HyperNumerics.Utils
 {
     public interface IReadOnlyRefEquatable<T> : IEquatable<T>
     {

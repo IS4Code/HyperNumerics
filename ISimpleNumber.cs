@@ -8,7 +8,7 @@ namespace IS4.HyperNumerics
     /// A general interface type for any number backed up by a single primitive type.
     /// </summary>
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
-    public interface ISimpleNumber<TPrimitive> : INumber where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public interface ISimpleNumber<TPrimitive> : INumber, IList<TPrimitive>, IReadOnlyList<TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         TPrimitive Value { get; }
     }

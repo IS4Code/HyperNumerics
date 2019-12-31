@@ -7,8 +7,14 @@ using static IS4.HyperNumerics.HyperMath;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
+    /// <summary>
+    /// A utility number type whose default value is different from the default value
+    /// of <typeparamref name="TInner"/>, and can be specified using a custom type.
+    /// </summary>
+    /// <typeparam name="TInner">The inner type.</typeparam>
+    /// <typeparam name="TTraits">A type implementing <see cref="ITraits"/> which is constructed once for every number type and queried for the default value.</typeparam>
     [Serializable]
-    public readonly struct CustomDefaultNumber<TInner, TTraits> : IExtendedNumber<CustomDefaultNumber<TInner, TTraits>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
+    public readonly struct CustomDefaultNumber<TInner, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
     {
         static TInner defaultValue = default(TTraits).DefaultValue;
 
@@ -290,6 +296,16 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.Equals(in num2);
@@ -298,6 +314,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public int Compare(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(CustomDefaultNumber<TInner, TTraits> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in CustomDefaultNumber<TInner, TTraits> num)
+            {
+                return num.GetHashCode();
             }
 
             public CustomDefaultNumber<TInner, TTraits> Call(NullaryOperation operation)
@@ -326,14 +352,28 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        /// <summary>
+        /// An interface that a user of <see cref="CustomDefaultNumber{TInner, TTraits}"/> must provide
+        /// to specify the default value of the type.
+        /// </summary>
         public interface ITraits
         {
+            /// <summary>
+            /// Obtains the default value of the type.
+            /// </summary>
             TInner DefaultValue { get; }
         }
     }
-    
+
+    /// <summary>
+    /// A utility number type whose default value is different from the default value
+    /// of <typeparamref name="TInner"/>, and can be specified using a custom type.
+    /// </summary>
+    /// <typeparam name="TInner">The inner type.</typeparam>
+    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
+    /// <typeparam name="TTraits">A type implementing <see cref="ITraits"/> which is constructed once for every number type and queried for the default value.</typeparam>
     [Serializable]
-    public readonly struct CustomDefaultNumber<TInner, TPrimitive, TTraits> : IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive> where TTraits : struct, CustomDefaultNumber<TInner, TPrimitive, TTraits>.ITraits
+    public readonly struct CustomDefaultNumber<TInner, TPrimitive, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive> where TTraits : struct, CustomDefaultNumber<TInner, TPrimitive, TTraits>.ITraits
     {
         static TInner defaultValue = default(TTraits).DefaultValue;
 
@@ -657,6 +697,16 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, CustomDefaultNumber<TInner, TPrimitive, TTraits> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, CustomDefaultNumber<TInner, TPrimitive, TTraits> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num2)
             {
                 return num1.Equals(in num2);
@@ -665,6 +715,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public int Compare(in CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num2)
             {
                 return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
+            {
+                return num.GetHashCode();
             }
 
             public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(NullaryOperation operation)
@@ -706,10 +766,27 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(num);
             }
-        }
 
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(IEnumerable<TPrimitive> units)
+            {
+                return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+            }
+
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(IEnumerator<TPrimitive> units)
+            {
+                return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+            }
+        }
+        
+        /// <summary>
+        /// An interface that a user of <see cref="CustomDefaultNumber{TInner, TPrimitive, TTraits}"/> must provide
+        /// to specify the default value of the type.
+        /// </summary>
         public interface ITraits
         {
+            /// <summary>
+            /// Obtains the default value of the type.
+            /// </summary>
             TInner DefaultValue { get; }
         }
 

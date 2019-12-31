@@ -350,14 +350,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num;
             }
 
+            public bool Equals(ExtendedReal num1, ExtendedReal num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(ExtendedReal num1, ExtendedReal num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in ExtendedReal num1, in ExtendedReal num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(ExtendedReal num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in ExtendedReal num)
+            {
+                return num.GetHashCode();
             }
 
             public ExtendedReal Call(NullaryOperation operation)
@@ -426,6 +446,34 @@ namespace IS4.HyperNumerics.NumberTypes
             public ExtendedReal Create(in Real value)
             {
                 return new ExtendedReal(value.Value);
+            }
+
+            public ExtendedReal Create(IEnumerable<double> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return new ExtendedReal(ienum.Current);
+            }
+
+            public ExtendedReal Create(IEnumerator<double> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new ExtendedReal(value);
+            }
+
+            public ExtendedReal Create(IEnumerable<float> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return new ExtendedReal(ienum.Current);
+            }
+
+            public ExtendedReal Create(IEnumerator<float> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new ExtendedReal(value);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IS4.HyperNumerics.AdditionalInterfaces
+namespace IS4.HyperNumerics.Utils
 {
     public interface IReadOnlyRefComparable<T> : IComparable<T>
     {

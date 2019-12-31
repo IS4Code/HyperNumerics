@@ -23,6 +23,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner First => first;
         public TInner Second => second;
 
+        TInner IWrapperNumber<TInner>.Value => first;
+
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
         public bool IsInvertible => CanInv(first) || CanInv(second);
@@ -347,14 +349,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(HyperComplex<TInner> num1, HyperComplex<TInner> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(HyperComplex<TInner> num1, HyperComplex<TInner> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(HyperComplex<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in HyperComplex<TInner> num)
+            {
+                return num.GetHashCode();
             }
 
             public HyperComplex<TInner> Call(NullaryOperation operation)
@@ -427,6 +449,8 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public TInner First => first;
         public TInner Second => second;
+
+        TInner IWrapperNumber<TInner>.Value => first;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -813,14 +837,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(HyperComplex<TInner, TPrimitive> num1, HyperComplex<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(HyperComplex<TInner, TPrimitive> num1, HyperComplex<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in HyperComplex<TInner, TPrimitive> num1, in HyperComplex<TInner, TPrimitive> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in HyperComplex<TInner, TPrimitive> num1, in HyperComplex<TInner, TPrimitive> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(HyperComplex<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in HyperComplex<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
             }
 
             public HyperComplex<TInner, TPrimitive> Call(NullaryOperation operation)
@@ -865,6 +909,20 @@ namespace IS4.HyperNumerics.NumberTypes
 
             public HyperComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)
             {
+                return new HyperComplex<TInner, TPrimitive>(first, second);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            {
+                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
                 return new HyperComplex<TInner, TPrimitive>(first, second);
             }
         }

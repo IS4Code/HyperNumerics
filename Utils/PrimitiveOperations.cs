@@ -3,6 +3,10 @@ using System.Linq.Expressions;
 
 namespace IS4.HyperNumerics
 {
+    /// <summary>
+    /// Provides dynamically compiled operations for a specific primitive type.
+    /// </summary>
+    /// <typeparam name="TPrimitive">The primitive type whose operations are obtained.</typeparam>
     public static class PrimitiveOperations<TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         public static readonly Func<TPrimitive, TPrimitive, TPrimitive> Add;
@@ -29,16 +33,24 @@ namespace IS4.HyperNumerics
         static Func<TPrimitive, TPrimitive> CreateUnary(Func<Expression, Expression> unaryExpression)
         {
             var param = Expression.Parameter(typeof(TPrimitive));
-            var expr = unaryExpression(param);
-            return Expression.Lambda<Func<TPrimitive, TPrimitive>>(expr, param).Compile();
+            try{
+                var expr = unaryExpression(param);
+                return Expression.Lambda<Func<TPrimitive, TPrimitive>>(expr, param).Compile();
+            }catch{
+                return null;
+            }
         }
 
         static Func<TPrimitive, TPrimitive, TPrimitive> CreateBinary(Func<Expression, Expression, Expression> binaryExpression)
         {
             var param1 = Expression.Parameter(typeof(TPrimitive));
             var param2 = Expression.Parameter(typeof(TPrimitive));
-            var expr = binaryExpression(param1, param2);
-            return Expression.Lambda<Func<TPrimitive, TPrimitive, TPrimitive>>(expr, param1, param2).Compile();
+            try{
+                var expr = binaryExpression(param1, param2);
+                return Expression.Lambda<Func<TPrimitive, TPrimitive, TPrimitive>>(expr, param1, param2).Compile();
+            }catch{
+                return null;
+            }
         }
     }
 }

@@ -14,10 +14,10 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <remarks>
     /// Even though taking the inverse of a number of this type is always
     /// supported, not all types of operations are possible on the result,
-    /// namely multiplication with zero, addition, and subtraction.
+    /// namely multiplication with zero, and addition and subtraction of infinities.
     /// </remarks>
     [Serializable]
-    public readonly struct ProjectiveNumber<TInner> : IExtendedNumber<ProjectiveNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct ProjectiveNumber<TInner> : IWrapperNumber<ProjectiveNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
         readonly TInner value;
         public TInner Value => value;
@@ -28,7 +28,9 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsFinite => !IsInfinity && IsFin(value);
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
-        
+
+        TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
+
         public ProjectiveNumber(in TInner value, bool isInfinity = false)
         {
             this.value = value;
@@ -258,14 +260,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(ProjectiveNumber<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in ProjectiveNumber<TInner> num)
+            {
+                return num.GetHashCode();
             }
 
             public ProjectiveNumber<TInner> Call(NullaryOperation operation)
@@ -306,7 +328,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// namely multiplication with zero, addition, and subtraction.
     /// </remarks>
     [Serializable]
-    public readonly struct ProjectiveNumber<TInner, TPrimitive> : IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct ProjectiveNumber<TInner, TPrimitive> : IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly TInner value;
         public TInner Value => value;
@@ -317,6 +339,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsFinite => !IsInfinity && IsFin(value);
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
+
+        TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
 
         public ProjectiveNumber(in TInner value, bool isInfinity = false)
         {
@@ -516,32 +540,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return IsInfinity ? "Infinity(" + value.ToString(format, formatProvider) + ")" : value.ToString(format, formatProvider);
         }
 
-        public static bool operator ==(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator==(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.Equals(in b);
         }
 
-        public static bool operator !=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator!=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return !a.Equals(in b);
         }
 
-        public static bool operator >(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator>(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) > 0;
         }
 
-        public static bool operator <(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator<(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) < 0;
         }
 
-        public static bool operator >=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator>=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) >= 0;
         }
 
-        public static bool operator <=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        public static bool operator<=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
         {
             return a.CompareTo(in b) <= 0;
         }
@@ -592,14 +616,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(ProjectiveNumber<TInner, TPrimitive> num1, ProjectiveNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(ProjectiveNumber<TInner, TPrimitive> num1, ProjectiveNumber<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in ProjectiveNumber<TInner, TPrimitive> num1, in ProjectiveNumber<TInner, TPrimitive> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in ProjectiveNumber<TInner, TPrimitive> num1, in ProjectiveNumber<TInner, TPrimitive> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(ProjectiveNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in ProjectiveNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
             }
 
             public ProjectiveNumber<TInner, TPrimitive> Call(NullaryOperation operation)
@@ -640,6 +684,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public ProjectiveNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new ProjectiveNumber<TInner, TPrimitive>(num);
+            }
+
+            public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+            }
+
+            public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            {
+                return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
             }
         }
 

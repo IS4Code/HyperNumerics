@@ -405,6 +405,7 @@ namespace IS4.HyperNumerics
                 public static readonly IHyperNumberOperations<TNumber, TInner, TPrimitive> Instance = default(TNumber).GetOperations();
             }
 
+            public static readonly INumberOperation Default = new DefaultNullaryOperation();
             public static readonly INumberOperation Zero = new NumberNullaryOperation(NullaryOperation.Zero);
             public static readonly INumberOperation RealOne = new NumberNullaryOperation(NullaryOperation.RealOne);
             public static readonly INumberOperation SpecialOne = new NumberNullaryOperation(NullaryOperation.SpecialOne);
@@ -590,6 +591,24 @@ namespace IS4.HyperNumerics
                 public override string ToString()
                 {
                     return "Id";
+                }
+            }
+
+            class DefaultNullaryOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+            {
+                public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
+                {
+                    return default;
+                }
+
+                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                {
+                    return default;
+                }
+
+                public override string ToString()
+                {
+                    return "default";
                 }
             }
 

@@ -23,6 +23,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner First => first;
         public TInner Second => second;
 
+        TInner IWrapperNumber<TInner>.Value => first;
+
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
         public bool IsInvertible => CanInv(first) && CanInv(Add(first, second));
@@ -290,14 +292,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(HyperDiagonal<TInner> num1, HyperDiagonal<TInner> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(HyperDiagonal<TInner> num1, HyperDiagonal<TInner> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(HyperDiagonal<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in HyperDiagonal<TInner> num)
+            {
+                return num.GetHashCode();
             }
 
             public HyperDiagonal<TInner> Call(NullaryOperation operation)
@@ -370,6 +392,8 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public TInner First => first;
         public TInner Second => second;
+
+        TInner IWrapperNumber<TInner>.Value => first;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -696,14 +720,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(HyperDiagonal<TInner, TPrimitive> num1, HyperDiagonal<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(HyperDiagonal<TInner, TPrimitive> num1, HyperDiagonal<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in HyperDiagonal<TInner, TPrimitive> num1, in HyperDiagonal<TInner, TPrimitive> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in HyperDiagonal<TInner, TPrimitive> num1, in HyperDiagonal<TInner, TPrimitive> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(HyperDiagonal<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in HyperDiagonal<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
             }
 
             public HyperDiagonal<TInner, TPrimitive> Call(NullaryOperation operation)
@@ -769,6 +813,20 @@ namespace IS4.HyperNumerics.NumberTypes
 
             public HyperDiagonal<TInner, TPrimitive> Create(in TInner first, in TInner second)
             {
+                return new HyperDiagonal<TInner, TPrimitive>(first, second);
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            {
+                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
                 return new HyperDiagonal<TInner, TPrimitive>(first, second);
             }
         }

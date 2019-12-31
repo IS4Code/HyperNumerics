@@ -6,6 +6,10 @@ using System.Text;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
+    /// <summary>
+    /// Represents a number whose actual value is provided by a generator function.
+    /// </summary>
+    /// <typeparam name="TInner">The inner type.</typeparam>
     [Serializable]
     public readonly struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
@@ -26,7 +30,7 @@ namespace IS4.HyperNumerics.NumberTypes
             generator = new ConstGenerator(value).Get;
         }
 
-        class ConstGenerator
+        class ConstGenerator : ICloneable
         {
             readonly TInner value;
 
@@ -38,6 +42,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public TInner Get()
             {
                 return value;
+            }
+
+            public object Clone()
+            {
+                return new ConstGenerator(HyperMath.Clone(value));
             }
         }
 
@@ -191,14 +200,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(GeneratedNumber<TInner> num1, GeneratedNumber<TInner> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(GeneratedNumber<TInner> num1, GeneratedNumber<TInner> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(GeneratedNumber<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in GeneratedNumber<TInner> num)
+            {
+                return num.GetHashCode();
             }
 
             public GeneratedNumber<TInner> Call(NullaryOperation operation)
@@ -227,7 +256,12 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
     }
-    
+
+    /// <summary>
+    /// Represents a number whose actual value is provided by a generator function.
+    /// </summary>
+    /// <typeparam name="TInner">The inner type.</typeparam>
+    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     [Serializable]
     public readonly struct GeneratedNumber<TInner, TPrimitive> : IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
@@ -248,7 +282,7 @@ namespace IS4.HyperNumerics.NumberTypes
             generator = new ConstGenerator(value).Get;
         }
 
-        class ConstGenerator
+        class ConstGenerator : ICloneable
         {
             readonly TInner value;
 
@@ -260,6 +294,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public TInner Get()
             {
                 return value;
+            }
+
+            public object Clone()
+            {
+                return new ConstGenerator(HyperMath.Clone(value));
             }
         }
 
@@ -434,14 +473,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(GeneratedNumber<TInner, TPrimitive> num1, GeneratedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(GeneratedNumber<TInner, TPrimitive> num1, GeneratedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in GeneratedNumber<TInner, TPrimitive> num1, in GeneratedNumber<TInner, TPrimitive> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in GeneratedNumber<TInner, TPrimitive> num1, in GeneratedNumber<TInner, TPrimitive> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
             }
 
             public GeneratedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
@@ -487,6 +546,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public GeneratedNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new GeneratedNumber<TInner, TPrimitive>(num);
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                return new GeneratedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            {
+                return new GeneratedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
             }
         }
 

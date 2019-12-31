@@ -23,6 +23,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner First => first;
         public TInner Second => second;
 
+        TInner IWrapperNumber<TInner>.Value => first;
+
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
         public bool IsInvertible => CanInv(first);
@@ -319,14 +321,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(HyperDual<TInner> num1, HyperDual<TInner> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(HyperDual<TInner> num1, HyperDual<TInner> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(HyperDual<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in HyperDual<TInner> num)
+            {
+                return num.GetHashCode();
             }
 
             public HyperDual<TInner> Call(NullaryOperation operation)
@@ -399,6 +421,8 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public TInner First => first;
         public TInner Second => second;
+
+        TInner IWrapperNumber<TInner>.Value => first;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -756,14 +780,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(HyperDual<TInner, TPrimitive> num1, HyperDual<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(HyperDual<TInner, TPrimitive> num1, HyperDual<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in HyperDual<TInner, TPrimitive> num1, in HyperDual<TInner, TPrimitive> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in HyperDual<TInner, TPrimitive> num1, in HyperDual<TInner, TPrimitive> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(HyperDual<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in HyperDual<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
             }
 
             public HyperDual<TInner, TPrimitive> Call(NullaryOperation operation)
@@ -808,6 +852,20 @@ namespace IS4.HyperNumerics.NumberTypes
 
             public HyperDual<TInner, TPrimitive> Create(in TInner first, in TInner second)
             {
+                return new HyperDual<TInner, TPrimitive>(first, second);
+            }
+
+            public HyperDual<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public HyperDual<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            {
+                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
                 return new HyperDual<TInner, TPrimitive>(first, second);
             }
         }

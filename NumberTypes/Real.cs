@@ -30,9 +30,7 @@ namespace IS4.HyperNumerics.NumberTypes
         /// Constructs a new value from its inner <see cref="System.Double"/> value.
         /// </summary>
         /// <param name="value">The value of the real number.</param>
-        /// <exception cref="System.NotFiniteNumberException">
-        /// This exception is thrown when <paramref name="value"/> doesn't correspond to any real number.
-        /// </exception>
+        /// <exception cref="System.NotFiniteNumberException">Thrown when <paramref name="value"/> doesn't correspond to any real number.</exception>
         public Real(double value)
         {
             if(Double.IsInfinity(value) || Double.IsNaN(value))
@@ -46,9 +44,7 @@ namespace IS4.HyperNumerics.NumberTypes
         /// Constructs a new value from its inner <see cref="System.Single"/> value.
         /// </summary>
         /// <param name="value">The value of the real number.</param>
-        /// <exception cref="System.NotFiniteNumberException">
-        /// This exception is thrown when <paramref name="value"/> doesn't correspond to any real number.
-        /// </exception>
+        /// <exception cref="System.NotFiniteNumberException">Thrown when <paramref name="value"/> doesn't correspond to any real number.</exception>
         public Real(float value)
         {
             if(Single.IsInfinity(value) || Single.IsNaN(value))
@@ -510,24 +506,64 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num;
             }
 
+            public bool Equals(Real num1, Real num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(Real num1, Real num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in Real num1, in Real num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in Real num1, in Real num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(Real num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in Real num)
+            {
+                return num.GetHashCode();
+            }
+
+            public bool Equals(ExtendedReal num1, ExtendedReal num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(ExtendedReal num1, ExtendedReal num2)
+            {
+                return num1.CompareTo(in num2);
             }
 
             public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in ExtendedReal num1, in ExtendedReal num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(ExtendedReal num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in ExtendedReal num)
+            {
+                return num.GetHashCode();
             }
 
             public Real Call(NullaryOperation operation)
@@ -644,6 +680,62 @@ namespace IS4.HyperNumerics.NumberTypes
             ExtendedReal INumberOperations<ExtendedReal, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
             {
                 return new ExtendedReal(realUnit);
+            }
+
+            public Real Create(IEnumerable<double> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return new Real(ienum.Current);
+            }
+
+            public Real Create(IEnumerator<double> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new Real(value);
+            }
+
+            public Real Create(IEnumerable<float> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return new Real(ienum.Current);
+            }
+
+            public Real Create(IEnumerator<float> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new Real(value);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, double>.Create(IEnumerable<double> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return new ExtendedReal(ienum.Current);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, double>.Create(IEnumerator<double> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new ExtendedReal(value);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, float>.Create(IEnumerable<float> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return new ExtendedReal(ienum.Current);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, float>.Create(IEnumerator<float> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new ExtendedReal(value);
             }
         }
 

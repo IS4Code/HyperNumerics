@@ -10,7 +10,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TInner">The internal number type that the instance supports.</typeparam>
     [Serializable]
-    public readonly struct BoxedNumber<TInner> : IExtendedNumber<BoxedNumber<TInner>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner>
+    public readonly struct BoxedNumber<TInner> : IWrapperNumber<BoxedNumber<TInner>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner>
     {
         static TInner defaultValue;
 
@@ -25,6 +25,10 @@ namespace IS4.HyperNumerics.NumberTypes
                 return ref defaultValue;
             }
         }
+
+        public ref readonly TInner Value => ref Reference;
+
+        TInner IWrapperNumber<TInner>.Value => Reference;
 
         public bool IsInvertible => Reference.IsInvertible;
 
@@ -219,14 +223,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(BoxedNumber<TInner> num1, BoxedNumber<TInner> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(BoxedNumber<TInner> num1, BoxedNumber<TInner> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(BoxedNumber<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in BoxedNumber<TInner> num)
+            {
+                return num.GetHashCode();
             }
 
             public BoxedNumber<TInner> Call(NullaryOperation operation)
@@ -272,7 +296,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TInner">The internal number type that the instance supports.</typeparam>
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     [Serializable]
-    public readonly struct BoxedNumber<TInner, TPrimitive> : IExtendedNumber<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct BoxedNumber<TInner, TPrimitive> : IWrapperNumber<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         static TInner defaultValue;
 
@@ -287,6 +311,10 @@ namespace IS4.HyperNumerics.NumberTypes
                 return ref defaultValue;
             }
         }
+
+        public ref readonly TInner Value => ref Reference;
+
+        TInner IWrapperNumber<TInner>.Value => Reference;
 
         public bool IsInvertible => Reference.IsInvertible;
 
@@ -511,14 +539,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(BoxedNumber<TInner, TPrimitive> num1, BoxedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(BoxedNumber<TInner, TPrimitive> num1, BoxedNumber<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in BoxedNumber<TInner, TPrimitive> num1, in BoxedNumber<TInner, TPrimitive> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in BoxedNumber<TInner, TPrimitive> num1, in BoxedNumber<TInner, TPrimitive> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
             }
 
             public BoxedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
@@ -559,6 +607,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public BoxedNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new BoxedNumber<TInner, TPrimitive>(num);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                return new BoxedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            {
+                return new BoxedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
             }
         }
 

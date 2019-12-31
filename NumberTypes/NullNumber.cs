@@ -140,12 +140,32 @@ namespace IS4.HyperNumerics.NumberTypes
                 return default;
             }
 
+            public bool Equals(NullNumber num1, NullNumber num2)
+            {
+                return true;
+            }
+
+            public int Compare(NullNumber num1, NullNumber num2)
+            {
+                return 0;
+            }
+
             public bool Equals(in NullNumber num1, in NullNumber num2)
             {
                 return true;
             }
 
             public int Compare(in NullNumber num1, in NullNumber num2)
+            {
+                return 0;
+            }
+
+            public int GetHashCode(NullNumber num)
+            {
+                return 0;
+            }
+
+            public int GetHashCode(in NullNumber num)
             {
                 return 0;
             }
@@ -318,12 +338,32 @@ namespace IS4.HyperNumerics.NumberTypes
                 return default;
             }
 
+            public bool Equals(NullNumber<TPrimitive> num1, NullNumber<TPrimitive> num2)
+            {
+                return true;
+            }
+
+            public int Compare(NullNumber<TPrimitive> num1, NullNumber<TPrimitive> num2)
+            {
+                return 0;
+            }
+
             public bool Equals(in NullNumber<TPrimitive> num1, in NullNumber<TPrimitive> num2)
             {
                 return true;
             }
 
             public int Compare(in NullNumber<TPrimitive> num1, in NullNumber<TPrimitive> num2)
+            {
+                return 0;
+            }
+
+            public int GetHashCode(NullNumber<TPrimitive> num)
+            {
+                return 0;
+            }
+
+            public int GetHashCode(in NullNumber<TPrimitive> num)
             {
                 return 0;
             }
@@ -354,6 +394,16 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 
             public NullNumber<TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Create(IEnumerator<TPrimitive> units)
             {
                 return default;
             }

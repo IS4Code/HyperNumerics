@@ -8,8 +8,13 @@ using static IS4.HyperNumerics.HyperMath;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
+    /// <summary>
+    /// Represents a number type constructed from <typeparamref name="TInner"/> with an additional "null" value.
+    /// The result of any operation whose operand is null is itself null.
+    /// </summary>
+    /// <typeparam name="TInner">The inner type.</typeparam>
     [Serializable]
-    public readonly struct NullableNumber<TInner> : IExtendedNumber<NullableNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct NullableNumber<TInner> : IWrapperNumber<NullableNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
         readonly bool hasValue;
         readonly TInner value;
@@ -21,7 +26,9 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsFinite => hasValue ? IsFin(value) : true;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
-        
+
+        TInner IWrapperNumber<TInner>.Value => hasValue ? value : throw new InvalidOperationException("The number is null.");
+
         public NullableNumber(in TInner value)
         {
             hasValue = true;
@@ -207,14 +214,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(NullableNumber<TInner> num1, NullableNumber<TInner> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(NullableNumber<TInner> num1, NullableNumber<TInner> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(NullableNumber<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in NullableNumber<TInner> num)
+            {
+                return num.GetHashCode();
             }
 
             public NullableNumber<TInner> Call(NullaryOperation operation)
@@ -243,9 +270,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
     }
-    
+
+    /// <summary>
+    /// Represents a number type constructed from <typeparamref name="TInner"/> with an additional "null" value.
+    /// The result of any operation whose operand is null is itself null.
+    /// </summary>
+    /// <typeparam name="TInner">The inner type.</typeparam>
+    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     [Serializable]
-    public readonly struct NullableNumber<TInner, TPrimitive> : IExtendedNumber<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct NullableNumber<TInner, TPrimitive> : IWrapperNumber<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly bool hasValue;
         readonly TInner value;
@@ -257,6 +290,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsFinite => hasValue ? IsFin(value) : true;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
+
+        TInner IWrapperNumber<TInner>.Value => hasValue ? value : throw new InvalidOperationException("The number is null.");
 
         public NullableNumber(in TInner value)
         {
@@ -467,14 +502,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(NullableNumber<TInner, TPrimitive> num1, NullableNumber<TInner, TPrimitive> num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(NullableNumber<TInner, TPrimitive> num1, NullableNumber<TInner, TPrimitive> num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in NullableNumber<TInner, TPrimitive> num1, in NullableNumber<TInner, TPrimitive> num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in NullableNumber<TInner, TPrimitive> num1, in NullableNumber<TInner, TPrimitive> num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(NullableNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in NullableNumber<TInner, TPrimitive> num)
+            {
+                return num.GetHashCode();
             }
 
             public NullableNumber<TInner, TPrimitive> Call(NullaryOperation operation)
@@ -515,6 +570,16 @@ namespace IS4.HyperNumerics.NumberTypes
             public NullableNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new NullableNumber<TInner, TPrimitive>(num);
+            }
+
+            public NullableNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            {
+                return new NullableNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+            }
+
+            public NullableNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            {
+                return new NullableNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
             }
         }
 

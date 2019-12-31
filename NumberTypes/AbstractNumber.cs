@@ -6,12 +6,17 @@ using System.Reflection;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
+    /// <summary>
+    /// Represents a number formed by invoking a constructed nullary operation (<see cref="INumberOperation"/>), i.e. the result of an expression.
+    /// This type supports dynamic dispatch – a dynamic cast to a valid number type will produce a number
+    /// of that type by calling <see cref="INumberOperation.Invoke{TNumber}"/> on the operation.
+    /// </summary>
     [Serializable]
     public readonly struct AbstractNumber : INumber<AbstractNumber>, INumberOperation, IDynamicMetaObjectProvider
     {
         private readonly INumberOperation operation;
 
-        public INumberOperation Operation => operation ?? HyperMath.Operations.Zero;
+        public INumberOperation Operation => operation ?? HyperMath.Operations.Default;
 
         public bool IsInvertible => true;
 
@@ -163,14 +168,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(AbstractNumber num1, AbstractNumber num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(AbstractNumber num1, AbstractNumber num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in AbstractNumber num1, in AbstractNumber num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in AbstractNumber num1, in AbstractNumber num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(AbstractNumber num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in AbstractNumber num)
+            {
+                return num.GetHashCode();
             }
 
             public AbstractNumber Call(NullaryOperation operation)
@@ -220,13 +245,18 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
     }
-    
+
+    /// <summary>
+    /// Represents a number formed by invoking a constructed nullary operation (<see cref="IPrimitiveNumberOperation"/>), i.e. the result of an expression.
+    /// This type supports dynamic dispatch – a dynamic cast to a valid number type will produce a number
+    /// of that type by calling <see cref="IPrimitiveNumberOperation.Invoke{TNumber, TPrimitive}"/> on the operation.
+    /// </summary>
     [Serializable]
     public readonly struct PrimitiveAbstractNumber : INumber<PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
     {
         private readonly IPrimitiveNumberOperation operation;
 
-        public IPrimitiveNumberOperation Operation => operation ?? HyperMath.Operations.Zero;
+        public IPrimitiveNumberOperation Operation => operation ?? HyperMath.Operations.Default;
 
         public bool IsInvertible => true;
 
@@ -378,14 +408,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(PrimitiveAbstractNumber num1, PrimitiveAbstractNumber num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(PrimitiveAbstractNumber num1, PrimitiveAbstractNumber num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(PrimitiveAbstractNumber num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in PrimitiveAbstractNumber num)
+            {
+                return num.GetHashCode();
             }
 
             public PrimitiveAbstractNumber Call(NullaryOperation operation)
@@ -435,13 +485,17 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
     }
-    
+
+    /// <summary>
+    /// Represents a number formed by invoking a constructed unary operation (<see cref="IUnaryNumberOperation"/>), i.e. the result of an expression
+    /// with a single variable.
+    /// </summary>
     [Serializable]
     public readonly struct UnaryAbstractNumber : INumber<UnaryAbstractNumber>, IUnaryNumberOperation
     {
         private readonly IUnaryNumberOperation operation;
 
-        public IUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsUnary();
+        public IUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
 
         public bool IsInvertible => true;
 
@@ -598,14 +652,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(UnaryAbstractNumber num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in UnaryAbstractNumber num)
+            {
+                return num.GetHashCode();
             }
 
             public UnaryAbstractNumber Call(NullaryOperation operation)
@@ -624,13 +698,17 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
     }
-    
+
+    /// <summary>
+    /// Represents a number formed by invoking a constructed unary operation (<see cref="IPrimitiveUnaryNumberOperation"/>), i.e. the result of an expression
+    /// with a single variable.
+    /// </summary>
     [Serializable]
     public readonly struct PrimitiveUnaryAbstractNumber : INumber<PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
     {
         private readonly IPrimitiveUnaryNumberOperation operation;
 
-        public IPrimitiveUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsUnary();
+        public IPrimitiveUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
 
         public bool IsInvertible => true;
 
@@ -792,14 +870,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(PrimitiveUnaryAbstractNumber num1, PrimitiveUnaryAbstractNumber num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(PrimitiveUnaryAbstractNumber num1, PrimitiveUnaryAbstractNumber num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(PrimitiveUnaryAbstractNumber num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in PrimitiveUnaryAbstractNumber num)
+            {
+                return num.GetHashCode();
             }
 
             public PrimitiveUnaryAbstractNumber Call(NullaryOperation operation)
@@ -818,13 +916,17 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
     }
-    
+
+    /// <summary>
+    /// Represents a number formed by invoking a constructed binary operation (<see cref="IBinaryNumberOperation"/>), i.e. the result of an expression
+    /// with two variables.
+    /// </summary>
     [Serializable]
     public readonly struct BinaryAbstractNumber : INumber<BinaryAbstractNumber>, IBinaryNumberOperation
     {
         private readonly IBinaryNumberOperation operation;
 
-        public IBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsBinary();
+        public IBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
 
         public bool IsInvertible => true;
 
@@ -986,14 +1088,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(BinaryAbstractNumber num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in BinaryAbstractNumber num)
+            {
+                return num.GetHashCode();
             }
 
             public BinaryAbstractNumber Call(NullaryOperation operation)
@@ -1012,13 +1134,17 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
     }
-    
+
+    /// <summary>
+    /// Represents a number formed by invoking a constructed binary operation (<see cref="IPrimitiveBinaryNumberOperation"/>), i.e. the result of an expression
+    /// with two variables.
+    /// </summary>
     [Serializable]
     public readonly struct PrimitiveBinaryAbstractNumber : INumber<PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
     {
         private readonly IPrimitiveBinaryNumberOperation operation;
 
-        public IPrimitiveBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Zero.AsBinary();
+        public IPrimitiveBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
 
         public bool IsInvertible => true;
 
@@ -1190,14 +1316,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Clone();
             }
 
+            public bool Equals(PrimitiveBinaryAbstractNumber num1, PrimitiveBinaryAbstractNumber num2)
+            {
+                return num1.Equals(in num2);
+            }
+
+            public int Compare(PrimitiveBinaryAbstractNumber num1, PrimitiveBinaryAbstractNumber num2)
+            {
+                return num1.CompareTo(in num2);
+            }
+
             public bool Equals(in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
             {
-                return num1.Equals(num2);
+                return num1.Equals(in num2);
             }
 
             public int Compare(in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
             {
-                return num1.CompareTo(num2);
+                return num1.CompareTo(in num2);
+            }
+
+            public int GetHashCode(PrimitiveBinaryAbstractNumber num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in PrimitiveBinaryAbstractNumber num)
+            {
+                return num.GetHashCode();
             }
 
             public PrimitiveBinaryAbstractNumber Call(NullaryOperation operation)
