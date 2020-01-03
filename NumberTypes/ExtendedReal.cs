@@ -9,13 +9,16 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Represents an extended real number, with its value stored as a <see cref="System.Double"/>, allowing for infinities and NaNs.
     /// </summary>
     [Serializable]
-    public readonly struct ExtendedReal : ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, IExtendedNumber<ExtendedReal, Real, double>, IExtendedNumber<ExtendedReal, Real, float>
+    public readonly struct ExtendedReal : ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, IWrapperNumber<ExtendedReal, ExtendedReal, double>, IWrapperNumber<ExtendedReal, ExtendedReal, float>, IExtendedNumber<ExtendedReal, Real, double>, IExtendedNumber<ExtendedReal, Real, float>
     {
         public static readonly ExtendedReal Zero = new ExtendedReal(0.0);
         public static readonly ExtendedReal One = new ExtendedReal(1.0);
 
         public double Value { get; }
+
         float ISimpleNumber<float>.Value => (float)Value;
+
+        ExtendedReal IWrapperNumber<ExtendedReal>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -329,7 +332,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<ExtendedReal>, IExtendedNumberOperations<ExtendedReal, Real, double>, IExtendedNumberOperations<ExtendedReal, Real, float>
+        IExtendedNumberOperations<ExtendedReal, ExtendedReal> IExtendedNumber<ExtendedReal, ExtendedReal>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<ExtendedReal, ExtendedReal, double> IExtendedNumber<ExtendedReal, ExtendedReal, double>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<ExtendedReal, ExtendedReal, float> IExtendedNumber<ExtendedReal, ExtendedReal, float>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<ExtendedReal>, IExtendedNumberOperations<ExtendedReal, Real, double>, IExtendedNumberOperations<ExtendedReal, Real, float>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, double>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, float>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -443,9 +461,14 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new ExtendedReal(realUnit);
             }
 
-            public ExtendedReal Create(in Real value)
+            public ExtendedReal Create(in Real num)
             {
-                return new ExtendedReal(value.Value);
+                return new ExtendedReal(num.Value);
+            }
+
+            public ExtendedReal Create(in ExtendedReal num)
+            {
+                return num;
             }
 
             public ExtendedReal Create(IEnumerable<double> units)

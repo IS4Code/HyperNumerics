@@ -12,13 +12,16 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Not all possible values of <see cref="System.Double"/> are allowed, namely infinites and NaNs.
     /// </remarks>
     [Serializable]
-    public readonly struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>
+    public readonly struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, IWrapperNumber<Real, Real, double>, IWrapperNumber<Real, Real, float>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>
     {
         public static readonly Real Zero = new Real(0.0);
         public static readonly Real One = new Real(1.0);
 
         public double Value { get; }
+
         float ISimpleNumber<float>.Value => (float)Value;
+
+        Real IWrapperNumber<Real>.Value => this;
 
         public bool IsInvertible => Value != 0.0;
 
@@ -470,7 +473,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>
+        IExtendedNumberOperations<Real, Real> IExtendedNumber<Real, Real>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<Real, Real, double> IExtendedNumber<Real, Real, double>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<Real, Real, float> IExtendedNumber<Real, Real, float>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>, IExtendedNumberOperations<Real, Real, double>, IExtendedNumberOperations<Real, Real, float>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -680,6 +698,11 @@ namespace IS4.HyperNumerics.NumberTypes
             ExtendedReal INumberOperations<ExtendedReal, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
             {
                 return new ExtendedReal(realUnit);
+            }
+
+            public Real Create(in Real num)
+            {
+                return num;
             }
 
             public Real Create(IEnumerable<double> units)

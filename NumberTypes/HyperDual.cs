@@ -15,7 +15,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A dual number (a, b) can be represented algebraically as a + bε, where ε^2 = 0.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperDual<TInner> : IHyperNumber<HyperDual<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct HyperDual<TInner> : IHyperNumber<HyperDual<TInner>, TInner>, IWrapperNumber<HyperDual<TInner>, HyperDual<TInner>> where TInner : struct, INumber<TInner>
     {
         readonly TInner first;
         readonly TInner second;
@@ -24,6 +24,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperDual<TInner> IWrapperNumber<HyperDual<TInner>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -295,12 +297,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperDual<TInner>, HyperDual<TInner>> IExtendedNumber<HyperDual<TInner>, HyperDual<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperDual<TInner>, TInner> IHyperNumber<HyperDual<TInner>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDual<TInner>>, IHyperNumberOperations<HyperDual<TInner>, TInner>
+        class Operations : NumberOperations<HyperDual<TInner>>, IHyperNumberOperations<HyperDual<TInner>, TInner>, IExtendedNumberOperations<HyperDual<TInner>, HyperDual<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -397,6 +404,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperDual<TInner>(num);
             }
 
+            public HyperDual<TInner> Create(in HyperDual<TInner> num)
+            {
+                return num;
+            }
+
             public HyperDual<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDual<TInner>(first, second);
@@ -414,7 +426,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A dual number (a, b) can be represented algebraically as a + bε, where ε^2 = 0.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperDual<TInner, TPrimitive> : IHyperNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct HyperDual<TInner, TPrimitive> : IHyperNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly TInner first;
         readonly TInner second;
@@ -423,6 +435,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperDual<TInner, TPrimitive> IWrapperNumber<HyperDual<TInner, TPrimitive>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -749,6 +763,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>> IExtendedNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner> IHyperNumber<HyperDual<TInner, TPrimitive>, TInner>.GetOperations()
         {
             return Operations.Instance;
@@ -759,7 +783,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDual<TInner, TPrimitive>>, IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>
+        class Operations : NumberOperations<HyperDual<TInner, TPrimitive>>, IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -848,6 +872,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperDual<TInner, TPrimitive> Create(in TInner num)
             {
                 return new HyperDual<TInner, TPrimitive>(num);
+            }
+
+            public HyperDual<TInner, TPrimitive> Create(in HyperDual<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public HyperDual<TInner, TPrimitive> Create(in TInner first, in TInner second)

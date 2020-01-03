@@ -15,7 +15,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A split-complex number (a, b) can be represented algebraically as a + bi, where j^2 = 1.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperSplitComplex<TInner> : IHyperNumber<HyperSplitComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct HyperSplitComplex<TInner> : IHyperNumber<HyperSplitComplex<TInner>, TInner>, IWrapperNumber<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>> where TInner : struct, INumber<TInner>
     {
         readonly TInner first;
         readonly TInner second;
@@ -24,6 +24,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperSplitComplex<TInner> IWrapperNumber<HyperSplitComplex<TInner>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -294,12 +296,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>> IExtendedNumber<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperSplitComplex<TInner>, TInner> IHyperNumber<HyperSplitComplex<TInner>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperSplitComplex<TInner>>, IHyperNumberOperations<HyperSplitComplex<TInner>, TInner>
+        class Operations : NumberOperations<HyperSplitComplex<TInner>>, IHyperNumberOperations<HyperSplitComplex<TInner>, TInner>, IExtendedNumberOperations<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -396,6 +403,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperSplitComplex<TInner>(num);
             }
 
+            public HyperSplitComplex<TInner> Create(in HyperSplitComplex<TInner> num)
+            {
+                return num;
+            }
+
             public HyperSplitComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperSplitComplex<TInner>(first, second);
@@ -413,7 +425,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A split-complex number (a, b) can be represented algebraically as a + bj, where j^2 = 1.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperSplitComplex<TInner, TPrimitive> : IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct HyperSplitComplex<TInner, TPrimitive> : IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly TInner first;
         readonly TInner second;
@@ -422,6 +434,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperSplitComplex<TInner, TPrimitive> IWrapperNumber<HyperSplitComplex<TInner, TPrimitive>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -746,6 +760,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner> IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner>.GetOperations()
         {
             return Operations.Instance;
@@ -756,7 +780,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperSplitComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>
+        class Operations : NumberOperations<HyperSplitComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -845,6 +869,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperSplitComplex<TInner, TPrimitive> Create(in TInner num)
             {
                 return new HyperSplitComplex<TInner, TPrimitive>(num);
+            }
+
+            public HyperSplitComplex<TInner, TPrimitive> Create(in HyperSplitComplex<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public HyperSplitComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)

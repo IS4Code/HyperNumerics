@@ -12,11 +12,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// of that type by calling <see cref="INumberOperation.Invoke{TNumber}"/> on the operation.
     /// </summary>
     [Serializable]
-    public readonly struct AbstractNumber : INumber<AbstractNumber>, INumberOperation, IDynamicMetaObjectProvider
+    public readonly struct AbstractNumber : IWrapperNumber<AbstractNumber, AbstractNumber>, INumberOperation, IDynamicMetaObjectProvider
     {
         private readonly INumberOperation operation;
 
         public INumberOperation Operation => operation ?? HyperMath.Operations.Default;
+
+        AbstractNumber IWrapperNumber<AbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -147,7 +149,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<AbstractNumber>, INumberOperations<AbstractNumber>
+        IExtendedNumberOperations<AbstractNumber, AbstractNumber> IExtendedNumber<AbstractNumber, AbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<AbstractNumber>, IExtendedNumberOperations<AbstractNumber, AbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -212,6 +219,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return num1.Call(operation, num2);
             }
+
+            public AbstractNumber Create(in AbstractNumber num)
+            {
+                return num;
+            }
         }
 
         DynamicMetaObject IDynamicMetaObjectProvider.GetMetaObject(Expression parameter)
@@ -252,11 +264,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// of that type by calling <see cref="IPrimitiveNumberOperation.Invoke{TNumber, TPrimitive}"/> on the operation.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveAbstractNumber : INumber<PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
+    public readonly struct PrimitiveAbstractNumber : IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
     {
         private readonly IPrimitiveNumberOperation operation;
 
         public IPrimitiveNumberOperation Operation => operation ?? HyperMath.Operations.Default;
+
+        PrimitiveAbstractNumber IWrapperNumber<PrimitiveAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -387,7 +401,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveAbstractNumber>, INumberOperations<PrimitiveAbstractNumber>
+        IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<PrimitiveAbstractNumber>, IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -452,6 +471,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return num1.Call(operation, num2);
             }
+
+            public PrimitiveAbstractNumber Create(in PrimitiveAbstractNumber num)
+            {
+                return num;
+            }
         }
 
         DynamicMetaObject IDynamicMetaObjectProvider.GetMetaObject(Expression parameter)
@@ -491,11 +515,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with a single variable.
     /// </summary>
     [Serializable]
-    public readonly struct UnaryAbstractNumber : INumber<UnaryAbstractNumber>, IUnaryNumberOperation
+    public readonly struct UnaryAbstractNumber : IWrapperNumber<UnaryAbstractNumber, UnaryAbstractNumber>, IUnaryNumberOperation
     {
         private readonly IUnaryNumberOperation operation;
 
         public IUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
+
+        UnaryAbstractNumber IWrapperNumber<UnaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -631,7 +657,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<UnaryAbstractNumber>, INumberOperations<UnaryAbstractNumber>
+        IExtendedNumberOperations<UnaryAbstractNumber, UnaryAbstractNumber> IExtendedNumber<UnaryAbstractNumber, UnaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<UnaryAbstractNumber>, IExtendedNumberOperations<UnaryAbstractNumber, UnaryAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -696,6 +727,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return num1.Call(operation, num2);
             }
+
+            public UnaryAbstractNumber Create(in UnaryAbstractNumber num)
+            {
+                return num;
+            }
         }
     }
 
@@ -704,11 +740,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with a single variable.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveUnaryAbstractNumber : INumber<PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
+    public readonly struct PrimitiveUnaryAbstractNumber : IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
     {
         private readonly IPrimitiveUnaryNumberOperation operation;
 
         public IPrimitiveUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
+
+        PrimitiveUnaryAbstractNumber IWrapperNumber<PrimitiveUnaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -849,7 +887,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, INumberOperations<PrimitiveUnaryAbstractNumber>
+        IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -914,6 +957,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return num1.Call(operation, num2);
             }
+
+            public PrimitiveUnaryAbstractNumber Create(in PrimitiveUnaryAbstractNumber num)
+            {
+                return num;
+            }
         }
     }
 
@@ -922,11 +970,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with two variables.
     /// </summary>
     [Serializable]
-    public readonly struct BinaryAbstractNumber : INumber<BinaryAbstractNumber>, IBinaryNumberOperation
+    public readonly struct BinaryAbstractNumber : IWrapperNumber<BinaryAbstractNumber, BinaryAbstractNumber>, IBinaryNumberOperation
     {
         private readonly IBinaryNumberOperation operation;
 
         public IBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
+
+        BinaryAbstractNumber IWrapperNumber<BinaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -1067,7 +1117,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<BinaryAbstractNumber>, INumberOperations<BinaryAbstractNumber>
+        IExtendedNumberOperations<BinaryAbstractNumber, BinaryAbstractNumber> IExtendedNumber<BinaryAbstractNumber, BinaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<BinaryAbstractNumber>, IExtendedNumberOperations<BinaryAbstractNumber, BinaryAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -1132,6 +1187,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return num1.Call(operation, num2);
             }
+
+            public BinaryAbstractNumber Create(in BinaryAbstractNumber num)
+            {
+                return num;
+            }
         }
     }
 
@@ -1140,11 +1200,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with two variables.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveBinaryAbstractNumber : INumber<PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
+    public readonly struct PrimitiveBinaryAbstractNumber : IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
     {
         private readonly IPrimitiveBinaryNumberOperation operation;
 
         public IPrimitiveBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
+
+        PrimitiveBinaryAbstractNumber IWrapperNumber<PrimitiveBinaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -1295,7 +1357,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, INumberOperations<PrimitiveBinaryAbstractNumber>
+        IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -1359,6 +1426,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public PrimitiveBinaryAbstractNumber Create(in PrimitiveBinaryAbstractNumber num)
+            {
+                return num;
             }
         }
     }

@@ -10,7 +10,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TInner">The internal number type that the instance supports.</typeparam>
     [Serializable]
-    public readonly struct BoxedNumber<TInner> : IWrapperNumber<BoxedNumber<TInner>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner>
+    public readonly struct BoxedNumber<TInner> : IWrapperNumber<BoxedNumber<TInner>, TInner>, IWrapperNumber<BoxedNumber<TInner>, BoxedNumber<TInner>>, INumber<TInner> where TInner : struct, INumber<TInner>
     {
         static TInner defaultValue;
 
@@ -29,6 +29,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public ref readonly TInner Value => ref Reference;
 
         TInner IWrapperNumber<TInner>.Value => Reference;
+
+        BoxedNumber<TInner> IWrapperNumber<BoxedNumber<TInner>>.Value => this;
 
         public bool IsInvertible => Reference.IsInvertible;
 
@@ -197,12 +199,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<BoxedNumber<TInner>, BoxedNumber<TInner>> IExtendedNumber<BoxedNumber<TInner>, BoxedNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return HyperMath.Operations.For<TInner>.Instance;
         }
 
-        class Operations : NumberOperations<BoxedNumber<TInner>>, IExtendedNumberOperations<BoxedNumber<TInner>, TInner>
+        class Operations : NumberOperations<BoxedNumber<TInner>>, IExtendedNumberOperations<BoxedNumber<TInner>, TInner>, IExtendedNumberOperations<BoxedNumber<TInner>, BoxedNumber<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -277,6 +284,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new BoxedNumber<TInner>(num);
             }
+
+            public BoxedNumber<TInner> Create(in BoxedNumber<TInner> num)
+            {
+                return num;
+            }
         }
 
         class Instance
@@ -296,7 +308,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TInner">The internal number type that the instance supports.</typeparam>
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     [Serializable]
-    public readonly struct BoxedNumber<TInner, TPrimitive> : IWrapperNumber<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct BoxedNumber<TInner, TPrimitive> : IWrapperNumber<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         static TInner defaultValue;
 
@@ -315,6 +327,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public ref readonly TInner Value => ref Reference;
 
         TInner IWrapperNumber<TInner>.Value => Reference;
+
+        BoxedNumber<TInner, TPrimitive> IWrapperNumber<BoxedNumber<TInner, TPrimitive>>.Value => this;
 
         public bool IsInvertible => Reference.IsInvertible;
 
@@ -508,6 +522,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return Reference.GetOperations();
@@ -518,7 +542,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.GetOperations();
         }
 
-        class Operations : NumberOperations<BoxedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>
+        class Operations : NumberOperations<BoxedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -607,6 +631,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public BoxedNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new BoxedNumber<TInner, TPrimitive>(num);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Create(in BoxedNumber<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public BoxedNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)

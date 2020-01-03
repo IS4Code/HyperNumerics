@@ -11,13 +11,15 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TInner">The inner type.</typeparam>
     [Serializable]
-    public readonly struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner>, IWrapperNumber<GeneratedNumber<TInner>, GeneratedNumber<TInner>> where TInner : struct, INumber<TInner>
     {
         public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
         readonly Func<TInner> generator;
 
         public Func<TInner> Generator => generator ?? Zero.Generator;
+
+        GeneratedNumber<TInner> IWrapperNumber<GeneratedNumber<TInner>>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -179,7 +181,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<GeneratedNumber<TInner>>, IExtendedNumberOperations<GeneratedNumber<TInner>, TInner>
+        IExtendedNumberOperations<GeneratedNumber<TInner>, GeneratedNumber<TInner>> IExtendedNumber<GeneratedNumber<TInner>, GeneratedNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<GeneratedNumber<TInner>>, IExtendedNumberOperations<GeneratedNumber<TInner>, TInner>, IExtendedNumberOperations<GeneratedNumber<TInner>, GeneratedNumber<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -254,6 +261,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new GeneratedNumber<TInner>(num);
             }
+
+            public GeneratedNumber<TInner> Create(in GeneratedNumber<TInner> num)
+            {
+                return num;
+            }
         }
     }
 
@@ -263,13 +275,15 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TInner">The inner type.</typeparam>
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     [Serializable]
-    public readonly struct GeneratedNumber<TInner, TPrimitive> : IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct GeneratedNumber<TInner, TPrimitive> : IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         public static GeneratedNumber<TInner, TPrimitive> Zero => new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
         readonly Func<TInner> generator;
 
         public Func<TInner> Generator => generator ?? Zero.Generator;
+
+        GeneratedNumber<TInner, TPrimitive> IWrapperNumber<GeneratedNumber<TInner, TPrimitive>>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -452,7 +466,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<GeneratedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive>
+        IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<GeneratedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -546,6 +570,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public GeneratedNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new GeneratedNumber<TInner, TPrimitive>(num);
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Create(in GeneratedNumber<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public GeneratedNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)

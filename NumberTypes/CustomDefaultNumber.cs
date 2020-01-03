@@ -14,7 +14,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TInner">The inner type.</typeparam>
     /// <typeparam name="TTraits">A type implementing <see cref="ITraits"/> which is constructed once for every number type and queried for the default value.</typeparam>
     [Serializable]
-    public readonly struct CustomDefaultNumber<TInner, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
+    public readonly struct CustomDefaultNumber<TInner, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, TInner>, IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>, INumber<TInner> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
     {
         static TInner defaultValue = default(TTraits).DefaultValue;
 
@@ -22,6 +22,8 @@ namespace IS4.HyperNumerics.NumberTypes
         readonly bool initialized;
 
         public TInner Value => initialized ? value : defaultValue;
+
+        CustomDefaultNumber<TInner, TTraits> IWrapperNumber<CustomDefaultNumber<TInner, TTraits>>.Value => this;
 
         public bool IsInvertible => initialized ? CanInv(value) : defaultValue.IsInvertible;
 
@@ -270,12 +272,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return HyperMath.Operations.For<TInner>.Instance;
         }
 
-        class Operations : NumberOperations<CustomDefaultNumber<TInner, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>
+        class Operations : NumberOperations<CustomDefaultNumber<TInner, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -350,6 +357,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new CustomDefaultNumber<TInner, TTraits>(num);
             }
+
+            public CustomDefaultNumber<TInner, TTraits> Create(in CustomDefaultNumber<TInner, TTraits> num)
+            {
+                return num;
+            }
         }
 
         /// <summary>
@@ -373,7 +385,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     /// <typeparam name="TTraits">A type implementing <see cref="ITraits"/> which is constructed once for every number type and queried for the default value.</typeparam>
     [Serializable]
-    public readonly struct CustomDefaultNumber<TInner, TPrimitive, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive> where TTraits : struct, CustomDefaultNumber<TInner, TPrimitive, TTraits>.ITraits
+    public readonly struct CustomDefaultNumber<TInner, TPrimitive, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>, IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive> where TTraits : struct, CustomDefaultNumber<TInner, TPrimitive, TTraits>.ITraits
     {
         static TInner defaultValue = default(TTraits).DefaultValue;
 
@@ -381,6 +393,8 @@ namespace IS4.HyperNumerics.NumberTypes
         readonly bool initialized;
 
         public TInner Value => initialized ? value : defaultValue;
+
+        CustomDefaultNumber<TInner, TPrimitive, TTraits> IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Value => this;
 
         public bool IsInvertible => initialized ? CanInv(value) : defaultValue.IsInvertible;
 
@@ -666,6 +680,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return HyperMath.Operations.For<TInner>.Instance;
@@ -676,7 +700,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Operations.For<TInner, TPrimitive>.Instance;
         }
 
-        class Operations : NumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>
+        class Operations : NumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -765,6 +789,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in TInner num)
             {
                 return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(num);
+            }
+
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
+            {
+                return num;
             }
 
             public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(IEnumerable<TPrimitive> units)

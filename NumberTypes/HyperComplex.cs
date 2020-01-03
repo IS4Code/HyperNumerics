@@ -15,7 +15,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A complex number (a, b) can be represented algebraically as a + bi, where i^2 = -1.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperComplex<TInner> : IHyperNumber<HyperComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct HyperComplex<TInner> : IHyperNumber<HyperComplex<TInner>, TInner>, IWrapperNumber<HyperComplex<TInner>, HyperComplex<TInner>> where TInner : struct, INumber<TInner>
     {
         readonly TInner first;
         readonly TInner second;
@@ -24,6 +24,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperComplex<TInner> IWrapperNumber<HyperComplex<TInner>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -323,12 +325,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperComplex<TInner>, HyperComplex<TInner>> IExtendedNumber<HyperComplex<TInner>, HyperComplex<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperComplex<TInner>, TInner> IHyperNumber<HyperComplex<TInner>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperComplex<TInner>>, IHyperNumberOperations<HyperComplex<TInner>, TInner>
+        class Operations : NumberOperations<HyperComplex<TInner>>, IHyperNumberOperations<HyperComplex<TInner>, TInner>, IExtendedNumberOperations<HyperComplex<TInner>, HyperComplex<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -425,6 +432,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperComplex<TInner>(num);
             }
 
+            public HyperComplex<TInner> Create(in HyperComplex<TInner> num)
+            {
+                return num;
+            }
+
             public HyperComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperComplex<TInner>(first, second);
@@ -442,7 +454,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A complex number (a, b) can be represented algebraically as a + bi, where i^2 = -1.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperComplex<TInner, TPrimitive> : IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct HyperComplex<TInner, TPrimitive> : IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly TInner first;
         readonly TInner second;
@@ -451,6 +463,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperComplex<TInner, TPrimitive> IWrapperNumber<HyperComplex<TInner, TPrimitive>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -806,6 +820,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>> IExtendedNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner> IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner>.GetOperations()
         {
             return Operations.Instance;
@@ -816,7 +840,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>
+        class Operations : NumberOperations<HyperComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -905,6 +929,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperComplex<TInner, TPrimitive> Create(in TInner num)
             {
                 return new HyperComplex<TInner, TPrimitive>(num);
+            }
+
+            public HyperComplex<TInner, TPrimitive> Create(in HyperComplex<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public HyperComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)

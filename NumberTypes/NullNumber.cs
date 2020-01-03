@@ -9,9 +9,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Represents a number type with a single value which is the result of all operations.
     /// </summary>
     [Serializable]
-    public readonly struct NullNumber : INumber<NullNumber>
+    public readonly struct NullNumber : INumber<NullNumber>, IWrapperNumber<NullNumber, NullNumber>
     {
         public static readonly NullNumber Value = default;
+
+        NullNumber IWrapperNumber<NullNumber>.Value => this;
 
         int INumber.Dimension => 0;
 
@@ -119,7 +121,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<NullNumber>, INumberOperations<NullNumber>
+        IExtendedNumberOperations<NullNumber, NullNumber> IExtendedNumber<NullNumber, NullNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<NullNumber>, INumberOperations<NullNumber>, IExtendedNumberOperations<NullNumber, NullNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -184,6 +191,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return default;
             }
+
+            public NullNumber Create(in NullNumber num)
+            {
+                return num;
+            }
         }
     }
 
@@ -192,9 +204,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TPrimitive">The primitive type the number mimics, but doesn't actually store.</typeparam>
     [Serializable]
-    public readonly struct NullNumber<TPrimitive> : INumber<NullNumber<TPrimitive>, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct NullNumber<TPrimitive> : INumber<NullNumber<TPrimitive>, TPrimitive>, IWrapperNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         public static readonly NullNumber<TPrimitive> Value = default;
+
+        NullNumber<TPrimitive> IWrapperNumber<NullNumber<TPrimitive>>.Value => this;
 
         int INumber.Dimension => 0;
 
@@ -317,7 +331,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<NullNumber<TPrimitive>>, INumberOperations<NullNumber<TPrimitive>, TPrimitive>
+        IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>> IExtendedNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive> IExtendedNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<NullNumber<TPrimitive>>, INumberOperations<NullNumber<TPrimitive>, TPrimitive>, IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -394,6 +418,11 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 
             public NullNumber<TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Create(in NullNumber<TPrimitive> num)
             {
                 return default;
             }

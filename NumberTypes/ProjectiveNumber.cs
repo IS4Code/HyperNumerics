@@ -17,10 +17,16 @@ namespace IS4.HyperNumerics.NumberTypes
     /// namely multiplication with zero, and addition and subtraction of infinities.
     /// </remarks>
     [Serializable]
-    public readonly struct ProjectiveNumber<TInner> : IWrapperNumber<ProjectiveNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct ProjectiveNumber<TInner> : IWrapperNumber<ProjectiveNumber<TInner>, TInner>, IWrapperNumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>> where TInner : struct, INumber<TInner>
     {
         readonly TInner value;
+
         public TInner Value => value;
+
+        TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
+
+        ProjectiveNumber<TInner> IWrapperNumber<ProjectiveNumber<TInner>>.Value => this;
+
         public bool IsInfinity { get; }
 
         public bool IsInvertible => true;
@@ -28,8 +34,6 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsFinite => !IsInfinity && IsFin(value);
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
-
-        TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
 
         public ProjectiveNumber(in TInner value, bool isInfinity = false)
         {
@@ -239,7 +243,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner>
+        IExtendedNumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>> IExtendedNumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner>, IExtendedNumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -314,6 +323,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new ProjectiveNumber<TInner>(num);
             }
+
+            public ProjectiveNumber<TInner> Create(in ProjectiveNumber<TInner> num)
+            {
+                return num;
+            }
         }
     }
 
@@ -328,10 +342,16 @@ namespace IS4.HyperNumerics.NumberTypes
     /// namely multiplication with zero, addition, and subtraction.
     /// </remarks>
     [Serializable]
-    public readonly struct ProjectiveNumber<TInner, TPrimitive> : IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct ProjectiveNumber<TInner, TPrimitive> : IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly TInner value;
+
         public TInner Value => value;
+
+        TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
+
+        ProjectiveNumber<TInner, TPrimitive> IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>>.Value => this;
+
         public bool IsInfinity { get; }
 
         public bool IsInvertible => true;
@@ -339,8 +359,6 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsFinite => !IsInfinity && IsFin(value);
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
-
-        TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
 
         public ProjectiveNumber(in TInner value, bool isInfinity = false)
         {
@@ -595,7 +613,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<ProjectiveNumber<TInner, TPrimitive>>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>
+        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<ProjectiveNumber<TInner, TPrimitive>>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -684,6 +712,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public ProjectiveNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new ProjectiveNumber<TInner, TPrimitive>(num);
+            }
+
+            public ProjectiveNumber<TInner, TPrimitive> Create(in ProjectiveNumber<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)

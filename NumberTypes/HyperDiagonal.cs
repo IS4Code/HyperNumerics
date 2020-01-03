@@ -15,7 +15,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A diagonal number (a, b) can be represented algebraically as a + bk, where k^2 = k.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperDiagonal<TInner> : IHyperNumber<HyperDiagonal<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct HyperDiagonal<TInner> : IHyperNumber<HyperDiagonal<TInner>, TInner>, IWrapperNumber<HyperDiagonal<TInner>, HyperDiagonal<TInner>> where TInner : struct, INumber<TInner>
     {
         readonly TInner first;
         readonly TInner second;
@@ -24,6 +24,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperDiagonal<TInner> IWrapperNumber<HyperDiagonal<TInner>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -266,12 +268,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperDiagonal<TInner>, HyperDiagonal<TInner>> IExtendedNumber<HyperDiagonal<TInner>, HyperDiagonal<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperDiagonal<TInner>, TInner> IHyperNumber<HyperDiagonal<TInner>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDiagonal<TInner>>, IHyperNumberOperations<HyperDiagonal<TInner>, TInner>
+        class Operations : NumberOperations<HyperDiagonal<TInner>>, IHyperNumberOperations<HyperDiagonal<TInner>, TInner>, IExtendedNumberOperations<HyperDiagonal<TInner>, HyperDiagonal<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -368,6 +375,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperDiagonal<TInner>(num);
             }
 
+            public HyperDiagonal<TInner> Create(in HyperDiagonal<TInner> num)
+            {
+                return num;
+            }
+
             public HyperDiagonal<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDiagonal<TInner>(first, second);
@@ -385,7 +397,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// A diagonal number (a, b) can be represented algebraically as a + bk, where k^2 = k.
     /// </remarks>
     [Serializable]
-    public readonly struct HyperDiagonal<TInner, TPrimitive> : IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct HyperDiagonal<TInner, TPrimitive> : IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly TInner first;
         readonly TInner second;
@@ -394,6 +406,8 @@ namespace IS4.HyperNumerics.NumberTypes
         public TInner Second => second;
 
         TInner IWrapperNumber<TInner>.Value => first;
+
+        HyperDiagonal<TInner, TPrimitive> IWrapperNumber<HyperDiagonal<TInner, TPrimitive>>.Value => this;
 
         int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -689,6 +703,16 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner> IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner>.GetOperations()
         {
             return Operations.Instance;
@@ -699,7 +723,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<HyperDiagonal<TInner, TPrimitive>>, IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>
+        class Operations : NumberOperations<HyperDiagonal<TInner, TPrimitive>>, IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -809,6 +833,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperDiagonal<TInner, TPrimitive> Create(in TInner num)
             {
                 return new HyperDiagonal<TInner, TPrimitive>(num);
+            }
+
+            public HyperDiagonal<TInner, TPrimitive> Create(in HyperDiagonal<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public HyperDiagonal<TInner, TPrimitive> Create(in TInner first, in TInner second)

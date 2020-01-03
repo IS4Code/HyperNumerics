@@ -14,12 +14,14 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TInner">The inner type.</typeparam>
     [Serializable]
-    public readonly struct NullableNumber<TInner> : IWrapperNumber<NullableNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly struct NullableNumber<TInner> : IWrapperNumber<NullableNumber<TInner>, TInner>, IWrapperNumber<NullableNumber<TInner>, NullableNumber<TInner>> where TInner : struct, INumber<TInner>
     {
         readonly bool hasValue;
         readonly TInner value;
 
         public TInner? Value => hasValue ? (TInner?)value : null;
+
+        NullableNumber<TInner> IWrapperNumber<NullableNumber<TInner>>.Value => this;
 
         public bool IsInvertible => hasValue ? CanInv(value) : true;
 
@@ -193,7 +195,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<NullableNumber<TInner>>, IExtendedNumberOperations<NullableNumber<TInner>, TInner>
+        IExtendedNumberOperations<NullableNumber<TInner>, NullableNumber<TInner>> IExtendedNumber<NullableNumber<TInner>, NullableNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<NullableNumber<TInner>>, IExtendedNumberOperations<NullableNumber<TInner>, TInner>, IExtendedNumberOperations<NullableNumber<TInner>, NullableNumber<TInner>>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -268,6 +275,11 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new NullableNumber<TInner>(num);
             }
+
+            public NullableNumber<TInner> Create(in NullableNumber<TInner> num)
+            {
+                return num;
+            }
         }
     }
 
@@ -278,12 +290,14 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TInner">The inner type.</typeparam>
     /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
     [Serializable]
-    public readonly struct NullableNumber<TInner, TPrimitive> : IWrapperNumber<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly struct NullableNumber<TInner, TPrimitive> : IWrapperNumber<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly bool hasValue;
         readonly TInner value;
 
         public TInner? Value => hasValue ? (TInner?)value : null;
+
+        NullableNumber<TInner, TPrimitive> IWrapperNumber<NullableNumber<TInner, TPrimitive>>.Value => this;
 
         public bool IsInvertible => hasValue ? CanInv(value) : true;
 
@@ -481,7 +495,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<NullableNumber<TInner, TPrimitive>>, IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive>
+        IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>> IExtendedNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<NullableNumber<TInner, TPrimitive>>, IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -570,6 +594,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public NullableNumber<TInner, TPrimitive> Create(in TInner num)
             {
                 return new NullableNumber<TInner, TPrimitive>(num);
+            }
+
+            public NullableNumber<TInner, TPrimitive> Create(in NullableNumber<TInner, TPrimitive> num)
+            {
+                return num;
             }
 
             public NullableNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
