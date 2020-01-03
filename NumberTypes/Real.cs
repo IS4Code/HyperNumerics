@@ -12,7 +12,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Not all possible values of <see cref="System.Double"/> are allowed, namely infinites and NaNs.
     /// </remarks>
     [Serializable]
-    public readonly struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, IWrapperNumber<Real, Real, double>, IWrapperNumber<Real, Real, float>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>
+    public readonly struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, ISimpleNumber<Real, Real>, IWrapperNumber<Real, Real, double>, IWrapperNumber<Real, Real, float>, IWrapperNumber<Real, Real, Real>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, ISimpleNumber<ExtendedReal, ExtendedReal>
     {
         public static readonly Real Zero = new Real(0.0);
         public static readonly Real One = new Real(1.0);
@@ -22,6 +22,10 @@ namespace IS4.HyperNumerics.NumberTypes
         float ISimpleNumber<float>.Value => (float)Value;
 
         Real IWrapperNumber<Real>.Value => this;
+
+        Real ISimpleNumber<Real>.Value => this;
+
+        ExtendedReal ISimpleNumber<ExtendedReal>.Value => new ExtendedReal(Value);
 
         public bool IsInvertible => Value != 0.0;
 
@@ -71,7 +75,12 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return this;
         }
-        
+
+        Real INumber<Real, Real>.Call(BinaryOperation operation, Real other)
+        {
+            return Call(operation, in other);
+        }
+
         public Real Call(BinaryOperation operation, in Real other)
         {
             switch(operation)
@@ -198,6 +207,11 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, ExtendedReal other)
+        {
+            return Call(operation, in other);
+        }
+
         public Real Call(UnaryOperation operation)
         {
             switch(operation)
@@ -315,12 +329,22 @@ namespace IS4.HyperNumerics.NumberTypes
 
         float INumber<Real, float>.Call(PrimitiveUnaryOperation operation)
         {
-            return (float)Math.Abs(Value);
+            return (float)Call(operation);
         }
 
         float INumber<ExtendedReal, float>.Call(PrimitiveUnaryOperation operation)
         {
-            return (float)Math.Abs(Value);
+            return (float)Call(operation);
+        }
+
+        Real INumber<Real, Real>.Call(PrimitiveUnaryOperation operation)
+        {
+            return new Real(Call(operation));
+        }
+
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(PrimitiveUnaryOperation operation)
+        {
+            return new ExtendedReal(Call(operation));
         }
 
         public override bool Equals(object obj)
@@ -458,6 +482,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        INumberOperations<Real, Real> INumber<Real, Real>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         INumberOperations<ExtendedReal> INumber<ExtendedReal>.GetOperations()
         {
             return Operations.Instance;
@@ -469,6 +498,11 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 
         INumberOperations<ExtendedReal, float> INumber<ExtendedReal, float>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<ExtendedReal, ExtendedReal> INumber<ExtendedReal, ExtendedReal>.GetOperations()
         {
             return Operations.Instance;
         }
@@ -488,7 +522,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>, IExtendedNumberOperations<Real, Real, double>, IExtendedNumberOperations<Real, Real, float>
+        IExtendedNumberOperations<Real, Real, Real> IExtendedNumber<Real, Real, Real>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>, INumberOperations<Real, Real>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>, INumberOperations<ExtendedReal, ExtendedReal>, IExtendedNumberOperations<Real, Real, double>, IExtendedNumberOperations<Real, Real, float>, IExtendedNumberOperations<Real, Real, Real>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -640,6 +679,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return (float)num.Call(operation);
             }
 
+            Real INumberOperations<Real, Real>.Call(PrimitiveUnaryOperation operation, in Real num)
+            {
+                return new Real(num.Call(operation));
+            }
+
             public Real Call(BinaryOperation operation, in Real num1, double num2)
             {
                 return num1.Call(operation, num2);
@@ -648,6 +692,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public Real Call(BinaryOperation operation, in Real num1, float num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            Real INumberOperations<Real, Real>.Call(BinaryOperation operation, in Real num1, Real num2)
+            {
+                return Call(operation, num1, num2);
             }
 
             public ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
@@ -670,6 +719,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return (float)num.Call(operation);
             }
 
+            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            {
+                return new ExtendedReal(num.Call(operation));
+            }
+
             public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, double num2)
             {
                 return num1.Call(operation, num2);
@@ -680,14 +734,29 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, in ExtendedReal num1, ExtendedReal num2)
+            {
+                return Call(operation, num1, num2);
+            }
+
             public Real Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined)
             {
                 return new Real(realUnit);
             }
 
-            Real INumberOperations<Real, float>.Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
+            public Real Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
             {
                 return new Real(realUnit);
+            }
+
+            public Real Create(Real realUnit, Real otherUnits, Real someUnitsCombined, Real allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public ExtendedReal Create(ExtendedReal realUnit, ExtendedReal otherUnits, ExtendedReal someUnitsCombined, ExtendedReal allUnitsCombined)
+            {
+                return realUnit;
             }
 
             ExtendedReal INumberOperations<ExtendedReal, double>.Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined)
@@ -731,6 +800,34 @@ namespace IS4.HyperNumerics.NumberTypes
                 var value = units.Current;
                 units.MoveNext();
                 return new Real(value);
+            }
+
+            public Real Create(IEnumerable<Real> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public Real Create(IEnumerator<Real> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
+
+            public ExtendedReal Create(IEnumerable<ExtendedReal> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public ExtendedReal Create(IEnumerator<ExtendedReal> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
             }
 
             ExtendedReal INumberOperations<ExtendedReal, double>.Create(IEnumerable<double> units)
@@ -886,6 +983,132 @@ namespace IS4.HyperNumerics.NumberTypes
         IEnumerator<float> IEnumerable<float>.GetEnumerator()
         {
             yield return (float)Value;
+        }
+
+        int ICollection<Real>.Count => 1;
+
+        bool ICollection<Real>.IsReadOnly => true;
+
+        int IReadOnlyCollection<Real>.Count => 1;
+
+        Real IReadOnlyList<Real>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        Real IList<Real>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<Real>.IndexOf(Real item)
+        {
+            return Equals(in item) ? 0 : -1;
+        }
+
+        void IList<Real>.Insert(int index, Real item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<Real>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<Real>.Add(Real item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<Real>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<Real>.Contains(Real item)
+        {
+            return Equals(in item);
+        }
+
+        void ICollection<Real>.CopyTo(Real[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<Real>.Remove(Real item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<Real> IEnumerable<Real>.GetEnumerator()
+        {
+            yield return this;
+        }
+
+        int ICollection<ExtendedReal>.Count => 1;
+
+        bool ICollection<ExtendedReal>.IsReadOnly => true;
+
+        int IReadOnlyCollection<ExtendedReal>.Count => 1;
+
+        ExtendedReal IReadOnlyList<ExtendedReal>.this[int index] => index == 0 ? new ExtendedReal(Value) : throw new ArgumentOutOfRangeException(nameof(index));
+
+        ExtendedReal IList<ExtendedReal>.this[int index]
+        {
+            get{
+                return index == 0 ? new ExtendedReal(Value) : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<ExtendedReal>.IndexOf(ExtendedReal item)
+        {
+            return Equals(in item) ? 0 : -1;
+        }
+
+        void IList<ExtendedReal>.Insert(int index, ExtendedReal item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<ExtendedReal>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<ExtendedReal>.Add(ExtendedReal item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<ExtendedReal>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<ExtendedReal>.Contains(ExtendedReal item)
+        {
+            return Equals(in item);
+        }
+
+        void ICollection<ExtendedReal>.CopyTo(ExtendedReal[] array, int arrayIndex)
+        {
+            array[arrayIndex] = new ExtendedReal(Value);
+        }
+
+        bool ICollection<ExtendedReal>.Remove(ExtendedReal item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<ExtendedReal> IEnumerable<ExtendedReal>.GetEnumerator()
+        {
+            yield return new ExtendedReal(Value);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

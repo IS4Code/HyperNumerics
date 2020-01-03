@@ -1,6 +1,7 @@
 ﻿using IS4.HyperNumerics.NumberTypes;
 using IS4.HyperNumerics.Operations;
 using System;
+using System.Collections.Generic;
 
 namespace IS4.HyperNumerics
 {
@@ -426,7 +427,8 @@ namespace IS4.HyperNumerics
             public static readonly IUnaryNumberOperation Dec = new NumberUnaryOperation(UnaryOperation.Decrement);
             public static readonly IUnaryNumberOperation Con = new NumberUnaryOperation(UnaryOperation.Conjugate);
             public static readonly IUnaryNumberOperation Mods = new NumberUnaryOperation(UnaryOperation.Modulus);
-            public static readonly IPrimitiveUnaryNumberFunc<ValueType> Abs = new NumberPrimitiveUnaryOperation(PrimitiveUnaryOperation.AbsoluteValue);
+            public static readonly IPrimitiveUnaryNumberOperation Abs = new PrimitiveNumberPrimitiveUnaryOperation(PrimitiveUnaryOperation.AbsoluteValue);
+            public static readonly IPrimitiveUnaryNumberOperation Std = new PrimitiveNumberPrimitiveUnaryOperation(PrimitiveUnaryOperation.RealValue);
             public static readonly IUnaryNumberOperation Mul2 = new NumberUnaryOperation(UnaryOperation.Double);
             public static readonly IUnaryNumberOperation Div2 = new NumberUnaryOperation(UnaryOperation.Half);
             public static readonly IBinaryNumberOperation Pow = new NumberBinaryOperation(BinaryOperation.Power);
@@ -537,6 +539,19 @@ namespace IS4.HyperNumerics
                         return Atan2;
                     default:
                         return new NumberBinaryOperation(operation);
+                }
+            }
+
+            public static IPrimitiveUnaryNumberOperation GetOperation(PrimitiveUnaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case PrimitiveUnaryOperation.AbsoluteValue:
+                        return Abs;
+                    case PrimitiveUnaryOperation.RealValue:
+                        return Std;
+                    default:
+                        return new PrimitiveNumberPrimitiveUnaryOperation(operation);
                 }
             }
 
@@ -704,6 +719,32 @@ namespace IS4.HyperNumerics
                 public override string ToString()
                 {
                     return type.ToString();
+                }
+            }
+
+            class PrimitiveNumberPrimitiveUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+            {
+                readonly PrimitiveUnaryOperation type;
+
+                public PrimitiveNumberPrimitiveUnaryOperation(PrimitiveUnaryOperation type)
+                {
+                    this.type = type;
+                }
+
+                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                {
+                    var result = For<TNumber, TPrimitive>.Instance.Call(type, num);
+                    return For<TNumber, TPrimitive>.Instance.Create(Iterator(result));
+                }
+
+                public override string ToString()
+                {
+                    return type.ToString();
+                }
+
+                IEnumerable<TPrimitive> Iterator<TPrimitive>(TPrimitive value) where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                {
+                    yield return value;
                 }
             }
         }

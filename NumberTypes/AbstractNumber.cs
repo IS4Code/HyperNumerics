@@ -1,5 +1,7 @@
 ﻿using IS4.HyperNumerics.Operations;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -264,7 +266,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// of that type by calling <see cref="IPrimitiveNumberOperation.Invoke{TNumber, TPrimitive}"/> on the operation.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveAbstractNumber : IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
+    public readonly struct PrimitiveAbstractNumber : IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
     {
         private readonly IPrimitiveNumberOperation operation;
 
@@ -316,7 +318,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
+        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.Call(BinaryOperation operation, PrimitiveAbstractNumber other)
+        {
+            return Call(operation, other);
+        }
+
         public PrimitiveAbstractNumber Call(UnaryOperation operation)
+        {
+            return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
+        }
+
+        public PrimitiveAbstractNumber Call(PrimitiveUnaryOperation operation)
         {
             return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -401,12 +413,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        INumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveAbstractNumber>, IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber>
+        IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber> IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<PrimitiveAbstractNumber>, IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -472,9 +494,38 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            PrimitiveAbstractNumber INumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.Call(BinaryOperation operation, in PrimitiveAbstractNumber num1, PrimitiveAbstractNumber num2)
+            {
+                return Call(operation, num1, num2);
+            }
+
+            public PrimitiveAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
             public PrimitiveAbstractNumber Create(in PrimitiveAbstractNumber num)
             {
                 return num;
+            }
+
+            public PrimitiveAbstractNumber Create(PrimitiveAbstractNumber realUnit, PrimitiveAbstractNumber otherUnits, PrimitiveAbstractNumber someUnitsCombined, PrimitiveAbstractNumber allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public PrimitiveAbstractNumber Create(IEnumerable<PrimitiveAbstractNumber> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public PrimitiveAbstractNumber Create(IEnumerator<PrimitiveAbstractNumber> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
             }
         }
 
@@ -507,6 +558,74 @@ namespace IS4.HyperNumerics.NumberTypes
                 var expression = Expression.Call(Expression.Convert(Expression, InterfaceType), method);
                 return new DynamicMetaObject(Expression.Convert(expression, binder.ReturnType), restrictions);
             }
+        }
+
+        int ICollection<PrimitiveAbstractNumber>.Count => 1;
+
+        bool ICollection<PrimitiveAbstractNumber>.IsReadOnly => true;
+
+        int IReadOnlyCollection<PrimitiveAbstractNumber>.Count => 1;
+
+        PrimitiveAbstractNumber IReadOnlyList<PrimitiveAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        PrimitiveAbstractNumber IList<PrimitiveAbstractNumber>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<PrimitiveAbstractNumber>.IndexOf(PrimitiveAbstractNumber item)
+        {
+            return Equals(in item) ? 0 : -1;
+        }
+
+        void IList<PrimitiveAbstractNumber>.Insert(int index, PrimitiveAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<PrimitiveAbstractNumber>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<PrimitiveAbstractNumber>.Add(PrimitiveAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<PrimitiveAbstractNumber>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<PrimitiveAbstractNumber>.Contains(PrimitiveAbstractNumber item)
+        {
+            return Equals(in item);
+        }
+
+        void ICollection<PrimitiveAbstractNumber>.CopyTo(PrimitiveAbstractNumber[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<PrimitiveAbstractNumber>.Remove(PrimitiveAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<PrimitiveAbstractNumber> IEnumerable<PrimitiveAbstractNumber>.GetEnumerator()
+        {
+            yield return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield return this;
         }
     }
 
@@ -740,7 +859,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with a single variable.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveUnaryAbstractNumber : IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
+    public readonly struct PrimitiveUnaryAbstractNumber : IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
     {
         private readonly IPrimitiveUnaryNumberOperation operation;
 
@@ -802,7 +921,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
+        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.Call(BinaryOperation operation, PrimitiveUnaryAbstractNumber other)
+        {
+            return Call(operation, other);
+        }
+
         public PrimitiveUnaryAbstractNumber Call(UnaryOperation operation)
+        {
+            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
+        }
+
+        public PrimitiveUnaryAbstractNumber Call(PrimitiveUnaryOperation operation)
         {
             return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -887,12 +1016,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        INumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
+        IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -958,10 +1097,107 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            PrimitiveUnaryAbstractNumber INumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber num1, PrimitiveUnaryAbstractNumber num2)
+            {
+                return Call(operation, num1, num2);
+            }
+
+            public PrimitiveUnaryAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveUnaryAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
             public PrimitiveUnaryAbstractNumber Create(in PrimitiveUnaryAbstractNumber num)
             {
                 return num;
             }
+
+            public PrimitiveUnaryAbstractNumber Create(PrimitiveUnaryAbstractNumber realUnit, PrimitiveUnaryAbstractNumber otherUnits, PrimitiveUnaryAbstractNumber someUnitsCombined, PrimitiveUnaryAbstractNumber allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public PrimitiveUnaryAbstractNumber Create(IEnumerable<PrimitiveUnaryAbstractNumber> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public PrimitiveUnaryAbstractNumber Create(IEnumerator<PrimitiveUnaryAbstractNumber> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
+        }
+
+        int ICollection<PrimitiveUnaryAbstractNumber>.Count => 1;
+
+        bool ICollection<PrimitiveUnaryAbstractNumber>.IsReadOnly => true;
+
+        int IReadOnlyCollection<PrimitiveUnaryAbstractNumber>.Count => 1;
+
+        PrimitiveUnaryAbstractNumber IReadOnlyList<PrimitiveUnaryAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        PrimitiveUnaryAbstractNumber IList<PrimitiveUnaryAbstractNumber>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<PrimitiveUnaryAbstractNumber>.IndexOf(PrimitiveUnaryAbstractNumber item)
+        {
+            return Equals(in item) ? 0 : -1;
+        }
+
+        void IList<PrimitiveUnaryAbstractNumber>.Insert(int index, PrimitiveUnaryAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<PrimitiveUnaryAbstractNumber>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<PrimitiveUnaryAbstractNumber>.Add(PrimitiveUnaryAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<PrimitiveUnaryAbstractNumber>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<PrimitiveUnaryAbstractNumber>.Contains(PrimitiveUnaryAbstractNumber item)
+        {
+            return Equals(in item);
+        }
+
+        void ICollection<PrimitiveUnaryAbstractNumber>.CopyTo(PrimitiveUnaryAbstractNumber[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<PrimitiveUnaryAbstractNumber>.Remove(PrimitiveUnaryAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<PrimitiveUnaryAbstractNumber> IEnumerable<PrimitiveUnaryAbstractNumber>.GetEnumerator()
+        {
+            yield return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield return this;
         }
     }
 
@@ -1200,7 +1436,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with two variables.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveBinaryAbstractNumber : IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
+    public readonly struct PrimitiveBinaryAbstractNumber : IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
     {
         private readonly IPrimitiveBinaryNumberOperation operation;
 
@@ -1272,7 +1508,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
+        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.Call(BinaryOperation operation, PrimitiveBinaryAbstractNumber other)
+        {
+            return Call(operation, other);
+        }
+
         public PrimitiveBinaryAbstractNumber Call(UnaryOperation operation)
+        {
+            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
+        }
+
+        public PrimitiveBinaryAbstractNumber Call(PrimitiveUnaryOperation operation)
         {
             return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -1357,12 +1603,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+        INumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
         IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
+        IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
         {
             public static readonly Operations Instance = new Operations();
 
@@ -1428,10 +1684,107 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            PrimitiveBinaryAbstractNumber INumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num1, PrimitiveBinaryAbstractNumber num2)
+            {
+                return Call(operation, num1, num2);
+            }
+
+            public PrimitiveBinaryAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveBinaryAbstractNumber num)
+            {
+                return num.Call(operation);
+            }
+
             public PrimitiveBinaryAbstractNumber Create(in PrimitiveBinaryAbstractNumber num)
             {
                 return num;
             }
+
+            public PrimitiveBinaryAbstractNumber Create(PrimitiveBinaryAbstractNumber realUnit, PrimitiveBinaryAbstractNumber otherUnits, PrimitiveBinaryAbstractNumber someUnitsCombined, PrimitiveBinaryAbstractNumber allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public PrimitiveBinaryAbstractNumber Create(IEnumerable<PrimitiveBinaryAbstractNumber> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public PrimitiveBinaryAbstractNumber Create(IEnumerator<PrimitiveBinaryAbstractNumber> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
+        }
+
+        int ICollection<PrimitiveBinaryAbstractNumber>.Count => 1;
+
+        bool ICollection<PrimitiveBinaryAbstractNumber>.IsReadOnly => true;
+
+        int IReadOnlyCollection<PrimitiveBinaryAbstractNumber>.Count => 1;
+
+        PrimitiveBinaryAbstractNumber IReadOnlyList<PrimitiveBinaryAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        PrimitiveBinaryAbstractNumber IList<PrimitiveBinaryAbstractNumber>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<PrimitiveBinaryAbstractNumber>.IndexOf(PrimitiveBinaryAbstractNumber item)
+        {
+            return Equals(in item) ? 0 : -1;
+        }
+
+        void IList<PrimitiveBinaryAbstractNumber>.Insert(int index, PrimitiveBinaryAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<PrimitiveBinaryAbstractNumber>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<PrimitiveBinaryAbstractNumber>.Add(PrimitiveBinaryAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<PrimitiveBinaryAbstractNumber>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<PrimitiveBinaryAbstractNumber>.Contains(PrimitiveBinaryAbstractNumber item)
+        {
+            return Equals(in item);
+        }
+
+        void ICollection<PrimitiveBinaryAbstractNumber>.CopyTo(PrimitiveBinaryAbstractNumber[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<PrimitiveBinaryAbstractNumber>.Remove(PrimitiveBinaryAbstractNumber item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<PrimitiveBinaryAbstractNumber> IEnumerable<PrimitiveBinaryAbstractNumber>.GetEnumerator()
+        {
+            yield return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield return this;
         }
     }
 }
