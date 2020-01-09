@@ -12,4 +12,68 @@
     <None Remove="Test\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="NumberTypes\Common.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Common.tt</DependentUpon>
+    </None>
+    <None Include="NumberTypes\HyperCommon.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HyperCommon.tt</DependentUpon>
+    </None>
+    <None Include="NumberTypes\PrimitiveCommon.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PrimitiveCommon.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NumberTypes\Common.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Common.cs</LastGenOutput>
+    </None>
+    <None Update="NumberTypes\HyperCommon.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>HyperCommon.cs</LastGenOutput>
+    </None>
+    <None Update="NumberTypes\PrimitiveCommon.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PrimitiveCommon.cs</LastGenOutput>
+    </None>
+    <None Update="NumberTypes\SelfWrapperCommon.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SelfWrapperCommon.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="NumberTypes\Common.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Common.tt</DependentUpon>
+    </Compile>
+    <Compile Update="NumberTypes\HyperCommon.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HyperCommon.tt</DependentUpon>
+    </Compile>
+    <Compile Update="NumberTypes\PrimitiveCommon.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PrimitiveCommon.tt</DependentUpon>
+    </Compile>
+    <Compile Update="NumberTypes\SelfWrapperCommon.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SelfWrapperCommon.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,261 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using IS4.HyperNumerics.Operations;
+using System;
+using System.Collections.Generic;
+
+namespace IS4.HyperNumerics.NumberTypes
+{
+<#
+Func<string, string> emptyConstraints = fn => "";
+var data = new[] {
+	new{name = "HyperComplex", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "HyperDiagonal", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "HyperDual", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "HyperSplitComplex", args = "", hasinner = true, constraints = emptyConstraints},
+};
+foreach(var info in data)
+{
+	bool hasinner = info.hasinner;
+	for(int variant = 0; variant <= 1; variant++)
+	{
+		bool primitive = variant == 1;
+		string primitiveaffix = primitive ? ", TPrimitive" : "";
+		string fullname = info.name;
+		bool first = true;
+		if(hasinner)
+		{
+			fullname += "<TInner";
+			first = false;
+		}
+		if(primitive)
+		{
+			fullname += first ? "<" : ", ";
+			fullname += "TPrimitive";
+			first = false;
+		}
+		if(!String.IsNullOrEmpty(info.args))
+		{
+			fullname += first ? "<" : ", ";
+			fullname += info.args;
+			first = false;
+		}
+		if(!first)
+		{
+			fullname += ">";
+		}
+#>
+	partial struct <#=fullname#> : IHyperNumber<<#=fullname#>, TInner<#=primitiveaffix#>><#=
+	hasinner ? primitive ? " where TInner : struct, INumber<TInner, TPrimitive>" : " where TInner : struct, INumber<TInner>" : ""
+	#><#=
+	primitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
+	#><#=
+	info.constraints(fullname)
+	#>
+	{
+        readonly TInner first;
+        readonly TInner second;
+
+        public TInner First => first;
+        public TInner Second => second;
+
+        TInner IWrapperNumber<TInner>.Value => first;
+
+        int INumber.Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
+
+        public <#=info.name#>(in TInner first)
+        {
+            this.first = first;
+            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+        }
+
+        public <#=info.name#>(in TInner first, in TInner second)
+        {
+            this.first = first;
+            this.second = second;
+        }
+
+        public <#=info.name#>(in (TInner first, TInner second) tuple)
+        {
+            first = tuple.first;
+            second = tuple.second;
+        }
+
+        public void Deconstruct(out TInner first, out TInner second)
+        {
+            first = this.first;
+            second = this.second;
+        }
+
+        public <#=fullname#> Clone()
+        {
+            return new <#=fullname#>(first.Clone(), second.Clone());
+        }
+
+        public <#=fullname#> WithFirst(in TInner first)
+        {
+            return new <#=fullname#>(first, second);
+        }
+
+        public <#=fullname#> WithSecond(in TInner second)
+        {
+            return new <#=fullname#>(first, second);
+        }
+
+        public static implicit operator <#=fullname#>((TInner first, TInner second) tuple)
+        {
+            return new <#=fullname#>(tuple.first, tuple.second);
+        }
+
+        public static implicit operator (TInner first, TInner second)(<#=fullname#> value)
+        {
+            return (value.first, value.second);
+        }
+
+        public <#=fullname#> FirstCall(BinaryOperation operation, in TInner other)
+        {
+            return new <#=fullname#>(HyperMath.Call(operation, first, other), second);
+        }
+
+        public <#=fullname#> SecondCall(BinaryOperation operation, in TInner other)
+        {
+            return new <#=fullname#>(first, HyperMath.Call(operation, second, other));
+        }
+		<# if(primitive) { #>
+		
+        public <#=fullname#> FirstCall(BinaryOperation operation, TPrimitive other)
+        {
+            return new <#=fullname#>(HyperMath.CallPrimitive(operation, first, other), second);
+        }
+
+        public <#=fullname#> SecondCall(BinaryOperation operation, TPrimitive other)
+        {
+            return new <#=fullname#>(first, HyperMath.CallPrimitive(operation, second, other));
+        }
+		<# } #>
+
+        public <#=fullname#> FirstCall(UnaryOperation operation)
+        {
+            return new <#=fullname#>(HyperMath.Call(operation, first), second);
+        }
+
+        public <#=fullname#> SecondCall(UnaryOperation operation)
+        {
+            return new <#=fullname#>(first, HyperMath.Call(operation, second));
+        }
+
+        public bool Equals(in <#=fullname#> other)
+        {
+            return HyperMath.Equals(first, other.first) && HyperMath.Equals(second, other.second);
+        }
+
+        public int CompareTo(in <#=fullname#> other)
+        {
+            int value = HyperMath.Compare(first, other.first);
+            return value != 0 ? value : HyperMath.Compare(second, other.second);
+        }
+
+        public bool Equals(in TInner other)
+        {
+            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+        }
+
+        public int CompareTo(in TInner other)
+        {
+            int value = HyperMath.Compare(first, other);
+            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+        }
+
+        public override int GetHashCode()
+        {
+            return first.GetHashCode() * 17 + second.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return "<#=info.name.Substring(5)#>(" + first.ToString() + ", " + second.ToString() + ")";
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return "<#=info.name.Substring(5)#>(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
+        }
+
+        IHyperNumberOperations<<#=fullname#>, TInner> IHyperNumber<<#=fullname#>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }<# if(primitive) { #>
+		
+
+        IHyperNumberOperations<<#=fullname#>, TInner, TPrimitive> IHyperNumber<<#=fullname#>, TInner, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }<# } #>
+
+
+		partial class Operations : NumberOperations<<#=fullname#>>, IHyperNumberOperations<<#=fullname#>, TInner<#=primitiveaffix#>>
+		{
+            public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
+
+			public <#=fullname#> Call(NullaryOperation operation)
+            {
+                switch(operation)
+                {
+                    case NullaryOperation.Zero:
+                    {
+                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        return new <#=fullname#>(zero, zero);
+                    }
+                    case NullaryOperation.RealOne:
+                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                    case NullaryOperation.SpecialOne:
+                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.UnitsOne:
+                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.NonRealUnitsOne:
+                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                    case NullaryOperation.CombinedOne:
+                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                    case NullaryOperation.AllOne:
+                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            public <#=fullname#> Create(in TInner first, in TInner second)
+            {
+                return new <#=fullname#>(first, second);
+            }<# if(primitive) { #>
+		
+            public <#=fullname#> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            {
+                return new <#=fullname#>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+            }
+
+            public <#=fullname#> Create(IEnumerable<TPrimitive> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public <#=fullname#> Create(IEnumerator<TPrimitive> units)
+            {
+                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
+                return new <#=fullname#>(first, second);
+            }<# } #>
+
+		}
+	}
+
+<#
+	}
+}
+#>
+}

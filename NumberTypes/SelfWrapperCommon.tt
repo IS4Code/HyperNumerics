@@ -1,0 +1,91 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System;
+
+namespace IS4.HyperNumerics.NumberTypes
+{
+<#
+Func<string, string> emptyConstraints = fn => "";
+var data = new[] {
+	new{name = "BoxedNumber", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "CustomDefaultNumber", args = "TTraits", hasinner = true, constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
+	new{name = "GeneratedNumber", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "HyperComplex", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "HyperDiagonal", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "HyperDual", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "HyperSplitComplex", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "NullableNumber", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "NullNumber", args = "", hasinner = false, constraints = emptyConstraints},
+	new{name = "ProjectiveNumber", args = "", hasinner = true, constraints = emptyConstraints},
+};
+foreach(var info in data)
+{
+	bool hasinner = info.hasinner;
+	for(int variant = 0; variant <= 1; variant++)
+	{
+		bool primitive = variant == 1;
+		string primitiveaffix = primitive ? ", TPrimitive" : "";
+		string fullname = info.name;
+		bool first = true;
+		if(hasinner)
+		{
+			fullname += "<TInner";
+			first = false;
+		}
+		if(primitive)
+		{
+			fullname += first ? "<" : ", ";
+			fullname += "TPrimitive";
+			first = false;
+		}
+		if(!String.IsNullOrEmpty(info.args))
+		{
+			fullname += first ? "<" : ", ";
+			fullname += info.args;
+			first = false;
+		}
+		if(!first)
+		{
+			fullname += ">";
+		}
+#>
+	partial struct <#=fullname#> : IWrapperNumber<<#=fullname#>, <#=fullname#><#=primitiveaffix#>><#=
+	hasinner ? primitive ? " where TInner : struct, INumber<TInner, TPrimitive>" : " where TInner : struct, INumber<TInner>" : ""
+	#><#=
+	primitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
+	#><#=
+	info.constraints(fullname)
+	#>
+	{
+        <#=fullname#> IWrapperNumber<<#=fullname#>>.Value => this;
+		
+        IExtendedNumberOperations<<#=fullname#>, <#=fullname#>> IExtendedNumber<<#=fullname#>, <#=fullname#>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+		<# if(primitive) { #>
+
+		IExtendedNumberOperations<<#=fullname#>, <#=fullname#>, TPrimitive> IExtendedNumber<<#=fullname#>, <#=fullname#>, TPrimitive>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+		<# } #>
+
+		partial class Operations : IExtendedNumberOperations<<#=fullname#>, <#=fullname#><#=primitiveaffix#>>
+		{
+            public <#=fullname#> Create(in <#=fullname#> num)
+            {
+                return num;
+            }
+		}
+	}
+
+<#
+	}
+}
+#>
+}

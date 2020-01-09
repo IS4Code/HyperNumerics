@@ -17,15 +17,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// namely multiplication with zero, and addition and subtraction of infinities.
     /// </remarks>
     [Serializable]
-    public readonly struct ProjectiveNumber<TInner> : IWrapperNumber<ProjectiveNumber<TInner>, TInner>, IWrapperNumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>> where TInner : struct, INumber<TInner>
+    public readonly partial struct ProjectiveNumber<TInner> : IWrapperNumber<ProjectiveNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
         readonly TInner value;
 
         public TInner Value => value;
 
         TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
-
-        ProjectiveNumber<TInner> IWrapperNumber<ProjectiveNumber<TInner>>.Value => this;
 
         public bool IsInfinity { get; }
 
@@ -44,16 +42,6 @@ namespace IS4.HyperNumerics.NumberTypes
         public ProjectiveNumber<TInner> Clone()
         {
             return new ProjectiveNumber<TInner>(HyperMath.Clone(value), IsInfinity);
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-
-        public static implicit operator ProjectiveNumber<TInner>(TInner value)
-        {
-            return new ProjectiveNumber<TInner>(value);
         }
 
         public ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> other)
@@ -163,24 +151,24 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is ProjectiveNumber<TInner> value && Equals(in value);
         }
 
-        public bool Equals(ProjectiveNumber<TInner> other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in ProjectiveNumber<TInner> other)
         {
-            return HyperMath.Equals(value, other.value) && IsInfinity == other.IsInfinity;
-        }
-
-        public int CompareTo(ProjectiveNumber<TInner> other)
-        {
-            return CompareTo(in other);
+            return IsInfinity == other.IsInfinity && HyperMath.Equals(value, other.value);
         }
 
         public int CompareTo(in ProjectiveNumber<TInner> other)
         {
             return HyperMath.Compare(value, other.value);
+        }
+
+        public bool Equals(in TInner other)
+        {
+            return !IsInfinity && HyperMath.Equals(value, other);
+        }
+
+        public int CompareTo(in TInner other)
+        {
+            return HyperMath.Compare(value, other);
         }
 
         public override int GetHashCode()
@@ -198,135 +186,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return IsInfinity ? "Infinity(" + value.ToString(format, formatProvider) + ")" : value.ToString(format, formatProvider);
         }
 
-        public static bool operator==(in ProjectiveNumber<TInner> a, in ProjectiveNumber<TInner> b)
+        partial class Operations : NumberOperations<ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner>
         {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(in ProjectiveNumber<TInner> a, in ProjectiveNumber<TInner> b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(in ProjectiveNumber<TInner> a, in ProjectiveNumber<TInner> b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(in ProjectiveNumber<TInner> a, in ProjectiveNumber<TInner> b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(in ProjectiveNumber<TInner> a, in ProjectiveNumber<TInner> b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(in ProjectiveNumber<TInner> a, in ProjectiveNumber<TInner> b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<ProjectiveNumber<TInner>> INumber<ProjectiveNumber<TInner>>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner> IExtendedNumber<ProjectiveNumber<TInner>, TInner>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>> IExtendedNumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        class Operations : NumberOperations<ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner>, IExtendedNumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>
-        {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
-
-            public bool IsInvertible(in ProjectiveNumber<TInner> num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in ProjectiveNumber<TInner> num)
-            {
-                return num.IsFinite;
-            }
-
-            public ProjectiveNumber<TInner> Clone(in ProjectiveNumber<TInner> num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(ProjectiveNumber<TInner> num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in ProjectiveNumber<TInner> num)
-            {
-                return num.GetHashCode();
-            }
 
             public ProjectiveNumber<TInner> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
-            }
-
-            public ProjectiveNumber<TInner> Call(UnaryOperation operation, in ProjectiveNumber<TInner> num)
-            {
-                return num.Call(operation);
-            }
-
-            public ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in TInner num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public ProjectiveNumber<TInner> Create(in TInner num)
-            {
-                return new ProjectiveNumber<TInner>(num);
-            }
-
-            public ProjectiveNumber<TInner> Create(in ProjectiveNumber<TInner> num)
-            {
-                return num;
             }
         }
     }
@@ -342,15 +208,13 @@ namespace IS4.HyperNumerics.NumberTypes
     /// namely multiplication with zero, addition, and subtraction.
     /// </remarks>
     [Serializable]
-    public readonly struct ProjectiveNumber<TInner, TPrimitive> : IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>, IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly partial struct ProjectiveNumber<TInner, TPrimitive> : IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         readonly TInner value;
 
         public TInner Value => value;
 
         TInner IWrapperNumber<TInner>.Value => !IsInfinity ? value : throw new InvalidOperationException("The number is infinite.");
-
-        ProjectiveNumber<TInner, TPrimitive> IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>>.Value => this;
 
         public bool IsInfinity { get; }
 
@@ -369,16 +233,6 @@ namespace IS4.HyperNumerics.NumberTypes
         public ProjectiveNumber<TInner, TPrimitive> Clone()
         {
             return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Clone(value), IsInfinity);
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-
-        public static implicit operator ProjectiveNumber<TInner, TPrimitive>(TInner value)
-        {
-            return new ProjectiveNumber<TInner, TPrimitive>(value);
         }
 
         public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> other)
@@ -523,24 +377,24 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is ProjectiveNumber<TInner, TPrimitive> value && Equals(in value);
         }
 
-        public bool Equals(ProjectiveNumber<TInner, TPrimitive> other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in ProjectiveNumber<TInner, TPrimitive> other)
         {
-            return HyperMath.Equals(value, other.value) && IsInfinity == other.IsInfinity;
-        }
-
-        public int CompareTo(ProjectiveNumber<TInner, TPrimitive> other)
-        {
-            return CompareTo(in other);
+            return IsInfinity == other.IsInfinity && HyperMath.Equals(value, other.value);
         }
 
         public int CompareTo(in ProjectiveNumber<TInner, TPrimitive> other)
         {
             return HyperMath.Compare(value, other.value);
+        }
+
+        public bool Equals(in TInner other)
+        {
+            return !IsInfinity && HyperMath.Equals(value, other);
+        }
+
+        public int CompareTo(in TInner other)
+        {
+            return HyperMath.Compare(value, other);
         }
 
         public override int GetHashCode()
@@ -558,165 +412,18 @@ namespace IS4.HyperNumerics.NumberTypes
             return IsInfinity ? "Infinity(" + value.ToString(format, formatProvider) + ")" : value.ToString(format, formatProvider);
         }
 
-        public static bool operator==(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
+        partial class Operations : NumberOperations<ProjectiveNumber<TInner, TPrimitive>>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>
         {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(in ProjectiveNumber<TInner, TPrimitive> a, in ProjectiveNumber<TInner, TPrimitive> b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<ProjectiveNumber<TInner, TPrimitive>> INumber<ProjectiveNumber<TInner, TPrimitive>>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<ProjectiveNumber<TInner, TPrimitive>, TPrimitive> INumber<ProjectiveNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, TInner>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        class Operations : NumberOperations<ProjectiveNumber<TInner, TPrimitive>>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>
-        {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
-
-            public bool IsInvertible(in ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num.IsFinite;
-            }
-
-            public ProjectiveNumber<TInner, TPrimitive> Clone(in ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(ProjectiveNumber<TInner, TPrimitive> num1, ProjectiveNumber<TInner, TPrimitive> num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(ProjectiveNumber<TInner, TPrimitive> num1, ProjectiveNumber<TInner, TPrimitive> num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in ProjectiveNumber<TInner, TPrimitive> num1, in ProjectiveNumber<TInner, TPrimitive> num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in ProjectiveNumber<TInner, TPrimitive> num1, in ProjectiveNumber<TInner, TPrimitive> num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num.GetHashCode();
-            }
 
             public ProjectiveNumber<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Call(UnaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num.Call(operation);
-            }
-
-            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num1, in ProjectiveNumber<TInner, TPrimitive> num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num.Call(operation);
-            }
-
-            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num1, TPrimitive num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num1, in TInner num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
             public ProjectiveNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
-            }
-
-            public ProjectiveNumber<TInner, TPrimitive> Create(in TInner num)
-            {
-                return new ProjectiveNumber<TInner, TPrimitive>(num);
-            }
-
-            public ProjectiveNumber<TInner, TPrimitive> Create(in ProjectiveNumber<TInner, TPrimitive> num)
-            {
-                return num;
             }
 
             public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
