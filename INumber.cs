@@ -67,6 +67,15 @@ namespace IS4.HyperNumerics
         TNumber Call(BinaryOperation operation, in TNumber other);
 
         /// <summary>
+        /// Invokes a binary operation on <paramref name="other"/> and this number.
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="other">The first argument to the operation.</param>
+        /// <returns>The result of the operation.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber CallReversed(BinaryOperation operation, in TNumber other);
+
+        /// <summary>
         /// Retrieves an instance of <see cref="INumberOperation{TNumber}"/> providing the supported operations on this type.
         /// </summary>
         /// <returns>An instance of <see cref="INumberOperation{TNumber}"/> providing the operations of this type.</returns>
@@ -100,6 +109,15 @@ namespace IS4.HyperNumerics
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
         TNumber Call(BinaryOperation operation, TPrimitive other);
+
+        /// <summary>
+        /// Invokes a binary operation on <paramref name="other"/> and this number.
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="other">The second argument to the operation.</param>
+        /// <returns>The result of the operation.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber CallReversed(BinaryOperation operation, TPrimitive other);
 
         /// <summary>
         /// Retrieves an instance of <see cref="INumberOperation{TNumber, TPrimitive}"/> providing the supported operations on this type.

@@ -4,6 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
+using IS4.HyperNumerics.Operations;
 using System;
 
 namespace IS4.HyperNumerics.NumberTypes
@@ -11,21 +12,27 @@ namespace IS4.HyperNumerics.NumberTypes
 <#
 Func<string, string> emptyConstraints = fn => "";
 var data = new[] {
-	new{name = "BoxedNumber", args = "", hasinner = true, constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TTraits", hasinner = true, constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
-	new{name = "GeneratedNumber", args = "", hasinner = true, constraints = emptyConstraints},
-	new{name = "HyperComplex", args = "", hasinner = true, constraints = emptyConstraints},
-	new{name = "HyperDiagonal", args = "", hasinner = true, constraints = emptyConstraints},
-	new{name = "HyperDual", args = "", hasinner = true, constraints = emptyConstraints},
-	new{name = "HyperSplitComplex", args = "", hasinner = true, constraints = emptyConstraints},
-	new{name = "NullableNumber", args = "", hasinner = true, constraints = emptyConstraints},
-	new{name = "NullNumber", args = "", hasinner = false, constraints = emptyConstraints},
-	new{name = "ProjectiveNumber", args = "", hasinner = true, constraints = emptyConstraints},
+	new{name = "AbstractNumber", args = "", hasinner = false, hasprimitive = false, constraints = emptyConstraints},
+	new{name = "PrimitiveAbstractNumber", args = "", hasinner = false, hasprimitive = false, constraints = emptyConstraints},
+	new{name = "UnaryAbstractNumber", args = "", hasinner = false, hasprimitive = false, constraints = emptyConstraints},
+	new{name = "PrimitiveUnaryAbstractNumber", args = "", hasinner = false, hasprimitive = false, constraints = emptyConstraints},
+	new{name = "BinaryAbstractNumber", args = "", hasinner = false, hasprimitive = false, constraints = emptyConstraints},
+	new{name = "PrimitiveBinaryAbstractNumber", args = "", hasinner = false, hasprimitive = false, constraints = emptyConstraints},
+	new{name = "BoxedNumber", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "CustomDefaultNumber", args = "TTraits", hasinner = true, hasprimitive = true, constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
+	new{name = "GeneratedNumber", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "HyperComplex", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "HyperDiagonal", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "HyperDual", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "HyperSplitComplex", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "NullableNumber", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "NullNumber", args = "", hasinner = false, hasprimitive = true, constraints = emptyConstraints},
+	new{name = "ProjectiveNumber", args = "", hasinner = true, hasprimitive = true, constraints = emptyConstraints},
 };
 foreach(var info in data)
 {
 	bool hasinner = info.hasinner;
-	for(int variant = 0; variant <= 1; variant++)
+	for(int variant = 0; variant <= (info.hasprimitive ? 1 : 0); variant++)
 	{
 		bool primitive = variant == 1;
 		string primitiveaffix = primitive ? ", TPrimitive" : "";
@@ -62,18 +69,23 @@ foreach(var info in data)
 	#>
 	{
         <#=fullname#> IWrapperNumber<<#=fullname#>>.Value => this;
+
+		<#=fullname#> IExtendedNumber<<#=fullname#>, <#=fullname#>>.CallReversed(BinaryOperation operation, in <#=fullname#> num)
+		{
+			return num.Call(operation, this);
+		}
 		
         IExtendedNumberOperations<<#=fullname#>, <#=fullname#>> IExtendedNumber<<#=fullname#>, <#=fullname#>>.GetOperations()
         {
             return Operations.Instance;
-        }
-		<# if(primitive) { #>
+        }<# if(primitive) { #>
+
 
 		IExtendedNumberOperations<<#=fullname#>, <#=fullname#>, TPrimitive> IExtendedNumber<<#=fullname#>, <#=fullname#>, TPrimitive>.GetOperations()
         {
             return Operations.Instance;
-        }
-		<# } #>
+        }<# } #>
+
 
 		partial class Operations : IExtendedNumberOperations<<#=fullname#>, <#=fullname#><#=primitiveaffix#>>
 		{

@@ -105,6 +105,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
+        public NullNumber<TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            return default;
+        }
+
         public NullNumber<TPrimitive> Call(UnaryOperation operation)
         {
             return default;

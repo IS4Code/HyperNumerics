@@ -62,9 +62,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Call(operation, other);
         }
 
+        public BoxedNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            return Reference.CallReversed(operation, other);
+        }
+
         TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
         {
             return Reference.Call(operation, other);
+        }
+
+        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        {
+            return Reference.CallReversed(operation, other);
         }
 
         public BoxedNumber<TInner> Call(UnaryOperation operation)
@@ -206,9 +216,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Call(operation, other);
         }
 
+        public BoxedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            return Reference.CallReversed(operation, other);
+        }
+
         TInner INumber<TInner, TPrimitive>.Call(BinaryOperation operation, TPrimitive other)
         {
             return Reference.Call(operation, other);
+        }
+
+        TInner INumber<TInner, TPrimitive>.CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            return Reference.CallReversed(operation, other);
         }
 
         public BoxedNumber<TInner, TPrimitive> Call(UnaryOperation operation)
@@ -216,9 +236,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Call(operation);
         }
 
+        public BoxedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            return Reference.CallReversed(operation, other);
+        }
+
         TInner INumber<TInner>.Call(UnaryOperation operation)
         {
             return Reference.Call(operation);
+        }
+
+        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        {
+            return Reference.CallReversed(operation, other);
         }
 
         public TPrimitive Call(PrimitiveUnaryOperation operation)

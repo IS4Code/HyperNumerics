@@ -144,5 +144,15 @@ namespace IS4.HyperNumerics
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
         TNumber Call(BinaryOperation operation, in TNumber num1, TPrimitive num2);
+
+        /// <summary>
+        /// Invokes a binary operation for the number type.
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="num1">The first argument of the operation.</param>
+        /// <param name="num2">The second argument of the operation.</param>
+        /// <returns>The result of the operation.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber Call(BinaryOperation operation, TPrimitive num1, in TNumber num2);
     }
 }

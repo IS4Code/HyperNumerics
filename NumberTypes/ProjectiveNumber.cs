@@ -106,7 +106,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 default:
                     throw new NotSupportedException();
             }
-            
+        }
+
+        public ProjectiveNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(!IsInfinity)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new ProjectiveNumber<TInner>(value, true);
+                case BinaryOperation.Subtract:
+                    return new ProjectiveNumber<TInner>(HyperMath.Neg(value), true);
+                case BinaryOperation.Multiply:
+                    return new ProjectiveNumber<TInner>(HyperMath.Div(value, other), true);
+                case BinaryOperation.Divide:
+                    return new ProjectiveNumber<TInner>(HyperMath.Mul(value, other));
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
         public ProjectiveNumber<TInner> Call(UnaryOperation operation)
@@ -299,6 +319,27 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public ProjectiveNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(!IsInfinity)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                case BinaryOperation.Subtract:
+                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Neg(value), true);
+                case BinaryOperation.Multiply:
+                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div(value, other), true);
+                case BinaryOperation.Divide:
+                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Mul(other, value));
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public ProjectiveNumber<TInner, TPrimitive> Call(UnaryOperation operation)
         {
             if(!IsInfinity)
@@ -358,6 +399,27 @@ namespace IS4.HyperNumerics.NumberTypes
                     return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.MulVal(value, other), true);
                 case BinaryOperation.Power:
                     return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.PowVal(value, other), true);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public ProjectiveNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            if(!IsInfinity)
+            {
+                return HyperMath.CallPrimitiveReversed(operation, other, value);
+            }
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                case BinaryOperation.Subtract:
+                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Neg(value), true);
+                case BinaryOperation.Multiply:
+                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.DivVal(value, other), true);
+                case BinaryOperation.Divide:
+                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.MulVal(value, other));
                 default:
                     throw new NotSupportedException();
             }

@@ -58,44 +58,22 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public ExtendedReal Call(BinaryOperation operation, in ExtendedReal other)
         {
-            switch(operation)
-            {
-                case BinaryOperation.Add:
-                    return Value + other.Value;
-                case BinaryOperation.Subtract:
-                    return Value - other.Value;
-                case BinaryOperation.Multiply:
-                    return Value * other.Value;
-                case BinaryOperation.Divide:
-                    return Value / other.Value;
-                case BinaryOperation.Power:
-                    return Math.Pow(Value, other.Value);
-                case BinaryOperation.Atan2:
-                    return Math.Atan2(Value, other.Value);
-                default:
-                    throw new NotSupportedException();
-            }
+            return Call(operation, other.Value);
+        }
+
+        public ExtendedReal CallReversed(BinaryOperation operation, in ExtendedReal other)
+        {
+            return CallReversed(operation, other.Value);
         }
 
         public ExtendedReal Call(BinaryOperation operation, in Real other)
         {
-            switch(operation)
-            {
-                case BinaryOperation.Add:
-                    return Value + other.Value;
-                case BinaryOperation.Subtract:
-                    return Value - other.Value;
-                case BinaryOperation.Multiply:
-                    return Value * other.Value;
-                case BinaryOperation.Divide:
-                    return Value / other.Value;
-                case BinaryOperation.Power:
-                    return Math.Pow(Value, other.Value);
-                case BinaryOperation.Atan2:
-                    return Math.Atan2(Value, other.Value);
-                default:
-                    throw new NotSupportedException();
-            }
+            return Call(operation, other.Value);
+        }
+
+        public ExtendedReal CallReversed(BinaryOperation operation, in Real other)
+        {
+            return CallReversed(operation, other.Value);
         }
 
         public ExtendedReal Call(BinaryOperation operation, double other)
@@ -119,30 +97,45 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public ExtendedReal Call(BinaryOperation operation, float other)
+        public ExtendedReal CallReversed(BinaryOperation operation, double other)
         {
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return Value + other;
+                    return other + Value;
                 case BinaryOperation.Subtract:
-                    return Value - other;
+                    return other - Value;
                 case BinaryOperation.Multiply:
-                    return Value * other;
+                    return other * Value;
                 case BinaryOperation.Divide:
-                    return Value / other;
+                    return other / Value;
                 case BinaryOperation.Power:
-                    return Math.Pow(Value, other);
+                    return Math.Pow(other, Value);
                 case BinaryOperation.Atan2:
-                    return Math.Atan2(Value, other);
+                    return Math.Atan2(other, Value);
                 default:
                     throw new NotSupportedException();
             }
         }
 
+        public ExtendedReal Call(BinaryOperation operation, float other)
+        {
+            return Call(operation, (double)other);
+        }
+
+        public ExtendedReal CallReversed(BinaryOperation operation, float other)
+        {
+            return CallReversed(operation, (double)other);
+        }
+
         ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, ExtendedReal other)
         {
-            return Call(operation, in other);
+            return Call(operation, other);
+        }
+
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallReversed(BinaryOperation operation, ExtendedReal other)
+        {
+            return CallReversed(operation, other);
         }
 
         public ExtendedReal Call(UnaryOperation operation)
@@ -453,6 +446,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public ExtendedReal Call(BinaryOperation operation, in Real num1, in ExtendedReal num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }
+
             public double Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
@@ -473,12 +471,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
+            public ExtendedReal Call(BinaryOperation operation, double num1, in ExtendedReal num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }
+
             public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, float num2)
             {
                 return num1.Call(operation, num2);
             }
 
+            public ExtendedReal Call(BinaryOperation operation, float num1, in ExtendedReal num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }
+
             ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, in ExtendedReal num1, ExtendedReal num2)
+            {
+                return Call(operation, num1, num2);
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, ExtendedReal num1, in ExtendedReal num2)
             {
                 return Call(operation, num1, num2);
             }

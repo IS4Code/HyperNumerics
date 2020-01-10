@@ -14,13 +14,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// of that type by calling <see cref="INumberOperation.Invoke{TNumber}"/> on the operation.
     /// </summary>
     [Serializable]
-    public readonly struct AbstractNumber : IWrapperNumber<AbstractNumber, AbstractNumber>, INumberOperation, IDynamicMetaObjectProvider
+    public readonly partial struct AbstractNumber : INumber<AbstractNumber>, INumberOperation, IDynamicMetaObjectProvider
     {
         private readonly INumberOperation operation;
 
         public INumberOperation Operation => operation ?? HyperMath.Operations.Default;
-
-        AbstractNumber IWrapperNumber<AbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -44,11 +42,6 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new AbstractNumber((INumberOperation)cloneable.Clone());
             }
             return this;
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
         }
 
         public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
@@ -76,19 +69,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is AbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(AbstractNumber other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in AbstractNumber other)
         {
             return Operation.Equals(other.Operation);
-        }
-
-        public int CompareTo(AbstractNumber other)
-        {
-            return 0;
         }
 
         public int CompareTo(in AbstractNumber other)
@@ -111,120 +94,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static bool operator==(AbstractNumber a, AbstractNumber b)
+        partial class Operations : NumberOperations<AbstractNumber>, INumberOperations<AbstractNumber>
         {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(AbstractNumber a, AbstractNumber b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(AbstractNumber a, AbstractNumber b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(AbstractNumber a, AbstractNumber b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(AbstractNumber a, AbstractNumber b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(AbstractNumber a, AbstractNumber b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<AbstractNumber> INumber<AbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<AbstractNumber, AbstractNumber> IExtendedNumber<AbstractNumber, AbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        class Operations : NumberOperations<AbstractNumber>, IExtendedNumberOperations<AbstractNumber, AbstractNumber>
-        {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => -1;
-
-            public bool IsInvertible(in AbstractNumber num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in AbstractNumber num)
-            {
-                return num.IsFinite;
-            }
-
-            public AbstractNumber Clone(in AbstractNumber num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(AbstractNumber num1, AbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(AbstractNumber num1, AbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in AbstractNumber num1, in AbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in AbstractNumber num1, in AbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(AbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in AbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
 
             public AbstractNumber Call(NullaryOperation operation)
             {
                 return new AbstractNumber(HyperMath.Operations.GetOperation(operation));
-            }
-
-            public AbstractNumber Call(UnaryOperation operation, in AbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public AbstractNumber Call(BinaryOperation operation, in AbstractNumber num1, in AbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public AbstractNumber Create(in AbstractNumber num)
-            {
-                return num;
             }
         }
 
@@ -266,13 +142,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// of that type by calling <see cref="IPrimitiveNumberOperation.Invoke{TNumber, TPrimitive}"/> on the operation.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveAbstractNumber : IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
+    public readonly partial struct PrimitiveAbstractNumber : IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
     {
         private readonly IPrimitiveNumberOperation operation;
 
         public IPrimitiveNumberOperation Operation => operation ?? HyperMath.Operations.Default;
-
-        PrimitiveAbstractNumber IWrapperNumber<PrimitiveAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -298,11 +172,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return this;
         }
 
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-
         public static implicit operator PrimitiveAbstractNumber(AbstractNumber num)
         {
             return new PrimitiveAbstractNumber(num.Operation);
@@ -323,6 +192,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Call(operation, other);
         }
 
+        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.CallReversed(BinaryOperation operation, PrimitiveAbstractNumber other)
+        {
+            return CallReversed(operation, other);
+        }
+
         public PrimitiveAbstractNumber Call(UnaryOperation operation)
         {
             return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
@@ -338,19 +212,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is PrimitiveAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(PrimitiveAbstractNumber other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in PrimitiveAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
-        }
-
-        public int CompareTo(PrimitiveAbstractNumber other)
-        {
-            return 0;
         }
 
         public int CompareTo(in PrimitiveAbstractNumber other)
@@ -373,140 +237,18 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static bool operator==(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(PrimitiveAbstractNumber a, PrimitiveAbstractNumber b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
         IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber> IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveAbstractNumber>, IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>
+        partial class Operations : NumberOperations<PrimitiveAbstractNumber>, IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>
         {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => -1;
-
-            public bool IsInvertible(in PrimitiveAbstractNumber num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in PrimitiveAbstractNumber num)
-            {
-                return num.IsFinite;
-            }
-
-            public PrimitiveAbstractNumber Clone(in PrimitiveAbstractNumber num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(PrimitiveAbstractNumber num1, PrimitiveAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(PrimitiveAbstractNumber num1, PrimitiveAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(PrimitiveAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in PrimitiveAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
 
             public PrimitiveAbstractNumber Call(NullaryOperation operation)
             {
                 return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation));
-            }
-
-            public PrimitiveAbstractNumber Call(UnaryOperation operation, in PrimitiveAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveAbstractNumber Call(BinaryOperation operation, in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            PrimitiveAbstractNumber INumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.Call(BinaryOperation operation, in PrimitiveAbstractNumber num1, PrimitiveAbstractNumber num2)
-            {
-                return Call(operation, num1, num2);
-            }
-
-            public PrimitiveAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveAbstractNumber Create(in PrimitiveAbstractNumber num)
-            {
-                return num;
             }
 
             public PrimitiveAbstractNumber Create(PrimitiveAbstractNumber realUnit, PrimitiveAbstractNumber otherUnits, PrimitiveAbstractNumber someUnitsCombined, PrimitiveAbstractNumber allUnitsCombined)
@@ -634,13 +376,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with a single variable.
     /// </summary>
     [Serializable]
-    public readonly struct UnaryAbstractNumber : IWrapperNumber<UnaryAbstractNumber, UnaryAbstractNumber>, IUnaryNumberOperation
+    public readonly partial struct UnaryAbstractNumber : IWrapperNumber<UnaryAbstractNumber, UnaryAbstractNumber>, IUnaryNumberOperation
     {
         private readonly IUnaryNumberOperation operation;
 
         public IUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
-
-        UnaryAbstractNumber IWrapperNumber<UnaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -664,11 +404,6 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new UnaryAbstractNumber((IUnaryNumberOperation)cloneable.Clone());
             }
             return this;
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
         }
 
         public static implicit operator UnaryAbstractNumber(AbstractNumber num)
@@ -701,19 +436,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is UnaryAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(UnaryAbstractNumber other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in UnaryAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
-        }
-
-        public int CompareTo(UnaryAbstractNumber other)
-        {
-            return 0;
         }
 
         public int CompareTo(in UnaryAbstractNumber other)
@@ -736,120 +461,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static bool operator==(UnaryAbstractNumber a, UnaryAbstractNumber b)
+        partial class Operations : NumberOperations<UnaryAbstractNumber>, IExtendedNumberOperations<UnaryAbstractNumber, UnaryAbstractNumber>
         {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(UnaryAbstractNumber a, UnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<UnaryAbstractNumber> INumber<UnaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<UnaryAbstractNumber, UnaryAbstractNumber> IExtendedNumber<UnaryAbstractNumber, UnaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        class Operations : NumberOperations<UnaryAbstractNumber>, IExtendedNumberOperations<UnaryAbstractNumber, UnaryAbstractNumber>
-        {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => -1;
-
-            public bool IsInvertible(in UnaryAbstractNumber num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in UnaryAbstractNumber num)
-            {
-                return num.IsFinite;
-            }
-
-            public UnaryAbstractNumber Clone(in UnaryAbstractNumber num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(UnaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in UnaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
 
             public UnaryAbstractNumber Call(NullaryOperation operation)
             {
                 return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
-            }
-
-            public UnaryAbstractNumber Call(UnaryOperation operation, in UnaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public UnaryAbstractNumber Create(in UnaryAbstractNumber num)
-            {
-                return num;
             }
         }
     }
@@ -859,13 +477,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with a single variable.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveUnaryAbstractNumber : IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
+    public readonly partial struct PrimitiveUnaryAbstractNumber : IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
     {
         private readonly IPrimitiveUnaryNumberOperation operation;
 
         public IPrimitiveUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
-
-        PrimitiveUnaryAbstractNumber IWrapperNumber<PrimitiveUnaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -889,11 +505,6 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new PrimitiveUnaryAbstractNumber((IPrimitiveUnaryNumberOperation)cloneable.Clone());
             }
             return this;
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
         }
 
         public static implicit operator PrimitiveUnaryAbstractNumber(AbstractNumber num)
@@ -926,6 +537,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Call(operation, other);
         }
 
+        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.CallReversed(BinaryOperation operation, PrimitiveUnaryAbstractNumber other)
+        {
+            return CallReversed(operation, other);
+        }
+
         public PrimitiveUnaryAbstractNumber Call(UnaryOperation operation)
         {
             return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
@@ -941,19 +557,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is PrimitiveUnaryAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(PrimitiveUnaryAbstractNumber other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in PrimitiveUnaryAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
-        }
-
-        public int CompareTo(PrimitiveUnaryAbstractNumber other)
-        {
-            return 0;
         }
 
         public int CompareTo(in PrimitiveUnaryAbstractNumber other)
@@ -976,140 +582,18 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static bool operator==(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(PrimitiveUnaryAbstractNumber a, PrimitiveUnaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
         IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
+        partial class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
         {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => -1;
-
-            public bool IsInvertible(in PrimitiveUnaryAbstractNumber num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in PrimitiveUnaryAbstractNumber num)
-            {
-                return num.IsFinite;
-            }
-
-            public PrimitiveUnaryAbstractNumber Clone(in PrimitiveUnaryAbstractNumber num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(PrimitiveUnaryAbstractNumber num1, PrimitiveUnaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(PrimitiveUnaryAbstractNumber num1, PrimitiveUnaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(PrimitiveUnaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in PrimitiveUnaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
 
             public PrimitiveUnaryAbstractNumber Call(NullaryOperation operation)
             {
                 return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
-            }
-
-            public PrimitiveUnaryAbstractNumber Call(UnaryOperation operation, in PrimitiveUnaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveUnaryAbstractNumber Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            PrimitiveUnaryAbstractNumber INumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber num1, PrimitiveUnaryAbstractNumber num2)
-            {
-                return Call(operation, num1, num2);
-            }
-
-            public PrimitiveUnaryAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveUnaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveUnaryAbstractNumber Create(in PrimitiveUnaryAbstractNumber num)
-            {
-                return num;
             }
 
             public PrimitiveUnaryAbstractNumber Create(PrimitiveUnaryAbstractNumber realUnit, PrimitiveUnaryAbstractNumber otherUnits, PrimitiveUnaryAbstractNumber someUnitsCombined, PrimitiveUnaryAbstractNumber allUnitsCombined)
@@ -1206,13 +690,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with two variables.
     /// </summary>
     [Serializable]
-    public readonly struct BinaryAbstractNumber : IWrapperNumber<BinaryAbstractNumber, BinaryAbstractNumber>, IBinaryNumberOperation
+    public readonly partial struct BinaryAbstractNumber : IWrapperNumber<BinaryAbstractNumber, BinaryAbstractNumber>, IBinaryNumberOperation
     {
         private readonly IBinaryNumberOperation operation;
 
         public IBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
-
-        BinaryAbstractNumber IWrapperNumber<BinaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -1236,11 +718,6 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new BinaryAbstractNumber((IBinaryNumberOperation)cloneable.Clone());
             }
             return this;
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
         }
 
         public static implicit operator BinaryAbstractNumber(AbstractNumber num)
@@ -1278,19 +755,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is BinaryAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(BinaryAbstractNumber other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in BinaryAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
-        }
-
-        public int CompareTo(BinaryAbstractNumber other)
-        {
-            return 0;
         }
 
         public int CompareTo(in BinaryAbstractNumber other)
@@ -1313,120 +780,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static bool operator==(BinaryAbstractNumber a, BinaryAbstractNumber b)
+        partial class Operations : NumberOperations<BinaryAbstractNumber>, IExtendedNumberOperations<BinaryAbstractNumber, BinaryAbstractNumber>
         {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(BinaryAbstractNumber a, BinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<BinaryAbstractNumber> INumber<BinaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<BinaryAbstractNumber, BinaryAbstractNumber> IExtendedNumber<BinaryAbstractNumber, BinaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        class Operations : NumberOperations<BinaryAbstractNumber>, IExtendedNumberOperations<BinaryAbstractNumber, BinaryAbstractNumber>
-        {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => -1;
-
-            public bool IsInvertible(in BinaryAbstractNumber num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in BinaryAbstractNumber num)
-            {
-                return num.IsFinite;
-            }
-
-            public BinaryAbstractNumber Clone(in BinaryAbstractNumber num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(BinaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in BinaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
 
             public BinaryAbstractNumber Call(NullaryOperation operation)
             {
                 return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
-            }
-
-            public BinaryAbstractNumber Call(UnaryOperation operation, in BinaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public BinaryAbstractNumber Create(in BinaryAbstractNumber num)
-            {
-                return num;
             }
         }
     }
@@ -1436,13 +796,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// with two variables.
     /// </summary>
     [Serializable]
-    public readonly struct PrimitiveBinaryAbstractNumber : IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
+    public readonly partial struct PrimitiveBinaryAbstractNumber : IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
     {
         private readonly IPrimitiveBinaryNumberOperation operation;
 
         public IPrimitiveBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
-
-        PrimitiveBinaryAbstractNumber IWrapperNumber<PrimitiveBinaryAbstractNumber>.Value => this;
 
         public bool IsInvertible => true;
 
@@ -1466,11 +824,6 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new PrimitiveBinaryAbstractNumber((IPrimitiveBinaryNumberOperation)cloneable.Clone());
             }
             return this;
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
         }
 
         public static implicit operator PrimitiveBinaryAbstractNumber(AbstractNumber num)
@@ -1513,6 +866,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Call(operation, other);
         }
 
+        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.CallReversed(BinaryOperation operation, PrimitiveBinaryAbstractNumber other)
+        {
+            return CallReversed(operation, other);
+        }
+
         public PrimitiveBinaryAbstractNumber Call(UnaryOperation operation)
         {
             return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
@@ -1528,19 +886,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return obj is PrimitiveBinaryAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(PrimitiveBinaryAbstractNumber other)
-        {
-            return Equals(in other);
-        }
-
         public bool Equals(in PrimitiveBinaryAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
-        }
-
-        public int CompareTo(PrimitiveBinaryAbstractNumber other)
-        {
-            return 0;
         }
 
         public int CompareTo(in PrimitiveBinaryAbstractNumber other)
@@ -1563,140 +911,18 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        public static bool operator==(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(PrimitiveBinaryAbstractNumber a, PrimitiveBinaryAbstractNumber b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
         IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
+        partial class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
         {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => -1;
-
-            public bool IsInvertible(in PrimitiveBinaryAbstractNumber num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in PrimitiveBinaryAbstractNumber num)
-            {
-                return num.IsFinite;
-            }
-
-            public PrimitiveBinaryAbstractNumber Clone(in PrimitiveBinaryAbstractNumber num)
-            {
-                return num.Clone();
-            }
-
-            public bool Equals(PrimitiveBinaryAbstractNumber num1, PrimitiveBinaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(PrimitiveBinaryAbstractNumber num1, PrimitiveBinaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(PrimitiveBinaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in PrimitiveBinaryAbstractNumber num)
-            {
-                return num.GetHashCode();
-            }
 
             public PrimitiveBinaryAbstractNumber Call(NullaryOperation operation)
             {
                 return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
-            }
-
-            public PrimitiveBinaryAbstractNumber Call(UnaryOperation operation, in PrimitiveBinaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            PrimitiveBinaryAbstractNumber INumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num1, PrimitiveBinaryAbstractNumber num2)
-            {
-                return Call(operation, num1, num2);
-            }
-
-            public PrimitiveBinaryAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveBinaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveBinaryAbstractNumber Create(in PrimitiveBinaryAbstractNumber num)
-            {
-                return num;
             }
 
             public PrimitiveBinaryAbstractNumber Create(PrimitiveBinaryAbstractNumber realUnit, PrimitiveBinaryAbstractNumber otherUnits, PrimitiveBinaryAbstractNumber someUnitsCombined, PrimitiveBinaryAbstractNumber allUnitsCombined)

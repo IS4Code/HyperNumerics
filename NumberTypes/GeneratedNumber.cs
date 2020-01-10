@@ -78,6 +78,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen(), value));
         }
 
+        public GeneratedNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            var gen = Generator;
+            var value = other;
+            return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, value, gen()));
+        }
+
         public GeneratedNumber<TInner> Call(UnaryOperation operation)
         {
             var gen = Generator;
@@ -198,10 +205,23 @@ namespace IS4.HyperNumerics.NumberTypes
             return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen(), value));
         }
 
+        public GeneratedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            var gen = Generator;
+            var value = other;
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, value, gen()));
+        }
+
         public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             var gen = Generator;
             return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitive(operation, gen(), other));
+        }
+
+        public GeneratedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            var gen = Generator;
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitiveReversed(operation, other, gen()));
         }
 
         public GeneratedNumber<TInner, TPrimitive> Call(UnaryOperation operation)

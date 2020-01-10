@@ -64,6 +64,28 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperDiagonal<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperDiagonal<TInner>(Div(other, first), Div(Neg(Div(Mul(other, second), first)), Add(first, second)));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperDiagonal<TInner> Call(UnaryOperation operation)
         {
             switch(operation)
@@ -157,6 +179,28 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperDiagonal<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner, TPrimitive>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner, TPrimitive>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner, TPrimitive>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperDiagonal<TInner, TPrimitive>(Div(other, first), Div(Neg(Div(Mul(other, second), first)), Add(first, second)));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             switch(operation)
@@ -174,6 +218,28 @@ namespace IS4.HyperNumerics.NumberTypes
                     return new HyperDiagonal<TInner, TPrimitive>(first, Sub(PowVal(Add(this.first, second), other), first));
                 case BinaryOperation.Atan2:
                     return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public HyperDiagonal<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDiagonal<TInner, TPrimitive>(AddValRev(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperDiagonal<TInner, TPrimitive>(SubValRev(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperDiagonal<TInner, TPrimitive>(MulValRev(other, first), MulValRev(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperDiagonal<TInner, TPrimitive>(DivValRev(other, first), Div(Neg(Div(MulValRev(other, second), first)), Add(first, second)));
+                case BinaryOperation.Power:
+                    return PowDefault(Operations.Instance.Create(other, default, default, default), this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(Operations.Instance.Create(other, default, default, default), this);
                 default:
                     throw new NotSupportedException();
             }

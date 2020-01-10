@@ -78,6 +78,28 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperComplex<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperComplex<TInner>(Div(Mul(other, first), denom), Div(Neg(Mul(other, second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperComplex<TInner> Call(UnaryOperation operation)
         {
             switch(operation)
@@ -227,6 +249,28 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperComplex<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner, TPrimitive>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner, TPrimitive>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner, TPrimitive>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperComplex<TInner, TPrimitive>(Div(Mul(other, first), denom), Div(Neg(Mul(other, second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             switch(operation)
@@ -245,6 +289,28 @@ namespace IS4.HyperNumerics.NumberTypes
                     return new HyperComplex<TInner, TPrimitive>(Mul(Cos(arg), mag), Mul(Sin(arg), mag));
                 case BinaryOperation.Atan2:
                     return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public HyperComplex<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperComplex<TInner, TPrimitive>(AddValRev(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperComplex<TInner, TPrimitive>(SubValRev(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperComplex<TInner, TPrimitive>(MulValRev(other, first), MulValRev(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Add(Pow2(first), Pow2(second));
+                    return new HyperComplex<TInner, TPrimitive>(Div(MulValRev(other, first), denom), Div(Neg(MulValRev(other, second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(Operations.Instance.Create(other, default, default, default), this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(Operations.Instance.Create(other, default, default, default), this);
                 default:
                     throw new NotSupportedException();
             }

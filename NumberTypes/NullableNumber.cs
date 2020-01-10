@@ -73,6 +73,15 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
+        public NullableNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(hasValue)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            return default;
+        }
+
         public NullableNumber<TInner> Call(UnaryOperation operation)
         {
             if(hasValue)
@@ -223,11 +232,29 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
+        public NullableNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(hasValue)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            return default;
+        }
+
         public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             if(hasValue)
             {
                 return HyperMath.CallPrimitive<TInner, TPrimitive>(operation, value, other);
+            }
+            return default;
+        }
+
+        public NullableNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            if(hasValue)
+            {
+                return HyperMath.CallPrimitiveReversed(operation, other, value);
             }
             return default;
         }

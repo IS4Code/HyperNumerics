@@ -67,6 +67,31 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperDual<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDual<TInner>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperDual<TInner>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperDual<TInner>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    if(!CanInv(other) && !CanInv(first))
+                    {
+                        return Div(HyperMath.Operations.For<TInner>.Instance.Call(NullaryOperation.Zero), second);
+                    }
+                    return new HyperDual<TInner>(Div(other, first), Div(Neg(Mul(other, second)), Pow2(first)));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperDual<TInner> Call(UnaryOperation operation)
         {
             switch(operation)
@@ -188,6 +213,31 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperDual<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDual<TInner, TPrimitive>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperDual<TInner, TPrimitive>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperDual<TInner, TPrimitive>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    if(!CanInv(other) && !CanInv(first))
+                    {
+                        return Div(HyperMath.Operations.For<TInner>.Instance.Call(NullaryOperation.Zero), second);
+                    }
+                    return new HyperDual<TInner, TPrimitive>(Div(other, first), Div(Neg(Mul(other, second)), Pow2(first)));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             switch(operation)
@@ -205,6 +255,32 @@ namespace IS4.HyperNumerics.NumberTypes
                     return new HyperDual<TInner, TPrimitive>(PowVal(first, other), Mul(MulVal(PowVal(first, exp), other), second));
                 case BinaryOperation.Atan2:
                     return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public HyperDual<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperDual<TInner, TPrimitive>(AddValRev(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperDual<TInner, TPrimitive>(SubValRev(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperDual<TInner, TPrimitive>(MulValRev(other, first), MulValRev(other, second));
+                case BinaryOperation.Divide:
+                    bool caninv = other is INumber num ? num.IsInvertible : !other.Equals(default);
+                    if(!caninv && !CanInv(first))
+                    {
+                        return Div(HyperMath.Operations.For<TInner>.Instance.Call(NullaryOperation.Zero), second);
+                    }
+                    return new HyperDual<TInner, TPrimitive>(DivValRev(other, first), Div(Neg(MulValRev(other, second)), Pow2(first)));
+                case BinaryOperation.Power:
+                    return PowDefault(Operations.Instance.Create(other, default, default, default), this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(Operations.Instance.Create(other, default, default, default), this);
                 default:
                     throw new NotSupportedException();
             }

@@ -79,6 +79,15 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
+        public CustomDefaultNumber<TInner, TTraits> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(initialized)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            return defaultValue.CallReversed(operation, other);
+        }
+
         TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
         {
             if(initialized)
@@ -86,6 +95,15 @@ namespace IS4.HyperNumerics.NumberTypes
                 return HyperMath.Call(operation, value, other);
             }
             return defaultValue.Call(operation, other);
+        }
+
+        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(initialized)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            return defaultValue.CallReversed(operation, other);
         }
 
         public CustomDefaultNumber<TInner, TTraits> Call(UnaryOperation operation)
@@ -286,6 +304,15 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
+        public CustomDefaultNumber<TInner, TPrimitive, TTraits> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(initialized)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            return defaultValue.CallReversed(operation, other);
+        }
+
         TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
         {
             if(initialized)
@@ -293,6 +320,15 @@ namespace IS4.HyperNumerics.NumberTypes
                 return HyperMath.Call(operation, value, other);
             }
             return defaultValue.Call(operation, other);
+        }
+
+        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        {
+            if(initialized)
+            {
+                return HyperMath.Call(operation, other, value);
+            }
+            return defaultValue.CallReversed(operation, other);
         }
 
         public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, TPrimitive other)
@@ -304,6 +340,15 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
+        public CustomDefaultNumber<TInner, TPrimitive, TTraits> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            if(initialized)
+            {
+                return HyperMath.CallPrimitiveReversed(operation, other, value);
+            }
+            return defaultValue.CallReversed(operation, other);
+        }
+
         TInner INumber<TInner, TPrimitive>.Call(BinaryOperation operation, TPrimitive other)
         {
             if(initialized)
@@ -311,6 +356,15 @@ namespace IS4.HyperNumerics.NumberTypes
                 return HyperMath.CallPrimitive(operation, value, other);
             }
             return defaultValue.Call(operation, other);
+        }
+
+        TInner INumber<TInner, TPrimitive>.CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            if(initialized)
+            {
+                return HyperMath.CallPrimitiveReversed(operation, other, value);
+            }
+            return defaultValue.CallReversed(operation, other);
         }
 
         public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(UnaryOperation operation)

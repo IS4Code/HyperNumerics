@@ -27,6 +27,15 @@ namespace IS4.HyperNumerics
         TNumber Call(BinaryOperation operation, in TInner other);
 
         /// <summary>
+        /// Invokes a binary operation on <paramref name="other"/> and this number.
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="other">The first argument to the operation.</param>
+        /// <returns>The result of the operation.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber CallReversed(BinaryOperation operation, in TInner other);
+
+        /// <summary>
         /// Retrieves an instance of <see cref="IExtendedNumberOperations{TNumber, TInner}"/> providing the supported operations on this type.
         /// </summary>
         /// <returns>An instance of <see cref="IExtendedNumberOperations{TNumber, TInner}"/> providing the operations of this type.</returns>

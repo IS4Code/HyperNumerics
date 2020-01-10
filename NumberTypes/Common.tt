@@ -13,24 +13,32 @@ namespace IS4.HyperNumerics.NumberTypes
 <#
 Func<string, string> emptyConstraints = fn => "";
 var data = new[] {
-	new{name = "BoxedNumber", args = "", level = 3, constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TTraits", level = 3, constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
-	new{name = "GeneratedNumber", args = "", level = 1, constraints = emptyConstraints},
-	new{name = "HyperComplex", args = "", level = 2, constraints = emptyConstraints},
-	new{name = "HyperDiagonal", args = "", level = 2, constraints = emptyConstraints},
-	new{name = "HyperDual", args = "", level = 2, constraints = emptyConstraints},
-	new{name = "HyperSplitComplex", args = "", level = 2, constraints = emptyConstraints},
-	new{name = "NullableNumber", args = "", level = 2, constraints = emptyConstraints},
-	new{name = "NullNumber", args = "", level = 0, constraints = emptyConstraints},
-	new{name = "ProjectiveNumber", args = "", level = 2, constraints = emptyConstraints},
+	new{name = "AbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
+	new{name = "PrimitiveAbstractNumber", args = "", level = 0, primitivetype = "PrimitiveAbstractNumber", constraints = emptyConstraints},
+	new{name = "UnaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
+	new{name = "PrimitiveUnaryAbstractNumber", args = "", level = 0, primitivetype = "PrimitiveUnaryAbstractNumber", constraints = emptyConstraints},
+	new{name = "BinaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
+	new{name = "PrimitiveBinaryAbstractNumber", args = "", level = 0, primitivetype = "PrimitiveBinaryAbstractNumber", constraints = emptyConstraints},
+	new{name = "BoxedNumber", args = "", level = 3, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "CustomDefaultNumber", args = "TTraits", level = 3, primitivetype = "TPrimitive", constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
+	new{name = "GeneratedNumber", args = "", level = 1, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "HyperComplex", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "HyperDiagonal", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "HyperDual", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "HyperSplitComplex", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "NullableNumber", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "NullNumber", args = "", level = 0, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "ProjectiveNumber", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
 };
 foreach(var info in data)
 {
 	var level = info.level;
-	for(int variant = 0; variant <= 1; variant++)
+	var primitivetype = info.primitivetype;
+	bool hasprimitive = primitivetype == "TPrimitive";
+	for(int variant = 0; variant <= (hasprimitive ? 1 : 0); variant++)
 	{
-		bool primitive = variant == 1;
-		string primitiveaffix = primitive ? ", TPrimitive" : "";
+		bool primitive = variant == 1 || (info.primitivetype != "" && !hasprimitive);
+		string primitiveaffix = primitive && hasprimitive ? ", TPrimitive" : "";
 		string fullname = info.name;
 		bool first = true;
 		if(level >= 1)
@@ -38,7 +46,7 @@ foreach(var info in data)
 			fullname += "<TInner";
 			first = false;
 		}
-		if(primitive)
+		if(primitive && hasprimitive)
 		{
 			fullname += first ? "<" : ", ";
 			fullname += "TPrimitive";
@@ -60,7 +68,7 @@ foreach(var info in data)
 	#><#=
 	level >= 1 ? primitive ? " where TInner : struct, INumber<TInner, TPrimitive>" : " where TInner : struct, INumber<TInner>" : ""
 	#><#=
-	primitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
+	primitive && hasprimitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
 	#><#=
 	info.constraints(fullname)
 	#>
@@ -70,25 +78,30 @@ foreach(var info in data)
             return Clone();
         }
 
+        public <#=fullname#> CallReversed(BinaryOperation operation, in <#=fullname#> other)
+        {
+            return other.Call(operation, this);
+        }
+
         bool IEquatable<<#=fullname#>>.Equals(<#=fullname#> other)
         {
-            return Equals(in other);
+            return Equals(other);
         }
 
         int IComparable<<#=fullname#>>.CompareTo(<#=fullname#> other)
         {
-            return CompareTo(in other);
+            return CompareTo(other);
         }<# if(level >= 2) { #>
 
 
         bool IEquatable<TInner>.Equals(TInner other)
         {
-            return Equals(in other);
+            return Equals(other);
         }
 
         int IComparable<TInner>.CompareTo(TInner other)
         {
-            return CompareTo(in other);
+            return CompareTo(other);
         }
 
         public static implicit operator <#=fullname#>(TInner value)
@@ -161,33 +174,146 @@ foreach(var info in data)
 
         public static bool operator==(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.Equals(in b);
+            return a.Equals(b);
         }
 
         public static bool operator!=(<#=fullname#> a, <#=fullname#> b)
         {
-            return !a.Equals(in b);
+            return !a.Equals(b);
         }
 
         public static bool operator>(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.CompareTo(in b) > 0;
+            return a.CompareTo(b) > 0;
         }
 
         public static bool operator<(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.CompareTo(in b) < 0;
+            return a.CompareTo(b) < 0;
         }
 
         public static bool operator>=(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.CompareTo(in b) >= 0;
+            return a.CompareTo(b) >= 0;
         }
 
         public static bool operator<=(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.CompareTo(in b) <= 0;
+            return a.CompareTo(b) <= 0;
+        }<# if(level >= 1) { #>
+		
+
+        public static <#=fullname#> operator+(<#=fullname#> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Add, b);
         }
+		
+        public static <#=fullname#> operator-(<#=fullname#> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Subtract, b);
+        }
+		
+        public static <#=fullname#> operator*(<#=fullname#> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Multiply, b);
+        }
+		
+        public static <#=fullname#> operator/(<#=fullname#> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Divide, b);
+        }
+		
+        public static <#=fullname#> operator^(<#=fullname#> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Power, b);
+        }
+
+        public static <#=fullname#> operator+(TInner a, <#=fullname#> b)
+        {
+            return b.CallReversed(BinaryOperation.Add, a);
+        }
+		
+        public static <#=fullname#> operator-(TInner a, <#=fullname#> b)
+        {
+            return b.CallReversed(BinaryOperation.Subtract, a);
+        }
+		
+        public static <#=fullname#> operator*(TInner a, <#=fullname#> b)
+        {
+            return b.CallReversed(BinaryOperation.Multiply, a);
+        }
+		
+        public static <#=fullname#> operator/(TInner a, <#=fullname#> b)
+        {
+            return b.CallReversed(BinaryOperation.Divide, a);
+        }
+		
+        public static <#=fullname#> operator^(TInner a, <#=fullname#> b)
+        {
+            return b.CallReversed(BinaryOperation.Power, a);
+        }<# } #><# if(level >= 2) { #>
+		
+
+        public static bool operator==(<#=fullname#> a, TInner b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(<#=fullname#> a, TInner b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(<#=fullname#> a, TInner b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(<#=fullname#> a, TInner b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(<#=fullname#> a, TInner b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(<#=fullname#> a, TInner b)
+        {
+            return a.CompareTo(b) <= 0;
+        }
+
+        public static bool operator==(TInner a, <#=fullname#> b)
+        {
+            return b.Equals(a);
+        }
+
+        public static bool operator!=(TInner a, <#=fullname#> b)
+        {
+            return !b.Equals(a);
+        }
+
+        public static bool operator>(TInner a, <#=fullname#> b)
+        {
+            return b.CompareTo(a) < 0;
+        }
+
+        public static bool operator<(TInner a, <#=fullname#> b)
+        {
+            return b.CompareTo(a) > 0;
+        }
+
+        public static bool operator>=(TInner a, <#=fullname#> b)
+        {
+            return b.CompareTo(a) <= 0;
+        }
+
+        public static bool operator<=(TInner a, <#=fullname#> b)
+        {
+            return b.CompareTo(a) >= 0;
+        }<# } #>
+
 
         INumberOperations INumber.GetOperations()
         {
@@ -200,7 +326,7 @@ foreach(var info in data)
         }<# if(primitive) { #>
 		
 
-        INumberOperations<<#=fullname#>, TPrimitive> INumber<<#=fullname#>, TPrimitive>.GetOperations()
+        INumberOperations<<#=fullname#>, <#=primitivetype#>> INumber<<#=fullname#>, <#=primitivetype#>>.GetOperations()
         {
             return Operations.Instance;
         }<# } #><# if(level >= 1) { #>
@@ -212,7 +338,7 @@ foreach(var info in data)
         }<# if(primitive) { #>
 		
 
-        IExtendedNumberOperations<<#=fullname#>, TInner, TPrimitive> IExtendedNumber<<#=fullname#>, TInner, TPrimitive>.GetOperations()
+        IExtendedNumberOperations<<#=fullname#>, TInner, <#=primitivetype#>> IExtendedNumber<<#=fullname#>, TInner, TPrimitive>.GetOperations()
         {
             return Operations.Instance;
         }<# } #><# } #><# if(level >= 3) { #>
@@ -224,9 +350,9 @@ foreach(var info in data)
         }<# if(primitive) { #>
 		
 
-        INumberOperations<TInner, TPrimitive> INumber<TInner, TPrimitive>.GetOperations()
+        INumberOperations<TInner, <#=primitivetype#>> INumber<TInner, <#=primitivetype#>>.GetOperations()
         {
-            return HyperMath.Operations.For<TInner, TPrimitive>.Instance;
+            return HyperMath.Operations.For<TInner, <#=primitivetype#>>.Instance;
         }<# } #><# } #>
 
 
@@ -251,22 +377,22 @@ foreach(var info in data)
 
             public bool Equals(<#=fullname#> num1, <#=fullname#> num2)
             {
-                return num1.Equals(in num2);
+                return num1.Equals(num2);
             }
 
             public int Compare(<#=fullname#> num1, <#=fullname#> num2)
             {
-                return num1.CompareTo(in num2);
+                return num1.CompareTo(num2);
             }
 
             public bool Equals(in <#=fullname#> num1, in <#=fullname#> num2)
             {
-                return num1.Equals(in num2);
+                return num1.Equals(num2);
             }
 
             public int Compare(in <#=fullname#> num1, in <#=fullname#> num2)
             {
-                return num1.CompareTo(in num2);
+                return num1.CompareTo(num2);
             }
 
             public int GetHashCode(<#=fullname#> num)
@@ -293,23 +419,33 @@ foreach(var info in data)
             public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public <#=fullname#> Call(BinaryOperation operation, in TInner num1, in <#=fullname#> num2)
+            {
+                return num2.CallReversed(operation, num1);
             }<# } #><# if(primitive) { #>
 
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in <#=fullname#> num)
+            public <#=primitivetype#> Call(PrimitiveUnaryOperation operation, in <#=fullname#> num)
             {
                 return num.Call(operation);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, TPrimitive num2)
+            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, <#=primitivetype#> num2)
             {
                 return num1.Call(operation, num2);
+            }
+
+            public <#=fullname#> Call(BinaryOperation operation, <#=primitivetype#> num1, in <#=fullname#> num2)
+            {
+                return num2.CallReversed(operation, num1);
             }<# } #><# if(level >= 1) { #>
 
 
             public <#=fullname#> Create(in TInner num)
             {
-                return new <#=fullname#>(in num);
+                return new <#=fullname#>(num);
             }<# } #>
 
 		}

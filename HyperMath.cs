@@ -124,6 +124,31 @@ namespace IS4.HyperNumerics
             return CallPrimitive(BinaryOperation.Power, x, y);
         }
 
+        public static TNumber AddValRev<TNumber, TPrimitive>(TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitiveReversed(BinaryOperation.Add, x, y);
+        }
+
+        public static TNumber SubValRev<TNumber, TPrimitive>(TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitiveReversed(BinaryOperation.Subtract, x, y);
+        }
+
+        public static TNumber MulValRev<TNumber, TPrimitive>(TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitiveReversed(BinaryOperation.Multiply, x, y);
+        }
+
+        public static TNumber DivValRev<TNumber, TPrimitive>(TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitiveReversed(BinaryOperation.Divide, x, y);
+        }
+
+        public static TNumber PowValRev<TNumber, TPrimitive>(TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return CallPrimitiveReversed(BinaryOperation.Power, x, y);
+        }
+
         public static TNumber Neg<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
             return Call(UnaryOperation.Negate, num);
@@ -305,6 +330,11 @@ namespace IS4.HyperNumerics
         }
 
         public static TNumber CallPrimitive<TNumber, TPrimitive>(BinaryOperation operation, in TNumber num1, TPrimitive num2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        {
+            return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num1, num2);
+        }
+
+        public static TNumber CallPrimitiveReversed<TNumber, TPrimitive>(BinaryOperation operation, TPrimitive num1, in TNumber num2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
         {
             return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num1, num2);
         }

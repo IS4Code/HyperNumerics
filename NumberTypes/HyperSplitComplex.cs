@@ -64,6 +64,28 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperSplitComplex<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperSplitComplex<TInner>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperSplitComplex<TInner>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperSplitComplex<TInner>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Sub(Pow2(first), Pow2(second));
+                    return new HyperSplitComplex<TInner>(Div(Mul(other, first), denom), Div(Neg(Mul(other, second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperSplitComplex<TInner> Call(UnaryOperation operation)
         {
             switch(operation)
@@ -184,6 +206,28 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public HyperSplitComplex<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperSplitComplex<TInner, TPrimitive>(Add(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperSplitComplex<TInner, TPrimitive>(Sub(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperSplitComplex<TInner, TPrimitive>(Mul(other, first), Mul(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Sub(Pow2(first), Pow2(second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Div(Mul(other, first), denom), Div(Neg(Mul(other, second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(other, this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(other, this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
         {
             switch(operation)
@@ -204,7 +248,29 @@ namespace IS4.HyperNumerics.NumberTypes
                     throw new NotSupportedException();
             }
         }
-        
+
+        public HyperSplitComplex<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        {
+            switch(operation)
+            {
+                case BinaryOperation.Add:
+                    return new HyperSplitComplex<TInner, TPrimitive>(AddValRev(other, first), second);
+                case BinaryOperation.Subtract:
+                    return new HyperSplitComplex<TInner, TPrimitive>(SubValRev(other, first), Neg(second));
+                case BinaryOperation.Multiply:
+                    return new HyperSplitComplex<TInner, TPrimitive>(MulValRev(other, first), MulValRev(other, second));
+                case BinaryOperation.Divide:
+                    var denom = Sub(Pow2(first), Pow2(second));
+                    return new HyperSplitComplex<TInner, TPrimitive>(Div(MulValRev(other, first), denom), Div(Neg(MulValRev(other, second)), denom));
+                case BinaryOperation.Power:
+                    return PowDefault(Operations.Instance.Create(other, default, default, default), this);
+                case BinaryOperation.Atan2:
+                    return Atan2Default(Operations.Instance.Create(other, default, default, default), this);
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public HyperSplitComplex<TInner, TPrimitive> Call(UnaryOperation operation)
         {
             switch(operation)
