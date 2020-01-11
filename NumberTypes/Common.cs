@@ -1741,12 +1741,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> num1, TPrimitive num2)
+            public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in BoxedNumber<TInner, TPrimitive> num2)
+            public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in BoxedNumber<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -2427,12 +2427,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, TPrimitive num2)
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, TPrimitive num1, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num2)
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in TPrimitive num1, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -2928,12 +2928,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num1, TPrimitive num2)
+            public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in GeneratedNumber<TInner, TPrimitive> num2)
+            public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in GeneratedNumber<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -3599,12 +3599,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> num1, TPrimitive num2)
+            public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in HyperComplex<TInner, TPrimitive> num2)
+            public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in HyperComplex<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -4270,12 +4270,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num1, TPrimitive num2)
+            public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in HyperDiagonal<TInner, TPrimitive> num2)
+            public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in HyperDiagonal<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -4941,12 +4941,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDual<TInner, TPrimitive> num1, TPrimitive num2)
+            public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDual<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in HyperDual<TInner, TPrimitive> num2)
+            public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in HyperDual<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -5612,12 +5612,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num1, TPrimitive num2)
+            public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in HyperSplitComplex<TInner, TPrimitive> num2)
+            public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in HyperSplitComplex<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -6283,12 +6283,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in NullableNumber<TInner, TPrimitive> num1, TPrimitive num2)
+            public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in NullableNumber<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in NullableNumber<TInner, TPrimitive> num2)
+            public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in NullableNumber<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -6644,12 +6644,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public NullNumber<TPrimitive> Call(BinaryOperation operation, in NullNumber<TPrimitive> num1, TPrimitive num2)
+            public NullNumber<TPrimitive> Call(BinaryOperation operation, in NullNumber<TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullNumber<TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in NullNumber<TPrimitive> num2)
+            public NullNumber<TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in NullNumber<TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -7310,12 +7310,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num1, TPrimitive num2)
+            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num1, in TPrimitive num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive num1, in ProjectiveNumber<TInner, TPrimitive> num2)
+            public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive num1, in ProjectiveNumber<TInner, TPrimitive> num2)
             {
                 return num2.CallReversed(operation, num1);
             }

@@ -235,12 +235,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
+        public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
-        public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
+        public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperComplex<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
         }
@@ -336,7 +336,7 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new HyperComplex<TInner, TPrimitive>(first, second);
             }		
-            public HyperComplex<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public HyperComplex<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
@@ -588,12 +588,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDiagonal<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperDiagonal<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
+        public HyperDiagonal<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperDiagonal<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
+        public HyperDiagonal<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperDiagonal<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
         }
@@ -689,7 +689,7 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new HyperDiagonal<TInner, TPrimitive>(first, second);
             }		
-            public HyperDiagonal<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public HyperDiagonal<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
@@ -941,12 +941,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDual<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperDual<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
+        public HyperDual<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperDual<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
-        public HyperDual<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
+        public HyperDual<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperDual<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
         }
@@ -1042,7 +1042,7 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new HyperDual<TInner, TPrimitive>(first, second);
             }		
-            public HyperDual<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public HyperDual<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperDual<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
@@ -1294,12 +1294,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperSplitComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, TPrimitive other)
+        public HyperSplitComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, TPrimitive other)
+        public HyperSplitComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
         {
             return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
         }
@@ -1395,7 +1395,7 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new HyperSplitComplex<TInner, TPrimitive>(first, second);
             }		
-            public HyperSplitComplex<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public HyperSplitComplex<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }

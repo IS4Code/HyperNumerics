@@ -377,7 +377,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
+        public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
         {
             if(!IsInfinity)
             {
@@ -404,7 +404,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        public ProjectiveNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             if(!IsInfinity)
             {
@@ -483,7 +483,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public ProjectiveNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }

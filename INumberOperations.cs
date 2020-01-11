@@ -110,7 +110,7 @@ namespace IS4.HyperNumerics
         /// <param name="someUnitsCombined">Any combination of non-real units.</param>
         /// <param name="allUnitsCombined">The combination of all units.</param>
         /// <returns>A new instance with the specified units.</returns>
-        TNumber Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined);
+        TNumber Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined);
 
         /// <summary>
         /// Creates a new instance of <typeparamref name="TNumber"/> from its primitive components.
@@ -143,7 +143,7 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TNumber num1, TPrimitive num2);
+        TNumber Call(BinaryOperation operation, in TNumber num1, in TPrimitive num2);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -153,6 +153,6 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, TPrimitive num1, in TNumber num2);
+        TNumber Call(BinaryOperation operation, in TPrimitive num1, in TNumber num2);
     }
 }

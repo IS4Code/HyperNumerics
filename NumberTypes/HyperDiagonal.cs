@@ -201,7 +201,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
+        public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
         {
             switch(operation)
             {
@@ -223,7 +223,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public HyperDiagonal<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        public HyperDiagonal<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             switch(operation)
             {

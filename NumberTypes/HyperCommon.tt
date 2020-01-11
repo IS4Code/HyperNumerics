@@ -127,12 +127,12 @@ foreach(var info in data)
         }
 		<# if(primitive) { #>
 		
-        public <#=fullname#> FirstCall(BinaryOperation operation, TPrimitive other)
+        public <#=fullname#> FirstCall(BinaryOperation operation, in TPrimitive other)
         {
             return new <#=fullname#>(HyperMath.CallPrimitive(operation, first, other), second);
         }
 
-        public <#=fullname#> SecondCall(BinaryOperation operation, TPrimitive other)
+        public <#=fullname#> SecondCall(BinaryOperation operation, in TPrimitive other)
         {
             return new <#=fullname#>(first, HyperMath.CallPrimitive(operation, second, other));
         }
@@ -232,7 +232,7 @@ foreach(var info in data)
                 return new <#=fullname#>(first, second);
             }<# if(primitive) { #>
 		
-            public <#=fullname#> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public <#=fullname#> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new <#=fullname#>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }

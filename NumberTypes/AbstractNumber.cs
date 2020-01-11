@@ -187,16 +187,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.Call(BinaryOperation operation, PrimitiveAbstractNumber other)
-        {
-            return Call(operation, other);
-        }
-
-        PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.CallReversed(BinaryOperation operation, PrimitiveAbstractNumber other)
-        {
-            return CallReversed(operation, other);
-        }
-
         public PrimitiveAbstractNumber Call(UnaryOperation operation)
         {
             return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
@@ -251,7 +241,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation));
             }
 
-            public PrimitiveAbstractNumber Create(PrimitiveAbstractNumber realUnit, PrimitiveAbstractNumber otherUnits, PrimitiveAbstractNumber someUnitsCombined, PrimitiveAbstractNumber allUnitsCombined)
+            public PrimitiveAbstractNumber Create(in PrimitiveAbstractNumber realUnit, in PrimitiveAbstractNumber otherUnits, in PrimitiveAbstractNumber someUnitsCombined, in PrimitiveAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
@@ -532,16 +522,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.Call(BinaryOperation operation, PrimitiveUnaryAbstractNumber other)
-        {
-            return Call(operation, other);
-        }
-
-        PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.CallReversed(BinaryOperation operation, PrimitiveUnaryAbstractNumber other)
-        {
-            return CallReversed(operation, other);
-        }
-
         public PrimitiveUnaryAbstractNumber Call(UnaryOperation operation)
         {
             return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
@@ -596,7 +576,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
             }
 
-            public PrimitiveUnaryAbstractNumber Create(PrimitiveUnaryAbstractNumber realUnit, PrimitiveUnaryAbstractNumber otherUnits, PrimitiveUnaryAbstractNumber someUnitsCombined, PrimitiveUnaryAbstractNumber allUnitsCombined)
+            public PrimitiveUnaryAbstractNumber Create(in PrimitiveUnaryAbstractNumber realUnit, in PrimitiveUnaryAbstractNumber otherUnits, in PrimitiveUnaryAbstractNumber someUnitsCombined, in PrimitiveUnaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
@@ -861,16 +841,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.Call(BinaryOperation operation, PrimitiveBinaryAbstractNumber other)
-        {
-            return Call(operation, other);
-        }
-
-        PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.CallReversed(BinaryOperation operation, PrimitiveBinaryAbstractNumber other)
-        {
-            return CallReversed(operation, other);
-        }
-
         public PrimitiveBinaryAbstractNumber Call(UnaryOperation operation)
         {
             return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
@@ -925,7 +895,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
             }
 
-            public PrimitiveBinaryAbstractNumber Create(PrimitiveBinaryAbstractNumber realUnit, PrimitiveBinaryAbstractNumber otherUnits, PrimitiveBinaryAbstractNumber someUnitsCombined, PrimitiveBinaryAbstractNumber allUnitsCombined)
+            public PrimitiveBinaryAbstractNumber Create(in PrimitiveBinaryAbstractNumber realUnit, in PrimitiveBinaryAbstractNumber otherUnits, in PrimitiveBinaryAbstractNumber someUnitsCombined, in PrimitiveBinaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }

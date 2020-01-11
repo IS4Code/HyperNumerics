@@ -100,12 +100,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullNumber<TPrimitive> Call(BinaryOperation operation, TPrimitive other)
+        public NullNumber<TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        public NullNumber<TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             return default;
         }
@@ -159,7 +159,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 return default;
             }
 
-            public NullNumber<TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public NullNumber<TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return default;
             }

@@ -76,7 +76,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return CallReversed(operation, other.Value);
         }
 
-        public ExtendedReal Call(BinaryOperation operation, double other)
+        public ExtendedReal Call(BinaryOperation operation, in double other)
         {
             switch(operation)
             {
@@ -97,7 +97,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public ExtendedReal CallReversed(BinaryOperation operation, double other)
+        public ExtendedReal CallReversed(BinaryOperation operation, in double other)
         {
             switch(operation)
             {
@@ -118,22 +118,22 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public ExtendedReal Call(BinaryOperation operation, float other)
+        public ExtendedReal Call(BinaryOperation operation, in float other)
         {
             return Call(operation, (double)other);
         }
 
-        public ExtendedReal CallReversed(BinaryOperation operation, float other)
+        public ExtendedReal CallReversed(BinaryOperation operation, in float other)
         {
             return CallReversed(operation, (double)other);
         }
 
-        ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, ExtendedReal other)
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, in ExtendedReal other)
         {
             return Call(operation, other);
         }
 
-        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallReversed(BinaryOperation operation, ExtendedReal other)
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallReversed(BinaryOperation operation, in ExtendedReal other)
         {
             return CallReversed(operation, other);
         }
@@ -466,47 +466,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new ExtendedReal(num.Call(operation));
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, double num2)
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in double num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, double num1, in ExtendedReal num2)
+            public ExtendedReal Call(BinaryOperation operation, in double num1, in ExtendedReal num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, float num2)
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in float num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, float num1, in ExtendedReal num2)
+            public ExtendedReal Call(BinaryOperation operation, in float num1, in ExtendedReal num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, in ExtendedReal num1, ExtendedReal num2)
-            {
-                return Call(operation, num1, num2);
-            }
-
-            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, ExtendedReal num1, in ExtendedReal num2)
-            {
-                return Call(operation, num1, num2);
-            }
-
-            public ExtendedReal Create(double realUnit, double otherUnits, double someUnitsCombined, double allUnitsCombined)
+            public ExtendedReal Create(in double realUnit, in double otherUnits, in double someUnitsCombined, in double allUnitsCombined)
             {
                 return new ExtendedReal(realUnit);
             }
 
-            public ExtendedReal Create(float realUnit, float otherUnits, float someUnitsCombined, float allUnitsCombined)
+            public ExtendedReal Create(in float realUnit, in float otherUnits, in float someUnitsCombined, in float allUnitsCombined)
             {
                 return new ExtendedReal(realUnit);
             }
 
-            public ExtendedReal Create(ExtendedReal realUnit, ExtendedReal otherUnits, ExtendedReal someUnitsCombined, ExtendedReal allUnitsCombined)
+            public ExtendedReal Create(in ExtendedReal realUnit, in ExtendedReal otherUnits, in ExtendedReal someUnitsCombined, in ExtendedReal allUnitsCombined)
             {
                 return realUnit;
             }

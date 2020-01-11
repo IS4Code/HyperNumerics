@@ -331,7 +331,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, TPrimitive other)
+        public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in TPrimitive other)
         {
             if(initialized)
             {
@@ -340,7 +340,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> CallReversed(BinaryOperation operation, TPrimitive other)
+        public CustomDefaultNumber<TInner, TPrimitive, TTraits> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             if(initialized)
             {
@@ -349,7 +349,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner, TPrimitive>.Call(BinaryOperation operation, TPrimitive other)
+        TInner INumber<TInner, TPrimitive>.Call(BinaryOperation operation, in TPrimitive other)
         {
             if(initialized)
             {
@@ -358,7 +358,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        TInner INumber<TInner, TPrimitive>.CallReversed(BinaryOperation operation, TPrimitive other)
+        TInner INumber<TInner, TPrimitive>.CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             if(initialized)
             {
@@ -487,7 +487,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }

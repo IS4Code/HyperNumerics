@@ -212,16 +212,18 @@ namespace IS4.HyperNumerics.NumberTypes
             return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, value, gen()));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
+        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
         {
             var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitive(operation, gen(), other));
+            var value = other;
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitive(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        public GeneratedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitiveReversed(operation, other, gen()));
+            var value = other;
+            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitiveReversed(operation, value, gen()));
         }
 
         public GeneratedNumber<TInner, TPrimitive> Call(UnaryOperation operation)
@@ -274,9 +276,13 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(operation));
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public GeneratedNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
-                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined));
+                var realUnitCopy = realUnit;
+                var otherUnitsCopy = otherUnits;
+                var someUnitsCombinedCopy = someUnitsCombined;
+                var allUnitsCombinedCopy = allUnitsCombined;
+                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Create<TInner, TPrimitive>(realUnitCopy, otherUnitsCopy, someUnitsCombinedCopy, allUnitsCombinedCopy));
             }
 
             public GeneratedNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)

@@ -228,7 +228,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
+        public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
         {
             switch(operation)
             {
@@ -249,7 +249,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        public HyperSplitComplex<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             switch(operation)
             {

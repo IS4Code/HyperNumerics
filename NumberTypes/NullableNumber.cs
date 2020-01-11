@@ -241,7 +241,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
+        public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
         {
             if(hasValue)
             {
@@ -250,7 +250,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        public NullableNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             if(hasValue)
             {
@@ -346,7 +346,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(TPrimitive realUnit, TPrimitive otherUnits, TPrimitive someUnitsCombined, TPrimitive allUnitsCombined)
+            public NullableNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }

@@ -238,7 +238,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, TPrimitive other)
+        public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
         {
             switch(operation)
             {
@@ -260,7 +260,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public HyperDual<TInner, TPrimitive> CallReversed(BinaryOperation operation, TPrimitive other)
+        public HyperDual<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
         {
             switch(operation)
             {
