@@ -9,7 +9,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Represents an extended real number, with its value stored as a <see cref="System.Double"/>, allowing for infinities and NaNs.
     /// </summary>
     [Serializable]
-    public readonly struct ExtendedReal : ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, ISimpleNumber<ExtendedReal, ExtendedReal>, IWrapperNumber<ExtendedReal, ExtendedReal, double>, IWrapperNumber<ExtendedReal, ExtendedReal, float>, IWrapperNumber<ExtendedReal, ExtendedReal, ExtendedReal>, IExtendedNumber<ExtendedReal, Real, double>, IExtendedNumber<ExtendedReal, Real, float>
+    public readonly partial struct ExtendedReal : ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, ISimpleNumber<ExtendedReal, ExtendedReal>, IWrapperNumber<ExtendedReal, ExtendedReal, double>, IWrapperNumber<ExtendedReal, ExtendedReal, float>, IWrapperNumber<ExtendedReal, ExtendedReal, ExtendedReal>, IExtendedNumber<ExtendedReal, Real, double>, IExtendedNumber<ExtendedReal, Real, float>
     {
         public static readonly ExtendedReal Zero = new ExtendedReal(0.0);
         public static readonly ExtendedReal One = new ExtendedReal(1.0);
@@ -46,12 +46,7 @@ namespace IS4.HyperNumerics.NumberTypes
             Value = (float)value;
         }
 
-        ExtendedReal INumber<ExtendedReal>.Clone()
-        {
-            return this;
-        }
-
-        object ICloneable.Clone()
+        public ExtendedReal Clone()
         {
             return this;
         }
@@ -59,11 +54,6 @@ namespace IS4.HyperNumerics.NumberTypes
         public ExtendedReal Call(BinaryOperation operation, in ExtendedReal other)
         {
             return Call(operation, other.Value);
-        }
-
-        public ExtendedReal CallReversed(BinaryOperation operation, in ExtendedReal other)
-        {
-            return CallReversed(operation, other.Value);
         }
 
         public ExtendedReal Call(BinaryOperation operation, in Real other)
@@ -266,46 +256,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return (float)value.Value;
         }
 
-        public static bool operator==(ExtendedReal a, ExtendedReal b)
-        {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(ExtendedReal a, ExtendedReal b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(ExtendedReal a, ExtendedReal b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(ExtendedReal a, ExtendedReal b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(ExtendedReal a, ExtendedReal b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(ExtendedReal a, ExtendedReal b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<ExtendedReal> INumber<ExtendedReal>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
         INumberOperations<ExtendedReal, double> INumber<ExtendedReal, double>.GetOperations()
         {
             return Operations.Instance;
@@ -356,56 +306,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<ExtendedReal>, IExtendedNumberOperations<ExtendedReal, Real, double>, IExtendedNumberOperations<ExtendedReal, Real, float>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, double>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, float>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, ExtendedReal>
+        partial class Operations : NumberOperations<ExtendedReal>, IExtendedNumberOperations<ExtendedReal, Real, double>, IExtendedNumberOperations<ExtendedReal, Real, float>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, double>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, float>, IExtendedNumberOperations<ExtendedReal, ExtendedReal, ExtendedReal>
         {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => 0;
-
-            public bool IsInvertible(in ExtendedReal num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in ExtendedReal num)
-            {
-                return num.IsFinite;
-            }
-
-            public ExtendedReal Clone(in ExtendedReal num)
-            {
-                return num;
-            }
-
-            public bool Equals(ExtendedReal num1, ExtendedReal num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(ExtendedReal num1, ExtendedReal num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in ExtendedReal num1, in ExtendedReal num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(ExtendedReal num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in ExtendedReal num)
-            {
-                return num.GetHashCode();
-            }
 
             public ExtendedReal Call(NullaryOperation operation)
             {
@@ -423,16 +326,6 @@ namespace IS4.HyperNumerics.NumberTypes
                     default:
                         throw new NotSupportedException();
                 }
-            }
-
-            public ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
-            {
-                return num.Call(operation);
-            }
-
-            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
-            {
-                return num1.Call(operation, num2);
             }
 
             public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in Real num2)

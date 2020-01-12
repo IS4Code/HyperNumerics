@@ -12,7 +12,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Not all possible values of <see cref="System.Double"/> are allowed, namely infinites and NaNs.
     /// </remarks>
     [Serializable]
-    public readonly struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, ISimpleNumber<Real, Real>, IWrapperNumber<Real, Real, double>, IWrapperNumber<Real, Real, float>, IWrapperNumber<Real, Real, Real>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, ISimpleNumber<ExtendedReal, ExtendedReal>
+    public readonly partial struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, ISimpleNumber<Real, Real>, IWrapperNumber<Real, Real, double>, IWrapperNumber<Real, Real, float>, IWrapperNumber<Real, Real, Real>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, ISimpleNumber<ExtendedReal, ExtendedReal>
     {
         public static readonly Real Zero = new Real(0.0);
         public static readonly Real One = new Real(1.0);
@@ -61,7 +61,7 @@ namespace IS4.HyperNumerics.NumberTypes
             Value = value;
         }
 
-        Real INumber<Real>.Clone()
+        public Real Clone()
         {
             return this;
         }
@@ -71,19 +71,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return new ExtendedReal(Value);
         }
 
-        object ICloneable.Clone()
-        {
-            return this;
-        }
-
         public Real Call(BinaryOperation operation, in Real other)
         {
             return Call(operation, other.Value);
-        }
-
-        public Real CallReversed(BinaryOperation operation, in Real other)
-        {
-            return CallReversed(operation, other.Value);
         }
 
         public ExtendedReal Call(BinaryOperation operation, in ExtendedReal other)
@@ -346,46 +336,6 @@ namespace IS4.HyperNumerics.NumberTypes
             return (float)value.Value;
         }
 
-        public static bool operator==(Real a, Real b)
-        {
-            return a.Equals(in b);
-        }
-
-        public static bool operator!=(Real a, Real b)
-        {
-            return !a.Equals(in b);
-        }
-
-        public static bool operator>(Real a, Real b)
-        {
-            return a.CompareTo(in b) > 0;
-        }
-
-        public static bool operator<(Real a, Real b)
-        {
-            return a.CompareTo(in b) < 0;
-        }
-
-        public static bool operator>=(Real a, Real b)
-        {
-            return a.CompareTo(in b) >= 0;
-        }
-
-        public static bool operator<=(Real a, Real b)
-        {
-            return a.CompareTo(in b) <= 0;
-        }
-
-        INumberOperations INumber.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
-        INumberOperations<Real> INumber<Real>.GetOperations()
-        {
-            return Operations.Instance;
-        }
-
         INumberOperations<Real, double> INumber<Real, double>.GetOperations()
         {
             return Operations.Instance;
@@ -441,26 +391,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>, INumberOperations<Real, Real>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>, INumberOperations<ExtendedReal, ExtendedReal>, IExtendedNumberOperations<Real, Real, double>, IExtendedNumberOperations<Real, Real, float>, IExtendedNumberOperations<Real, Real, Real>
+        partial class Operations : NumberOperations<Real>, INumberOperations<Real, double>, INumberOperations<Real, float>, INumberOperations<Real, Real>, INumberOperations<ExtendedReal, double>, INumberOperations<ExtendedReal, float>, INumberOperations<ExtendedReal, ExtendedReal>, IExtendedNumberOperations<Real, Real, double>, IExtendedNumberOperations<Real, Real, float>, IExtendedNumberOperations<Real, Real, Real>
         {
-            public static readonly Operations Instance = new Operations();
-
             public override int Dimension => 0;
-
-            public bool IsInvertible(in Real num)
-            {
-                return num.IsInvertible;
-            }
-
-            public bool IsFinite(in Real num)
-            {
-                return num.IsFinite;
-            }
-
-            public Real Clone(in Real num)
-            {
-                return num;
-            }
 
             public bool IsInvertible(in ExtendedReal num)
             {
@@ -475,36 +408,6 @@ namespace IS4.HyperNumerics.NumberTypes
             public ExtendedReal Clone(in ExtendedReal num)
             {
                 return num;
-            }
-
-            public bool Equals(Real num1, Real num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(Real num1, Real num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public bool Equals(in Real num1, in Real num2)
-            {
-                return num1.Equals(in num2);
-            }
-
-            public int Compare(in Real num1, in Real num2)
-            {
-                return num1.CompareTo(in num2);
-            }
-
-            public int GetHashCode(Real num)
-            {
-                return num.GetHashCode();
-            }
-
-            public int GetHashCode(in Real num)
-            {
-                return num.GetHashCode();
             }
 
             public bool Equals(ExtendedReal num1, ExtendedReal num2)
@@ -571,16 +474,6 @@ namespace IS4.HyperNumerics.NumberTypes
                     default:
                         throw new NotSupportedException();
                 }
-            }
-
-            public Real Call(UnaryOperation operation, in Real num)
-            {
-                return num.Call(operation);
-            }
-
-            public Real Call(BinaryOperation operation, in Real num1, in Real num2)
-            {
-                return num1.Call(operation, num2);
             }
 
             public double CallComponent(UnaryOperation operation, in Real num)

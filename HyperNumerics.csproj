@@ -23,11 +23,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>HyperCommon.tt</DependentUpon>
     </None>
-    <None Include="NumberTypes\PrimitiveCommon.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PrimitiveCommon.tt</DependentUpon>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -29,6 +29,8 @@ var data = new[] {
 	new{name = "NullableNumber", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
 	new{name = "NullNumber", args = "", level = 0, componenttype = "TComponent", constraints = emptyConstraints},
 	new{name = "ProjectiveNumber", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "Real", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "ExtendedReal", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
 };
 foreach(var info in data)
 {

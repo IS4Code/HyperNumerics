@@ -7267,4 +7267,340 @@ namespace IS4.HyperNumerics.NumberTypes
 		}
 	}
 
+	partial struct Real
+	{
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public Real CallReversed(BinaryOperation operation, in Real other)
+        {
+            return other.Call(operation, this);
+        }
+
+        bool IEquatable<Real>.Equals(Real other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<Real>.CompareTo(Real other)
+        {
+            return CompareTo(other);
+        }
+
+        public static Real operator+(Real a, Real b)
+        {
+            return a.Call(BinaryOperation.Add, b);
+        }
+		
+        public static Real operator-(Real a, Real b)
+        {
+            return a.Call(BinaryOperation.Subtract, b);
+        }
+		
+        public static Real operator*(Real a, Real b)
+        {
+            return a.Call(BinaryOperation.Multiply, b);
+        }
+		
+        public static Real operator/(Real a, Real b)
+        {
+            return a.Call(BinaryOperation.Divide, b);
+        }
+		
+        public static Real operator^(Real a, Real b)
+        {
+            return a.Call(BinaryOperation.Power, b);
+        }
+		
+        public static Real operator-(Real a)
+        {
+            return a.Call(UnaryOperation.Negate);
+        }
+		
+        public static Real operator~(Real a)
+        {
+            return a.Call(UnaryOperation.Inverse);
+        }
+		
+        public static Real operator++(Real a)
+        {
+            return a.Call(UnaryOperation.Increment);
+        }
+		
+        public static Real operator--(Real a)
+        {
+            return a.Call(UnaryOperation.Decrement);
+        }
+
+        public static bool operator==(Real a, Real b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(Real a, Real b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(Real a, Real b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(Real a, Real b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(Real a, Real b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(Real a, Real b)
+        {
+            return a.CompareTo(b) <= 0;
+        }
+
+        INumberOperations INumber.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<Real> INumber<Real>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations
+		{
+			public static readonly Operations Instance = new Operations();
+			
+            public bool IsInvertible(in Real num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in Real num)
+            {
+                return num.IsFinite;
+            }
+
+            public Real Clone(in Real num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(Real num1, Real num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(Real num1, Real num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public bool Equals(in Real num1, in Real num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in Real num1, in Real num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public int GetHashCode(Real num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in Real num)
+            {
+                return num.GetHashCode();
+            }
+
+            public Real Call(UnaryOperation operation, in Real num)
+            {
+                return num.Call(operation);
+            }
+
+            public Real Call(BinaryOperation operation, in Real num1, in Real num2)
+            {
+                return num1.Call(operation, num2);
+            }
+		}
+	}
+
+	partial struct ExtendedReal
+	{
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public ExtendedReal CallReversed(BinaryOperation operation, in ExtendedReal other)
+        {
+            return other.Call(operation, this);
+        }
+
+        bool IEquatable<ExtendedReal>.Equals(ExtendedReal other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<ExtendedReal>.CompareTo(ExtendedReal other)
+        {
+            return CompareTo(other);
+        }
+
+        public static ExtendedReal operator+(ExtendedReal a, ExtendedReal b)
+        {
+            return a.Call(BinaryOperation.Add, b);
+        }
+		
+        public static ExtendedReal operator-(ExtendedReal a, ExtendedReal b)
+        {
+            return a.Call(BinaryOperation.Subtract, b);
+        }
+		
+        public static ExtendedReal operator*(ExtendedReal a, ExtendedReal b)
+        {
+            return a.Call(BinaryOperation.Multiply, b);
+        }
+		
+        public static ExtendedReal operator/(ExtendedReal a, ExtendedReal b)
+        {
+            return a.Call(BinaryOperation.Divide, b);
+        }
+		
+        public static ExtendedReal operator^(ExtendedReal a, ExtendedReal b)
+        {
+            return a.Call(BinaryOperation.Power, b);
+        }
+		
+        public static ExtendedReal operator-(ExtendedReal a)
+        {
+            return a.Call(UnaryOperation.Negate);
+        }
+		
+        public static ExtendedReal operator~(ExtendedReal a)
+        {
+            return a.Call(UnaryOperation.Inverse);
+        }
+		
+        public static ExtendedReal operator++(ExtendedReal a)
+        {
+            return a.Call(UnaryOperation.Increment);
+        }
+		
+        public static ExtendedReal operator--(ExtendedReal a)
+        {
+            return a.Call(UnaryOperation.Decrement);
+        }
+
+        public static bool operator==(ExtendedReal a, ExtendedReal b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(ExtendedReal a, ExtendedReal b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(ExtendedReal a, ExtendedReal b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(ExtendedReal a, ExtendedReal b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(ExtendedReal a, ExtendedReal b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(ExtendedReal a, ExtendedReal b)
+        {
+            return a.CompareTo(b) <= 0;
+        }
+
+        INumberOperations INumber.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<ExtendedReal> INumber<ExtendedReal>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations
+		{
+			public static readonly Operations Instance = new Operations();
+			
+            public bool IsInvertible(in ExtendedReal num)
+            {
+                return num.IsInvertible;
+            }
+
+            public bool IsFinite(in ExtendedReal num)
+            {
+                return num.IsFinite;
+            }
+
+            public ExtendedReal Clone(in ExtendedReal num)
+            {
+                return num.Clone();
+            }
+
+            public bool Equals(ExtendedReal num1, ExtendedReal num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(ExtendedReal num1, ExtendedReal num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public int Compare(in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public int GetHashCode(ExtendedReal num)
+            {
+                return num.GetHashCode();
+            }
+
+            public int GetHashCode(in ExtendedReal num)
+            {
+                return num.GetHashCode();
+            }
+
+            public ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
+            {
+                return num.Call(operation);
+            }
+
+            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
+            {
+                return num1.Call(operation, num2);
+            }
+		}
+	}
+
 }
