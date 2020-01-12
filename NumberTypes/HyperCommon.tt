@@ -24,8 +24,8 @@ foreach(var info in data)
 	bool hasinner = info.hasinner;
 	for(int variant = 0; variant <= 1; variant++)
 	{
-		bool primitive = variant == 1;
-		string primitiveaffix = primitive ? ", TPrimitive" : "";
+		bool component = variant == 1;
+		string componentaffix = component ? ", TComponent" : "";
 		string fullname = info.name;
 		bool first = true;
 		if(hasinner)
@@ -33,10 +33,10 @@ foreach(var info in data)
 			fullname += "<TInner";
 			first = false;
 		}
-		if(primitive)
+		if(component)
 		{
 			fullname += first ? "<" : ", ";
-			fullname += "TPrimitive";
+			fullname += "TComponent";
 			first = false;
 		}
 		if(!String.IsNullOrEmpty(info.args))
@@ -50,10 +50,10 @@ foreach(var info in data)
 			fullname += ">";
 		}
 #>
-	partial struct <#=fullname#> : IHyperNumber<<#=fullname#>, TInner<#=primitiveaffix#>><#=
-	hasinner ? primitive ? " where TInner : struct, INumber<TInner, TPrimitive>" : " where TInner : struct, INumber<TInner>" : ""
+	partial struct <#=fullname#> : IHyperNumber<<#=fullname#>, TInner<#=componentaffix#>><#=
+	hasinner ? component ? " where TInner : struct, INumber<TInner, TComponent>" : " where TInner : struct, INumber<TInner>" : ""
 	#><#=
-	primitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
+	component ? " where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>" : ""
 	#><#=
 	info.constraints(fullname)
 	#>
@@ -126,16 +126,16 @@ foreach(var info in data)
         {
             return new <#=fullname#>(first, HyperMath.Call(operation, second, other));
         }
-		<# if(primitive) { #>
+		<# if(component) { #>
 		
-        public <#=fullname#> FirstCall(BinaryOperation operation, in TPrimitive other)
+        public <#=fullname#> FirstCall(BinaryOperation operation, in TComponent other)
         {
-            return new <#=fullname#>(HyperMath.CallPrimitive(operation, first, other), second);
+            return new <#=fullname#>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public <#=fullname#> SecondCall(BinaryOperation operation, in TPrimitive other)
+        public <#=fullname#> SecondCall(BinaryOperation operation, in TComponent other)
         {
-            return new <#=fullname#>(first, HyperMath.CallPrimitive(operation, second, other));
+            return new <#=fullname#>(first, HyperMath.CallComponent(operation, second, other));
         }
 		<# } #>
 
@@ -189,16 +189,16 @@ foreach(var info in data)
         IHyperNumberOperations<<#=fullname#>, TInner> IHyperNumber<<#=fullname#>, TInner>.GetOperations()
         {
             return Operations.Instance;
-        }<# if(primitive) { #>
+        }<# if(component) { #>
 		
 
-        IHyperNumberOperations<<#=fullname#>, TInner, TPrimitive> IHyperNumber<<#=fullname#>, TInner, TPrimitive>.GetOperations()
+        IHyperNumberOperations<<#=fullname#>, TInner, TComponent> IHyperNumber<<#=fullname#>, TInner, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }<# } #>
 
 
-		partial class Operations : NumberOperations<<#=fullname#>>, IHyperNumberOperations<<#=fullname#>, TInner<#=primitiveaffix#>>
+		partial class Operations : NumberOperations<<#=fullname#>>, IHyperNumberOperations<<#=fullname#>, TInner<#=componentaffix#>>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -231,34 +231,34 @@ foreach(var info in data)
             public <#=fullname#> Create(in TInner first, in TInner second)
             {
                 return new <#=fullname#>(first, second);
-            }<# if(primitive) { #>
+            }<# if(component) { #>
 			
 			
-            public <#=fullname#> Create(in TPrimitive num)
+            public <#=fullname#> Create(in TComponent num)
             {
-                return new <#=fullname#>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new <#=fullname#>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public <#=fullname#> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public <#=fullname#> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return new <#=fullname#>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+                return new <#=fullname#>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public <#=fullname#> Create(IEnumerable<TPrimitive> units)
+            public <#=fullname#> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public <#=fullname#> Create(IEnumerator<TPrimitive> units)
+            public <#=fullname#> Create(IEnumerator<TComponent> units)
             {
-                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
+                var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 return new <#=fullname#>(first, second);
             }<# } #>
 
-		}<# if(!primitive) { #>
+		}<# if(!component) { #>
 
 
 		IEnumerator IEnumerable.GetEnumerator()

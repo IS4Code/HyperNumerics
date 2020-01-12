@@ -41,12 +41,12 @@ namespace IS4.HyperNumerics
         /// 
         /// </summary>
         /// <typeparam name="TNumber"></typeparam>
-        /// <typeparam name="TPrimitive"></typeparam>
+        /// <typeparam name="TComponent"></typeparam>
         /// <param name="num"></param>
         /// <returns></returns>
-        public static TPrimitive Abs<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TComponent Abs<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operations.For<TNumber, TPrimitive>.Instance.CallComponent(UnaryOperation.Identity, num);
+            return Operations.For<TNumber, TComponent>.Instance.CallComponent(UnaryOperation.Identity, num);
         }
 
         public static TNumber Mul2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
@@ -89,59 +89,59 @@ namespace IS4.HyperNumerics
             return Exp(Mul(Log(x), y));
         }
 
-        internal static TNumber PowValDefault<TNumber, TPrimitive>(in TNumber x, in TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        internal static TNumber PowValDefault<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
             return Exp(MulVal(Log(x), y));
         }
 
-        public static TNumber AddVal<TNumber, TPrimitive>(in TNumber x, in TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber AddVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitive(BinaryOperation.Add, x, y);
+            return CallComponent(BinaryOperation.Add, x, y);
         }
 
-        public static TNumber SubVal<TNumber, TPrimitive>(in TNumber x, in TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber SubVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitive(BinaryOperation.Subtract, x, y);
+            return CallComponent(BinaryOperation.Subtract, x, y);
         }
 
-        public static TNumber MulVal<TNumber, TPrimitive>(in TNumber x, in TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber MulVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitive(BinaryOperation.Multiply, x, y);
+            return CallComponent(BinaryOperation.Multiply, x, y);
         }
 
-        public static TNumber DivVal<TNumber, TPrimitive>(in TNumber x, in TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber DivVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitive(BinaryOperation.Divide, x, y);
+            return CallComponent(BinaryOperation.Divide, x, y);
         }
 
-        public static TNumber PowVal<TNumber, TPrimitive>(in TNumber x, in TPrimitive y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber PowVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitive(BinaryOperation.Power, x, y);
+            return CallComponent(BinaryOperation.Power, x, y);
         }
 
-        public static TNumber AddValRev<TNumber, TPrimitive>(in TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber AddValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitiveReversed(BinaryOperation.Add, x, y);
+            return CallComponentReversed(BinaryOperation.Add, x, y);
         }
 
-        public static TNumber SubValRev<TNumber, TPrimitive>(in TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber SubValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitiveReversed(BinaryOperation.Subtract, x, y);
+            return CallComponentReversed(BinaryOperation.Subtract, x, y);
         }
 
-        public static TNumber MulValRev<TNumber, TPrimitive>(in TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber MulValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitiveReversed(BinaryOperation.Multiply, x, y);
+            return CallComponentReversed(BinaryOperation.Multiply, x, y);
         }
 
-        public static TNumber DivValRev<TNumber, TPrimitive>(in TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber DivValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitiveReversed(BinaryOperation.Divide, x, y);
+            return CallComponentReversed(BinaryOperation.Divide, x, y);
         }
 
-        public static TNumber PowValRev<TNumber, TPrimitive>(in TPrimitive x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber PowValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallPrimitiveReversed(BinaryOperation.Power, x, y);
+            return CallComponentReversed(BinaryOperation.Power, x, y);
         }
 
         public static TNumber Neg<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
@@ -324,24 +324,24 @@ namespace IS4.HyperNumerics
             return Operations.ForExtended<TNumber, TInner>.Instance.Call(operation, num1, num2);
         }
 
-        public static TNumber CallPrimitive<TNumber, TPrimitive>(BinaryOperation operation, in TNumber num1, in TPrimitive num2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber CallComponent<TNumber, TComponent>(BinaryOperation operation, in TNumber num1, in TComponent num2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num1, num2);
+            return Operations.For<TNumber, TComponent>.Instance.Call(operation, num1, num2);
         }
 
-        public static TNumber CallPrimitiveReversed<TNumber, TPrimitive>(BinaryOperation operation, in TPrimitive num1, in TNumber num2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber CallComponentReversed<TNumber, TComponent>(BinaryOperation operation, in TComponent num1, in TNumber num2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num1, num2);
+            return Operations.For<TNumber, TComponent>.Instance.Call(operation, num1, num2);
         }
 
-        public static TPrimitive CallComponent<TNumber, TPrimitive>(UnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TComponent CallComponent<TNumber, TComponent>(UnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operations.For<TNumber, TPrimitive>.Instance.CallComponent(operation, num);
+            return Operations.For<TNumber, TComponent>.Instance.CallComponent(operation, num);
         }
 
-        public static TNumber Create<TNumber, TPrimitive>(in TPrimitive realUnit = default, in TPrimitive otherUnits = default, TPrimitive someUnitsCombined = default, TPrimitive allUnitsCombined = default) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TNumber Create<TNumber, TComponent>(in TComponent realUnit = default, in TComponent otherUnits = default, TComponent someUnitsCombined = default, TComponent allUnitsCombined = default) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operations.For<TNumber, TPrimitive>.Instance.Create(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+            return Operations.For<TNumber, TComponent>.Instance.Create(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
         }
 
         public static TNumber[] GetDerivative<TNumber>(IUnaryNumberOperation func, in TNumber num, int depth) where TNumber : struct, INumber<TNumber>
@@ -393,7 +393,7 @@ namespace IS4.HyperNumerics
                 return GetDerivative(func, arg, order)[order];
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
                 return Invoke<TNumber>(arg);
             }
@@ -406,9 +406,9 @@ namespace IS4.HyperNumerics
                 public static readonly INumberOperations<TNumber> Instance = default(TNumber).GetOperations();
             }
 
-            public static class For<TNumber, TPrimitive> where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public static class For<TNumber, TComponent> where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                public static readonly INumberOperations<TNumber, TPrimitive> Instance = default(TNumber).GetOperations();
+                public static readonly INumberOperations<TNumber, TComponent> Instance = default(TNumber).GetOperations();
             }
 
             public static class ForExtended<TNumber, TInner> where TNumber : struct, IExtendedNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
@@ -416,9 +416,9 @@ namespace IS4.HyperNumerics
                 public static readonly IExtendedNumberOperations<TNumber, TInner> Instance = default(TNumber).GetOperations();
             }
 
-            public static class ForExtended<TNumber, TInner, TPrimitive> where TNumber : struct, IExtendedNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public static class ForExtended<TNumber, TInner, TComponent> where TNumber : struct, IExtendedNumber<TNumber, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                public static readonly IExtendedNumberOperations<TNumber, TInner, TPrimitive> Instance = default(TNumber).GetOperations();
+                public static readonly IExtendedNumberOperations<TNumber, TInner, TComponent> Instance = default(TNumber).GetOperations();
             }
 
             public static class ForHyper<TNumber, TInner> where TNumber : struct, IHyperNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
@@ -426,9 +426,9 @@ namespace IS4.HyperNumerics
                 public static readonly IHyperNumberOperations<TNumber, TInner> Instance = default(TNumber).GetOperations();
             }
 
-            public static class ForHyper<TNumber, TInner, TPrimitive> where TNumber : struct, IHyperNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public static class ForHyper<TNumber, TInner, TComponent> where TNumber : struct, IHyperNumber<TNumber, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                public static readonly IHyperNumberOperations<TNumber, TInner, TPrimitive> Instance = default(TNumber).GetOperations();
+                public static readonly IHyperNumberOperations<TNumber, TInner, TComponent> Instance = default(TNumber).GetOperations();
             }
 
             public static readonly INumberOperation Default = new DefaultNullaryOperation();
@@ -452,7 +452,7 @@ namespace IS4.HyperNumerics
             public static readonly IUnaryNumberOperation Dec = new NumberUnaryOperation(UnaryOperation.Decrement);
             public static readonly IUnaryNumberOperation Con = new NumberUnaryOperation(UnaryOperation.Conjugate);
             public static readonly IUnaryNumberOperation Mods = new NumberUnaryOperation(UnaryOperation.Modulus);
-            public static readonly IPrimitiveUnaryNumberOperation Abs = new PrimitiveNumberUnaryOperation(UnaryOperation.Identity);
+            public static readonly IComponentUnaryNumberOperation Abs = new ComponentNumberUnaryOperation(UnaryOperation.Identity);
             public static readonly IUnaryNumberOperation Mul2 = new NumberUnaryOperation(UnaryOperation.Double);
             public static readonly IUnaryNumberOperation Div2 = new NumberUnaryOperation(UnaryOperation.Half);
             public static readonly IBinaryNumberOperation Pow = new NumberBinaryOperation(BinaryOperation.Power);
@@ -575,7 +575,7 @@ namespace IS4.HyperNumerics
                     return PI<TNumber>();
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
                     return PI<TNumber>();
                 }
@@ -593,7 +593,7 @@ namespace IS4.HyperNumerics
                     return E<TNumber>();
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
                     return E<TNumber>();
                 }
@@ -611,7 +611,7 @@ namespace IS4.HyperNumerics
                     return num;
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
                     return num;
                 }
@@ -629,7 +629,7 @@ namespace IS4.HyperNumerics
                     return default;
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
                     return default;
                 }
@@ -654,9 +654,9 @@ namespace IS4.HyperNumerics
                     return For<TNumber>.Instance.Call(type);
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
-                    return For<TNumber, TPrimitive>.Instance.Call(type);
+                    return For<TNumber, TComponent>.Instance.Call(type);
                 }
 
                 public override string ToString()
@@ -679,9 +679,9 @@ namespace IS4.HyperNumerics
                     return For<TNumber>.Instance.Call(type, num);
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
-                    return For<TNumber, TPrimitive>.Instance.Call(type, num);
+                    return For<TNumber, TComponent>.Instance.Call(type, num);
                 }
 
                 public override string ToString()
@@ -704,9 +704,9 @@ namespace IS4.HyperNumerics
                     return For<TNumber>.Instance.Call(type, x, y);
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
-                    return For<TNumber, TPrimitive>.Instance.Call(type, x, y);
+                    return For<TNumber, TComponent>.Instance.Call(type, x, y);
                 }
 
                 public override string ToString()
@@ -715,7 +715,7 @@ namespace IS4.HyperNumerics
                 }
             }
 
-            class NumberUnaryComponentOperation : DynamicNumberOperation<IPrimitiveUnaryNumberFunc<ValueType>>, IPrimitiveUnaryNumberFunc<ValueType>
+            class NumberUnaryComponentOperation : DynamicNumberOperation<IComponentUnaryNumberFunc<ValueType>>, IComponentUnaryNumberFunc<ValueType>
             {
                 readonly UnaryOperation type;
 
@@ -724,9 +724,9 @@ namespace IS4.HyperNumerics
                     this.type = type;
                 }
 
-                public ValueType Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public ValueType Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
-                    return For<TNumber, TPrimitive>.Instance.CallComponent(type, num);
+                    return For<TNumber, TComponent>.Instance.CallComponent(type, num);
                 }
 
                 public override string ToString()
@@ -735,19 +735,19 @@ namespace IS4.HyperNumerics
                 }
             }
 
-            class PrimitiveNumberUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+            class ComponentNumberUnaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
             {
                 readonly UnaryOperation type;
 
-                public PrimitiveNumberUnaryOperation(UnaryOperation type)
+                public ComponentNumberUnaryOperation(UnaryOperation type)
                 {
                     this.type = type;
                 }
 
-                public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+                public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
-                    var result = For<TNumber, TPrimitive>.Instance.CallComponent(type, num);
-                    return For<TNumber, TPrimitive>.Instance.Create(result);
+                    var result = For<TNumber, TComponent>.Instance.CallComponent(type, num);
+                    return For<TNumber, TComponent>.Instance.Create(result);
                 }
 
                 public override string ToString()

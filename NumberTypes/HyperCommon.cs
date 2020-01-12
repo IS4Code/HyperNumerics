@@ -177,7 +177,7 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperComplex<TInner, TPrimitive> : IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperComplex<TInner, TComponent> : IHyperNumber<HyperComplex<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -213,67 +213,67 @@ namespace IS4.HyperNumerics.NumberTypes
             second = this.second;
         }
 
-        public HyperComplex<TInner, TPrimitive> Clone()
+        public HyperComplex<TInner, TComponent> Clone()
         {
-            return new HyperComplex<TInner, TPrimitive>(first.Clone(), second.Clone());
+            return new HyperComplex<TInner, TComponent>(first.Clone(), second.Clone());
         }
 
-        public HyperComplex<TInner, TPrimitive> WithFirst(in TInner first)
+        public HyperComplex<TInner, TComponent> WithFirst(in TInner first)
         {
-            return new HyperComplex<TInner, TPrimitive>(first, second);
+            return new HyperComplex<TInner, TComponent>(first, second);
         }
 
-        public HyperComplex<TInner, TPrimitive> WithSecond(in TInner second)
+        public HyperComplex<TInner, TComponent> WithSecond(in TInner second)
         {
-            return new HyperComplex<TInner, TPrimitive>(first, second);
+            return new HyperComplex<TInner, TComponent>(first, second);
         }
 
-        public static implicit operator HyperComplex<TInner, TPrimitive>((TInner first, TInner second) tuple)
+        public static implicit operator HyperComplex<TInner, TComponent>((TInner first, TInner second) tuple)
         {
-            return new HyperComplex<TInner, TPrimitive>(tuple.first, tuple.second);
+            return new HyperComplex<TInner, TComponent>(tuple.first, tuple.second);
         }
 
-        public static implicit operator (TInner first, TInner second)(HyperComplex<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second)(HyperComplex<TInner, TComponent> value)
         {
             return (value.first, value.second);
         }
 
-        public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, first, other), second);
+            return new HyperComplex<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
+            return new HyperComplex<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
+        public HyperComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
+            return new HyperComplex<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
+        public HyperComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperComplex<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
+            return new HyperComplex<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperComplex<TInner, TPrimitive> FirstCall(UnaryOperation operation)
+        public HyperComplex<TInner, TComponent> FirstCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner, TPrimitive>(HyperMath.Call(operation, first), second);
+            return new HyperComplex<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperComplex<TInner, TPrimitive> SecondCall(UnaryOperation operation)
+        public HyperComplex<TInner, TComponent> SecondCall(UnaryOperation operation)
         {
-            return new HyperComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second));
+            return new HyperComplex<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
 
-        public bool Equals(in HyperComplex<TInner, TPrimitive> other)
+        public bool Equals(in HyperComplex<TInner, TComponent> other)
         {
             return HyperMath.Equals(first, other.first) && HyperMath.Equals(second, other.second);
         }
 
-        public int CompareTo(in HyperComplex<TInner, TPrimitive> other)
+        public int CompareTo(in HyperComplex<TInner, TComponent> other)
         {
             int value = HyperMath.Compare(first, other.first);
             return value != 0 ? value : HyperMath.Compare(second, other.second);
@@ -305,73 +305,73 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Complex(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
-        IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner> IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner>.GetOperations()
+        IHyperNumberOperations<HyperComplex<TInner, TComponent>, TInner> IHyperNumber<HyperComplex<TInner, TComponent>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        IHyperNumberOperations<HyperComplex<TInner, TComponent>, TInner, TComponent> IHyperNumber<HyperComplex<TInner, TComponent>, TInner, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive>
+		partial class Operations : NumberOperations<HyperComplex<TInner, TComponent>>, IHyperNumberOperations<HyperComplex<TInner, TComponent>, TInner, TComponent>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperComplex<TInner, TPrimitive> Call(NullaryOperation operation)
+			public HyperComplex<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
                     case NullaryOperation.Zero:
                     {
                         var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
-                        return new HyperComplex<TInner, TPrimitive>(zero, zero);
+                        return new HyperComplex<TInner, TComponent>(zero, zero);
                     }
                     case NullaryOperation.RealOne:
-                        return new HyperComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
                     case NullaryOperation.SpecialOne:
-                        return new HyperComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.UnitsOne:
-                        return new HyperComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.NonRealUnitsOne:
-                        return new HyperComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.CombinedOne:
-                        return new HyperComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
                     case NullaryOperation.AllOne:
-                        return new HyperComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
                     default:
                         throw new NotSupportedException();
                 }
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            public HyperComplex<TInner, TComponent> Create(in TInner first, in TInner second)
             {
-                return new HyperComplex<TInner, TPrimitive>(first, second);
+                return new HyperComplex<TInner, TComponent>(first, second);
             }			
 			
-            public HyperComplex<TInner, TPrimitive> Create(in TPrimitive num)
+            public HyperComplex<TInner, TComponent> Create(in TComponent num)
             {
-                return new HyperComplex<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new HyperComplex<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public HyperComplex<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return new HyperComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+                return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public HyperComplex<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public HyperComplex<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                return new HyperComplex<TInner, TPrimitive>(first, second);
+                var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                return new HyperComplex<TInner, TComponent>(first, second);
             }
 		}
 	}
@@ -548,7 +548,7 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperDiagonal<TInner, TPrimitive> : IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperDiagonal<TInner, TComponent> : IHyperNumber<HyperDiagonal<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -584,67 +584,67 @@ namespace IS4.HyperNumerics.NumberTypes
             second = this.second;
         }
 
-        public HyperDiagonal<TInner, TPrimitive> Clone()
+        public HyperDiagonal<TInner, TComponent> Clone()
         {
-            return new HyperDiagonal<TInner, TPrimitive>(first.Clone(), second.Clone());
+            return new HyperDiagonal<TInner, TComponent>(first.Clone(), second.Clone());
         }
 
-        public HyperDiagonal<TInner, TPrimitive> WithFirst(in TInner first)
+        public HyperDiagonal<TInner, TComponent> WithFirst(in TInner first)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(first, second);
+            return new HyperDiagonal<TInner, TComponent>(first, second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> WithSecond(in TInner second)
+        public HyperDiagonal<TInner, TComponent> WithSecond(in TInner second)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(first, second);
+            return new HyperDiagonal<TInner, TComponent>(first, second);
         }
 
-        public static implicit operator HyperDiagonal<TInner, TPrimitive>((TInner first, TInner second) tuple)
+        public static implicit operator HyperDiagonal<TInner, TComponent>((TInner first, TInner second) tuple)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(tuple.first, tuple.second);
+            return new HyperDiagonal<TInner, TComponent>(tuple.first, tuple.second);
         }
 
-        public static implicit operator (TInner first, TInner second)(HyperDiagonal<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second)(HyperDiagonal<TInner, TComponent> value)
         {
             return (value.first, value.second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call(operation, first, other), second);
+            return new HyperDiagonal<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
+            return new HyperDiagonal<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperDiagonal<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
+        public HyperDiagonal<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
+            return new HyperDiagonal<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
+        public HyperDiagonal<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
+            return new HyperDiagonal<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperDiagonal<TInner, TPrimitive> FirstCall(UnaryOperation operation)
+        public HyperDiagonal<TInner, TComponent> FirstCall(UnaryOperation operation)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call(operation, first), second);
+            return new HyperDiagonal<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperDiagonal<TInner, TPrimitive> SecondCall(UnaryOperation operation)
+        public HyperDiagonal<TInner, TComponent> SecondCall(UnaryOperation operation)
         {
-            return new HyperDiagonal<TInner, TPrimitive>(first, HyperMath.Call(operation, second));
+            return new HyperDiagonal<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
 
-        public bool Equals(in HyperDiagonal<TInner, TPrimitive> other)
+        public bool Equals(in HyperDiagonal<TInner, TComponent> other)
         {
             return HyperMath.Equals(first, other.first) && HyperMath.Equals(second, other.second);
         }
 
-        public int CompareTo(in HyperDiagonal<TInner, TPrimitive> other)
+        public int CompareTo(in HyperDiagonal<TInner, TComponent> other)
         {
             int value = HyperMath.Compare(first, other.first);
             return value != 0 ? value : HyperMath.Compare(second, other.second);
@@ -676,73 +676,73 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Diagonal(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
-        IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner> IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner>.GetOperations()
+        IHyperNumberOperations<HyperDiagonal<TInner, TComponent>, TInner> IHyperNumber<HyperDiagonal<TInner, TComponent>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        IHyperNumberOperations<HyperDiagonal<TInner, TComponent>, TInner, TComponent> IHyperNumber<HyperDiagonal<TInner, TComponent>, TInner, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperDiagonal<TInner, TPrimitive>>, IHyperNumberOperations<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive>
+		partial class Operations : NumberOperations<HyperDiagonal<TInner, TComponent>>, IHyperNumberOperations<HyperDiagonal<TInner, TComponent>, TInner, TComponent>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperDiagonal<TInner, TPrimitive> Call(NullaryOperation operation)
+			public HyperDiagonal<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
                     case NullaryOperation.Zero:
                     {
                         var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
-                        return new HyperDiagonal<TInner, TPrimitive>(zero, zero);
+                        return new HyperDiagonal<TInner, TComponent>(zero, zero);
                     }
                     case NullaryOperation.RealOne:
-                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
                     case NullaryOperation.SpecialOne:
-                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.UnitsOne:
-                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.NonRealUnitsOne:
-                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.CombinedOne:
-                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
                     case NullaryOperation.AllOne:
-                        return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
                     default:
                         throw new NotSupportedException();
                 }
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            public HyperDiagonal<TInner, TComponent> Create(in TInner first, in TInner second)
             {
-                return new HyperDiagonal<TInner, TPrimitive>(first, second);
+                return new HyperDiagonal<TInner, TComponent>(first, second);
             }			
 			
-            public HyperDiagonal<TInner, TPrimitive> Create(in TPrimitive num)
+            public HyperDiagonal<TInner, TComponent> Create(in TComponent num)
             {
-                return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new HyperDiagonal<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public HyperDiagonal<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+                return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public HyperDiagonal<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public HyperDiagonal<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                return new HyperDiagonal<TInner, TPrimitive>(first, second);
+                var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                return new HyperDiagonal<TInner, TComponent>(first, second);
             }
 		}
 	}
@@ -919,7 +919,7 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperDual<TInner, TPrimitive> : IHyperNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperDual<TInner, TComponent> : IHyperNumber<HyperDual<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -955,67 +955,67 @@ namespace IS4.HyperNumerics.NumberTypes
             second = this.second;
         }
 
-        public HyperDual<TInner, TPrimitive> Clone()
+        public HyperDual<TInner, TComponent> Clone()
         {
-            return new HyperDual<TInner, TPrimitive>(first.Clone(), second.Clone());
+            return new HyperDual<TInner, TComponent>(first.Clone(), second.Clone());
         }
 
-        public HyperDual<TInner, TPrimitive> WithFirst(in TInner first)
+        public HyperDual<TInner, TComponent> WithFirst(in TInner first)
         {
-            return new HyperDual<TInner, TPrimitive>(first, second);
+            return new HyperDual<TInner, TComponent>(first, second);
         }
 
-        public HyperDual<TInner, TPrimitive> WithSecond(in TInner second)
+        public HyperDual<TInner, TComponent> WithSecond(in TInner second)
         {
-            return new HyperDual<TInner, TPrimitive>(first, second);
+            return new HyperDual<TInner, TComponent>(first, second);
         }
 
-        public static implicit operator HyperDual<TInner, TPrimitive>((TInner first, TInner second) tuple)
+        public static implicit operator HyperDual<TInner, TComponent>((TInner first, TInner second) tuple)
         {
-            return new HyperDual<TInner, TPrimitive>(tuple.first, tuple.second);
+            return new HyperDual<TInner, TComponent>(tuple.first, tuple.second);
         }
 
-        public static implicit operator (TInner first, TInner second)(HyperDual<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second)(HyperDual<TInner, TComponent> value)
         {
             return (value.first, value.second);
         }
 
-        public HyperDual<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDual<TInner, TPrimitive>(HyperMath.Call(operation, first, other), second);
+            return new HyperDual<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperDual<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperDual<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
+            return new HyperDual<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperDual<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
+        public HyperDual<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperDual<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
+            return new HyperDual<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperDual<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
+        public HyperDual<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperDual<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
+            return new HyperDual<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperDual<TInner, TPrimitive> FirstCall(UnaryOperation operation)
+        public HyperDual<TInner, TComponent> FirstCall(UnaryOperation operation)
         {
-            return new HyperDual<TInner, TPrimitive>(HyperMath.Call(operation, first), second);
+            return new HyperDual<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperDual<TInner, TPrimitive> SecondCall(UnaryOperation operation)
+        public HyperDual<TInner, TComponent> SecondCall(UnaryOperation operation)
         {
-            return new HyperDual<TInner, TPrimitive>(first, HyperMath.Call(operation, second));
+            return new HyperDual<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
 
-        public bool Equals(in HyperDual<TInner, TPrimitive> other)
+        public bool Equals(in HyperDual<TInner, TComponent> other)
         {
             return HyperMath.Equals(first, other.first) && HyperMath.Equals(second, other.second);
         }
 
-        public int CompareTo(in HyperDual<TInner, TPrimitive> other)
+        public int CompareTo(in HyperDual<TInner, TComponent> other)
         {
             int value = HyperMath.Compare(first, other.first);
             return value != 0 ? value : HyperMath.Compare(second, other.second);
@@ -1047,73 +1047,73 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Dual(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
-        IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner> IHyperNumber<HyperDual<TInner, TPrimitive>, TInner>.GetOperations()
+        IHyperNumberOperations<HyperDual<TInner, TComponent>, TInner> IHyperNumber<HyperDual<TInner, TComponent>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        IHyperNumberOperations<HyperDual<TInner, TComponent>, TInner, TComponent> IHyperNumber<HyperDual<TInner, TComponent>, TInner, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperDual<TInner, TPrimitive>>, IHyperNumberOperations<HyperDual<TInner, TPrimitive>, TInner, TPrimitive>
+		partial class Operations : NumberOperations<HyperDual<TInner, TComponent>>, IHyperNumberOperations<HyperDual<TInner, TComponent>, TInner, TComponent>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperDual<TInner, TPrimitive> Call(NullaryOperation operation)
+			public HyperDual<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
                     case NullaryOperation.Zero:
                     {
                         var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
-                        return new HyperDual<TInner, TPrimitive>(zero, zero);
+                        return new HyperDual<TInner, TComponent>(zero, zero);
                     }
                     case NullaryOperation.RealOne:
-                        return new HyperDual<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
                     case NullaryOperation.SpecialOne:
-                        return new HyperDual<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.UnitsOne:
-                        return new HyperDual<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.NonRealUnitsOne:
-                        return new HyperDual<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.CombinedOne:
-                        return new HyperDual<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
                     case NullaryOperation.AllOne:
-                        return new HyperDual<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
                     default:
                         throw new NotSupportedException();
                 }
             }
 
-            public HyperDual<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            public HyperDual<TInner, TComponent> Create(in TInner first, in TInner second)
             {
-                return new HyperDual<TInner, TPrimitive>(first, second);
+                return new HyperDual<TInner, TComponent>(first, second);
             }			
 			
-            public HyperDual<TInner, TPrimitive> Create(in TPrimitive num)
+            public HyperDual<TInner, TComponent> Create(in TComponent num)
             {
-                return new HyperDual<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new HyperDual<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperDual<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public HyperDual<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return new HyperDual<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+                return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperDual<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public HyperDual<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperDual<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public HyperDual<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                return new HyperDual<TInner, TPrimitive>(first, second);
+                var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                return new HyperDual<TInner, TComponent>(first, second);
             }
 		}
 	}
@@ -1290,7 +1290,7 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperSplitComplex<TInner, TPrimitive> : IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperSplitComplex<TInner, TComponent> : IHyperNumber<HyperSplitComplex<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -1326,67 +1326,67 @@ namespace IS4.HyperNumerics.NumberTypes
             second = this.second;
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> Clone()
+        public HyperSplitComplex<TInner, TComponent> Clone()
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(first.Clone(), second.Clone());
+            return new HyperSplitComplex<TInner, TComponent>(first.Clone(), second.Clone());
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> WithFirst(in TInner first)
+        public HyperSplitComplex<TInner, TComponent> WithFirst(in TInner first)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(first, second);
+            return new HyperSplitComplex<TInner, TComponent>(first, second);
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> WithSecond(in TInner second)
+        public HyperSplitComplex<TInner, TComponent> WithSecond(in TInner second)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(first, second);
+            return new HyperSplitComplex<TInner, TComponent>(first, second);
         }
 
-        public static implicit operator HyperSplitComplex<TInner, TPrimitive>((TInner first, TInner second) tuple)
+        public static implicit operator HyperSplitComplex<TInner, TComponent>((TInner first, TInner second) tuple)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(tuple.first, tuple.second);
+            return new HyperSplitComplex<TInner, TComponent>(tuple.first, tuple.second);
         }
 
-        public static implicit operator (TInner first, TInner second)(HyperSplitComplex<TInner, TPrimitive> value)
+        public static implicit operator (TInner first, TInner second)(HyperSplitComplex<TInner, TComponent> value)
         {
             return (value.first, value.second);
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperSplitComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call(operation, first, other), second);
+            return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperSplitComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second, other));
+            return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperSplitComplex<TInner, TPrimitive> FirstCall(BinaryOperation operation, in TPrimitive other)
+        public HyperSplitComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.CallPrimitive(operation, first, other), second);
+            return new HyperSplitComplex<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> SecondCall(BinaryOperation operation, in TPrimitive other)
+        public HyperSplitComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.CallPrimitive(operation, second, other));
+            return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperSplitComplex<TInner, TPrimitive> FirstCall(UnaryOperation operation)
+        public HyperSplitComplex<TInner, TComponent> FirstCall(UnaryOperation operation)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call(operation, first), second);
+            return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperSplitComplex<TInner, TPrimitive> SecondCall(UnaryOperation operation)
+        public HyperSplitComplex<TInner, TComponent> SecondCall(UnaryOperation operation)
         {
-            return new HyperSplitComplex<TInner, TPrimitive>(first, HyperMath.Call(operation, second));
+            return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
 
-        public bool Equals(in HyperSplitComplex<TInner, TPrimitive> other)
+        public bool Equals(in HyperSplitComplex<TInner, TComponent> other)
         {
             return HyperMath.Equals(first, other.first) && HyperMath.Equals(second, other.second);
         }
 
-        public int CompareTo(in HyperSplitComplex<TInner, TPrimitive> other)
+        public int CompareTo(in HyperSplitComplex<TInner, TComponent> other)
         {
             int value = HyperMath.Compare(first, other.first);
             return value != 0 ? value : HyperMath.Compare(second, other.second);
@@ -1418,73 +1418,73 @@ namespace IS4.HyperNumerics.NumberTypes
             return "SplitComplex(" + first.ToString(format, formatProvider) + ", " + second.ToString(format, formatProvider) + ")";
         }
 
-        IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner> IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner>.GetOperations()
+        IHyperNumberOperations<HyperSplitComplex<TInner, TComponent>, TInner> IHyperNumber<HyperSplitComplex<TInner, TComponent>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive> IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>.GetOperations()
+        IHyperNumberOperations<HyperSplitComplex<TInner, TComponent>, TInner, TComponent> IHyperNumber<HyperSplitComplex<TInner, TComponent>, TInner, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperSplitComplex<TInner, TPrimitive>>, IHyperNumberOperations<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive>
+		partial class Operations : NumberOperations<HyperSplitComplex<TInner, TComponent>>, IHyperNumberOperations<HyperSplitComplex<TInner, TComponent>, TInner, TComponent>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperSplitComplex<TInner, TPrimitive> Call(NullaryOperation operation)
+			public HyperSplitComplex<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
                     case NullaryOperation.Zero:
                     {
                         var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
-                        return new HyperSplitComplex<TInner, TPrimitive>(zero, zero);
+                        return new HyperSplitComplex<TInner, TComponent>(zero, zero);
                     }
                     case NullaryOperation.RealOne:
-                        return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
                     case NullaryOperation.SpecialOne:
-                        return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.UnitsOne:
-                        return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.NonRealUnitsOne:
-                        return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
                     case NullaryOperation.CombinedOne:
-                        return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
                     case NullaryOperation.AllOne:
-                        return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
                     default:
                         throw new NotSupportedException();
                 }
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)
+            public HyperSplitComplex<TInner, TComponent> Create(in TInner first, in TInner second)
             {
-                return new HyperSplitComplex<TInner, TPrimitive>(first, second);
+                return new HyperSplitComplex<TInner, TComponent>(first, second);
             }			
 			
-            public HyperSplitComplex<TInner, TPrimitive> Create(in TPrimitive num)
+            public HyperSplitComplex<TInner, TComponent> Create(in TComponent num)
             {
-                return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new HyperSplitComplex<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public HyperSplitComplex<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
+                return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public HyperSplitComplex<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public HyperSplitComplex<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                var first = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                var second = HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units);
-                return new HyperSplitComplex<TInner, TPrimitive>(first, second);
+                var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
+                return new HyperSplitComplex<TInner, TComponent>(first, second);
             }
 		}
 	}

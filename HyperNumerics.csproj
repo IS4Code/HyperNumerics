@@ -39,9 +39,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>HyperCommon.cs</LastGenOutput>
     </None>
-    <None Update="NumberTypes\PrimitiveCommon.tt">
+    <None Update="NumberTypes\ComponentCommon.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>PrimitiveCommon.cs</LastGenOutput>
+      <LastGenOutput>ComponentCommon.cs</LastGenOutput>
     </None>
     <None Update="NumberTypes\SelfWrapperCommon.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -64,10 +64,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>HyperCommon.tt</DependentUpon>
     </Compile>
-    <Compile Update="NumberTypes\PrimitiveCommon.cs">
+    <Compile Update="NumberTypes\ComponentCommon.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>PrimitiveCommon.tt</DependentUpon>
+      <DependentUpon>ComponentCommon.tt</DependentUpon>
     </Compile>
     <Compile Update="NumberTypes\SelfWrapperCommon.cs">
       <DesignTime>True</DesignTime>

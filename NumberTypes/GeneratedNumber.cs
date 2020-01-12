@@ -141,11 +141,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Represents a number whose actual value is provided by a generator function.
     /// </summary>
     /// <typeparam name="TInner">The inner type.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
     [Serializable]
-    public readonly partial struct GeneratedNumber<TInner, TPrimitive> : IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly partial struct GeneratedNumber<TInner, TComponent> : IExtendedNumber<GeneratedNumber<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
-        public static GeneratedNumber<TInner, TPrimitive> Zero => new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
+        public static GeneratedNumber<TInner, TComponent> Zero => new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
         readonly Func<TInner> generator;
 
@@ -187,72 +187,72 @@ namespace IS4.HyperNumerics.NumberTypes
             this.generator = generator;
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Clone()
+        public GeneratedNumber<TInner, TComponent> Clone()
         {
             if(generator.Target is ICloneable cloneable)
             {
-                return new GeneratedNumber<TInner, TPrimitive>((Func<TInner>)Delegate.CreateDelegate(typeof(Func<TInner>), cloneable.Clone(), generator.Method));
+                return new GeneratedNumber<TInner, TComponent>((Func<TInner>)Delegate.CreateDelegate(typeof(Func<TInner>), cloneable.Clone(), generator.Method));
             }
             return this;
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> other)
+        public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> other)
         {
             var gen1 = Generator;
             var gen2 = other.Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen1(), gen2()));
+            return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, gen1(), gen2()));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
+        public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen(), value));
+            return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        public GeneratedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, value, gen()));
+            return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, value, gen()));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
+        public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
         {
             var gen = Generator;
             var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitive(operation, gen(), value));
+            return new GeneratedNumber<TInner, TComponent>(() => HyperMath.CallComponent(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
+        public GeneratedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
         {
             var gen = Generator;
             var value = other;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.CallPrimitiveReversed(operation, value, gen()));
+            return new GeneratedNumber<TInner, TComponent>(() => HyperMath.CallComponentReversed(operation, value, gen()));
         }
 
-        public GeneratedNumber<TInner, TPrimitive> Call(UnaryOperation operation)
+        public GeneratedNumber<TInner, TComponent> Call(UnaryOperation operation)
         {
             var gen = Generator;
-            return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen()));
+            return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, gen()));
         }
 
-        public TPrimitive CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(UnaryOperation operation)
         {
-            return HyperMath.CallComponent<TInner, TPrimitive>(operation, Generator());
+            return HyperMath.CallComponent<TInner, TComponent>(operation, Generator());
         }
 
         public override bool Equals(object obj)
         {
-            return obj is GeneratedNumber<TInner, TPrimitive> value && Equals(in value);
+            return obj is GeneratedNumber<TInner, TComponent> value && Equals(in value);
         }
 
-        public bool Equals(in GeneratedNumber<TInner, TPrimitive> other)
+        public bool Equals(in GeneratedNumber<TInner, TComponent> other)
         {
             return Generator.Equals(other.Generator);
         }
 
-        public int CompareTo(in GeneratedNumber<TInner, TPrimitive> other)
+        public int CompareTo(in GeneratedNumber<TInner, TComponent> other)
         {
             return 0;
         }
@@ -272,38 +272,38 @@ namespace IS4.HyperNumerics.NumberTypes
             return Generator.ToString();
         }
 
-        partial class Operations : NumberOperations<GeneratedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, TInner, TPrimitive>
+        partial class Operations : NumberOperations<GeneratedNumber<TInner, TComponent>>, IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, TInner, TComponent>
         {
             public override int Dimension => 0;
 
-            public GeneratedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
+            public GeneratedNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
-                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(operation));
+                return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call<TInner>(operation));
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            public GeneratedNumber<TInner, TComponent> Create(in TComponent num)
             {
                 var numCopy = num;
-                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(numCopy));
+                return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Operations.For<TInner, TComponent>.Instance.Create(numCopy));
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public GeneratedNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 var realUnitCopy = realUnit;
                 var otherUnitsCopy = otherUnits;
                 var someUnitsCombinedCopy = someUnitsCombined;
                 var allUnitsCombinedCopy = allUnitsCombined;
-                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Create<TInner, TPrimitive>(realUnitCopy, otherUnitsCopy, someUnitsCombinedCopy, allUnitsCombinedCopy));
+                return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Create<TInner, TComponent>(realUnitCopy, otherUnitsCopy, someUnitsCombinedCopy, allUnitsCombinedCopy));
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public GeneratedNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
-                return new GeneratedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new GeneratedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public GeneratedNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                return new GeneratedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new GeneratedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
         }
     }

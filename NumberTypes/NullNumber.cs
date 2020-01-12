@@ -83,11 +83,11 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <summary>
     /// Represents a number type with a single value which is the result of all operations.
     /// </summary>
-    /// <typeparam name="TPrimitive">The primitive type the number mimics, but doesn't actually store.</typeparam>
+    /// <typeparam name="TComponent">The component type the number mimics, but doesn't actually store.</typeparam>
     [Serializable]
-    public readonly partial struct NullNumber<TPrimitive> : INumber<NullNumber<TPrimitive>, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly partial struct NullNumber<TComponent> : INumber<NullNumber<TComponent>, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
-        public static readonly NullNumber<TPrimitive> Value = default;
+        public static readonly NullNumber<TComponent> Value = default;
 
         int INumber.Dimension => 0;
 
@@ -95,47 +95,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => true;
 
-        public NullNumber<TPrimitive> Clone()
+        public NullNumber<TComponent> Clone()
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> Call(BinaryOperation operation, in NullNumber<TPrimitive> other)
+        public NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> other)
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
+        public NullNumber<TComponent> Call(BinaryOperation operation, in TComponent other)
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
+        public NullNumber<TComponent> CallReversed(BinaryOperation operation, in TComponent other)
         {
             return default;
         }
 
-        public NullNumber<TPrimitive> Call(UnaryOperation operation)
+        public NullNumber<TComponent> Call(UnaryOperation operation)
         {
             return default;
         }
 
-        public TPrimitive CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(UnaryOperation operation)
         {
             return default;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is NullNumber<TPrimitive> value;
+            return obj is NullNumber<TComponent> value;
         }
 
-        public bool Equals(in NullNumber<TPrimitive> other)
+        public bool Equals(in NullNumber<TComponent> other)
         {
             return true;
         }
 
-        public int CompareTo(in NullNumber<TPrimitive> other)
+        public int CompareTo(in NullNumber<TComponent> other)
         {
             return 0;
         }
@@ -155,45 +155,45 @@ namespace IS4.HyperNumerics.NumberTypes
             return "Null";
         }
 
-        partial class Operations : NumberOperations<NullNumber<TPrimitive>>, INumberOperations<NullNumber<TPrimitive>, TPrimitive>
+        partial class Operations : NumberOperations<NullNumber<TComponent>>, INumberOperations<NullNumber<TComponent>, TComponent>
         {
             public override int Dimension => 0;
 
-            public NullNumber<TPrimitive> Call(NullaryOperation operation)
+            public NullNumber<TComponent> Call(NullaryOperation operation)
             {
                 return default;
             }
 
-            public NullNumber<TPrimitive> Create(in TPrimitive num)
+            public NullNumber<TComponent> Create(in TComponent num)
             {
                 return default;
             }
 
-            public NullNumber<TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public NullNumber<TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return default;
             }
 
-            public NullNumber<TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public NullNumber<TComponent> Create(IEnumerable<TComponent> units)
             {
                 return default;
             }
 
-            public NullNumber<TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public NullNumber<TComponent> Create(IEnumerator<TComponent> units)
             {
                 return default;
             }
         }
 
-        int ICollection<TPrimitive>.Count => 0;
+        int ICollection<TComponent>.Count => 0;
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => 0;
+        int IReadOnlyCollection<TComponent>.Count => 0;
 
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index] => throw new ArgumentOutOfRangeException(nameof(index));
+        TComponent IReadOnlyList<TComponent>.this[int index] => throw new ArgumentOutOfRangeException(nameof(index));
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -203,47 +203,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             return -1;
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return false;
         }
 
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
 
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
             yield break;
         }

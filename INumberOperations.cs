@@ -98,49 +98,49 @@ namespace IS4.HyperNumerics
     }
 
     /// <summary>
-    /// Provides operations for a number type implementing <see cref="INumber{TNumber, TPrimitive}"/>.
+    /// Provides operations for a number type implementing <see cref="INumber{TNumber, TComponent}"/>.
     /// </summary>
-    public interface INumberOperations<TNumber, TPrimitive> : INumberOperations<TNumber> where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public interface INumberOperations<TNumber, TComponent> : INumberOperations<TNumber> where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
         /// <summary>
-        /// Creates a new instance of <typeparamref name="TNumber"/> from the value of <typeparamref name="TPrimitive"/>.
+        /// Creates a new instance of <typeparamref name="TNumber"/> from the value of <typeparamref name="TComponent"/>.
         /// </summary>
         /// <param name="num">The inner value with which the instance shall be initialized to.</param>
         /// <returns>A new instance containing the inner value.</returns>
-        TNumber Create(in TPrimitive num);
+        TNumber Create(in TComponent num);
 
         /// <summary>
-        /// Creates a new instance of <typeparamref name="TNumber"/> from the primitive coefficients of its components.
+        /// Creates a new instance of <typeparamref name="TNumber"/> from the component coefficients of its components.
         /// </summary>
         /// <param name="realUnit">The real (standard) part of the number.</param>
         /// <param name="otherUnits">The other (non-real) units.</param>
         /// <param name="someUnitsCombined">Any combination of non-real units.</param>
         /// <param name="allUnitsCombined">The combination of all units.</param>
         /// <returns>A new instance with the specified units.</returns>
-        TNumber Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined);
+        TNumber Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined);
 
         /// <summary>
-        /// Creates a new instance of <typeparamref name="TNumber"/> from its primitive components.
+        /// Creates a new instance of <typeparamref name="TNumber"/> from its component components.
         /// </summary>
-        /// <param name="units">A sequence of primitive values, used to construct the number.</param>
+        /// <param name="units">A sequence of component values, used to construct the number.</param>
         /// <returns>A new instance with the specified units.</returns>
-        TNumber Create(IEnumerable<TPrimitive> units);
+        TNumber Create(IEnumerable<TComponent> units);
 
         /// <summary>
-        /// Creates a new instance of <typeparamref name="TNumber"/> from its primitive components.
+        /// Creates a new instance of <typeparamref name="TNumber"/> from its component components.
         /// </summary>
-        /// <param name="units">A sequence of primitive values, used to construct the number.</param>
+        /// <param name="units">A sequence of component values, used to construct the number.</param>
         /// <returns>A new instance with the specified units.</returns>
-        TNumber Create(IEnumerator<TPrimitive> units);
+        TNumber Create(IEnumerator<TComponent> units);
 
         /// <summary>
-        /// Invokes a primitive-returning unary operation for the number type.
+        /// Invokes a component-returning unary operation for the number type.
         /// </summary>
         /// <param name="operation">The operation that will be invoked.</param>
         /// <param name="num">The argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TPrimitive CallComponent(UnaryOperation operation, in TNumber num);
+        TComponent CallComponent(UnaryOperation operation, in TNumber num);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -150,7 +150,7 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TNumber num1, in TPrimitive num2);
+        TNumber Call(BinaryOperation operation, in TNumber num1, in TComponent num2);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -160,6 +160,6 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TPrimitive num1, in TNumber num2);
+        TNumber Call(BinaryOperation operation, in TComponent num1, in TNumber num2);
     }
 }

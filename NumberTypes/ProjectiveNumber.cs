@@ -232,14 +232,14 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Represents a number in a projective space where the inverse of a number is always defined (an infinity of some sort for every non-invertible number).
     /// </summary>
     /// <typeparam name="TInner">The original number type.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
     /// <remarks>
     /// Even though taking the inverse of a number of this type is always
     /// supported, not all types of operations are possible on the result,
     /// namely multiplication with zero, addition, and subtraction.
     /// </remarks>
     [Serializable]
-    public readonly partial struct ProjectiveNumber<TInner, TPrimitive> : IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly partial struct ProjectiveNumber<TInner, TComponent> : IWrapperNumber<ProjectiveNumber<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
         readonly TInner value;
 
@@ -261,12 +261,12 @@ namespace IS4.HyperNumerics.NumberTypes
             IsInfinity = isInfinity;
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> Clone()
+        public ProjectiveNumber<TInner, TComponent> Clone()
         {
-            return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Clone(value), IsInfinity);
+            return new ProjectiveNumber<TInner, TComponent>(HyperMath.Clone(value), IsInfinity);
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> other)
+        public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> other)
         {
             if(!other.IsInfinity)
             {
@@ -277,60 +277,60 @@ namespace IS4.HyperNumerics.NumberTypes
                 case BinaryOperation.Add:
                     if(IsInfinity)
                     {
-                        return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Add(other.value, value)), true);
+                        return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Add(other.value, value)), true);
                     }
-                    return new ProjectiveNumber<TInner, TPrimitive>(other.value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(other.value, true);
                 case BinaryOperation.Subtract:
                     if(IsInfinity)
                     {
-                        return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Sub(other.value, value)), true);
+                        return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Sub(other.value, value)), true);
                     }
-                    return new ProjectiveNumber<TInner, TPrimitive>(other.value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(other.value, true);
                 case BinaryOperation.Multiply:
                     if(IsInfinity)
                     {
-                        return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Mul(value, other.value), true);
+                        return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul(value, other.value), true);
                     }
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div(value, other.value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other.value), true);
                 case BinaryOperation.Divide:
                     if(IsInfinity)
                     {
-                        return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div(value, other.value));
+                        return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other.value));
                     }
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Mul(value, other.value));
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul(value, other.value));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
+        public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
         {
             if(!IsInfinity)
             {
                 if(operation == BinaryOperation.Divide && !HyperMath.CanInv(other))
                 {
-                    return Call(BinaryOperation.Multiply, new ProjectiveNumber<TInner, TPrimitive>(other, true));
+                    return Call(BinaryOperation.Multiply, new ProjectiveNumber<TInner, TComponent>(other, true));
                 }
                 return HyperMath.Call<TInner>(operation, value, other);
             }
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case BinaryOperation.Subtract:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case BinaryOperation.Multiply:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other), true);
                 case BinaryOperation.Divide:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Mul(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul(value, other), true);
                 case BinaryOperation.Power:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Pow(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Pow(value, other), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        public ProjectiveNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
         {
             if(!IsInfinity)
             {
@@ -339,25 +339,25 @@ namespace IS4.HyperNumerics.NumberTypes
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case BinaryOperation.Subtract:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Neg(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Neg(value), true);
                 case BinaryOperation.Multiply:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other), true);
                 case BinaryOperation.Divide:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Mul(other, value));
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul(other, value));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> Call(UnaryOperation operation)
+        public ProjectiveNumber<TInner, TComponent> Call(UnaryOperation operation)
         {
             if(!IsInfinity)
             {
                 if(operation == UnaryOperation.Inverse && !HyperMath.CanInv(value))
                 {
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 }
                 return HyperMath.Call(operation, value);
             }
@@ -366,98 +366,98 @@ namespace IS4.HyperNumerics.NumberTypes
                 case UnaryOperation.Identity:
                     return this;
                 case UnaryOperation.Negate:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Neg(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Neg(value), true);
                 case UnaryOperation.Increment:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case UnaryOperation.Decrement:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case UnaryOperation.Inverse:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, false);
+                    return new ProjectiveNumber<TInner, TComponent>(value, false);
                 case UnaryOperation.Conjugate:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Con(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Con(value), true);
                 case UnaryOperation.Modulus:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Mods(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mods(value), true);
                 case UnaryOperation.Double:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Div2(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div2(value), true);
                 case UnaryOperation.Half:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Mul2(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul2(value), true);
                 case UnaryOperation.Square:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Pow2(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Pow2(value), true);
                 case UnaryOperation.SquareRoot:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Sqrt(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Sqrt(value), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
+        public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
         {
             if(!IsInfinity)
             {
                 if(operation == BinaryOperation.Divide)
                 {
-                    return Call(BinaryOperation.Divide, HyperMath.Create<TInner, TPrimitive>(other));
+                    return Call(BinaryOperation.Divide, HyperMath.Create<TInner, TComponent>(other));
                 }
-                return HyperMath.CallPrimitive(operation, value, other);
+                return HyperMath.CallComponent(operation, value, other);
             }
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case BinaryOperation.Subtract:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case BinaryOperation.Multiply:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.DivVal(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.DivVal(value, other), true);
                 case BinaryOperation.Divide:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.MulVal(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.MulVal(value, other), true);
                 case BinaryOperation.Power:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.PowVal(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.PowVal(value, other), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
+        public ProjectiveNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
         {
             if(!IsInfinity)
             {
-                return HyperMath.CallPrimitiveReversed(operation, other, value);
+                return HyperMath.CallComponentReversed(operation, other, value);
             }
             switch(operation)
             {
                 case BinaryOperation.Add:
-                    return new ProjectiveNumber<TInner, TPrimitive>(value, true);
+                    return new ProjectiveNumber<TInner, TComponent>(value, true);
                 case BinaryOperation.Subtract:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Neg(value), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.Neg(value), true);
                 case BinaryOperation.Multiply:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.DivVal(value, other), true);
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.DivVal(value, other), true);
                 case BinaryOperation.Divide:
-                    return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.MulVal(value, other));
+                    return new ProjectiveNumber<TInner, TComponent>(HyperMath.MulVal(value, other));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public TPrimitive CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(UnaryOperation operation)
         {
             if(IsInfinity)
             {
                 throw new NotSupportedException();
             }
-            return HyperMath.CallComponent<TInner, TPrimitive>(operation, value);
+            return HyperMath.CallComponent<TInner, TComponent>(operation, value);
         }
 
         public override bool Equals(object obj)
         {
-            return obj is ProjectiveNumber<TInner, TPrimitive> value && Equals(in value);
+            return obj is ProjectiveNumber<TInner, TComponent> value && Equals(in value);
         }
 
-        public bool Equals(in ProjectiveNumber<TInner, TPrimitive> other)
+        public bool Equals(in ProjectiveNumber<TInner, TComponent> other)
         {
             return IsInfinity == other.IsInfinity && HyperMath.Equals(value, other.value);
         }
 
-        public int CompareTo(in ProjectiveNumber<TInner, TPrimitive> other)
+        public int CompareTo(in ProjectiveNumber<TInner, TComponent> other)
         {
             return HyperMath.Compare(value, other.value);
         }
@@ -487,52 +487,52 @@ namespace IS4.HyperNumerics.NumberTypes
             return IsInfinity ? "Infinity(" + value.ToString(format, formatProvider) + ")" : value.ToString(format, formatProvider);
         }
 
-        partial class Operations : NumberOperations<ProjectiveNumber<TInner, TPrimitive>>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, TInner, TPrimitive>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>
+        partial class Operations : NumberOperations<ProjectiveNumber<TInner, TComponent>>, IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, TInner, TComponent>, IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, TComponent>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public ProjectiveNumber<TInner, TPrimitive> Call(NullaryOperation operation)
+            public ProjectiveNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            public ProjectiveNumber<TInner, TComponent> Create(in TComponent num)
             {
-                return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new ProjectiveNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public ProjectiveNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public ProjectiveNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
-                return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new ProjectiveNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public ProjectiveNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new ProjectiveNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
         }
 
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
@@ -545,23 +545,23 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int ICollection<TPrimitive>.Count{
+        int ICollection<TComponent>.Count{
             get{
                 ThrowIfInfinity();
                 return GetCollectionCount(value);
             }
         }
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count{
+        int IReadOnlyCollection<TComponent>.Count{
             get{
                 ThrowIfInfinity();
                 return GetReadOnlyCollectionCount(value);
             }
         }
 
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 ThrowIfInfinity();
@@ -569,7 +569,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 ThrowIfInfinity();
@@ -580,7 +580,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             if(IsInfinity)
             {
@@ -589,27 +589,27 @@ namespace IS4.HyperNumerics.NumberTypes
             return value.IndexOf(item);
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             if(IsInfinity)
             {
@@ -618,18 +618,18 @@ namespace IS4.HyperNumerics.NumberTypes
             return value.Contains(item);
         }
 
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
             ThrowIfInfinity();
             value.CopyTo(array, arrayIndex);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
             ThrowIfInfinity();
             return value.GetEnumerator();

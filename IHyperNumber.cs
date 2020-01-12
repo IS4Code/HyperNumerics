@@ -94,8 +94,8 @@ namespace IS4.HyperNumerics
     /// </summary>
     /// <typeparam name="TNumber">The number type that serves as the argument and result of the operations, usually the same as the implementing type.</typeparam>
     /// <typeparam name="TInner">The inner type of the components.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
-    public interface IHyperNumber<TNumber, TInner, TPrimitive> : IHyperNumber<TNumber, TInner>, IWrapperNumber<TNumber, TInner, TPrimitive> where TNumber : struct, IHyperNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
+    public interface IHyperNumber<TNumber, TInner, TComponent> : IHyperNumber<TNumber, TInner>, IWrapperNumber<TNumber, TInner, TComponent> where TNumber : struct, IHyperNumber<TNumber, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
         /// <summary>
         /// Invokes a binary operation on the first component of the number and <paramref name="other"/>.
@@ -104,7 +104,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation when invoked on the first component, with the second component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber FirstCall(BinaryOperation operation, in TPrimitive other);
+        TNumber FirstCall(BinaryOperation operation, in TComponent other);
 
         /// <summary>
         /// Invokes a binary operation on the second component of the number and <paramref name="other"/>.
@@ -113,12 +113,12 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber SecondCall(BinaryOperation operation, in TPrimitive other);
+        TNumber SecondCall(BinaryOperation operation, in TComponent other);
 
         /// <summary>
-        /// Retrieves an instance of <see cref="IHyperNumberOperations{TNumber, TInner, TPrimitive}"/> providing the supported operations on this type.
+        /// Retrieves an instance of <see cref="IHyperNumberOperations{TNumber, TInner, TComponent}"/> providing the supported operations on this type.
         /// </summary>
-        /// <returns>An instance of <see cref="IHyperNumberOperations{TNumber, TInner, TPrimitive}"/> providing the operations of this type.</returns>
-        new IHyperNumberOperations<TNumber, TInner, TPrimitive> GetOperations();
+        /// <returns>An instance of <see cref="IHyperNumberOperations{TNumber, TInner, TComponent}"/> providing the operations of this type.</returns>
+        new IHyperNumberOperations<TNumber, TInner, TComponent> GetOperations();
     }
 }

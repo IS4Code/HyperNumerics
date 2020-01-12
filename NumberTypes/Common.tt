@@ -13,32 +13,32 @@ namespace IS4.HyperNumerics.NumberTypes
 <#
 Func<string, string> emptyConstraints = fn => "";
 var data = new[] {
-	new{name = "AbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "PrimitiveAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "UnaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "PrimitiveUnaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "BinaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "PrimitiveBinaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "BoxedNumber", args = "", level = 3, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TTraits", level = 3, primitivetype = "TPrimitive", constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
-	new{name = "GeneratedNumber", args = "", level = 1, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "HyperComplex", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "HyperDiagonal", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "HyperDual", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "HyperSplitComplex", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "NullableNumber", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "NullNumber", args = "", level = 0, primitivetype = "TPrimitive", constraints = emptyConstraints},
-	new{name = "ProjectiveNumber", args = "", level = 2, primitivetype = "TPrimitive", constraints = emptyConstraints},
+	new{name = "AbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "ComponentAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "UnaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "ComponentUnaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "BinaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "ComponentBinaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "BoxedNumber", args = "", level = 3, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "CustomDefaultNumber", args = "TTraits", level = 3, componenttype = "TComponent", constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
+	new{name = "GeneratedNumber", args = "", level = 1, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "HyperComplex", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "HyperDiagonal", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "HyperDual", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "HyperSplitComplex", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "NullableNumber", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "NullNumber", args = "", level = 0, componenttype = "TComponent", constraints = emptyConstraints},
+	new{name = "ProjectiveNumber", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
 };
 foreach(var info in data)
 {
 	var level = info.level;
-	var primitivetype = info.primitivetype;
-	bool hasprimitive = primitivetype == "TPrimitive";
-	for(int variant = 0; variant <= (hasprimitive ? 1 : 0); variant++)
+	var componenttype = info.componenttype;
+	bool hascomponent = componenttype == "TComponent";
+	for(int variant = 0; variant <= (hascomponent ? 1 : 0); variant++)
 	{
-		bool primitive = variant == 1 || (info.primitivetype != "" && !hasprimitive);
-		string primitiveaffix = primitive && hasprimitive ? ", TPrimitive" : "";
+		bool component = variant == 1 || (info.componenttype != "" && !hascomponent);
+		string componentaffix = component && hascomponent ? ", TComponent" : "";
 		string fullname = info.name;
 		bool first = true;
 		if(level >= 1)
@@ -46,10 +46,10 @@ foreach(var info in data)
 			fullname += "<TInner";
 			first = false;
 		}
-		if(primitive && hasprimitive)
+		if(component && hascomponent)
 		{
 			fullname += first ? "<" : ", ";
-			fullname += "TPrimitive";
+			fullname += "TComponent";
 			first = false;
 		}
 		if(!String.IsNullOrEmpty(info.args))
@@ -66,9 +66,9 @@ foreach(var info in data)
 	partial struct <#=fullname#><#=
 	level >= 2 ? " : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner>" : ""
 	#><#=
-	level >= 1 ? primitive ? " where TInner : struct, INumber<TInner, TPrimitive>" : " where TInner : struct, INumber<TInner>" : ""
+	level >= 1 ? component ? " where TInner : struct, INumber<TInner, TComponent>" : " where TInner : struct, INumber<TInner>" : ""
 	#><#=
-	primitive && hasprimitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
+	component && hascomponent ? " where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>" : ""
 	#><#=
 	info.constraints(fullname)
 	#>
@@ -323,10 +323,10 @@ foreach(var info in data)
         INumberOperations<<#=fullname#>> INumber<<#=fullname#>>.GetOperations()
         {
             return Operations.Instance;
-        }<# if(primitive) { #>
+        }<# if(component) { #>
 		
 
-        INumberOperations<<#=fullname#>, <#=primitivetype#>> INumber<<#=fullname#>, <#=primitivetype#>>.GetOperations()
+        INumberOperations<<#=fullname#>, <#=componenttype#>> INumber<<#=fullname#>, <#=componenttype#>>.GetOperations()
         {
             return Operations.Instance;
         }<# } #><# if(level >= 1) { #>
@@ -335,10 +335,10 @@ foreach(var info in data)
         IExtendedNumberOperations<<#=fullname#>, TInner> IExtendedNumber<<#=fullname#>, TInner>.GetOperations()
         {
             return Operations.Instance;
-        }<# if(primitive) { #>
+        }<# if(component) { #>
 		
 
-        IExtendedNumberOperations<<#=fullname#>, TInner, <#=primitivetype#>> IExtendedNumber<<#=fullname#>, TInner, TPrimitive>.GetOperations()
+        IExtendedNumberOperations<<#=fullname#>, TInner, <#=componenttype#>> IExtendedNumber<<#=fullname#>, TInner, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }<# } #><# } #><# if(level >= 3) { #>
@@ -347,12 +347,12 @@ foreach(var info in data)
         INumberOperations<TInner> INumber<TInner>.GetOperations()
         {
             return HyperMath.Operations.For<TInner>.Instance;
-        }<# if(primitive) { #>
+        }<# if(component) { #>
 		
 
-        INumberOperations<TInner, <#=primitivetype#>> INumber<TInner, <#=primitivetype#>>.GetOperations()
+        INumberOperations<TInner, <#=componenttype#>> INumber<TInner, <#=componenttype#>>.GetOperations()
         {
-            return HyperMath.Operations.For<TInner, <#=primitivetype#>>.Instance;
+            return HyperMath.Operations.For<TInner, <#=componenttype#>>.Instance;
         }<# } #><# } #>
 
 
@@ -424,20 +424,20 @@ foreach(var info in data)
             public <#=fullname#> Call(BinaryOperation operation, in TInner num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
-            }<# } #><# if(primitive) { #>
+            }<# } #><# if(component) { #>
 
 
-            public <#=primitivetype#> CallComponent(UnaryOperation operation, in <#=fullname#> num)
+            public <#=componenttype#> CallComponent(UnaryOperation operation, in <#=fullname#> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=primitivetype#> num2)
+            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=componenttype#> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=primitivetype#> num1, in <#=fullname#> num2)
+            public <#=fullname#> Call(BinaryOperation operation, in <#=componenttype#> num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
             }<# } #><# if(level >= 1) { #>

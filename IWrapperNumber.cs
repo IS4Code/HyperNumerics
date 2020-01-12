@@ -30,8 +30,8 @@ namespace IS4.HyperNumerics
     /// </summary>
     /// <typeparam name="TNumber">The number type that serves as the argument and result of the operations, usually the same as the implementing type.</typeparam>
     /// <typeparam name="TInner">The inner type.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
-    public interface IWrapperNumber<TNumber, TInner, TPrimitive> : IWrapperNumber<TNumber, TInner>, IExtendedNumber<TNumber, TInner, TPrimitive> where TNumber : struct, IExtendedNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
+    public interface IWrapperNumber<TNumber, TInner, TComponent> : IWrapperNumber<TNumber, TInner>, IExtendedNumber<TNumber, TInner, TComponent> where TNumber : struct, IExtendedNumber<TNumber, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
 
     }

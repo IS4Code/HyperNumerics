@@ -39,12 +39,12 @@ namespace IS4.HyperNumerics
     }
 
     /// <summary>
-    /// Provides operations for a number type implementing <see cref="IExtendedNumber{TNumber, TInner, TPrimitive}"/>.
+    /// Provides operations for a number type implementing <see cref="IExtendedNumber{TNumber, TInner, TComponent}"/>.
     /// </summary>
     /// <typeparam name="TNumber">The number type that serves as the argument and result of the operations.</typeparam>
     /// <typeparam name="TInner">The inner type.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
-    public interface IExtendedNumberOperations<TNumber, TInner, TPrimitive> : IExtendedNumberOperations<TNumber, TInner>, INumberOperations<TNumber, TPrimitive> where TNumber : struct, IExtendedNumber<TNumber, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
+    public interface IExtendedNumberOperations<TNumber, TInner, TComponent> : IExtendedNumberOperations<TNumber, TInner>, INumberOperations<TNumber, TComponent> where TNumber : struct, IExtendedNumber<TNumber, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
 
     }

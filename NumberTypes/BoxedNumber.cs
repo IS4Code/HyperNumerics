@@ -157,9 +157,9 @@ namespace IS4.HyperNumerics.NumberTypes
     /// Stores a reference to a boxed instance of <typeparamref name="TInner"/> so that it is not copied when the value is reassigned.
     /// </summary>
     /// <typeparam name="TInner">The internal number type that the instance supports.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
     [Serializable]
-    public readonly partial struct BoxedNumber<TInner, TPrimitive> : IWrapperNumber<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly partial struct BoxedNumber<TInner, TComponent> : IWrapperNumber<BoxedNumber<TInner, TComponent>, TInner, TComponent>, INumber<TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
         static TInner defaultValue;
 
@@ -190,10 +190,10 @@ namespace IS4.HyperNumerics.NumberTypes
             instance = defaultValue.Equals(in value) ? null : new Instance(value);
         }
 
-        public BoxedNumber<TInner, TPrimitive> Clone()
+        public BoxedNumber<TInner, TComponent> Clone()
         {
             if(instance == null) return default;
-            return new BoxedNumber<TInner, TPrimitive>(instance.Value.Clone());
+            return new BoxedNumber<TInner, TComponent>(instance.Value.Clone());
         }
 
         TInner INumber<TInner>.Clone()
@@ -201,12 +201,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Clone();
         }
 
-        public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> other)
+        public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> other)
         {
             return Reference.Call(operation, other.Reference);
         }
 
-        public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
+        public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
         {
             return Reference.Call(operation, other);
         }
@@ -216,32 +216,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Call(operation, other);
         }
 
-        public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
+        public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
         {
             return Reference.Call(operation, other);
         }
 
-        public BoxedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
+        public BoxedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner, TPrimitive>.Call(BinaryOperation operation, in TPrimitive other)
+        TInner INumber<TInner, TComponent>.Call(BinaryOperation operation, in TComponent other)
         {
             return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner, TPrimitive>.CallReversed(BinaryOperation operation, in TPrimitive other)
+        TInner INumber<TInner, TComponent>.CallReversed(BinaryOperation operation, in TComponent other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        public BoxedNumber<TInner, TPrimitive> Call(UnaryOperation operation)
+        public BoxedNumber<TInner, TComponent> Call(UnaryOperation operation)
         {
             return Reference.Call(operation);
         }
 
-        public BoxedNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        public BoxedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
         {
             return Reference.CallReversed(operation, other);
         }
@@ -256,17 +256,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.CallReversed(operation, other);
         }
 
-        public TPrimitive CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(UnaryOperation operation)
         {
             return Reference.CallComponent(operation);
         }
 
         public override bool Equals(object obj)
         {
-            return obj is BoxedNumber<TInner, TPrimitive> value && Equals(value) || Reference.Equals(obj);
+            return obj is BoxedNumber<TInner, TComponent> value && Equals(value) || Reference.Equals(obj);
         }
 
-        public bool Equals(in BoxedNumber<TInner, TPrimitive> other)
+        public bool Equals(in BoxedNumber<TInner, TComponent> other)
         {
             return Reference.Equals(other);
         }
@@ -276,7 +276,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Equals(other);
         }
 
-        public int CompareTo(in BoxedNumber<TInner, TPrimitive> other)
+        public int CompareTo(in BoxedNumber<TInner, TComponent> other)
         {
             return Reference.CompareTo(other.Reference);
         }
@@ -301,33 +301,33 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.ToString(format, formatProvider);
         }
 
-        partial class Operations : NumberOperations<BoxedNumber<TInner, TPrimitive>>, IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, TInner, TPrimitive>
+        partial class Operations : NumberOperations<BoxedNumber<TInner, TComponent>>, IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, TInner, TComponent>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public BoxedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
+            public BoxedNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            public BoxedNumber<TInner, TComponent> Create(in TComponent num)
             {
-                return new BoxedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new BoxedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public BoxedNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public BoxedNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
-                return new BoxedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new BoxedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public BoxedNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                return new BoxedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new BoxedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
         }
 

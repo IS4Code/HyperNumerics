@@ -241,10 +241,10 @@ namespace IS4.HyperNumerics.NumberTypes
     /// of <typeparamref name="TInner"/>, and can be specified using a custom type.
     /// </summary>
     /// <typeparam name="TInner">The inner type.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
     /// <typeparam name="TTraits">A type implementing <see cref="ITraits"/> which is constructed once for every number type and queried for the default value.</typeparam>
     [Serializable]
-    public readonly partial struct CustomDefaultNumber<TInner, TPrimitive, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>, INumber<TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive> where TTraits : struct, CustomDefaultNumber<TInner, TPrimitive, TTraits>.ITraits
+    public readonly partial struct CustomDefaultNumber<TInner, TComponent, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, TInner, TComponent>, INumber<TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTraits : struct, CustomDefaultNumber<TInner, TComponent, TTraits>.ITraits
     {
         static TInner defaultValue = default(TTraits).DefaultValue;
 
@@ -265,7 +265,7 @@ namespace IS4.HyperNumerics.NumberTypes
             this.initialized = true;
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> Clone()
+        public CustomDefaultNumber<TInner, TComponent, TTraits> Clone()
         {
             if(initialized)
             {
@@ -283,7 +283,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Clone();
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> other)
+        public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> other)
         {
             if(initialized)
             {
@@ -300,7 +300,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Call(operation, defaultValue, defaultValue);
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in TInner other)
+        public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -309,7 +309,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> CallReversed(BinaryOperation operation, in TInner other)
+        public CustomDefaultNumber<TInner, TComponent, TTraits> CallReversed(BinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -336,43 +336,43 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in TPrimitive other)
+        public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
-                return HyperMath.CallPrimitive(operation, value, other);
+                return HyperMath.CallComponent(operation, value, other);
             }
             return defaultValue.Call(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> CallReversed(BinaryOperation operation, in TPrimitive other)
+        public CustomDefaultNumber<TInner, TComponent, TTraits> CallReversed(BinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
-                return HyperMath.CallPrimitiveReversed(operation, other, value);
+                return HyperMath.CallComponentReversed(operation, other, value);
             }
             return defaultValue.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner, TPrimitive>.Call(BinaryOperation operation, in TPrimitive other)
+        TInner INumber<TInner, TComponent>.Call(BinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
-                return HyperMath.CallPrimitive(operation, value, other);
+                return HyperMath.CallComponent(operation, value, other);
             }
             return defaultValue.Call(operation, other);
         }
 
-        TInner INumber<TInner, TPrimitive>.CallReversed(BinaryOperation operation, in TPrimitive other)
+        TInner INumber<TInner, TComponent>.CallReversed(BinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
-                return HyperMath.CallPrimitiveReversed(operation, other, value);
+                return HyperMath.CallComponentReversed(operation, other, value);
             }
             return defaultValue.CallReversed(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(UnaryOperation operation)
+        public CustomDefaultNumber<TInner, TComponent, TTraits> Call(UnaryOperation operation)
         {
             if(initialized)
             {
@@ -390,21 +390,21 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation);
         }
 
-        public TPrimitive CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(UnaryOperation operation)
         {
             if(initialized)
             {
-                return HyperMath.CallComponent<TInner, TPrimitive>(operation, value);
+                return HyperMath.CallComponent<TInner, TComponent>(operation, value);
             }
             return defaultValue.CallComponent(operation);
         }
 
         public override bool Equals(object obj)
         {
-            return obj is CustomDefaultNumber<TInner, TPrimitive, TTraits> value && Equals(in value) || Value.Equals(obj);
+            return obj is CustomDefaultNumber<TInner, TComponent, TTraits> value && Equals(in value) || Value.Equals(obj);
         }
 
-        public bool Equals(in CustomDefaultNumber<TInner, TPrimitive, TTraits> other)
+        public bool Equals(in CustomDefaultNumber<TInner, TComponent, TTraits> other)
         {
             if(initialized)
             {
@@ -430,7 +430,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Equals(defaultValue, other);
         }
 
-        public int CompareTo(in CustomDefaultNumber<TInner, TPrimitive, TTraits> other)
+        public int CompareTo(in CustomDefaultNumber<TInner, TComponent, TTraits> other)
         {
             if(initialized)
             {
@@ -483,38 +483,38 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.ToString(format, formatProvider);
         }
 
-        partial class Operations : NumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, TInner, TPrimitive>
+        partial class Operations : NumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, TInner, TComponent>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(NullaryOperation operation)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in TPrimitive num)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TComponent num)
             {
-                return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new CustomDefaultNumber<TInner, TComponent, TTraits>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(IEnumerable<TPrimitive> units)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerable<TComponent> units)
             {
-                return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new CustomDefaultNumber<TInner, TComponent, TTraits>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(IEnumerator<TPrimitive> units)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerator<TComponent> units)
             {
-                return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new CustomDefaultNumber<TInner, TComponent, TTraits>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
         }
         
         /// <summary>
-        /// An interface that a user of <see cref="CustomDefaultNumber{TInner, TPrimitive, TTraits}"/> must provide
+        /// An interface that a user of <see cref="CustomDefaultNumber{TInner, TComponent, TTraits}"/> must provide
         /// to specify the default value of the type.
         /// </summary>
         public interface ITraits

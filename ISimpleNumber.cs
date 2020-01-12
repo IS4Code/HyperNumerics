@@ -5,20 +5,20 @@ using System.Text;
 namespace IS4.HyperNumerics
 {
     /// <summary>
-    /// A general interface type for any number backed up by a single primitive type.
+    /// A general interface type for any number backed up by a single component type.
     /// </summary>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
-    public interface ISimpleNumber<TPrimitive> : INumber, IList<TPrimitive>, IReadOnlyList<TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
+    public interface ISimpleNumber<TComponent> : INumber, IList<TComponent>, IReadOnlyList<TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
-        TPrimitive Value { get; }
+        TComponent Value { get; }
     }
 
     /// <summary>
-    /// A general interface type for any number backed up by a single primitive type, supporting the common set of standard operations.
+    /// A general interface type for any number backed up by a single component type, supporting the common set of standard operations.
     /// </summary>
     /// <typeparam name="TNumber">The number type that serves as the argument and result of the operations, usually the same as the implementing type.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
-    public interface ISimpleNumber<TNumber, TPrimitive> : ISimpleNumber<TPrimitive>, INumber<TNumber, TPrimitive> where TNumber : struct, ISimpleNumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
+    public interface ISimpleNumber<TNumber, TComponent> : ISimpleNumber<TComponent>, INumber<TNumber, TComponent> where TNumber : struct, ISimpleNumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
 
     }

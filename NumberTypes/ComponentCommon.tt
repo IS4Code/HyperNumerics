@@ -24,8 +24,8 @@ var data = new[] {
 foreach(var info in data)
 {
 	bool hasinner = info.hasinner;
-	bool primitive = true;
-	string primitiveaffix = primitive ? ", TPrimitive" : "";
+	bool component = true;
+	string componentaffix = component ? ", TComponent" : "";
 	string fullname = info.name;
 	bool first = true;
 	if(hasinner)
@@ -33,10 +33,10 @@ foreach(var info in data)
 		fullname += "<TInner";
 		first = false;
 	}
-	if(primitive)
+	if(component)
 	{
 		fullname += first ? "<" : ", ";
-		fullname += "TPrimitive";
+		fullname += "TComponent";
 		first = false;
 	}
 	if(!String.IsNullOrEmpty(info.args))
@@ -50,47 +50,47 @@ foreach(var info in data)
 		fullname += ">";
 	}
 #>
-	partial struct <#=fullname#> : IWrapperNumber<<#=fullname#>, <#=fullname#><#=primitiveaffix#>><#=
-	hasinner ? primitive ? " where TInner : struct, INumber<TInner, TPrimitive>" : " where TInner : struct, INumber<TInner>" : ""
+	partial struct <#=fullname#> : IWrapperNumber<<#=fullname#>, <#=fullname#><#=componentaffix#>><#=
+	hasinner ? component ? " where TInner : struct, INumber<TInner, TComponent>" : " where TInner : struct, INumber<TInner>" : ""
 	#><#=
-	primitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
+	component ? " where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>" : ""
 	#><#=
 	info.constraints(fullname)
 	#>
 	{
-		partial class Operations : IExtendedNumberOperations<<#=fullname#>, <#=fullname#><#=primitiveaffix#>>
+		partial class Operations : IExtendedNumberOperations<<#=fullname#>, <#=fullname#><#=componentaffix#>>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => <#=String.Join(" + ", info.value.Select(v => "GetCollectionCount(" + v + ")"))#>;
+        int ICollection<TComponent>.Count => <#=String.Join(" + ", info.value.Select(v => "GetCollectionCount(" + v + ")"))#>;
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => <#=String.Join(" + ", info.value.Select(v => "GetReadOnlyCollectionCount(" + v + ")"))#>;
+        int IReadOnlyCollection<TComponent>.Count => <#=String.Join(" + ", info.value.Select(v => "GetReadOnlyCollectionCount(" + v + ")"))#>;
 		<# if(info.value.Length > 1) { #>
 		
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 int offset = GetReadOnlyCollectionCount(first);
@@ -102,7 +102,7 @@ foreach(var info in data)
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 int offset = GetCollectionCount(first);
@@ -117,7 +117,7 @@ foreach(var info in data)
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             int index = first.IndexOf(item);
             if(index == -1)
@@ -128,14 +128,14 @@ foreach(var info in data)
             return index;
         }<# }else if(info.value.Length == 1) { #>
 
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 return GetReadOnlyListItem(<#=info.value[0]#>, index);
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 return GetListItem(<#=info.value[0]#>, index);
@@ -145,39 +145,39 @@ foreach(var info in data)
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             return <#=info.value[0]#>.IndexOf(item);
         }<# } #>
 
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return <#=String.Join(" || ", info.value.Select(v => v + ".Contains(item)"))#>;
         }
 		<# if(info.value.Length > 1) { #>
 		
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
 			int offset = 0;<#
 			foreach(var value in info.value)
@@ -191,19 +191,19 @@ foreach(var info in data)
 
         }<# }else if(info.value.Length == 1) { #>
 
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
             <#=info.value[0]#>.CopyTo(array, arrayIndex);
         }<# } #>
 
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		<# if(info.value.Length > 1) { #>
 
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {<#
 			foreach(var value in info.value)
 			{
@@ -233,7 +233,7 @@ foreach(var info in data)
 
         }<# }else if(info.value.Length == 1) { #>
 
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
 			return <#=info.value[0]#>.GetEnumerator();
         }

@@ -28,9 +28,9 @@ namespace IS4.HyperNumerics.Operations
             private static readonly MethodInfo Invoke = InterfaceType.GetMethod("Invoke", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
             private static readonly Type NumberOperation = typeof(INumberOperation);
-            private static readonly Type PrimitiveNumberOperation = typeof(IPrimitiveNumberOperation);
+            private static readonly Type ComponentNumberOperation = typeof(IComponentNumberOperation);
             private static readonly ConstructorInfo AbstractConstructor = typeof(AbstractNumber).GetConstructor(new[] { NumberOperation });
-            private static readonly ConstructorInfo PrimitiveAbstractConstructor = typeof(PrimitiveAbstractNumber).GetConstructor(new[] { PrimitiveNumberOperation });
+            private static readonly ConstructorInfo ComponentAbstractConstructor = typeof(ComponentAbstractNumber).GetConstructor(new[] { ComponentNumberOperation });
 
             public MetaObject(Expression expression, DynamicNumberOperation<TInterface> value) : base(expression, BindingRestrictions.GetTypeRestriction(expression, InterfaceType), value)
             {
@@ -47,9 +47,9 @@ namespace IS4.HyperNumerics.Operations
                     {
                         return new DynamicMetaObject(Expression.Convert(Expression.New(AbstractConstructor, Expression.Convert(Expression, NumberOperation)), binder.ReturnType), restrictions);
                     }
-                    if(PrimitiveNumberOperation.Equals(InterfaceType))
+                    if(ComponentNumberOperation.Equals(InterfaceType))
                     {
-                        return new DynamicMetaObject(Expression.Convert(Expression.New(PrimitiveAbstractConstructor, Expression.Convert(Expression, PrimitiveNumberOperation)), binder.ReturnType), restrictions);
+                        return new DynamicMetaObject(Expression.Convert(Expression.New(ComponentAbstractConstructor, Expression.Convert(Expression, ComponentNumberOperation)), binder.ReturnType), restrictions);
                     }
                     MethodInfo method = null;
                     foreach(var arg in args)
@@ -64,11 +64,11 @@ namespace IS4.HyperNumerics.Operations
                         {
                             break;
                         }else{
-                            var primitiveType = TypeTools.GetPrimitiveType(arg.LimitType);
-                            if(primitiveType != null)
+                            var componentType = TypeTools.GetComponentType(arg.LimitType);
+                            if(componentType != null)
                             {
                                 try{
-                                    method = Invoke.MakeGenericMethod(arg.LimitType, primitiveType);
+                                    method = Invoke.MakeGenericMethod(arg.LimitType, componentType);
                                 }catch(ArgumentException)
                                 {
 

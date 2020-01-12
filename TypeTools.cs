@@ -16,13 +16,13 @@ namespace IS4.HyperNumerics
             return GetHyperNumberType<TNumber>(complex.Concat(splitComplex).Concat(dual).Concat(diagonal));
         }
 
-        public static Type GetHyperNumberType<TNumber, TPrimitive>(int numComplexUnits = 0, int numSplitComplexUnits = 0, int numDualUnits = 0, int numDiagonalUnits = 0) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static Type GetHyperNumberType<TNumber, TComponent>(int numComplexUnits = 0, int numSplitComplexUnits = 0, int numDualUnits = 0, int numDiagonalUnits = 0) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
             var complex = Enumerable.Repeat(typeof(HyperComplex<,>), numComplexUnits);
             var splitComplex = Enumerable.Repeat(typeof(HyperSplitComplex<,>), numSplitComplexUnits);
             var dual = Enumerable.Repeat(typeof(HyperDual<,>), numDualUnits);
             var diagonal = Enumerable.Repeat(typeof(HyperDiagonal<,>), numDiagonalUnits);
-            return GetHyperNumberType<TNumber, TPrimitive>(complex.Concat(splitComplex).Concat(dual).Concat(diagonal));
+            return GetHyperNumberType<TNumber, TComponent>(complex.Concat(splitComplex).Concat(dual).Concat(diagonal));
         }
 
         public static Type GetHyperNumberType<TNumber>(IEnumerable<Type> hyperNumberTypes) where TNumber : struct, INumber<TNumber>
@@ -35,10 +35,10 @@ namespace IS4.HyperNumerics
             return type;
         }
 
-        public static Type GetHyperNumberType<TNumber, TPrimitive>(IEnumerable<Type> hyperNumberTypes) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static Type GetHyperNumberType<TNumber, TComponent>(IEnumerable<Type> hyperNumberTypes) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
             var type = typeof(TNumber);
-            var primType = typeof(TPrimitive);
+            var primType = typeof(TComponent);
             foreach(var t in hyperNumberTypes)
             {
                 type = t.MakeGenericType(type, primType);
@@ -51,7 +51,7 @@ namespace IS4.HyperNumerics
             return ((INumber)Activator.CreateInstance(numberType)).GetOperations();
         }
 
-        public static Type GetPrimitiveType(Type numberType)
+        public static Type GetComponentType(Type numberType)
         {
             var tbase = typeof(INumber<,>);
             return numberType.GetInterfaces().Where(

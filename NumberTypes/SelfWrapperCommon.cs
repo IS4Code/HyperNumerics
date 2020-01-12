@@ -130,60 +130,60 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct PrimitiveAbstractNumber : IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>
+	partial struct ComponentAbstractNumber : IWrapperNumber<ComponentAbstractNumber, ComponentAbstractNumber>, IWrapperNumber<ComponentAbstractNumber, ComponentAbstractNumber, ComponentAbstractNumber>
 	{
-        PrimitiveAbstractNumber IWrapperNumber<PrimitiveAbstractNumber>.Value => this;
+        ComponentAbstractNumber IWrapperNumber<ComponentAbstractNumber>.Value => this;
 
-		PrimitiveAbstractNumber IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.CallReversed(BinaryOperation operation, in PrimitiveAbstractNumber num)
+		ComponentAbstractNumber IExtendedNumber<ComponentAbstractNumber, ComponentAbstractNumber>.CallReversed(BinaryOperation operation, in ComponentAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		PrimitiveAbstractNumber INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.CallComponent(UnaryOperation operation)
+		ComponentAbstractNumber INumber<ComponentAbstractNumber, ComponentAbstractNumber>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
+        IExtendedNumberOperations<ComponentAbstractNumber, ComponentAbstractNumber> IExtendedNumber<ComponentAbstractNumber, ComponentAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
+		INumberOperations<ComponentAbstractNumber, ComponentAbstractNumber> INumber<ComponentAbstractNumber, ComponentAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber> IExtendedNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
+		IExtendedNumberOperations<ComponentAbstractNumber, ComponentAbstractNumber, ComponentAbstractNumber> IExtendedNumber<ComponentAbstractNumber, ComponentAbstractNumber, ComponentAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>
+		partial class Operations : IExtendedNumberOperations<ComponentAbstractNumber, ComponentAbstractNumber>, IExtendedNumberOperations<ComponentAbstractNumber, ComponentAbstractNumber, ComponentAbstractNumber>
 		{
-            PrimitiveAbstractNumber INumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.CallComponent(UnaryOperation operation, in PrimitiveAbstractNumber num)
+            ComponentAbstractNumber INumberOperations<ComponentAbstractNumber, ComponentAbstractNumber>.CallComponent(UnaryOperation operation, in ComponentAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public PrimitiveAbstractNumber Create(in PrimitiveAbstractNumber num)
+            public ComponentAbstractNumber Create(in ComponentAbstractNumber num)
             {
                 return num;
             }
 
-            public PrimitiveAbstractNumber Create(in PrimitiveAbstractNumber realUnit, in PrimitiveAbstractNumber otherUnits, in PrimitiveAbstractNumber someUnitsCombined, in PrimitiveAbstractNumber allUnitsCombined)
+            public ComponentAbstractNumber Create(in ComponentAbstractNumber realUnit, in ComponentAbstractNumber otherUnits, in ComponentAbstractNumber someUnitsCombined, in ComponentAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public PrimitiveAbstractNumber Create(IEnumerable<PrimitiveAbstractNumber> units)
+            public ComponentAbstractNumber Create(IEnumerable<ComponentAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public PrimitiveAbstractNumber Create(IEnumerator<PrimitiveAbstractNumber> units)
+            public ComponentAbstractNumber Create(IEnumerator<ComponentAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -191,15 +191,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<PrimitiveAbstractNumber>.Count => 1;
+        int ICollection<ComponentAbstractNumber>.Count => 1;
 
-        bool ICollection<PrimitiveAbstractNumber>.IsReadOnly => true;
+        bool ICollection<ComponentAbstractNumber>.IsReadOnly => true;
 
-        int IReadOnlyCollection<PrimitiveAbstractNumber>.Count => 1;
+        int IReadOnlyCollection<ComponentAbstractNumber>.Count => 1;
 
-        PrimitiveAbstractNumber IReadOnlyList<PrimitiveAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        ComponentAbstractNumber IReadOnlyList<ComponentAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        PrimitiveAbstractNumber IList<PrimitiveAbstractNumber>.this[int index]
+        ComponentAbstractNumber IList<ComponentAbstractNumber>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -209,47 +209,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<PrimitiveAbstractNumber>.IndexOf(PrimitiveAbstractNumber item)
+        int IList<ComponentAbstractNumber>.IndexOf(ComponentAbstractNumber item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<PrimitiveAbstractNumber>.Insert(int index, PrimitiveAbstractNumber item)
+        void IList<ComponentAbstractNumber>.Insert(int index, ComponentAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<PrimitiveAbstractNumber>.RemoveAt(int index)
+        void IList<ComponentAbstractNumber>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<PrimitiveAbstractNumber>.Add(PrimitiveAbstractNumber item)
+        void ICollection<ComponentAbstractNumber>.Add(ComponentAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<PrimitiveAbstractNumber>.Clear()
+        void ICollection<ComponentAbstractNumber>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<PrimitiveAbstractNumber>.Contains(PrimitiveAbstractNumber item)
+        bool ICollection<ComponentAbstractNumber>.Contains(ComponentAbstractNumber item)
         {
             return Equals(item);
         }
 
-        void ICollection<PrimitiveAbstractNumber>.CopyTo(PrimitiveAbstractNumber[] array, int arrayIndex)
+        void ICollection<ComponentAbstractNumber>.CopyTo(ComponentAbstractNumber[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<PrimitiveAbstractNumber>.Remove(PrimitiveAbstractNumber item)
+        bool ICollection<ComponentAbstractNumber>.Remove(ComponentAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<PrimitiveAbstractNumber> IEnumerable<PrimitiveAbstractNumber>.GetEnumerator()
+        IEnumerator<ComponentAbstractNumber> IEnumerable<ComponentAbstractNumber>.GetEnumerator()
         {
             yield return this;
         }
@@ -380,60 +380,60 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct PrimitiveUnaryAbstractNumber : IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
+	partial struct ComponentUnaryAbstractNumber : IWrapperNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>, IWrapperNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>
 	{
-        PrimitiveUnaryAbstractNumber IWrapperNumber<PrimitiveUnaryAbstractNumber>.Value => this;
+        ComponentUnaryAbstractNumber IWrapperNumber<ComponentUnaryAbstractNumber>.Value => this;
 
-		PrimitiveUnaryAbstractNumber IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.CallReversed(BinaryOperation operation, in PrimitiveUnaryAbstractNumber num)
+		ComponentUnaryAbstractNumber IExtendedNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallReversed(BinaryOperation operation, in ComponentUnaryAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		PrimitiveUnaryAbstractNumber INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.CallComponent(UnaryOperation operation)
+		ComponentUnaryAbstractNumber INumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
+        IExtendedNumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber> IExtendedNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
+		INumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber> INumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> IExtendedNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
+		IExtendedNumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber> IExtendedNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
+		partial class Operations : IExtendedNumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>, IExtendedNumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>
 		{
-            PrimitiveUnaryAbstractNumber INumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.CallComponent(UnaryOperation operation, in PrimitiveUnaryAbstractNumber num)
+            ComponentUnaryAbstractNumber INumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallComponent(UnaryOperation operation, in ComponentUnaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public PrimitiveUnaryAbstractNumber Create(in PrimitiveUnaryAbstractNumber num)
+            public ComponentUnaryAbstractNumber Create(in ComponentUnaryAbstractNumber num)
             {
                 return num;
             }
 
-            public PrimitiveUnaryAbstractNumber Create(in PrimitiveUnaryAbstractNumber realUnit, in PrimitiveUnaryAbstractNumber otherUnits, in PrimitiveUnaryAbstractNumber someUnitsCombined, in PrimitiveUnaryAbstractNumber allUnitsCombined)
+            public ComponentUnaryAbstractNumber Create(in ComponentUnaryAbstractNumber realUnit, in ComponentUnaryAbstractNumber otherUnits, in ComponentUnaryAbstractNumber someUnitsCombined, in ComponentUnaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public PrimitiveUnaryAbstractNumber Create(IEnumerable<PrimitiveUnaryAbstractNumber> units)
+            public ComponentUnaryAbstractNumber Create(IEnumerable<ComponentUnaryAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public PrimitiveUnaryAbstractNumber Create(IEnumerator<PrimitiveUnaryAbstractNumber> units)
+            public ComponentUnaryAbstractNumber Create(IEnumerator<ComponentUnaryAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -441,15 +441,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<PrimitiveUnaryAbstractNumber>.Count => 1;
+        int ICollection<ComponentUnaryAbstractNumber>.Count => 1;
 
-        bool ICollection<PrimitiveUnaryAbstractNumber>.IsReadOnly => true;
+        bool ICollection<ComponentUnaryAbstractNumber>.IsReadOnly => true;
 
-        int IReadOnlyCollection<PrimitiveUnaryAbstractNumber>.Count => 1;
+        int IReadOnlyCollection<ComponentUnaryAbstractNumber>.Count => 1;
 
-        PrimitiveUnaryAbstractNumber IReadOnlyList<PrimitiveUnaryAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        ComponentUnaryAbstractNumber IReadOnlyList<ComponentUnaryAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        PrimitiveUnaryAbstractNumber IList<PrimitiveUnaryAbstractNumber>.this[int index]
+        ComponentUnaryAbstractNumber IList<ComponentUnaryAbstractNumber>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -459,47 +459,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<PrimitiveUnaryAbstractNumber>.IndexOf(PrimitiveUnaryAbstractNumber item)
+        int IList<ComponentUnaryAbstractNumber>.IndexOf(ComponentUnaryAbstractNumber item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<PrimitiveUnaryAbstractNumber>.Insert(int index, PrimitiveUnaryAbstractNumber item)
+        void IList<ComponentUnaryAbstractNumber>.Insert(int index, ComponentUnaryAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<PrimitiveUnaryAbstractNumber>.RemoveAt(int index)
+        void IList<ComponentUnaryAbstractNumber>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<PrimitiveUnaryAbstractNumber>.Add(PrimitiveUnaryAbstractNumber item)
+        void ICollection<ComponentUnaryAbstractNumber>.Add(ComponentUnaryAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<PrimitiveUnaryAbstractNumber>.Clear()
+        void ICollection<ComponentUnaryAbstractNumber>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<PrimitiveUnaryAbstractNumber>.Contains(PrimitiveUnaryAbstractNumber item)
+        bool ICollection<ComponentUnaryAbstractNumber>.Contains(ComponentUnaryAbstractNumber item)
         {
             return Equals(item);
         }
 
-        void ICollection<PrimitiveUnaryAbstractNumber>.CopyTo(PrimitiveUnaryAbstractNumber[] array, int arrayIndex)
+        void ICollection<ComponentUnaryAbstractNumber>.CopyTo(ComponentUnaryAbstractNumber[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<PrimitiveUnaryAbstractNumber>.Remove(PrimitiveUnaryAbstractNumber item)
+        bool ICollection<ComponentUnaryAbstractNumber>.Remove(ComponentUnaryAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<PrimitiveUnaryAbstractNumber> IEnumerable<PrimitiveUnaryAbstractNumber>.GetEnumerator()
+        IEnumerator<ComponentUnaryAbstractNumber> IEnumerable<ComponentUnaryAbstractNumber>.GetEnumerator()
         {
             yield return this;
         }
@@ -630,60 +630,60 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct PrimitiveBinaryAbstractNumber : IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
+	partial struct ComponentBinaryAbstractNumber : IWrapperNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>, IWrapperNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>
 	{
-        PrimitiveBinaryAbstractNumber IWrapperNumber<PrimitiveBinaryAbstractNumber>.Value => this;
+        ComponentBinaryAbstractNumber IWrapperNumber<ComponentBinaryAbstractNumber>.Value => this;
 
-		PrimitiveBinaryAbstractNumber IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.CallReversed(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num)
+		ComponentBinaryAbstractNumber IExtendedNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallReversed(BinaryOperation operation, in ComponentBinaryAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		PrimitiveBinaryAbstractNumber INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.CallComponent(UnaryOperation operation)
+		ComponentBinaryAbstractNumber INumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
+        IExtendedNumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber> IExtendedNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
+		INumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber> INumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> IExtendedNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
+		IExtendedNumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber> IExtendedNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
+		partial class Operations : IExtendedNumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>, IExtendedNumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>
 		{
-            PrimitiveBinaryAbstractNumber INumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.CallComponent(UnaryOperation operation, in PrimitiveBinaryAbstractNumber num)
+            ComponentBinaryAbstractNumber INumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallComponent(UnaryOperation operation, in ComponentBinaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public PrimitiveBinaryAbstractNumber Create(in PrimitiveBinaryAbstractNumber num)
+            public ComponentBinaryAbstractNumber Create(in ComponentBinaryAbstractNumber num)
             {
                 return num;
             }
 
-            public PrimitiveBinaryAbstractNumber Create(in PrimitiveBinaryAbstractNumber realUnit, in PrimitiveBinaryAbstractNumber otherUnits, in PrimitiveBinaryAbstractNumber someUnitsCombined, in PrimitiveBinaryAbstractNumber allUnitsCombined)
+            public ComponentBinaryAbstractNumber Create(in ComponentBinaryAbstractNumber realUnit, in ComponentBinaryAbstractNumber otherUnits, in ComponentBinaryAbstractNumber someUnitsCombined, in ComponentBinaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public PrimitiveBinaryAbstractNumber Create(IEnumerable<PrimitiveBinaryAbstractNumber> units)
+            public ComponentBinaryAbstractNumber Create(IEnumerable<ComponentBinaryAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public PrimitiveBinaryAbstractNumber Create(IEnumerator<PrimitiveBinaryAbstractNumber> units)
+            public ComponentBinaryAbstractNumber Create(IEnumerator<ComponentBinaryAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -691,15 +691,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<PrimitiveBinaryAbstractNumber>.Count => 1;
+        int ICollection<ComponentBinaryAbstractNumber>.Count => 1;
 
-        bool ICollection<PrimitiveBinaryAbstractNumber>.IsReadOnly => true;
+        bool ICollection<ComponentBinaryAbstractNumber>.IsReadOnly => true;
 
-        int IReadOnlyCollection<PrimitiveBinaryAbstractNumber>.Count => 1;
+        int IReadOnlyCollection<ComponentBinaryAbstractNumber>.Count => 1;
 
-        PrimitiveBinaryAbstractNumber IReadOnlyList<PrimitiveBinaryAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        ComponentBinaryAbstractNumber IReadOnlyList<ComponentBinaryAbstractNumber>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        PrimitiveBinaryAbstractNumber IList<PrimitiveBinaryAbstractNumber>.this[int index]
+        ComponentBinaryAbstractNumber IList<ComponentBinaryAbstractNumber>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -709,47 +709,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<PrimitiveBinaryAbstractNumber>.IndexOf(PrimitiveBinaryAbstractNumber item)
+        int IList<ComponentBinaryAbstractNumber>.IndexOf(ComponentBinaryAbstractNumber item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<PrimitiveBinaryAbstractNumber>.Insert(int index, PrimitiveBinaryAbstractNumber item)
+        void IList<ComponentBinaryAbstractNumber>.Insert(int index, ComponentBinaryAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<PrimitiveBinaryAbstractNumber>.RemoveAt(int index)
+        void IList<ComponentBinaryAbstractNumber>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<PrimitiveBinaryAbstractNumber>.Add(PrimitiveBinaryAbstractNumber item)
+        void ICollection<ComponentBinaryAbstractNumber>.Add(ComponentBinaryAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<PrimitiveBinaryAbstractNumber>.Clear()
+        void ICollection<ComponentBinaryAbstractNumber>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<PrimitiveBinaryAbstractNumber>.Contains(PrimitiveBinaryAbstractNumber item)
+        bool ICollection<ComponentBinaryAbstractNumber>.Contains(ComponentBinaryAbstractNumber item)
         {
             return Equals(item);
         }
 
-        void ICollection<PrimitiveBinaryAbstractNumber>.CopyTo(PrimitiveBinaryAbstractNumber[] array, int arrayIndex)
+        void ICollection<ComponentBinaryAbstractNumber>.CopyTo(ComponentBinaryAbstractNumber[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<PrimitiveBinaryAbstractNumber>.Remove(PrimitiveBinaryAbstractNumber item)
+        bool ICollection<ComponentBinaryAbstractNumber>.Remove(ComponentBinaryAbstractNumber item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<PrimitiveBinaryAbstractNumber> IEnumerable<PrimitiveBinaryAbstractNumber>.GetEnumerator()
+        IEnumerator<ComponentBinaryAbstractNumber> IEnumerable<ComponentBinaryAbstractNumber>.GetEnumerator()
         {
             yield return this;
         }
@@ -880,65 +880,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct BoxedNumber<TInner, TPrimitive> : IWrapperNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct BoxedNumber<TInner, TComponent> : IWrapperNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, TComponent>, IWrapperNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        BoxedNumber<TInner, TPrimitive> IWrapperNumber<BoxedNumber<TInner, TPrimitive>>.Value => this;
+        BoxedNumber<TInner, TComponent> IWrapperNumber<BoxedNumber<TInner, TComponent>>.Value => this;
 
-		BoxedNumber<TInner, TPrimitive> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> num)
+		BoxedNumber<TInner, TComponent> IExtendedNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		BoxedNumber<TInner, TPrimitive> INumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		BoxedNumber<TInner, TComponent> INumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>> IExtendedNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, TComponent> IExtendedNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>> INumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>> INumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>> IExtendedNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>> IExtendedNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>
 		{
-            BoxedNumber<TInner, TPrimitive> INumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in BoxedNumber<TInner, TPrimitive> num)
+            BoxedNumber<TInner, TComponent> INumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(in BoxedNumber<TInner, TPrimitive> num)
+            public BoxedNumber<TInner, TComponent> Create(in BoxedNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(in BoxedNumber<TInner, TPrimitive> realUnit, in BoxedNumber<TInner, TPrimitive> otherUnits, in BoxedNumber<TInner, TPrimitive> someUnitsCombined, in BoxedNumber<TInner, TPrimitive> allUnitsCombined)
+            public BoxedNumber<TInner, TComponent> Create(in BoxedNumber<TInner, TComponent> realUnit, in BoxedNumber<TInner, TComponent> otherUnits, in BoxedNumber<TInner, TComponent> someUnitsCombined, in BoxedNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(IEnumerable<BoxedNumber<TInner, TPrimitive>> units)
+            public BoxedNumber<TInner, TComponent> Create(IEnumerable<BoxedNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public BoxedNumber<TInner, TPrimitive> Create(IEnumerator<BoxedNumber<TInner, TPrimitive>> units)
+            public BoxedNumber<TInner, TComponent> Create(IEnumerator<BoxedNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -946,15 +946,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<BoxedNumber<TInner, TPrimitive>>.Count => 1;
+        int ICollection<BoxedNumber<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<BoxedNumber<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<BoxedNumber<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<BoxedNumber<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<BoxedNumber<TInner, TComponent>>.Count => 1;
 
-        BoxedNumber<TInner, TPrimitive> IReadOnlyList<BoxedNumber<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        BoxedNumber<TInner, TComponent> IReadOnlyList<BoxedNumber<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        BoxedNumber<TInner, TPrimitive> IList<BoxedNumber<TInner, TPrimitive>>.this[int index]
+        BoxedNumber<TInner, TComponent> IList<BoxedNumber<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -964,47 +964,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<BoxedNumber<TInner, TPrimitive>>.IndexOf(BoxedNumber<TInner, TPrimitive> item)
+        int IList<BoxedNumber<TInner, TComponent>>.IndexOf(BoxedNumber<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<BoxedNumber<TInner, TPrimitive>>.Insert(int index, BoxedNumber<TInner, TPrimitive> item)
+        void IList<BoxedNumber<TInner, TComponent>>.Insert(int index, BoxedNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<BoxedNumber<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<BoxedNumber<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<BoxedNumber<TInner, TPrimitive>>.Add(BoxedNumber<TInner, TPrimitive> item)
+        void ICollection<BoxedNumber<TInner, TComponent>>.Add(BoxedNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<BoxedNumber<TInner, TPrimitive>>.Clear()
+        void ICollection<BoxedNumber<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<BoxedNumber<TInner, TPrimitive>>.Contains(BoxedNumber<TInner, TPrimitive> item)
+        bool ICollection<BoxedNumber<TInner, TComponent>>.Contains(BoxedNumber<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<BoxedNumber<TInner, TPrimitive>>.CopyTo(BoxedNumber<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<BoxedNumber<TInner, TComponent>>.CopyTo(BoxedNumber<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<BoxedNumber<TInner, TPrimitive>>.Remove(BoxedNumber<TInner, TPrimitive> item)
+        bool ICollection<BoxedNumber<TInner, TComponent>>.Remove(BoxedNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<BoxedNumber<TInner, TPrimitive>> IEnumerable<BoxedNumber<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<BoxedNumber<TInner, TComponent>> IEnumerable<BoxedNumber<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -1135,65 +1135,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TPrimitive, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>, IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive> where TTraits : struct, CustomDefaultNumber<TInner, TPrimitive, TTraits>.ITraits
+	partial struct CustomDefaultNumber<TInner, TComponent, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>, IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTraits : struct, CustomDefaultNumber<TInner, TComponent, TTraits>.ITraits
 	{
-        CustomDefaultNumber<TInner, TPrimitive, TTraits> IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Value => this;
+        CustomDefaultNumber<TInner, TComponent, TTraits> IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>>.Value => this;
 
-		CustomDefaultNumber<TInner, TPrimitive, TTraits> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
+		CustomDefaultNumber<TInner, TComponent, TTraits> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		CustomDefaultNumber<TInner, TPrimitive, TTraits> INumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>.CallComponent(UnaryOperation operation)
+		CustomDefaultNumber<TInner, TComponent, TTraits> INumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>.GetOperations()
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>> INumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>.GetOperations()
+		INumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> INumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>.GetOperations()
+		IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>
+		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>
 		{
-            CustomDefaultNumber<TInner, TPrimitive, TTraits> INumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
+            CustomDefaultNumber<TInner, TComponent, TTraits> INumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.Call(operation);
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num;
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in CustomDefaultNumber<TInner, TPrimitive, TTraits> realUnit, in CustomDefaultNumber<TInner, TPrimitive, TTraits> otherUnits, in CustomDefaultNumber<TInner, TPrimitive, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TPrimitive, TTraits> allUnitsCombined)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> realUnit, in CustomDefaultNumber<TInner, TComponent, TTraits> otherUnits, in CustomDefaultNumber<TInner, TComponent, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TComponent, TTraits> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TPrimitive, TTraits>> units)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TPrimitive, TTraits>> units)
+            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1201,15 +1201,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Count => 1;
+        int ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Count => 1;
 
-        bool ICollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.IsReadOnly => true;
+        bool ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Count => 1;
+        int IReadOnlyCollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Count => 1;
 
-        CustomDefaultNumber<TInner, TPrimitive, TTraits> IReadOnlyList<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        CustomDefaultNumber<TInner, TComponent, TTraits> IReadOnlyList<CustomDefaultNumber<TInner, TComponent, TTraits>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        CustomDefaultNumber<TInner, TPrimitive, TTraits> IList<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.this[int index]
+        CustomDefaultNumber<TInner, TComponent, TTraits> IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -1219,47 +1219,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.IndexOf(CustomDefaultNumber<TInner, TPrimitive, TTraits> item)
+        int IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.IndexOf(CustomDefaultNumber<TInner, TComponent, TTraits> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Insert(int index, CustomDefaultNumber<TInner, TPrimitive, TTraits> item)
+        void IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.Insert(int index, CustomDefaultNumber<TInner, TComponent, TTraits> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.RemoveAt(int index)
+        void IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Add(CustomDefaultNumber<TInner, TPrimitive, TTraits> item)
+        void ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Add(CustomDefaultNumber<TInner, TComponent, TTraits> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Clear()
+        void ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Contains(CustomDefaultNumber<TInner, TPrimitive, TTraits> item)
+        bool ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Contains(CustomDefaultNumber<TInner, TComponent, TTraits> item)
         {
             return Equals(item);
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.CopyTo(CustomDefaultNumber<TInner, TPrimitive, TTraits>[] array, int arrayIndex)
+        void ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.CopyTo(CustomDefaultNumber<TInner, TComponent, TTraits>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.Remove(CustomDefaultNumber<TInner, TPrimitive, TTraits> item)
+        bool ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Remove(CustomDefaultNumber<TInner, TComponent, TTraits> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<CustomDefaultNumber<TInner, TPrimitive, TTraits>> IEnumerable<CustomDefaultNumber<TInner, TPrimitive, TTraits>>.GetEnumerator()
+        IEnumerator<CustomDefaultNumber<TInner, TComponent, TTraits>> IEnumerable<CustomDefaultNumber<TInner, TComponent, TTraits>>.GetEnumerator()
         {
             yield return this;
         }
@@ -1390,65 +1390,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct GeneratedNumber<TInner, TPrimitive> : IWrapperNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct GeneratedNumber<TInner, TComponent> : IWrapperNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, TComponent>, IWrapperNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        GeneratedNumber<TInner, TPrimitive> IWrapperNumber<GeneratedNumber<TInner, TPrimitive>>.Value => this;
+        GeneratedNumber<TInner, TComponent> IWrapperNumber<GeneratedNumber<TInner, TComponent>>.Value => this;
 
-		GeneratedNumber<TInner, TPrimitive> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num)
+		GeneratedNumber<TInner, TComponent> IExtendedNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		GeneratedNumber<TInner, TPrimitive> INumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		GeneratedNumber<TInner, TComponent> INumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>> IExtendedNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, TComponent> IExtendedNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>> INumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>> INumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>> IExtendedNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>> IExtendedNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>
 		{
-            GeneratedNumber<TInner, TPrimitive> INumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num)
+            GeneratedNumber<TInner, TComponent> INumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(in GeneratedNumber<TInner, TPrimitive> num)
+            public GeneratedNumber<TInner, TComponent> Create(in GeneratedNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(in GeneratedNumber<TInner, TPrimitive> realUnit, in GeneratedNumber<TInner, TPrimitive> otherUnits, in GeneratedNumber<TInner, TPrimitive> someUnitsCombined, in GeneratedNumber<TInner, TPrimitive> allUnitsCombined)
+            public GeneratedNumber<TInner, TComponent> Create(in GeneratedNumber<TInner, TComponent> realUnit, in GeneratedNumber<TInner, TComponent> otherUnits, in GeneratedNumber<TInner, TComponent> someUnitsCombined, in GeneratedNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(IEnumerable<GeneratedNumber<TInner, TPrimitive>> units)
+            public GeneratedNumber<TInner, TComponent> Create(IEnumerable<GeneratedNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public GeneratedNumber<TInner, TPrimitive> Create(IEnumerator<GeneratedNumber<TInner, TPrimitive>> units)
+            public GeneratedNumber<TInner, TComponent> Create(IEnumerator<GeneratedNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1456,15 +1456,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<GeneratedNumber<TInner, TPrimitive>>.Count => 1;
+        int ICollection<GeneratedNumber<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<GeneratedNumber<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<GeneratedNumber<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<GeneratedNumber<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<GeneratedNumber<TInner, TComponent>>.Count => 1;
 
-        GeneratedNumber<TInner, TPrimitive> IReadOnlyList<GeneratedNumber<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        GeneratedNumber<TInner, TComponent> IReadOnlyList<GeneratedNumber<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        GeneratedNumber<TInner, TPrimitive> IList<GeneratedNumber<TInner, TPrimitive>>.this[int index]
+        GeneratedNumber<TInner, TComponent> IList<GeneratedNumber<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -1474,47 +1474,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<GeneratedNumber<TInner, TPrimitive>>.IndexOf(GeneratedNumber<TInner, TPrimitive> item)
+        int IList<GeneratedNumber<TInner, TComponent>>.IndexOf(GeneratedNumber<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<GeneratedNumber<TInner, TPrimitive>>.Insert(int index, GeneratedNumber<TInner, TPrimitive> item)
+        void IList<GeneratedNumber<TInner, TComponent>>.Insert(int index, GeneratedNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<GeneratedNumber<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<GeneratedNumber<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<GeneratedNumber<TInner, TPrimitive>>.Add(GeneratedNumber<TInner, TPrimitive> item)
+        void ICollection<GeneratedNumber<TInner, TComponent>>.Add(GeneratedNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<GeneratedNumber<TInner, TPrimitive>>.Clear()
+        void ICollection<GeneratedNumber<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<GeneratedNumber<TInner, TPrimitive>>.Contains(GeneratedNumber<TInner, TPrimitive> item)
+        bool ICollection<GeneratedNumber<TInner, TComponent>>.Contains(GeneratedNumber<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<GeneratedNumber<TInner, TPrimitive>>.CopyTo(GeneratedNumber<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<GeneratedNumber<TInner, TComponent>>.CopyTo(GeneratedNumber<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<GeneratedNumber<TInner, TPrimitive>>.Remove(GeneratedNumber<TInner, TPrimitive> item)
+        bool ICollection<GeneratedNumber<TInner, TComponent>>.Remove(GeneratedNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<GeneratedNumber<TInner, TPrimitive>> IEnumerable<GeneratedNumber<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<GeneratedNumber<TInner, TComponent>> IEnumerable<GeneratedNumber<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -1645,65 +1645,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperComplex<TInner, TPrimitive> : IWrapperNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperComplex<TInner, TComponent> : IWrapperNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, TComponent>, IWrapperNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        HyperComplex<TInner, TPrimitive> IWrapperNumber<HyperComplex<TInner, TPrimitive>>.Value => this;
+        HyperComplex<TInner, TComponent> IWrapperNumber<HyperComplex<TInner, TComponent>>.Value => this;
 
-		HyperComplex<TInner, TPrimitive> IExtendedNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> num)
+		HyperComplex<TInner, TComponent> IExtendedNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperComplex<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperComplex<TInner, TPrimitive> INumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		HyperComplex<TInner, TComponent> INumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>> IExtendedNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>> IExtendedNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, TComponent> IExtendedNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>> INumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>> INumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>> IExtendedNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>> IExtendedNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>
 		{
-            HyperComplex<TInner, TPrimitive> INumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in HyperComplex<TInner, TPrimitive> num)
+            HyperComplex<TInner, TComponent> INumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(in HyperComplex<TInner, TPrimitive> num)
+            public HyperComplex<TInner, TComponent> Create(in HyperComplex<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(in HyperComplex<TInner, TPrimitive> realUnit, in HyperComplex<TInner, TPrimitive> otherUnits, in HyperComplex<TInner, TPrimitive> someUnitsCombined, in HyperComplex<TInner, TPrimitive> allUnitsCombined)
+            public HyperComplex<TInner, TComponent> Create(in HyperComplex<TInner, TComponent> realUnit, in HyperComplex<TInner, TComponent> otherUnits, in HyperComplex<TInner, TComponent> someUnitsCombined, in HyperComplex<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(IEnumerable<HyperComplex<TInner, TPrimitive>> units)
+            public HyperComplex<TInner, TComponent> Create(IEnumerable<HyperComplex<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperComplex<TInner, TPrimitive> Create(IEnumerator<HyperComplex<TInner, TPrimitive>> units)
+            public HyperComplex<TInner, TComponent> Create(IEnumerator<HyperComplex<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1711,15 +1711,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<HyperComplex<TInner, TPrimitive>>.Count => 1;
+        int ICollection<HyperComplex<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<HyperComplex<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<HyperComplex<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<HyperComplex<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<HyperComplex<TInner, TComponent>>.Count => 1;
 
-        HyperComplex<TInner, TPrimitive> IReadOnlyList<HyperComplex<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        HyperComplex<TInner, TComponent> IReadOnlyList<HyperComplex<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        HyperComplex<TInner, TPrimitive> IList<HyperComplex<TInner, TPrimitive>>.this[int index]
+        HyperComplex<TInner, TComponent> IList<HyperComplex<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -1729,47 +1729,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<HyperComplex<TInner, TPrimitive>>.IndexOf(HyperComplex<TInner, TPrimitive> item)
+        int IList<HyperComplex<TInner, TComponent>>.IndexOf(HyperComplex<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<HyperComplex<TInner, TPrimitive>>.Insert(int index, HyperComplex<TInner, TPrimitive> item)
+        void IList<HyperComplex<TInner, TComponent>>.Insert(int index, HyperComplex<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<HyperComplex<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<HyperComplex<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperComplex<TInner, TPrimitive>>.Add(HyperComplex<TInner, TPrimitive> item)
+        void ICollection<HyperComplex<TInner, TComponent>>.Add(HyperComplex<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperComplex<TInner, TPrimitive>>.Clear()
+        void ICollection<HyperComplex<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<HyperComplex<TInner, TPrimitive>>.Contains(HyperComplex<TInner, TPrimitive> item)
+        bool ICollection<HyperComplex<TInner, TComponent>>.Contains(HyperComplex<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<HyperComplex<TInner, TPrimitive>>.CopyTo(HyperComplex<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<HyperComplex<TInner, TComponent>>.CopyTo(HyperComplex<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<HyperComplex<TInner, TPrimitive>>.Remove(HyperComplex<TInner, TPrimitive> item)
+        bool ICollection<HyperComplex<TInner, TComponent>>.Remove(HyperComplex<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<HyperComplex<TInner, TPrimitive>> IEnumerable<HyperComplex<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<HyperComplex<TInner, TComponent>> IEnumerable<HyperComplex<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -1900,65 +1900,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperDiagonal<TInner, TPrimitive> : IWrapperNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperDiagonal<TInner, TComponent> : IWrapperNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, TComponent>, IWrapperNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        HyperDiagonal<TInner, TPrimitive> IWrapperNumber<HyperDiagonal<TInner, TPrimitive>>.Value => this;
+        HyperDiagonal<TInner, TComponent> IWrapperNumber<HyperDiagonal<TInner, TComponent>>.Value => this;
 
-		HyperDiagonal<TInner, TPrimitive> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num)
+		HyperDiagonal<TInner, TComponent> IExtendedNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperDiagonal<TInner, TPrimitive> INumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		HyperDiagonal<TInner, TComponent> INumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>> IExtendedNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, TComponent> IExtendedNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>> INumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>> INumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>> IExtendedNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>> IExtendedNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>
 		{
-            HyperDiagonal<TInner, TPrimitive> INumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num)
+            HyperDiagonal<TInner, TComponent> INumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(in HyperDiagonal<TInner, TPrimitive> num)
+            public HyperDiagonal<TInner, TComponent> Create(in HyperDiagonal<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(in HyperDiagonal<TInner, TPrimitive> realUnit, in HyperDiagonal<TInner, TPrimitive> otherUnits, in HyperDiagonal<TInner, TPrimitive> someUnitsCombined, in HyperDiagonal<TInner, TPrimitive> allUnitsCombined)
+            public HyperDiagonal<TInner, TComponent> Create(in HyperDiagonal<TInner, TComponent> realUnit, in HyperDiagonal<TInner, TComponent> otherUnits, in HyperDiagonal<TInner, TComponent> someUnitsCombined, in HyperDiagonal<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(IEnumerable<HyperDiagonal<TInner, TPrimitive>> units)
+            public HyperDiagonal<TInner, TComponent> Create(IEnumerable<HyperDiagonal<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperDiagonal<TInner, TPrimitive> Create(IEnumerator<HyperDiagonal<TInner, TPrimitive>> units)
+            public HyperDiagonal<TInner, TComponent> Create(IEnumerator<HyperDiagonal<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1966,15 +1966,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<HyperDiagonal<TInner, TPrimitive>>.Count => 1;
+        int ICollection<HyperDiagonal<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<HyperDiagonal<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<HyperDiagonal<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<HyperDiagonal<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<HyperDiagonal<TInner, TComponent>>.Count => 1;
 
-        HyperDiagonal<TInner, TPrimitive> IReadOnlyList<HyperDiagonal<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        HyperDiagonal<TInner, TComponent> IReadOnlyList<HyperDiagonal<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        HyperDiagonal<TInner, TPrimitive> IList<HyperDiagonal<TInner, TPrimitive>>.this[int index]
+        HyperDiagonal<TInner, TComponent> IList<HyperDiagonal<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -1984,47 +1984,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<HyperDiagonal<TInner, TPrimitive>>.IndexOf(HyperDiagonal<TInner, TPrimitive> item)
+        int IList<HyperDiagonal<TInner, TComponent>>.IndexOf(HyperDiagonal<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<HyperDiagonal<TInner, TPrimitive>>.Insert(int index, HyperDiagonal<TInner, TPrimitive> item)
+        void IList<HyperDiagonal<TInner, TComponent>>.Insert(int index, HyperDiagonal<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<HyperDiagonal<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<HyperDiagonal<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperDiagonal<TInner, TPrimitive>>.Add(HyperDiagonal<TInner, TPrimitive> item)
+        void ICollection<HyperDiagonal<TInner, TComponent>>.Add(HyperDiagonal<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperDiagonal<TInner, TPrimitive>>.Clear()
+        void ICollection<HyperDiagonal<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<HyperDiagonal<TInner, TPrimitive>>.Contains(HyperDiagonal<TInner, TPrimitive> item)
+        bool ICollection<HyperDiagonal<TInner, TComponent>>.Contains(HyperDiagonal<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<HyperDiagonal<TInner, TPrimitive>>.CopyTo(HyperDiagonal<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<HyperDiagonal<TInner, TComponent>>.CopyTo(HyperDiagonal<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<HyperDiagonal<TInner, TPrimitive>>.Remove(HyperDiagonal<TInner, TPrimitive> item)
+        bool ICollection<HyperDiagonal<TInner, TComponent>>.Remove(HyperDiagonal<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<HyperDiagonal<TInner, TPrimitive>> IEnumerable<HyperDiagonal<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<HyperDiagonal<TInner, TComponent>> IEnumerable<HyperDiagonal<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -2155,65 +2155,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperDual<TInner, TPrimitive> : IWrapperNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperDual<TInner, TComponent> : IWrapperNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, TComponent>, IWrapperNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        HyperDual<TInner, TPrimitive> IWrapperNumber<HyperDual<TInner, TPrimitive>>.Value => this;
+        HyperDual<TInner, TComponent> IWrapperNumber<HyperDual<TInner, TComponent>>.Value => this;
 
-		HyperDual<TInner, TPrimitive> IExtendedNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in HyperDual<TInner, TPrimitive> num)
+		HyperDual<TInner, TComponent> IExtendedNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperDual<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperDual<TInner, TPrimitive> INumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		HyperDual<TInner, TComponent> INumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>> IExtendedNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>> IExtendedNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, TComponent> IExtendedNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>> INumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>> INumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>> IExtendedNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>> IExtendedNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>
 		{
-            HyperDual<TInner, TPrimitive> INumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in HyperDual<TInner, TPrimitive> num)
+            HyperDual<TInner, TComponent> INumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperDual<TInner, TPrimitive> Create(in HyperDual<TInner, TPrimitive> num)
+            public HyperDual<TInner, TComponent> Create(in HyperDual<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperDual<TInner, TPrimitive> Create(in HyperDual<TInner, TPrimitive> realUnit, in HyperDual<TInner, TPrimitive> otherUnits, in HyperDual<TInner, TPrimitive> someUnitsCombined, in HyperDual<TInner, TPrimitive> allUnitsCombined)
+            public HyperDual<TInner, TComponent> Create(in HyperDual<TInner, TComponent> realUnit, in HyperDual<TInner, TComponent> otherUnits, in HyperDual<TInner, TComponent> someUnitsCombined, in HyperDual<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperDual<TInner, TPrimitive> Create(IEnumerable<HyperDual<TInner, TPrimitive>> units)
+            public HyperDual<TInner, TComponent> Create(IEnumerable<HyperDual<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperDual<TInner, TPrimitive> Create(IEnumerator<HyperDual<TInner, TPrimitive>> units)
+            public HyperDual<TInner, TComponent> Create(IEnumerator<HyperDual<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2221,15 +2221,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<HyperDual<TInner, TPrimitive>>.Count => 1;
+        int ICollection<HyperDual<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<HyperDual<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<HyperDual<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<HyperDual<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<HyperDual<TInner, TComponent>>.Count => 1;
 
-        HyperDual<TInner, TPrimitive> IReadOnlyList<HyperDual<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        HyperDual<TInner, TComponent> IReadOnlyList<HyperDual<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        HyperDual<TInner, TPrimitive> IList<HyperDual<TInner, TPrimitive>>.this[int index]
+        HyperDual<TInner, TComponent> IList<HyperDual<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -2239,47 +2239,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<HyperDual<TInner, TPrimitive>>.IndexOf(HyperDual<TInner, TPrimitive> item)
+        int IList<HyperDual<TInner, TComponent>>.IndexOf(HyperDual<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<HyperDual<TInner, TPrimitive>>.Insert(int index, HyperDual<TInner, TPrimitive> item)
+        void IList<HyperDual<TInner, TComponent>>.Insert(int index, HyperDual<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<HyperDual<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<HyperDual<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperDual<TInner, TPrimitive>>.Add(HyperDual<TInner, TPrimitive> item)
+        void ICollection<HyperDual<TInner, TComponent>>.Add(HyperDual<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperDual<TInner, TPrimitive>>.Clear()
+        void ICollection<HyperDual<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<HyperDual<TInner, TPrimitive>>.Contains(HyperDual<TInner, TPrimitive> item)
+        bool ICollection<HyperDual<TInner, TComponent>>.Contains(HyperDual<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<HyperDual<TInner, TPrimitive>>.CopyTo(HyperDual<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<HyperDual<TInner, TComponent>>.CopyTo(HyperDual<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<HyperDual<TInner, TPrimitive>>.Remove(HyperDual<TInner, TPrimitive> item)
+        bool ICollection<HyperDual<TInner, TComponent>>.Remove(HyperDual<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<HyperDual<TInner, TPrimitive>> IEnumerable<HyperDual<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<HyperDual<TInner, TComponent>> IEnumerable<HyperDual<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -2410,65 +2410,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperSplitComplex<TInner, TPrimitive> : IWrapperNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperSplitComplex<TInner, TComponent> : IWrapperNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, TComponent>, IWrapperNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        HyperSplitComplex<TInner, TPrimitive> IWrapperNumber<HyperSplitComplex<TInner, TPrimitive>>.Value => this;
+        HyperSplitComplex<TInner, TComponent> IWrapperNumber<HyperSplitComplex<TInner, TComponent>>.Value => this;
 
-		HyperSplitComplex<TInner, TPrimitive> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num)
+		HyperSplitComplex<TInner, TComponent> IExtendedNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperSplitComplex<TInner, TPrimitive> INumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		HyperSplitComplex<TInner, TComponent> INumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>> IExtendedNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, TComponent> IExtendedNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>> INumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>> INumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>> IExtendedNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>> IExtendedNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>
 		{
-            HyperSplitComplex<TInner, TPrimitive> INumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num)
+            HyperSplitComplex<TInner, TComponent> INumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(in HyperSplitComplex<TInner, TPrimitive> num)
+            public HyperSplitComplex<TInner, TComponent> Create(in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(in HyperSplitComplex<TInner, TPrimitive> realUnit, in HyperSplitComplex<TInner, TPrimitive> otherUnits, in HyperSplitComplex<TInner, TPrimitive> someUnitsCombined, in HyperSplitComplex<TInner, TPrimitive> allUnitsCombined)
+            public HyperSplitComplex<TInner, TComponent> Create(in HyperSplitComplex<TInner, TComponent> realUnit, in HyperSplitComplex<TInner, TComponent> otherUnits, in HyperSplitComplex<TInner, TComponent> someUnitsCombined, in HyperSplitComplex<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(IEnumerable<HyperSplitComplex<TInner, TPrimitive>> units)
+            public HyperSplitComplex<TInner, TComponent> Create(IEnumerable<HyperSplitComplex<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperSplitComplex<TInner, TPrimitive> Create(IEnumerator<HyperSplitComplex<TInner, TPrimitive>> units)
+            public HyperSplitComplex<TInner, TComponent> Create(IEnumerator<HyperSplitComplex<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2476,15 +2476,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<HyperSplitComplex<TInner, TPrimitive>>.Count => 1;
+        int ICollection<HyperSplitComplex<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<HyperSplitComplex<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<HyperSplitComplex<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<HyperSplitComplex<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<HyperSplitComplex<TInner, TComponent>>.Count => 1;
 
-        HyperSplitComplex<TInner, TPrimitive> IReadOnlyList<HyperSplitComplex<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        HyperSplitComplex<TInner, TComponent> IReadOnlyList<HyperSplitComplex<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        HyperSplitComplex<TInner, TPrimitive> IList<HyperSplitComplex<TInner, TPrimitive>>.this[int index]
+        HyperSplitComplex<TInner, TComponent> IList<HyperSplitComplex<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -2494,47 +2494,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<HyperSplitComplex<TInner, TPrimitive>>.IndexOf(HyperSplitComplex<TInner, TPrimitive> item)
+        int IList<HyperSplitComplex<TInner, TComponent>>.IndexOf(HyperSplitComplex<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<HyperSplitComplex<TInner, TPrimitive>>.Insert(int index, HyperSplitComplex<TInner, TPrimitive> item)
+        void IList<HyperSplitComplex<TInner, TComponent>>.Insert(int index, HyperSplitComplex<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<HyperSplitComplex<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<HyperSplitComplex<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperSplitComplex<TInner, TPrimitive>>.Add(HyperSplitComplex<TInner, TPrimitive> item)
+        void ICollection<HyperSplitComplex<TInner, TComponent>>.Add(HyperSplitComplex<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<HyperSplitComplex<TInner, TPrimitive>>.Clear()
+        void ICollection<HyperSplitComplex<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<HyperSplitComplex<TInner, TPrimitive>>.Contains(HyperSplitComplex<TInner, TPrimitive> item)
+        bool ICollection<HyperSplitComplex<TInner, TComponent>>.Contains(HyperSplitComplex<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<HyperSplitComplex<TInner, TPrimitive>>.CopyTo(HyperSplitComplex<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<HyperSplitComplex<TInner, TComponent>>.CopyTo(HyperSplitComplex<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<HyperSplitComplex<TInner, TPrimitive>>.Remove(HyperSplitComplex<TInner, TPrimitive> item)
+        bool ICollection<HyperSplitComplex<TInner, TComponent>>.Remove(HyperSplitComplex<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<HyperSplitComplex<TInner, TPrimitive>> IEnumerable<HyperSplitComplex<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<HyperSplitComplex<TInner, TComponent>> IEnumerable<HyperSplitComplex<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -2665,65 +2665,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct NullableNumber<TInner, TPrimitive> : IWrapperNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct NullableNumber<TInner, TComponent> : IWrapperNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, TComponent>, IWrapperNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        NullableNumber<TInner, TPrimitive> IWrapperNumber<NullableNumber<TInner, TPrimitive>>.Value => this;
+        NullableNumber<TInner, TComponent> IWrapperNumber<NullableNumber<TInner, TComponent>>.Value => this;
 
-		NullableNumber<TInner, TPrimitive> IExtendedNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in NullableNumber<TInner, TPrimitive> num)
+		NullableNumber<TInner, TComponent> IExtendedNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in NullableNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		NullableNumber<TInner, TPrimitive> INumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		NullableNumber<TInner, TComponent> INumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>> IExtendedNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>> IExtendedNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, TComponent> IExtendedNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>> INumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>> INumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>> IExtendedNumber<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>> IExtendedNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>
 		{
-            NullableNumber<TInner, TPrimitive> INumberOperations<NullableNumber<TInner, TPrimitive>, NullableNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in NullableNumber<TInner, TPrimitive> num)
+            NullableNumber<TInner, TComponent> INumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(in NullableNumber<TInner, TPrimitive> num)
+            public NullableNumber<TInner, TComponent> Create(in NullableNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(in NullableNumber<TInner, TPrimitive> realUnit, in NullableNumber<TInner, TPrimitive> otherUnits, in NullableNumber<TInner, TPrimitive> someUnitsCombined, in NullableNumber<TInner, TPrimitive> allUnitsCombined)
+            public NullableNumber<TInner, TComponent> Create(in NullableNumber<TInner, TComponent> realUnit, in NullableNumber<TInner, TComponent> otherUnits, in NullableNumber<TInner, TComponent> someUnitsCombined, in NullableNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(IEnumerable<NullableNumber<TInner, TPrimitive>> units)
+            public NullableNumber<TInner, TComponent> Create(IEnumerable<NullableNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(IEnumerator<NullableNumber<TInner, TPrimitive>> units)
+            public NullableNumber<TInner, TComponent> Create(IEnumerator<NullableNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2731,15 +2731,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<NullableNumber<TInner, TPrimitive>>.Count => 1;
+        int ICollection<NullableNumber<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<NullableNumber<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<NullableNumber<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<NullableNumber<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<NullableNumber<TInner, TComponent>>.Count => 1;
 
-        NullableNumber<TInner, TPrimitive> IReadOnlyList<NullableNumber<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        NullableNumber<TInner, TComponent> IReadOnlyList<NullableNumber<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        NullableNumber<TInner, TPrimitive> IList<NullableNumber<TInner, TPrimitive>>.this[int index]
+        NullableNumber<TInner, TComponent> IList<NullableNumber<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -2749,47 +2749,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<NullableNumber<TInner, TPrimitive>>.IndexOf(NullableNumber<TInner, TPrimitive> item)
+        int IList<NullableNumber<TInner, TComponent>>.IndexOf(NullableNumber<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<NullableNumber<TInner, TPrimitive>>.Insert(int index, NullableNumber<TInner, TPrimitive> item)
+        void IList<NullableNumber<TInner, TComponent>>.Insert(int index, NullableNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<NullableNumber<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<NullableNumber<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<NullableNumber<TInner, TPrimitive>>.Add(NullableNumber<TInner, TPrimitive> item)
+        void ICollection<NullableNumber<TInner, TComponent>>.Add(NullableNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<NullableNumber<TInner, TPrimitive>>.Clear()
+        void ICollection<NullableNumber<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<NullableNumber<TInner, TPrimitive>>.Contains(NullableNumber<TInner, TPrimitive> item)
+        bool ICollection<NullableNumber<TInner, TComponent>>.Contains(NullableNumber<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<NullableNumber<TInner, TPrimitive>>.CopyTo(NullableNumber<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<NullableNumber<TInner, TComponent>>.CopyTo(NullableNumber<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<NullableNumber<TInner, TPrimitive>>.Remove(NullableNumber<TInner, TPrimitive> item)
+        bool ICollection<NullableNumber<TInner, TComponent>>.Remove(NullableNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<NullableNumber<TInner, TPrimitive>> IEnumerable<NullableNumber<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<NullableNumber<TInner, TComponent>> IEnumerable<NullableNumber<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -2920,65 +2920,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct NullNumber<TPrimitive> : IWrapperNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive>, IWrapperNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>, NullNumber<TPrimitive>> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct NullNumber<TComponent> : IWrapperNumber<NullNumber<TComponent>, NullNumber<TComponent>, TComponent>, IWrapperNumber<NullNumber<TComponent>, NullNumber<TComponent>, NullNumber<TComponent>> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        NullNumber<TPrimitive> IWrapperNumber<NullNumber<TPrimitive>>.Value => this;
+        NullNumber<TComponent> IWrapperNumber<NullNumber<TComponent>>.Value => this;
 
-		NullNumber<TPrimitive> IExtendedNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>>.CallReversed(BinaryOperation operation, in NullNumber<TPrimitive> num)
+		NullNumber<TComponent> IExtendedNumber<NullNumber<TComponent>, NullNumber<TComponent>>.CallReversed(BinaryOperation operation, in NullNumber<TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		NullNumber<TPrimitive> INumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>>.CallComponent(UnaryOperation operation)
+		NullNumber<TComponent> INumber<NullNumber<TComponent>, NullNumber<TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>> IExtendedNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<NullNumber<TComponent>, NullNumber<TComponent>> IExtendedNumber<NullNumber<TComponent>, NullNumber<TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive> IExtendedNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<NullNumber<TComponent>, NullNumber<TComponent>, TComponent> IExtendedNumber<NullNumber<TComponent>, NullNumber<TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>> INumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>>.GetOperations()
+		INumberOperations<NullNumber<TComponent>, NullNumber<TComponent>> INumber<NullNumber<TComponent>, NullNumber<TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>, NullNumber<TPrimitive>> IExtendedNumber<NullNumber<TPrimitive>, NullNumber<TPrimitive>, NullNumber<TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<NullNumber<TComponent>, NullNumber<TComponent>, NullNumber<TComponent>> IExtendedNumber<NullNumber<TComponent>, NullNumber<TComponent>, NullNumber<TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>, TPrimitive>, IExtendedNumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>, NullNumber<TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<NullNumber<TComponent>, NullNumber<TComponent>, TComponent>, IExtendedNumberOperations<NullNumber<TComponent>, NullNumber<TComponent>, NullNumber<TComponent>>
 		{
-            NullNumber<TPrimitive> INumberOperations<NullNumber<TPrimitive>, NullNumber<TPrimitive>>.CallComponent(UnaryOperation operation, in NullNumber<TPrimitive> num)
+            NullNumber<TComponent> INumberOperations<NullNumber<TComponent>, NullNumber<TComponent>>.CallComponent(UnaryOperation operation, in NullNumber<TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public NullNumber<TPrimitive> Create(in NullNumber<TPrimitive> num)
+            public NullNumber<TComponent> Create(in NullNumber<TComponent> num)
             {
                 return num;
             }
 
-            public NullNumber<TPrimitive> Create(in NullNumber<TPrimitive> realUnit, in NullNumber<TPrimitive> otherUnits, in NullNumber<TPrimitive> someUnitsCombined, in NullNumber<TPrimitive> allUnitsCombined)
+            public NullNumber<TComponent> Create(in NullNumber<TComponent> realUnit, in NullNumber<TComponent> otherUnits, in NullNumber<TComponent> someUnitsCombined, in NullNumber<TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public NullNumber<TPrimitive> Create(IEnumerable<NullNumber<TPrimitive>> units)
+            public NullNumber<TComponent> Create(IEnumerable<NullNumber<TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public NullNumber<TPrimitive> Create(IEnumerator<NullNumber<TPrimitive>> units)
+            public NullNumber<TComponent> Create(IEnumerator<NullNumber<TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2986,15 +2986,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<NullNumber<TPrimitive>>.Count => 1;
+        int ICollection<NullNumber<TComponent>>.Count => 1;
 
-        bool ICollection<NullNumber<TPrimitive>>.IsReadOnly => true;
+        bool ICollection<NullNumber<TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<NullNumber<TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<NullNumber<TComponent>>.Count => 1;
 
-        NullNumber<TPrimitive> IReadOnlyList<NullNumber<TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        NullNumber<TComponent> IReadOnlyList<NullNumber<TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        NullNumber<TPrimitive> IList<NullNumber<TPrimitive>>.this[int index]
+        NullNumber<TComponent> IList<NullNumber<TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -3004,47 +3004,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<NullNumber<TPrimitive>>.IndexOf(NullNumber<TPrimitive> item)
+        int IList<NullNumber<TComponent>>.IndexOf(NullNumber<TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<NullNumber<TPrimitive>>.Insert(int index, NullNumber<TPrimitive> item)
+        void IList<NullNumber<TComponent>>.Insert(int index, NullNumber<TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<NullNumber<TPrimitive>>.RemoveAt(int index)
+        void IList<NullNumber<TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<NullNumber<TPrimitive>>.Add(NullNumber<TPrimitive> item)
+        void ICollection<NullNumber<TComponent>>.Add(NullNumber<TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<NullNumber<TPrimitive>>.Clear()
+        void ICollection<NullNumber<TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<NullNumber<TPrimitive>>.Contains(NullNumber<TPrimitive> item)
+        bool ICollection<NullNumber<TComponent>>.Contains(NullNumber<TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<NullNumber<TPrimitive>>.CopyTo(NullNumber<TPrimitive>[] array, int arrayIndex)
+        void ICollection<NullNumber<TComponent>>.CopyTo(NullNumber<TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<NullNumber<TPrimitive>>.Remove(NullNumber<TPrimitive> item)
+        bool ICollection<NullNumber<TComponent>>.Remove(NullNumber<TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<NullNumber<TPrimitive>> IEnumerable<NullNumber<TPrimitive>>.GetEnumerator()
+        IEnumerator<NullNumber<TComponent>> IEnumerable<NullNumber<TComponent>>.GetEnumerator()
         {
             yield return this;
         }
@@ -3175,65 +3175,65 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct ProjectiveNumber<TInner, TPrimitive> : IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>, IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct ProjectiveNumber<TInner, TComponent> : IWrapperNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, TComponent>, IWrapperNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-        ProjectiveNumber<TInner, TPrimitive> IWrapperNumber<ProjectiveNumber<TInner, TPrimitive>>.Value => this;
+        ProjectiveNumber<TInner, TComponent> IWrapperNumber<ProjectiveNumber<TInner, TComponent>>.Value => this;
 
-		ProjectiveNumber<TInner, TPrimitive> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.CallReversed(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num)
+		ProjectiveNumber<TInner, TComponent> IExtendedNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		ProjectiveNumber<TInner, TPrimitive> INumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation)
+		ProjectiveNumber<TInner, TComponent> INumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.GetOperations()
+        IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>> IExtendedNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>.GetOperations()
+		IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, TComponent> IExtendedNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>> INumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.GetOperations()
+		INumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>> INumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>> IExtendedNumber<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.GetOperations()
+		IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>> IExtendedNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, TPrimitive>, IExtendedNumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>
+		partial class Operations : IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>
 		{
-            ProjectiveNumber<TInner, TPrimitive> INumberOperations<ProjectiveNumber<TInner, TPrimitive>, ProjectiveNumber<TInner, TPrimitive>>.CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num)
+            ProjectiveNumber<TInner, TComponent> INumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(in ProjectiveNumber<TInner, TPrimitive> num)
+            public ProjectiveNumber<TInner, TComponent> Create(in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(in ProjectiveNumber<TInner, TPrimitive> realUnit, in ProjectiveNumber<TInner, TPrimitive> otherUnits, in ProjectiveNumber<TInner, TPrimitive> someUnitsCombined, in ProjectiveNumber<TInner, TPrimitive> allUnitsCombined)
+            public ProjectiveNumber<TInner, TComponent> Create(in ProjectiveNumber<TInner, TComponent> realUnit, in ProjectiveNumber<TInner, TComponent> otherUnits, in ProjectiveNumber<TInner, TComponent> someUnitsCombined, in ProjectiveNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerable<ProjectiveNumber<TInner, TPrimitive>> units)
+            public ProjectiveNumber<TInner, TComponent> Create(IEnumerable<ProjectiveNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public ProjectiveNumber<TInner, TPrimitive> Create(IEnumerator<ProjectiveNumber<TInner, TPrimitive>> units)
+            public ProjectiveNumber<TInner, TComponent> Create(IEnumerator<ProjectiveNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -3241,15 +3241,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<ProjectiveNumber<TInner, TPrimitive>>.Count => 1;
+        int ICollection<ProjectiveNumber<TInner, TComponent>>.Count => 1;
 
-        bool ICollection<ProjectiveNumber<TInner, TPrimitive>>.IsReadOnly => true;
+        bool ICollection<ProjectiveNumber<TInner, TComponent>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<ProjectiveNumber<TInner, TPrimitive>>.Count => 1;
+        int IReadOnlyCollection<ProjectiveNumber<TInner, TComponent>>.Count => 1;
 
-        ProjectiveNumber<TInner, TPrimitive> IReadOnlyList<ProjectiveNumber<TInner, TPrimitive>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        ProjectiveNumber<TInner, TComponent> IReadOnlyList<ProjectiveNumber<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        ProjectiveNumber<TInner, TPrimitive> IList<ProjectiveNumber<TInner, TPrimitive>>.this[int index]
+        ProjectiveNumber<TInner, TComponent> IList<ProjectiveNumber<TInner, TComponent>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -3259,47 +3259,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<ProjectiveNumber<TInner, TPrimitive>>.IndexOf(ProjectiveNumber<TInner, TPrimitive> item)
+        int IList<ProjectiveNumber<TInner, TComponent>>.IndexOf(ProjectiveNumber<TInner, TComponent> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<ProjectiveNumber<TInner, TPrimitive>>.Insert(int index, ProjectiveNumber<TInner, TPrimitive> item)
+        void IList<ProjectiveNumber<TInner, TComponent>>.Insert(int index, ProjectiveNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<ProjectiveNumber<TInner, TPrimitive>>.RemoveAt(int index)
+        void IList<ProjectiveNumber<TInner, TComponent>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<ProjectiveNumber<TInner, TPrimitive>>.Add(ProjectiveNumber<TInner, TPrimitive> item)
+        void ICollection<ProjectiveNumber<TInner, TComponent>>.Add(ProjectiveNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<ProjectiveNumber<TInner, TPrimitive>>.Clear()
+        void ICollection<ProjectiveNumber<TInner, TComponent>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<ProjectiveNumber<TInner, TPrimitive>>.Contains(ProjectiveNumber<TInner, TPrimitive> item)
+        bool ICollection<ProjectiveNumber<TInner, TComponent>>.Contains(ProjectiveNumber<TInner, TComponent> item)
         {
             return Equals(item);
         }
 
-        void ICollection<ProjectiveNumber<TInner, TPrimitive>>.CopyTo(ProjectiveNumber<TInner, TPrimitive>[] array, int arrayIndex)
+        void ICollection<ProjectiveNumber<TInner, TComponent>>.CopyTo(ProjectiveNumber<TInner, TComponent>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<ProjectiveNumber<TInner, TPrimitive>>.Remove(ProjectiveNumber<TInner, TPrimitive> item)
+        bool ICollection<ProjectiveNumber<TInner, TComponent>>.Remove(ProjectiveNumber<TInner, TComponent> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<ProjectiveNumber<TInner, TPrimitive>> IEnumerable<ProjectiveNumber<TInner, TPrimitive>>.GetEnumerator()
+        IEnumerator<ProjectiveNumber<TInner, TComponent>> IEnumerable<ProjectiveNumber<TInner, TComponent>>.GetEnumerator()
         {
             yield return this;
         }

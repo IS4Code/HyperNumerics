@@ -4,47 +4,47 @@ using System.Collections.Generic;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
-	partial struct BoxedNumber<TInner, TPrimitive> : IWrapperNumber<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct BoxedNumber<TInner, TComponent> : IWrapperNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-		partial class Operations : IExtendedNumberOperations<BoxedNumber<TInner, TPrimitive>, BoxedNumber<TInner, TPrimitive>, TPrimitive>
+		partial class Operations : IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, TComponent>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => GetCollectionCount(Reference);
+        int ICollection<TComponent>.Count => GetCollectionCount(Reference);
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(Reference);
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(Reference);
 		
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 return GetReadOnlyListItem(Reference, index);
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 return GetListItem(Reference, index);
@@ -54,47 +54,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             return Reference.IndexOf(item);
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return Reference.Contains(item);
         }
 		
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
             Reference.CopyTo(array, arrayIndex);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
 			return Reference.GetEnumerator();
         }
@@ -105,47 +105,47 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TPrimitive, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive> where TTraits : struct, CustomDefaultNumber<TInner, TPrimitive, TTraits>.ITraits
+	partial struct CustomDefaultNumber<TInner, TComponent, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTraits : struct, CustomDefaultNumber<TInner, TComponent, TTraits>.ITraits
 	{
-		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TPrimitive, TTraits>, CustomDefaultNumber<TInner, TPrimitive, TTraits>, TPrimitive>
+		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => GetCollectionCount(Value);
+        int ICollection<TComponent>.Count => GetCollectionCount(Value);
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(Value);
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(Value);
 		
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 return GetReadOnlyListItem(Value, index);
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 return GetListItem(Value, index);
@@ -155,47 +155,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             return Value.IndexOf(item);
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return Value.Contains(item);
         }
 		
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
             Value.CopyTo(array, arrayIndex);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
 			return Value.GetEnumerator();
         }
@@ -206,47 +206,47 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct GeneratedNumber<TInner, TPrimitive> : IWrapperNumber<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct GeneratedNumber<TInner, TComponent> : IWrapperNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-		partial class Operations : IExtendedNumberOperations<GeneratedNumber<TInner, TPrimitive>, GeneratedNumber<TInner, TPrimitive>, TPrimitive>
+		partial class Operations : IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, TComponent>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => GetCollectionCount(Generator());
+        int ICollection<TComponent>.Count => GetCollectionCount(Generator());
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(Generator());
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(Generator());
 		
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 return GetReadOnlyListItem(Generator(), index);
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 return GetListItem(Generator(), index);
@@ -256,47 +256,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             return Generator().IndexOf(item);
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return Generator().Contains(item);
         }
 		
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
             Generator().CopyTo(array, arrayIndex);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
 			return Generator().GetEnumerator();
         }
@@ -307,40 +307,40 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperComplex<TInner, TPrimitive> : IWrapperNumber<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperComplex<TInner, TComponent> : IWrapperNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-		partial class Operations : IExtendedNumberOperations<HyperComplex<TInner, TPrimitive>, HyperComplex<TInner, TPrimitive>, TPrimitive>
+		partial class Operations : IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, TComponent>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
+        int ICollection<TComponent>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
 				
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 int offset = GetReadOnlyCollectionCount(first);
@@ -352,7 +352,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 int offset = GetCollectionCount(first);
@@ -367,7 +367,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             int index = first.IndexOf(item);
             if(index == -1)
@@ -378,32 +378,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return index;
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return first.Contains(item) || second.Contains(item);
         }
 				
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
 			int offset = 0;
             first.CopyTo(array, arrayIndex + offset);
@@ -412,12 +412,12 @@ namespace IS4.HyperNumerics.NumberTypes
 			offset += GetCollectionCount(second);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
             foreach(var num in first)
             {
@@ -442,40 +442,40 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperDiagonal<TInner, TPrimitive> : IWrapperNumber<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperDiagonal<TInner, TComponent> : IWrapperNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-		partial class Operations : IExtendedNumberOperations<HyperDiagonal<TInner, TPrimitive>, HyperDiagonal<TInner, TPrimitive>, TPrimitive>
+		partial class Operations : IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, TComponent>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
+        int ICollection<TComponent>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
 				
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 int offset = GetReadOnlyCollectionCount(first);
@@ -487,7 +487,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 int offset = GetCollectionCount(first);
@@ -502,7 +502,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             int index = first.IndexOf(item);
             if(index == -1)
@@ -513,32 +513,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return index;
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return first.Contains(item) || second.Contains(item);
         }
 				
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
 			int offset = 0;
             first.CopyTo(array, arrayIndex + offset);
@@ -547,12 +547,12 @@ namespace IS4.HyperNumerics.NumberTypes
 			offset += GetCollectionCount(second);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
             foreach(var num in first)
             {
@@ -577,40 +577,40 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperDual<TInner, TPrimitive> : IWrapperNumber<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperDual<TInner, TComponent> : IWrapperNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-		partial class Operations : IExtendedNumberOperations<HyperDual<TInner, TPrimitive>, HyperDual<TInner, TPrimitive>, TPrimitive>
+		partial class Operations : IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, TComponent>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
+        int ICollection<TComponent>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
 				
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 int offset = GetReadOnlyCollectionCount(first);
@@ -622,7 +622,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 int offset = GetCollectionCount(first);
@@ -637,7 +637,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             int index = first.IndexOf(item);
             if(index == -1)
@@ -648,32 +648,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return index;
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return first.Contains(item) || second.Contains(item);
         }
 				
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
 			int offset = 0;
             first.CopyTo(array, arrayIndex + offset);
@@ -682,12 +682,12 @@ namespace IS4.HyperNumerics.NumberTypes
 			offset += GetCollectionCount(second);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
             foreach(var num in first)
             {
@@ -712,40 +712,40 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct HyperSplitComplex<TInner, TPrimitive> : IWrapperNumber<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+	partial struct HyperSplitComplex<TInner, TComponent> : IWrapperNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
-		partial class Operations : IExtendedNumberOperations<HyperSplitComplex<TInner, TPrimitive>, HyperSplitComplex<TInner, TPrimitive>, TPrimitive>
+		partial class Operations : IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, TComponent>
 		{
 			
 		}
         
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 		
-        int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
+        int ICollection<TComponent>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(first) + GetReadOnlyCollectionCount(second);
 				
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 int offset = GetReadOnlyCollectionCount(first);
@@ -757,7 +757,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get{
                 int offset = GetCollectionCount(first);
@@ -772,7 +772,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             int index = first.IndexOf(item);
             if(index == -1)
@@ -783,32 +783,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return index;
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             return first.Contains(item) || second.Contains(item);
         }
 				
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
 			int offset = 0;
             first.CopyTo(array, arrayIndex + offset);
@@ -817,12 +817,12 @@ namespace IS4.HyperNumerics.NumberTypes
 			offset += GetCollectionCount(second);
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 		
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
             foreach(var num in first)
             {

@@ -182,9 +182,9 @@ namespace IS4.HyperNumerics.NumberTypes
     /// The result of any operation whose operand is null is itself null.
     /// </summary>
     /// <typeparam name="TInner">The inner type.</typeparam>
-    /// <typeparam name="TPrimitive">The primitive type the number uses.</typeparam>
+    /// <typeparam name="TComponent">The component type the number uses.</typeparam>
     [Serializable]
-    public readonly partial struct NullableNumber<TInner, TPrimitive> : IWrapperNumber<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+    public readonly partial struct NullableNumber<TInner, TComponent> : IWrapperNumber<NullableNumber<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
         readonly bool hasValue;
         readonly TInner value;
@@ -211,7 +211,7 @@ namespace IS4.HyperNumerics.NumberTypes
             this.value = value.GetValueOrDefault();
         }
 
-        public NullableNumber<TInner, TPrimitive> Clone()
+        public NullableNumber<TInner, TComponent> Clone()
         {
             if(hasValue)
             {
@@ -220,12 +220,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public static implicit operator NullableNumber<TInner, TPrimitive>(TInner? value)
+        public static implicit operator NullableNumber<TInner, TComponent>(TInner? value)
         {
-            return new NullableNumber<TInner, TPrimitive>(value);
+            return new NullableNumber<TInner, TComponent>(value);
         }
 
-        public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in NullableNumber<TInner, TPrimitive> other)
+        public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> other)
         {
             if(hasValue && other.hasValue)
             {
@@ -234,7 +234,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TInner other)
+        public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
         {
             if(hasValue)
             {
@@ -243,7 +243,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TInner other)
+        public NullableNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
         {
             if(hasValue)
             {
@@ -252,25 +252,25 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in TPrimitive other)
+        public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
         {
             if(hasValue)
             {
-                return HyperMath.CallPrimitive<TInner, TPrimitive>(operation, value, other);
+                return HyperMath.CallComponent<TInner, TComponent>(operation, value, other);
             }
             return default;
         }
 
-        public NullableNumber<TInner, TPrimitive> CallReversed(BinaryOperation operation, in TPrimitive other)
+        public NullableNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
         {
             if(hasValue)
             {
-                return HyperMath.CallPrimitiveReversed(operation, other, value);
+                return HyperMath.CallComponentReversed(operation, other, value);
             }
             return default;
         }
 
-        public NullableNumber<TInner, TPrimitive> Call(UnaryOperation operation)
+        public NullableNumber<TInner, TComponent> Call(UnaryOperation operation)
         {
             if(hasValue)
             {
@@ -279,17 +279,17 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public TPrimitive CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(UnaryOperation operation)
         {
             return Value?.CallComponent(operation) ?? default;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is NullableNumber<TInner, TPrimitive> value && Equals(in value);
+            return obj is NullableNumber<TInner, TComponent> value && Equals(in value);
         }
 
-        public bool Equals(in NullableNumber<TInner, TPrimitive> other)
+        public bool Equals(in NullableNumber<TInner, TComponent> other)
         {
             if(hasValue)
             {
@@ -302,7 +302,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return !other.hasValue;
         }
 
-        public int CompareTo(in NullableNumber<TInner, TPrimitive> other)
+        public int CompareTo(in NullableNumber<TInner, TComponent> other)
         {
             if(hasValue)
             {
@@ -348,63 +348,63 @@ namespace IS4.HyperNumerics.NumberTypes
             return hasValue ? value.ToString(format, formatProvider) : "Null";
         }
 
-        partial class Operations : NumberOperations<NullableNumber<TInner, TPrimitive>>, IExtendedNumberOperations<NullableNumber<TInner, TPrimitive>, TInner, TPrimitive>
+        partial class Operations : NumberOperations<NullableNumber<TInner, TComponent>>, IExtendedNumberOperations<NullableNumber<TInner, TComponent>, TInner, TComponent>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public NullableNumber<TInner, TPrimitive> Call(NullaryOperation operation)
+            public NullableNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            public NullableNumber<TInner, TComponent> Create(in TComponent num)
             {
-                return new NullableNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+                return new NullableNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
+            public NullableNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
-                return HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
+                return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(IEnumerable<TPrimitive> units)
+            public NullableNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
-                return new NullableNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new NullableNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public NullableNumber<TInner, TPrimitive> Create(IEnumerator<TPrimitive> units)
+            public NullableNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
-                return new NullableNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(units));
+                return new NullableNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
         }
 
-        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TPrimitive>
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetListItem<T>(in T value, int index) where T : struct, IList<TPrimitive>
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
         {
             return value[index];
         }
 
-        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TPrimitive>
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
         {
             return value.Count;
         }
 
-        static TPrimitive GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TPrimitive>
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
         {
             return value[index];
         }
 
-        int ICollection<TPrimitive>.Count => Value.HasValue ? GetCollectionCount(Value.Value) : 0;
+        int ICollection<TComponent>.Count => Value.HasValue ? GetCollectionCount(Value.Value) : 0;
 
-        bool ICollection<TPrimitive>.IsReadOnly => true;
+        bool ICollection<TComponent>.IsReadOnly => true;
 
-        int IReadOnlyCollection<TPrimitive>.Count => Value.HasValue ? GetReadOnlyCollectionCount(Value.Value) : 0;
+        int IReadOnlyCollection<TComponent>.Count => Value.HasValue ? GetReadOnlyCollectionCount(Value.Value) : 0;
 
-        TPrimitive IReadOnlyList<TPrimitive>.this[int index]
+        TComponent IReadOnlyList<TComponent>.this[int index]
         {
             get{
                 if(!hasValue)
@@ -415,7 +415,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        TPrimitive IList<TPrimitive>.this[int index]
+        TComponent IList<TComponent>.this[int index]
         {
             get {
                 if(!hasValue)
@@ -429,7 +429,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<TPrimitive>.IndexOf(TPrimitive item)
+        int IList<TComponent>.IndexOf(TComponent item)
         {
             if(!hasValue)
             {
@@ -438,27 +438,27 @@ namespace IS4.HyperNumerics.NumberTypes
             return value.IndexOf(item);
         }
 
-        void IList<TPrimitive>.Insert(int index, TPrimitive item)
+        void IList<TComponent>.Insert(int index, TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<TPrimitive>.RemoveAt(int index)
+        void IList<TComponent>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Add(TPrimitive item)
+        void ICollection<TComponent>.Add(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<TPrimitive>.Clear()
+        void ICollection<TComponent>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<TPrimitive>.Contains(TPrimitive item)
+        bool ICollection<TComponent>.Contains(TComponent item)
         {
             if(!hasValue)
             {
@@ -467,7 +467,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return value.Contains(item);
         }
 
-        void ICollection<TPrimitive>.CopyTo(TPrimitive[] array, int arrayIndex)
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
         {
             if(hasValue)
             {
@@ -475,16 +475,16 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        bool ICollection<TPrimitive>.Remove(TPrimitive item)
+        bool ICollection<TComponent>.Remove(TComponent item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
         {
             if(!hasValue)
             {
-                return Enumerable.Empty<TPrimitive>().GetEnumerator();
+                return Enumerable.Empty<TComponent>().GetEnumerator();
             }
             return value.GetEnumerator();
         }
@@ -493,7 +493,7 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             if(!hasValue)
             {
-                return Enumerable.Empty<TPrimitive>().GetEnumerator();
+                return Enumerable.Empty<TComponent>().GetEnumerator();
             }
             return value.GetEnumerator();
         }

@@ -6,7 +6,7 @@ namespace IS4.HyperNumerics.Operations
 {
     public static class FunctionalExtensions
     {
-        public static TResult DynamicInvoke<TResult, TPrimitive>(this IPrimitiveNumberFunc<TResult> func, Type numberType, Type primitiveType = null) where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TResult DynamicInvoke<TResult, TComponent>(this IComponentNumberFunc<TResult> func, Type numberType, Type componentType = null) where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
             if(func == null)
             {
@@ -17,26 +17,26 @@ namespace IS4.HyperNumerics.Operations
                 throw new ArgumentNullException(nameof(numberType));
             }
             MethodInfo method;
-            if(primitiveType == null && func is INumberFunc<TResult>)
+            if(componentType == null && func is INumberFunc<TResult>)
             {
                 method = typeof(INumberFunc<TResult>).GetMethod(nameof(INumberFunc<TResult>.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
                 method = method.MakeGenericMethod(numberType);
             }else{
-                method = typeof(IPrimitiveNumberFunc<TResult>).GetMethod(nameof(IPrimitiveNumberFunc<TResult>.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-                if(primitiveType == null)
+                method = typeof(IComponentNumberFunc<TResult>).GetMethod(nameof(IComponentNumberFunc<TResult>.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                if(componentType == null)
                 {
-                    primitiveType = TypeTools.GetPrimitiveType(numberType);
-                    if(primitiveType == null)
+                    componentType = TypeTools.GetComponentType(numberType);
+                    if(componentType == null)
                     {
-                        throw new ArgumentException("Type does not provide its primitive type.", nameof(numberType));
+                        throw new ArgumentException("Type does not provide its component type.", nameof(numberType));
                     }
                 }
-                method = method.MakeGenericMethod(numberType, primitiveType);
+                method = method.MakeGenericMethod(numberType, componentType);
             }
             return (TResult)method.Invoke(func, null);
         }
 
-        public static INumber DynamicInvoke(this IPrimitiveNumberOperation func, Type numberType, Type primitiveType = null)
+        public static INumber DynamicInvoke(this IComponentNumberOperation func, Type numberType, Type componentType = null)
         {
             if(func == null)
             {
@@ -47,21 +47,21 @@ namespace IS4.HyperNumerics.Operations
                 throw new ArgumentNullException(nameof(numberType));
             }
             MethodInfo method;
-            if(primitiveType == null && func is INumberOperation)
+            if(componentType == null && func is INumberOperation)
             {
                 method = typeof(INumberOperation).GetMethod(nameof(INumberOperation.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
                 method = method.MakeGenericMethod(numberType);
             }else{
-                method = typeof(IPrimitiveNumberOperation).GetMethod(nameof(IPrimitiveNumberOperation.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-                if(primitiveType == null)
+                method = typeof(IComponentNumberOperation).GetMethod(nameof(IComponentNumberOperation.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                if(componentType == null)
                 {
-                    primitiveType = TypeTools.GetPrimitiveType(numberType);
-                    if(primitiveType == null)
+                    componentType = TypeTools.GetComponentType(numberType);
+                    if(componentType == null)
                     {
-                        throw new ArgumentException("Type does not provide its primitive type.", nameof(numberType));
+                        throw new ArgumentException("Type does not provide its component type.", nameof(numberType));
                     }
                 }
-                method = method.MakeGenericMethod(numberType, primitiveType);
+                method = method.MakeGenericMethod(numberType, componentType);
             }
             return (INumber)method.Invoke(func, null);
         }
@@ -269,9 +269,9 @@ namespace IS4.HyperNumerics.Operations
                 return func().Invoke<TNumber>();
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return func().Invoke<TNumber, TPrimitive>();
+                return func().Invoke<TNumber, TComponent>();
             }
 
             public override string ToString()
@@ -294,9 +294,9 @@ namespace IS4.HyperNumerics.Operations
                 return operation.Invoke<TNumber>();
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>();
+                return operation.Invoke<TNumber, TComponent>();
             }
 
             public override string ToString()
@@ -319,9 +319,9 @@ namespace IS4.HyperNumerics.Operations
                 return operation.Invoke<TNumber>(numArg, numArg);
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>(numArg, numArg);
+                return operation.Invoke<TNumber, TComponent>(numArg, numArg);
             }
 
             public override string ToString()
@@ -344,9 +344,9 @@ namespace IS4.HyperNumerics.Operations
                 return operation.Invoke<TNumber>(arg1);
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>(arg1);
+                return operation.Invoke<TNumber, TComponent>(arg1);
             }
 
             public override string ToString()
@@ -369,9 +369,9 @@ namespace IS4.HyperNumerics.Operations
                 return operation.Invoke<TNumber>();
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>();
+                return operation.Invoke<TNumber, TComponent>();
             }
 
             public override string ToString()
@@ -394,9 +394,9 @@ namespace IS4.HyperNumerics.Operations
                 return operation.Invoke<TNumber>(arg2, arg1);
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>(arg2, arg1);
+                return operation.Invoke<TNumber, TComponent>(arg2, arg1);
             }
 
             public override string ToString()
@@ -421,9 +421,9 @@ namespace IS4.HyperNumerics.Operations
                 return outer.Invoke<TNumber>(inner.Invoke<TNumber>(numArg));
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(inner.Invoke<TNumber, TPrimitive>(numArg));
+                return outer.Invoke<TNumber, TComponent>(inner.Invoke<TNumber, TComponent>(numArg));
             }
 
             public override string ToString()
@@ -448,9 +448,9 @@ namespace IS4.HyperNumerics.Operations
                 return outer.Invoke<TNumber>(inner.Invoke<TNumber>());
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(inner.Invoke<TNumber, TPrimitive>());
+                return outer.Invoke<TNumber, TComponent>(inner.Invoke<TNumber, TComponent>());
             }
 
             public override string ToString()
@@ -477,9 +477,9 @@ namespace IS4.HyperNumerics.Operations
                 return outer.Invoke<TNumber>(left.Invoke<TNumber>(), right.Invoke<TNumber>());
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(), right.Invoke<TNumber, TPrimitive>());
+                return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(), right.Invoke<TNumber, TComponent>());
             }
 
             public override string ToString()
@@ -511,13 +511,13 @@ namespace IS4.HyperNumerics.Operations
                 }
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
                 if(left == null)
                 {
-                    return outer.Invoke<TNumber, TPrimitive>(num, right.Invoke<TNumber, TPrimitive>());
+                    return outer.Invoke<TNumber, TComponent>(num, right.Invoke<TNumber, TComponent>());
                 }else{
-                    return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(num), right.Invoke<TNumber, TPrimitive>());
+                    return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(num), right.Invoke<TNumber, TComponent>());
                 }
             }
 
@@ -550,13 +550,13 @@ namespace IS4.HyperNumerics.Operations
                 }
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
                 if(right == null)
                 {
-                    return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(), num);
+                    return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(), num);
                 }else{
-                    return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(), right.Invoke<TNumber, TPrimitive>(num));
+                    return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(), right.Invoke<TNumber, TComponent>(num));
                 }
             }
 
@@ -599,22 +599,22 @@ namespace IS4.HyperNumerics.Operations
                 }
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
                 if(left == null)
                 {
                     if(right == null)
                     {
-                        return outer.Invoke<TNumber, TPrimitive>(num, num);
+                        return outer.Invoke<TNumber, TComponent>(num, num);
                     }else{
-                        return outer.Invoke<TNumber, TPrimitive>(num, right.Invoke<TNumber, TPrimitive>(num));
+                        return outer.Invoke<TNumber, TComponent>(num, right.Invoke<TNumber, TComponent>(num));
                     }
                 }else{
                     if(right == null)
                     {
-                        return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(num), num);
+                        return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(num), num);
                     }else{
-                        return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(num), right.Invoke<TNumber, TPrimitive>(num));
+                        return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(num), right.Invoke<TNumber, TComponent>(num));
                     }
                 }
             }
@@ -643,9 +643,9 @@ namespace IS4.HyperNumerics.Operations
                 return outer.Invoke<TNumber>(left.Invoke<TNumber>(arg1, arg2), right.Invoke<TNumber>(arg1, arg2));
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(arg1, arg2), right.Invoke<TNumber, TPrimitive>(arg1, arg2));
+                return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(arg1, arg2), right.Invoke<TNumber, TComponent>(arg1, arg2));
             }
 
             public override string ToString()
@@ -670,9 +670,9 @@ namespace IS4.HyperNumerics.Operations
                 return outer.Invoke<TNumber>(inner.Invoke<TNumber>(arg1, arg2));
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(inner.Invoke<TNumber, TPrimitive>(arg1, arg2));
+                return outer.Invoke<TNumber, TComponent>(inner.Invoke<TNumber, TComponent>(arg1, arg2));
             }
 
             public override string ToString()
@@ -681,88 +681,88 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        public static IPrimitiveNumberOperation AsOperation(this Func<PrimitiveAbstractNumber> func)
+        public static IComponentNumberOperation AsOperation(this Func<ComponentAbstractNumber> func)
         {
             if(func == null)
             {
                 throw new ArgumentNullException(nameof(func));
             }
-            return new PrimitiveFuncAsNullaryOperation(func);
+            return new ComponentFuncAsNullaryOperation(func);
         }
 
-        public static PrimitiveAbstractNumber AsNumber(this IPrimitiveNumberOperation operation)
+        public static ComponentAbstractNumber AsNumber(this IComponentNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveAbstractNumber(operation);
+            return new ComponentAbstractNumber(operation);
         }
 
-        public static PrimitiveUnaryAbstractNumber AsNumber(this IPrimitiveUnaryNumberOperation operation)
+        public static ComponentUnaryAbstractNumber AsNumber(this IComponentUnaryNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveUnaryAbstractNumber(operation);
+            return new ComponentUnaryAbstractNumber(operation);
         }
 
-        public static PrimitiveBinaryAbstractNumber AsNumber(this IPrimitiveBinaryNumberOperation operation)
+        public static ComponentBinaryAbstractNumber AsNumber(this IComponentBinaryNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveBinaryAbstractNumber(operation);
+            return new ComponentBinaryAbstractNumber(operation);
         }
 
-        public static IPrimitiveUnaryNumberOperation AsUnary(this IPrimitiveNumberOperation operation)
+        public static IComponentUnaryNumberOperation AsUnary(this IComponentNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveNullaryAsUnaryOperation(operation);
+            return new ComponentNullaryAsUnaryOperation(operation);
         }
 
-        public static IPrimitiveUnaryNumberOperation AsUnary(this IPrimitiveBinaryNumberOperation operation)
+        public static IComponentUnaryNumberOperation AsUnary(this IComponentBinaryNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveBinaryAsUnaryOperation(operation);
+            return new ComponentBinaryAsUnaryOperation(operation);
         }
 
-        public static IPrimitiveBinaryNumberOperation AsBinary(this IPrimitiveUnaryNumberOperation operation)
+        public static IComponentBinaryNumberOperation AsBinary(this IComponentUnaryNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveUnaryAsBinaryOperation(operation);
+            return new ComponentUnaryAsBinaryOperation(operation);
         }
 
-        public static IPrimitiveBinaryNumberOperation AsBinary(this IPrimitiveNumberOperation operation)
+        public static IComponentBinaryNumberOperation AsBinary(this IComponentNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveNullaryAsBinaryOperation(operation);
+            return new ComponentNullaryAsBinaryOperation(operation);
         }
 
-        public static IPrimitiveBinaryNumberOperation Swap(this IPrimitiveBinaryNumberOperation operation)
+        public static IComponentBinaryNumberOperation Swap(this IComponentBinaryNumberOperation operation)
         {
             if(operation == null)
             {
                 throw new ArgumentNullException(nameof(operation));
             }
-            return new PrimitiveSwapOperation(operation);
+            return new ComponentSwapOperation(operation);
         }
 
-        public static IPrimitiveUnaryNumberOperation Apply(this IPrimitiveUnaryNumberOperation outer, IPrimitiveUnaryNumberOperation inner)
+        public static IComponentUnaryNumberOperation Apply(this IComponentUnaryNumberOperation outer, IComponentUnaryNumberOperation inner)
         {
             if(outer == null)
             {
@@ -772,10 +772,10 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(inner));
             }
-            return new PrimitiveUnaryUnaryOperation(outer, inner);
+            return new ComponentUnaryUnaryOperation(outer, inner);
         }
 
-        public static IPrimitiveNumberOperation Apply(this IPrimitiveUnaryNumberOperation outer, IPrimitiveNumberOperation inner)
+        public static IComponentNumberOperation Apply(this IComponentUnaryNumberOperation outer, IComponentNumberOperation inner)
         {
             if(outer == null)
             {
@@ -785,10 +785,10 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(inner));
             }
-            return new PrimitiveUnaryNullaryOperation(outer, inner);
+            return new ComponentUnaryNullaryOperation(outer, inner);
         }
 
-        public static IPrimitiveNumberOperation Apply(this IPrimitiveBinaryNumberOperation outer, IPrimitiveNumberOperation left, IPrimitiveNumberOperation right)
+        public static IComponentNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentNumberOperation right)
         {
             if(outer == null)
             {
@@ -802,10 +802,10 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(right));
             }
-            return new PrimitiveBinaryNullaryNullaryOperation(outer, left, right);
+            return new ComponentBinaryNullaryNullaryOperation(outer, left, right);
         }
 
-        public static IPrimitiveUnaryNumberOperation Apply(this IPrimitiveBinaryNumberOperation outer, IPrimitiveUnaryNumberOperation left, IPrimitiveNumberOperation right)
+        public static IComponentUnaryNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentUnaryNumberOperation left, IComponentNumberOperation right)
         {
             if(outer == null)
             {
@@ -815,10 +815,10 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(right));
             }
-            return new PrimitiveBinaryUnaryNullaryOperation(outer, left, right);
+            return new ComponentBinaryUnaryNullaryOperation(outer, left, right);
         }
 
-        public static IPrimitiveUnaryNumberOperation Apply(this IPrimitiveBinaryNumberOperation outer, IPrimitiveNumberOperation left, IPrimitiveUnaryNumberOperation right)
+        public static IComponentUnaryNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentUnaryNumberOperation right)
         {
             if(outer == null)
             {
@@ -828,19 +828,19 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(left));
             }
-            return new PrimitiveBinaryNullaryUnaryOperation(outer, left, right);
+            return new ComponentBinaryNullaryUnaryOperation(outer, left, right);
         }
 
-        public static IPrimitiveUnaryNumberOperation Apply(this IPrimitiveBinaryNumberOperation outer, IPrimitiveUnaryNumberOperation left, IPrimitiveUnaryNumberOperation right)
+        public static IComponentUnaryNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentUnaryNumberOperation left, IComponentUnaryNumberOperation right)
         {
             if(outer == null)
             {
                 throw new ArgumentNullException(nameof(outer));
             }
-            return new PrimitiveBinaryUnaryUnaryOperation(outer, left, right);
+            return new ComponentBinaryUnaryUnaryOperation(outer, left, right);
         }
 
-        public static IPrimitiveBinaryNumberOperation Apply(this IPrimitiveBinaryNumberOperation outer, IPrimitiveBinaryNumberOperation left, IPrimitiveBinaryNumberOperation right)
+        public static IComponentBinaryNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentBinaryNumberOperation left, IComponentBinaryNumberOperation right)
         {
             if(outer == null)
             {
@@ -854,10 +854,10 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(right));
             }
-            return new PrimitiveBinaryBinaryBinaryOperation(outer, left, right);
+            return new ComponentBinaryBinaryBinaryOperation(outer, left, right);
         }
 
-        public static IPrimitiveBinaryNumberOperation Apply(this IPrimitiveUnaryNumberOperation outer, IPrimitiveBinaryNumberOperation inner)
+        public static IComponentBinaryNumberOperation Apply(this IComponentUnaryNumberOperation outer, IComponentBinaryNumberOperation inner)
         {
             if(outer == null)
             {
@@ -867,21 +867,21 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(inner));
             }
-            return new PrimitiveUnaryBinaryOperation(outer, inner);
+            return new ComponentUnaryBinaryOperation(outer, inner);
         }
 
-        private class PrimitiveFuncAsNullaryOperation : DynamicNumberOperation<IPrimitiveNumberOperation>, IPrimitiveNumberOperation
+        private class ComponentFuncAsNullaryOperation : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
         {
-            readonly Func<PrimitiveAbstractNumber> func;
+            readonly Func<ComponentAbstractNumber> func;
 
-            public PrimitiveFuncAsNullaryOperation(Func<PrimitiveAbstractNumber> func)
+            public ComponentFuncAsNullaryOperation(Func<ComponentAbstractNumber> func)
             {
                 this.func = func;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return func().Invoke<TNumber, TPrimitive>();
+                return func().Invoke<TNumber, TComponent>();
             }
 
             public override string ToString()
@@ -890,18 +890,18 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveNullaryAsUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+        private class ComponentNullaryAsUnaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
         {
-            readonly IPrimitiveNumberOperation operation;
+            readonly IComponentNumberOperation operation;
 
-            public PrimitiveNullaryAsUnaryOperation(IPrimitiveNumberOperation operation)
+            public ComponentNullaryAsUnaryOperation(IComponentNumberOperation operation)
             {
                 this.operation = operation;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>();
+                return operation.Invoke<TNumber, TComponent>();
             }
 
             public override string ToString()
@@ -910,18 +910,18 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveBinaryAsUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+        private class ComponentBinaryAsUnaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
         {
-            readonly IPrimitiveBinaryNumberOperation operation;
+            readonly IComponentBinaryNumberOperation operation;
 
-            public PrimitiveBinaryAsUnaryOperation(IPrimitiveBinaryNumberOperation operation)
+            public ComponentBinaryAsUnaryOperation(IComponentBinaryNumberOperation operation)
             {
                 this.operation = operation;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>(numArg, numArg);
+                return operation.Invoke<TNumber, TComponent>(numArg, numArg);
             }
 
             public override string ToString()
@@ -930,18 +930,18 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveUnaryAsBinaryOperation : DynamicNumberOperation<IBinaryNumberOperation>, IPrimitiveBinaryNumberOperation
+        private class ComponentUnaryAsBinaryOperation : DynamicNumberOperation<IBinaryNumberOperation>, IComponentBinaryNumberOperation
         {
-            readonly IPrimitiveUnaryNumberOperation operation;
+            readonly IComponentUnaryNumberOperation operation;
 
-            public PrimitiveUnaryAsBinaryOperation(IPrimitiveUnaryNumberOperation operation)
+            public ComponentUnaryAsBinaryOperation(IComponentUnaryNumberOperation operation)
             {
                 this.operation = operation;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>(arg1);
+                return operation.Invoke<TNumber, TComponent>(arg1);
             }
 
             public override string ToString()
@@ -950,18 +950,18 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveNullaryAsBinaryOperation : DynamicNumberOperation<IPrimitiveBinaryNumberOperation>, IPrimitiveBinaryNumberOperation
+        private class ComponentNullaryAsBinaryOperation : DynamicNumberOperation<IComponentBinaryNumberOperation>, IComponentBinaryNumberOperation
         {
-            readonly IPrimitiveNumberOperation operation;
+            readonly IComponentNumberOperation operation;
 
-            public PrimitiveNullaryAsBinaryOperation(IPrimitiveNumberOperation operation)
+            public ComponentNullaryAsBinaryOperation(IComponentNumberOperation operation)
             {
                 this.operation = operation;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>();
+                return operation.Invoke<TNumber, TComponent>();
             }
 
             public override string ToString()
@@ -970,18 +970,18 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveSwapOperation : DynamicNumberOperation<IPrimitiveBinaryNumberOperation>, IPrimitiveBinaryNumberOperation
+        private class ComponentSwapOperation : DynamicNumberOperation<IComponentBinaryNumberOperation>, IComponentBinaryNumberOperation
         {
-            readonly IPrimitiveBinaryNumberOperation operation;
+            readonly IComponentBinaryNumberOperation operation;
 
-            public PrimitiveSwapOperation(IPrimitiveBinaryNumberOperation operation)
+            public ComponentSwapOperation(IComponentBinaryNumberOperation operation)
             {
                 this.operation = operation;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return operation.Invoke<TNumber, TPrimitive>(arg2, arg1);
+                return operation.Invoke<TNumber, TComponent>(arg2, arg1);
             }
 
             public override string ToString()
@@ -990,20 +990,20 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveUnaryUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+        private class ComponentUnaryUnaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
         {
-            readonly IPrimitiveUnaryNumberOperation outer;
-            readonly IPrimitiveUnaryNumberOperation inner;
+            readonly IComponentUnaryNumberOperation outer;
+            readonly IComponentUnaryNumberOperation inner;
 
-            public PrimitiveUnaryUnaryOperation(IPrimitiveUnaryNumberOperation outer, IPrimitiveUnaryNumberOperation inner)
+            public ComponentUnaryUnaryOperation(IComponentUnaryNumberOperation outer, IComponentUnaryNumberOperation inner)
             {
                 this.outer = outer;
                 this.inner = inner;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber numArg) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(inner.Invoke<TNumber, TPrimitive>(numArg));
+                return outer.Invoke<TNumber, TComponent>(inner.Invoke<TNumber, TComponent>(numArg));
             }
 
             public override string ToString()
@@ -1012,20 +1012,20 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveUnaryNullaryOperation : DynamicNumberOperation<IPrimitiveNumberOperation>, IPrimitiveNumberOperation
+        private class ComponentUnaryNullaryOperation : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
         {
-            readonly IPrimitiveUnaryNumberOperation outer;
-            readonly IPrimitiveNumberOperation inner;
+            readonly IComponentUnaryNumberOperation outer;
+            readonly IComponentNumberOperation inner;
 
-            public PrimitiveUnaryNullaryOperation(IPrimitiveUnaryNumberOperation outer, IPrimitiveNumberOperation inner)
+            public ComponentUnaryNullaryOperation(IComponentUnaryNumberOperation outer, IComponentNumberOperation inner)
             {
                 this.outer = outer;
                 this.inner = inner;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(inner.Invoke<TNumber, TPrimitive>());
+                return outer.Invoke<TNumber, TComponent>(inner.Invoke<TNumber, TComponent>());
             }
 
             public override string ToString()
@@ -1034,22 +1034,22 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveBinaryNullaryNullaryOperation : DynamicNumberOperation<IPrimitiveNumberOperation>, IPrimitiveNumberOperation
+        private class ComponentBinaryNullaryNullaryOperation : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
         {
-            readonly IPrimitiveBinaryNumberOperation outer;
-            readonly IPrimitiveNumberOperation left;
-            readonly IPrimitiveNumberOperation right;
+            readonly IComponentBinaryNumberOperation outer;
+            readonly IComponentNumberOperation left;
+            readonly IComponentNumberOperation right;
 
-            public PrimitiveBinaryNullaryNullaryOperation(IPrimitiveBinaryNumberOperation outer, IPrimitiveNumberOperation left, IPrimitiveNumberOperation right)
+            public ComponentBinaryNullaryNullaryOperation(IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentNumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
                 this.right = right;
             }
             
-            public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(), right.Invoke<TNumber, TPrimitive>());
+                return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(), right.Invoke<TNumber, TComponent>());
             }
 
             public override string ToString()
@@ -1058,26 +1058,26 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveBinaryUnaryNullaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+        private class ComponentBinaryUnaryNullaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
         {
-            readonly IPrimitiveBinaryNumberOperation outer;
-            readonly IPrimitiveUnaryNumberOperation left;
-            readonly IPrimitiveNumberOperation right;
+            readonly IComponentBinaryNumberOperation outer;
+            readonly IComponentUnaryNumberOperation left;
+            readonly IComponentNumberOperation right;
 
-            public PrimitiveBinaryUnaryNullaryOperation(IPrimitiveBinaryNumberOperation outer, IPrimitiveUnaryNumberOperation left, IPrimitiveNumberOperation right)
+            public ComponentBinaryUnaryNullaryOperation(IComponentBinaryNumberOperation outer, IComponentUnaryNumberOperation left, IComponentNumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
                 this.right = right;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
                 if(left == null)
                 {
-                    return outer.Invoke<TNumber, TPrimitive>(num, right.Invoke<TNumber, TPrimitive>());
+                    return outer.Invoke<TNumber, TComponent>(num, right.Invoke<TNumber, TComponent>());
                 }else{
-                    return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(num), right.Invoke<TNumber, TPrimitive>());
+                    return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(num), right.Invoke<TNumber, TComponent>());
                 }
             }
 
@@ -1087,26 +1087,26 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveBinaryNullaryUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+        private class ComponentBinaryNullaryUnaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
         {
-            readonly IPrimitiveBinaryNumberOperation outer;
-            readonly IPrimitiveNumberOperation left;
-            readonly IPrimitiveUnaryNumberOperation right;
+            readonly IComponentBinaryNumberOperation outer;
+            readonly IComponentNumberOperation left;
+            readonly IComponentUnaryNumberOperation right;
 
-            public PrimitiveBinaryNullaryUnaryOperation(IPrimitiveBinaryNumberOperation outer, IPrimitiveNumberOperation left, IPrimitiveUnaryNumberOperation right)
+            public ComponentBinaryNullaryUnaryOperation(IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentUnaryNumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
                 this.right = right;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
                 if(right == null)
                 {
-                    return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(), num);
+                    return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(), num);
                 }else{
-                    return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(), right.Invoke<TNumber, TPrimitive>(num));
+                    return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(), right.Invoke<TNumber, TComponent>(num));
                 }
             }
 
@@ -1116,35 +1116,35 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveBinaryUnaryUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+        private class ComponentBinaryUnaryUnaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
         {
-            readonly IPrimitiveBinaryNumberOperation outer;
-            readonly IPrimitiveUnaryNumberOperation left;
-            readonly IPrimitiveUnaryNumberOperation right;
+            readonly IComponentBinaryNumberOperation outer;
+            readonly IComponentUnaryNumberOperation left;
+            readonly IComponentUnaryNumberOperation right;
 
-            public PrimitiveBinaryUnaryUnaryOperation(IPrimitiveBinaryNumberOperation outer, IPrimitiveUnaryNumberOperation left, IPrimitiveUnaryNumberOperation right)
+            public ComponentBinaryUnaryUnaryOperation(IComponentBinaryNumberOperation outer, IComponentUnaryNumberOperation left, IComponentUnaryNumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
                 this.right = right;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
                 if(left == null)
                 {
                     if(right == null)
                     {
-                        return outer.Invoke<TNumber, TPrimitive>(num, num);
+                        return outer.Invoke<TNumber, TComponent>(num, num);
                     }else{
-                        return outer.Invoke<TNumber, TPrimitive>(num, right.Invoke<TNumber, TPrimitive>(num));
+                        return outer.Invoke<TNumber, TComponent>(num, right.Invoke<TNumber, TComponent>(num));
                     }
                 }else{
                     if(right == null)
                     {
-                        return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(num), num);
+                        return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(num), num);
                     }else{
-                        return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(num), right.Invoke<TNumber, TPrimitive>(num));
+                        return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(num), right.Invoke<TNumber, TComponent>(num));
                     }
                 }
             }
@@ -1155,22 +1155,22 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveBinaryBinaryBinaryOperation : DynamicNumberOperation<IPrimitiveBinaryNumberOperation>, IPrimitiveBinaryNumberOperation
+        private class ComponentBinaryBinaryBinaryOperation : DynamicNumberOperation<IComponentBinaryNumberOperation>, IComponentBinaryNumberOperation
         {
-            readonly IPrimitiveBinaryNumberOperation outer;
-            readonly IPrimitiveBinaryNumberOperation left;
-            readonly IPrimitiveBinaryNumberOperation right;
+            readonly IComponentBinaryNumberOperation outer;
+            readonly IComponentBinaryNumberOperation left;
+            readonly IComponentBinaryNumberOperation right;
 
-            public PrimitiveBinaryBinaryBinaryOperation(IPrimitiveBinaryNumberOperation outer, IPrimitiveBinaryNumberOperation left, IPrimitiveBinaryNumberOperation right)
+            public ComponentBinaryBinaryBinaryOperation(IComponentBinaryNumberOperation outer, IComponentBinaryNumberOperation left, IComponentBinaryNumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
                 this.right = right;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(left.Invoke<TNumber, TPrimitive>(arg1, arg2), right.Invoke<TNumber, TPrimitive>(arg1, arg2));
+                return outer.Invoke<TNumber, TComponent>(left.Invoke<TNumber, TComponent>(arg1, arg2), right.Invoke<TNumber, TComponent>(arg1, arg2));
             }
 
             public override string ToString()
@@ -1179,20 +1179,20 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class PrimitiveUnaryBinaryOperation : DynamicNumberOperation<IPrimitiveBinaryNumberOperation>, IPrimitiveBinaryNumberOperation
+        private class ComponentUnaryBinaryOperation : DynamicNumberOperation<IComponentBinaryNumberOperation>, IComponentBinaryNumberOperation
         {
-            readonly IPrimitiveUnaryNumberOperation outer;
-            readonly IPrimitiveBinaryNumberOperation inner;
+            readonly IComponentUnaryNumberOperation outer;
+            readonly IComponentBinaryNumberOperation inner;
 
-            public PrimitiveUnaryBinaryOperation(IPrimitiveUnaryNumberOperation outer, IPrimitiveBinaryNumberOperation inner)
+            public ComponentUnaryBinaryOperation(IComponentUnaryNumberOperation outer, IComponentBinaryNumberOperation inner)
             {
                 this.outer = outer;
                 this.inner = inner;
             }
 
-            public TNumber Invoke<TNumber, TPrimitive>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+            public TNumber Invoke<TNumber, TComponent>(in TNumber arg1, in TNumber arg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
             {
-                return outer.Invoke<TNumber, TPrimitive>(inner.Invoke<TNumber, TPrimitive>(arg1, arg2));
+                return outer.Invoke<TNumber, TComponent>(inner.Invoke<TNumber, TComponent>(arg1, arg2));
             }
 
             public override string ToString()

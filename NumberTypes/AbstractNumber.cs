@@ -49,9 +49,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber>();
         }
 
-        public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operation.Invoke<TNumber, TPrimitive>();
+            return Operation.Invoke<TNumber, TComponent>();
         }
 
         public AbstractNumber Call(BinaryOperation operation, in AbstractNumber other)
@@ -142,16 +142,16 @@ namespace IS4.HyperNumerics.NumberTypes
     }
 
     /// <summary>
-    /// Represents a number formed by invoking a constructed nullary operation (<see cref="IPrimitiveNumberOperation"/>), i.e. the result of an expression.
+    /// Represents a number formed by invoking a constructed nullary operation (<see cref="IComponentNumberOperation"/>), i.e. the result of an expression.
     /// This type supports dynamic dispatch – a dynamic cast to a valid number type will produce a number
-    /// of that type by calling <see cref="IPrimitiveNumberOperation.Invoke{TNumber, TPrimitive}"/> on the operation.
+    /// of that type by calling <see cref="IComponentNumberOperation.Invoke{TNumber, TComponent}"/> on the operation.
     /// </summary>
     [Serializable]
-    public readonly partial struct PrimitiveAbstractNumber : IWrapperNumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>, IPrimitiveNumberOperation, IDynamicMetaObjectProvider
+    public readonly partial struct ComponentAbstractNumber : IWrapperNumber<ComponentAbstractNumber, ComponentAbstractNumber, ComponentAbstractNumber>, IComponentNumberOperation, IDynamicMetaObjectProvider
     {
-        private readonly IPrimitiveNumberOperation operation;
+        private readonly IComponentNumberOperation operation;
 
-        public IPrimitiveNumberOperation Operation => operation ?? HyperMath.Operations.Default;
+        public IComponentNumberOperation Operation => operation ?? HyperMath.Operations.Default;
 
         public bool IsInvertible => true;
 
@@ -159,7 +159,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int INumber.Dimension => -1;
 
-        public PrimitiveAbstractNumber(IPrimitiveNumberOperation operation)
+        public ComponentAbstractNumber(IComponentNumberOperation operation)
         {
             if(operation == null)
             {
@@ -168,46 +168,46 @@ namespace IS4.HyperNumerics.NumberTypes
             this.operation = operation;
         }
 
-        public PrimitiveAbstractNumber Clone()
+        public ComponentAbstractNumber Clone()
         {
             if(Operation is ICloneable cloneable)
             {
-                return new PrimitiveAbstractNumber((IPrimitiveNumberOperation)cloneable.Clone());
+                return new ComponentAbstractNumber((IComponentNumberOperation)cloneable.Clone());
             }
             return this;
         }
 
-        public static implicit operator PrimitiveAbstractNumber(AbstractNumber num)
+        public static implicit operator ComponentAbstractNumber(AbstractNumber num)
         {
-            return new PrimitiveAbstractNumber(num.Operation);
+            return new ComponentAbstractNumber(num.Operation);
         }
 
-        public TNumber Invoke<TNumber, TPrimitive>() where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operation.Invoke<TNumber, TPrimitive>();
+            return Operation.Invoke<TNumber, TComponent>();
         }
 
-        public PrimitiveAbstractNumber Call(BinaryOperation operation, in PrimitiveAbstractNumber other)
+        public ComponentAbstractNumber Call(BinaryOperation operation, in ComponentAbstractNumber other)
         {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
+            return new ComponentAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public PrimitiveAbstractNumber Call(UnaryOperation operation)
+        public ComponentAbstractNumber Call(UnaryOperation operation)
         {
-            return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
+            return new ComponentAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
         {
-            return obj is PrimitiveAbstractNumber value && Equals(in value);
+            return obj is ComponentAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(in PrimitiveAbstractNumber other)
+        public bool Equals(in ComponentAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
         }
 
-        public int CompareTo(in PrimitiveAbstractNumber other)
+        public int CompareTo(in ComponentAbstractNumber other)
         {
             return 0;
         }
@@ -227,13 +227,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        partial class Operations : NumberOperations<PrimitiveAbstractNumber>, IExtendedNumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber, PrimitiveAbstractNumber>
+        partial class Operations : NumberOperations<ComponentAbstractNumber>, IExtendedNumberOperations<ComponentAbstractNumber, ComponentAbstractNumber, ComponentAbstractNumber>
         {
             public override int Dimension => -1;
 
-            public PrimitiveAbstractNumber Call(NullaryOperation operation)
+            public ComponentAbstractNumber Call(NullaryOperation operation)
             {
-                return new PrimitiveAbstractNumber(HyperMath.Operations.GetOperation(operation));
+                return new ComponentAbstractNumber(HyperMath.Operations.GetOperation(operation));
             }
         }
 
@@ -244,11 +244,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         class MetaObject : DynamicMetaObject
         {
-            private static readonly Type InterfaceType = typeof(IPrimitiveNumberOperation);
-            private static readonly MethodInfo Invoke = InterfaceType.GetMethod(nameof(IPrimitiveNumberOperation.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-            private static readonly Type NumberType = typeof(PrimitiveAbstractNumber);
+            private static readonly Type InterfaceType = typeof(IComponentNumberOperation);
+            private static readonly MethodInfo Invoke = InterfaceType.GetMethod(nameof(IComponentNumberOperation.Invoke), BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            private static readonly Type NumberType = typeof(ComponentAbstractNumber);
 
-            public MetaObject(Expression expression, INumber<PrimitiveAbstractNumber> value) : base(expression, BindingRestrictions.GetTypeRestriction(expression, NumberType), value)
+            public MetaObject(Expression expression, INumber<ComponentAbstractNumber> value) : base(expression, BindingRestrictions.GetTypeRestriction(expression, NumberType), value)
             {
 
             }
@@ -257,7 +257,7 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 MethodInfo method;
                 try{
-                    method = Invoke.MakeGenericMethod(binder.Type, TypeTools.GetPrimitiveType(binder.Type));
+                    method = Invoke.MakeGenericMethod(binder.Type, TypeTools.GetComponentType(binder.Type));
                 }catch(ArgumentException)
                 {
                     return base.BindConvert(binder);
@@ -319,9 +319,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber>(num);
         }
 
-        public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operation.Invoke<TNumber, TPrimitive>(num);
+            return Operation.Invoke<TNumber, TComponent>(num);
         }
 
         public UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber other)
@@ -381,15 +381,15 @@ namespace IS4.HyperNumerics.NumberTypes
     }
 
     /// <summary>
-    /// Represents a number formed by invoking a constructed unary operation (<see cref="IPrimitiveUnaryNumberOperation"/>), i.e. the result of an expression
+    /// Represents a number formed by invoking a constructed unary operation (<see cref="IComponentUnaryNumberOperation"/>), i.e. the result of an expression
     /// with a single variable.
     /// </summary>
     [Serializable]
-    public readonly partial struct PrimitiveUnaryAbstractNumber : IWrapperNumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>, IPrimitiveUnaryNumberOperation
+    public readonly partial struct ComponentUnaryAbstractNumber : IWrapperNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>, IComponentUnaryNumberOperation
     {
-        private readonly IPrimitiveUnaryNumberOperation operation;
+        private readonly IComponentUnaryNumberOperation operation;
 
-        public IPrimitiveUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
+        public IComponentUnaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsUnary();
 
         public bool IsInvertible => true;
 
@@ -397,7 +397,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int INumber.Dimension => -1;
 
-        public PrimitiveUnaryAbstractNumber(IPrimitiveUnaryNumberOperation operation)
+        public ComponentUnaryAbstractNumber(IComponentUnaryNumberOperation operation)
         {
             if(operation == null)
             {
@@ -406,56 +406,56 @@ namespace IS4.HyperNumerics.NumberTypes
             this.operation = operation;
         }
 
-        public PrimitiveUnaryAbstractNumber Clone()
+        public ComponentUnaryAbstractNumber Clone()
         {
             if(Operation is ICloneable cloneable)
             {
-                return new PrimitiveUnaryAbstractNumber((IPrimitiveUnaryNumberOperation)cloneable.Clone());
+                return new ComponentUnaryAbstractNumber((IComponentUnaryNumberOperation)cloneable.Clone());
             }
             return this;
         }
 
-        public static implicit operator PrimitiveUnaryAbstractNumber(AbstractNumber num)
+        public static implicit operator ComponentUnaryAbstractNumber(AbstractNumber num)
         {
-            return new PrimitiveUnaryAbstractNumber(num.Operation.AsUnary());
+            return new ComponentUnaryAbstractNumber(num.Operation.AsUnary());
         }
 
-        public static implicit operator PrimitiveUnaryAbstractNumber(UnaryAbstractNumber num)
+        public static implicit operator ComponentUnaryAbstractNumber(UnaryAbstractNumber num)
         {
-            return new PrimitiveUnaryAbstractNumber(num.Operation);
+            return new ComponentUnaryAbstractNumber(num.Operation);
         }
 
-        public static implicit operator PrimitiveUnaryAbstractNumber(PrimitiveAbstractNumber num)
+        public static implicit operator ComponentUnaryAbstractNumber(ComponentAbstractNumber num)
         {
-            return new PrimitiveUnaryAbstractNumber(num.Operation.AsUnary());
+            return new ComponentUnaryAbstractNumber(num.Operation.AsUnary());
         }
 
-        public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public TNumber Invoke<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operation.Invoke<TNumber, TPrimitive>(num);
+            return Operation.Invoke<TNumber, TComponent>(num);
         }
 
-        public PrimitiveUnaryAbstractNumber Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber other)
+        public ComponentUnaryAbstractNumber Call(BinaryOperation operation, in ComponentUnaryAbstractNumber other)
         {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
+            return new ComponentUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public PrimitiveUnaryAbstractNumber Call(UnaryOperation operation)
+        public ComponentUnaryAbstractNumber Call(UnaryOperation operation)
         {
-            return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
+            return new ComponentUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
         {
-            return obj is PrimitiveUnaryAbstractNumber value && Equals(in value);
+            return obj is ComponentUnaryAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(in PrimitiveUnaryAbstractNumber other)
+        public bool Equals(in ComponentUnaryAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
         }
 
-        public int CompareTo(in PrimitiveUnaryAbstractNumber other)
+        public int CompareTo(in ComponentUnaryAbstractNumber other)
         {
             return 0;
         }
@@ -475,13 +475,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        partial class Operations : NumberOperations<PrimitiveUnaryAbstractNumber>, IExtendedNumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>
+        partial class Operations : NumberOperations<ComponentUnaryAbstractNumber>, IExtendedNumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>
         {
             public override int Dimension => -1;
 
-            public PrimitiveUnaryAbstractNumber Call(NullaryOperation operation)
+            public ComponentUnaryAbstractNumber Call(NullaryOperation operation)
             {
-                return new PrimitiveUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
+                return new ComponentUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
             }
         }
 
@@ -541,9 +541,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber>(numArg1, numArg2);
         }
 
-        public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg1, in TNumber numArg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public TNumber Invoke<TNumber, TComponent>(in TNumber numArg1, in TNumber numArg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operation.Invoke<TNumber, TPrimitive>(numArg1, numArg2);
+            return Operation.Invoke<TNumber, TComponent>(numArg1, numArg2);
         }
 
         public BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber other)
@@ -603,15 +603,15 @@ namespace IS4.HyperNumerics.NumberTypes
     }
 
     /// <summary>
-    /// Represents a number formed by invoking a constructed binary operation (<see cref="IPrimitiveBinaryNumberOperation"/>), i.e. the result of an expression
+    /// Represents a number formed by invoking a constructed binary operation (<see cref="IComponentBinaryNumberOperation"/>), i.e. the result of an expression
     /// with two variables.
     /// </summary>
     [Serializable]
-    public readonly partial struct PrimitiveBinaryAbstractNumber : IWrapperNumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>, IPrimitiveBinaryNumberOperation
+    public readonly partial struct ComponentBinaryAbstractNumber : IWrapperNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>, IComponentBinaryNumberOperation
     {
-        private readonly IPrimitiveBinaryNumberOperation operation;
+        private readonly IComponentBinaryNumberOperation operation;
 
-        public IPrimitiveBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
+        public IComponentBinaryNumberOperation Operation => operation ?? HyperMath.Operations.Default.AsBinary();
 
         public bool IsInvertible => true;
 
@@ -619,7 +619,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         int INumber.Dimension => -1;
 
-        public PrimitiveBinaryAbstractNumber(IPrimitiveBinaryNumberOperation operation)
+        public ComponentBinaryAbstractNumber(IComponentBinaryNumberOperation operation)
         {
             if(operation == null)
             {
@@ -628,66 +628,66 @@ namespace IS4.HyperNumerics.NumberTypes
             this.operation = operation;
         }
 
-        public PrimitiveBinaryAbstractNumber Clone()
+        public ComponentBinaryAbstractNumber Clone()
         {
             if(Operation is ICloneable cloneable)
             {
-                return new PrimitiveBinaryAbstractNumber((IPrimitiveBinaryNumberOperation)cloneable.Clone());
+                return new ComponentBinaryAbstractNumber((IComponentBinaryNumberOperation)cloneable.Clone());
             }
             return this;
         }
 
-        public static implicit operator PrimitiveBinaryAbstractNumber(AbstractNumber num)
+        public static implicit operator ComponentBinaryAbstractNumber(AbstractNumber num)
         {
-            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
+            return new ComponentBinaryAbstractNumber(num.Operation.AsBinary());
         }
 
-        public static implicit operator PrimitiveBinaryAbstractNumber(UnaryAbstractNumber num)
+        public static implicit operator ComponentBinaryAbstractNumber(UnaryAbstractNumber num)
         {
-            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
+            return new ComponentBinaryAbstractNumber(num.Operation.AsBinary());
         }
 
-        public static implicit operator PrimitiveBinaryAbstractNumber(BinaryAbstractNumber num)
+        public static implicit operator ComponentBinaryAbstractNumber(BinaryAbstractNumber num)
         {
-            return new PrimitiveBinaryAbstractNumber(num.Operation);
+            return new ComponentBinaryAbstractNumber(num.Operation);
         }
 
-        public static implicit operator PrimitiveBinaryAbstractNumber(PrimitiveUnaryAbstractNumber num)
+        public static implicit operator ComponentBinaryAbstractNumber(ComponentUnaryAbstractNumber num)
         {
-            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
+            return new ComponentBinaryAbstractNumber(num.Operation.AsBinary());
         }
 
-        public static implicit operator PrimitiveBinaryAbstractNumber(PrimitiveAbstractNumber num)
+        public static implicit operator ComponentBinaryAbstractNumber(ComponentAbstractNumber num)
         {
-            return new PrimitiveBinaryAbstractNumber(num.Operation.AsBinary());
+            return new ComponentBinaryAbstractNumber(num.Operation.AsBinary());
         }
 
-        public TNumber Invoke<TNumber, TPrimitive>(in TNumber numArg1, in TNumber numArg2) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public TNumber Invoke<TNumber, TComponent>(in TNumber numArg1, in TNumber numArg2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operation.Invoke<TNumber, TPrimitive>(numArg1, numArg2);
+            return Operation.Invoke<TNumber, TComponent>(numArg1, numArg2);
         }
 
-        public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber other)
+        public ComponentBinaryAbstractNumber Call(BinaryOperation operation, in ComponentBinaryAbstractNumber other)
         {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
+            return new ComponentBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public PrimitiveBinaryAbstractNumber Call(UnaryOperation operation)
+        public ComponentBinaryAbstractNumber Call(UnaryOperation operation)
         {
-            return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
+            return new ComponentBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
 
         public override bool Equals(object obj)
         {
-            return obj is PrimitiveBinaryAbstractNumber value && Equals(in value);
+            return obj is ComponentBinaryAbstractNumber value && Equals(in value);
         }
 
-        public bool Equals(in PrimitiveBinaryAbstractNumber other)
+        public bool Equals(in ComponentBinaryAbstractNumber other)
         {
             return Operation.Equals(other.Operation);
         }
 
-        public int CompareTo(in PrimitiveBinaryAbstractNumber other)
+        public int CompareTo(in ComponentBinaryAbstractNumber other)
         {
             return 0;
         }
@@ -707,13 +707,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.ToString();
         }
 
-        partial class Operations : NumberOperations<PrimitiveBinaryAbstractNumber>, IExtendedNumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>
+        partial class Operations : NumberOperations<ComponentBinaryAbstractNumber>, IExtendedNumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>
         {
             public override int Dimension => -1;
 
-            public PrimitiveBinaryAbstractNumber Call(NullaryOperation operation)
+            public ComponentBinaryAbstractNumber Call(NullaryOperation operation)
             {
-                return new PrimitiveBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
+                return new ComponentBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
             }
         }
 
