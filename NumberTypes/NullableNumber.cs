@@ -164,6 +164,17 @@ namespace IS4.HyperNumerics.NumberTypes
                 return HyperMath.Call<TInner>(operation);
             }
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            if(hasValue)
+            {
+                foreach(var obj in value)
+                {
+                    yield return obj;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -268,9 +279,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
-            return Value?.Call(operation) ?? default;
+            return Value?.CallComponent(operation) ?? default;
         }
 
         public override bool Equals(object obj)
@@ -344,6 +355,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public NullableNumber<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
+            }
+
+            public NullableNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                return new NullableNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
             }
 
             public NullableNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)

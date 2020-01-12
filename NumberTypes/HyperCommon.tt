@@ -6,6 +6,7 @@
 <#@ output extension=".cs" #>
 using IS4.HyperNumerics.Operations;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace IS4.HyperNumerics.NumberTypes
@@ -231,7 +232,13 @@ foreach(var info in data)
             {
                 return new <#=fullname#>(first, second);
             }<# if(primitive) { #>
-		
+			
+			
+            public <#=fullname#> Create(in TPrimitive num)
+            {
+                return new <#=fullname#>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+            }
+
             public <#=fullname#> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new <#=fullname#>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
@@ -251,7 +258,21 @@ foreach(var info in data)
                 return new <#=fullname#>(first, second);
             }<# } #>
 
-		}
+		}<# if(!primitive) { #>
+
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			foreach(var obj in first)
+			{
+				yield return obj;
+			}
+			foreach(var obj in second)
+			{
+				yield return obj;
+			}
+        }<# } #>
+
 	}
 
 <#

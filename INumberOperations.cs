@@ -103,6 +103,13 @@ namespace IS4.HyperNumerics
     public interface INumberOperations<TNumber, TPrimitive> : INumberOperations<TNumber> where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
     {
         /// <summary>
+        /// Creates a new instance of <typeparamref name="TNumber"/> from the value of <typeparamref name="TPrimitive"/>.
+        /// </summary>
+        /// <param name="num">The inner value with which the instance shall be initialized to.</param>
+        /// <returns>A new instance containing the inner value.</returns>
+        TNumber Create(in TPrimitive num);
+
+        /// <summary>
         /// Creates a new instance of <typeparamref name="TNumber"/> from the primitive coefficients of its components.
         /// </summary>
         /// <param name="realUnit">The real (standard) part of the number.</param>
@@ -133,7 +140,7 @@ namespace IS4.HyperNumerics
         /// <param name="num">The argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TPrimitive Call(PrimitiveUnaryOperation operation, in TNumber num);
+        TPrimitive CallComponent(UnaryOperation operation, in TNumber num);
 
         /// <summary>
         /// Invokes a binary operation for the number type.

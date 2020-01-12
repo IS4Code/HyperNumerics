@@ -82,11 +82,6 @@ foreach(var info in data)
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => <#=String.Join(" + ", info.value.Select(v => "GetCollectionCount(" + v + ")"))#>;
 
@@ -224,8 +219,18 @@ foreach(var info in data)
         }
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
-			return GetBaseEnumerator(this);
+        {<#
+			foreach(var value in info.value)
+			{
+			#>
+
+            foreach(var num in <#=value#>)
+            {
+                yield return num;
+            }<#
+			}
+			#>
+
         }<# }else if(info.value.Length == 1) { #>
 
         IEnumerator<TPrimitive> IEnumerable<TPrimitive>.GetEnumerator()

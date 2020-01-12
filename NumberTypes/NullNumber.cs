@@ -73,6 +73,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return default;
             }
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield break;
+        }
     }
 
     /// <summary>
@@ -115,7 +120,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
             return default;
         }
@@ -155,6 +160,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public override int Dimension => 0;
 
             public NullNumber<TPrimitive> Call(NullaryOperation operation)
+            {
+                return default;
+            }
+
+            public NullNumber<TPrimitive> Create(in TPrimitive num)
             {
                 return default;
             }

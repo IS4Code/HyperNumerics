@@ -14,11 +14,11 @@ namespace IS4.HyperNumerics.NumberTypes
 Func<string, string> emptyConstraints = fn => "";
 var data = new[] {
 	new{name = "AbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "PrimitiveAbstractNumber", args = "", level = 0, primitivetype = "PrimitiveAbstractNumber", constraints = emptyConstraints},
+	new{name = "PrimitiveAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
 	new{name = "UnaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "PrimitiveUnaryAbstractNumber", args = "", level = 0, primitivetype = "PrimitiveUnaryAbstractNumber", constraints = emptyConstraints},
+	new{name = "PrimitiveUnaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
 	new{name = "BinaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
-	new{name = "PrimitiveBinaryAbstractNumber", args = "", level = 0, primitivetype = "PrimitiveBinaryAbstractNumber", constraints = emptyConstraints},
+	new{name = "PrimitiveBinaryAbstractNumber", args = "", level = 0, primitivetype = "", constraints = emptyConstraints},
 	new{name = "BoxedNumber", args = "", level = 3, primitivetype = "TPrimitive", constraints = emptyConstraints},
 	new{name = "CustomDefaultNumber", args = "TTraits", level = 3, primitivetype = "TPrimitive", constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
 	new{name = "GeneratedNumber", args = "", level = 1, primitivetype = "TPrimitive", constraints = emptyConstraints},
@@ -427,17 +427,17 @@ foreach(var info in data)
             }<# } #><# if(primitive) { #>
 
 
-            public <#=primitivetype#> Call(PrimitiveUnaryOperation operation, in <#=fullname#> num)
+            public <#=primitivetype#> CallComponent(UnaryOperation operation, in <#=fullname#> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, <#=primitivetype#> num2)
+            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=primitivetype#> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, <#=primitivetype#> num1, in <#=fullname#> num2)
+            public <#=fullname#> Call(BinaryOperation operation, in <#=primitivetype#> num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
             }<# } #><# if(level >= 1) { #>

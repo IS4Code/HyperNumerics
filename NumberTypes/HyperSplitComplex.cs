@@ -90,6 +90,8 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new HyperSplitComplex<TInner>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
@@ -275,6 +277,8 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new HyperSplitComplex<TInner, TPrimitive>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
@@ -326,17 +330,9 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
-            switch(operation)
-            {
-                case PrimitiveUnaryOperation.AbsoluteValue:
-                    return Abs<TInner, TPrimitive>(Sqrt(Sub(Pow2(first), Pow2(second))));
-                case PrimitiveUnaryOperation.RealValue:
-                    return Std<TInner, TPrimitive>(first);
-                default:
-                    throw new NotSupportedException();
-            }
+            return Sqrt(Sub(Pow2(first), Pow2(second))).CallComponent(operation);
         }
 
         public override bool Equals(object other)

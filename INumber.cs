@@ -1,6 +1,7 @@
 ﻿using IS4.HyperNumerics.Operations;
 using IS4.HyperNumerics.Utils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace IS4.HyperNumerics
@@ -8,7 +9,7 @@ namespace IS4.HyperNumerics
     /// <summary>
     /// A general interface for any number type.
     /// </summary>
-    public interface INumber : IFormattable, ICloneable
+    public interface INumber : IFormattable, ICloneable, IEnumerable
     {
         /// <summary>
         /// If the number can be expressed as an element of a vector space, returns its dimension (-1 if infinite).
@@ -99,7 +100,7 @@ namespace IS4.HyperNumerics
         /// <param name="operation">The operation that will be invoked.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TPrimitive Call(PrimitiveUnaryOperation operation);
+        TPrimitive CallComponent(UnaryOperation operation);
 
         /// <summary>
         /// Invokes a binary operation on this number and <paramref name="other"/>.

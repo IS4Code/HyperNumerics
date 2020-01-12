@@ -30,11 +30,6 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => GetCollectionCount(Reference);
 
@@ -136,11 +131,6 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => GetCollectionCount(Value);
 
@@ -242,11 +232,6 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => GetCollectionCount(Generator());
 
@@ -348,11 +333,6 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
@@ -451,7 +431,14 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-			return GetBaseEnumerator(this);
+            foreach(var num in first)
+            {
+                yield return num;
+            }
+            foreach(var num in second)
+            {
+                yield return num;
+            }
         }
 	}
 
@@ -481,11 +468,6 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
@@ -584,7 +566,14 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-			return GetBaseEnumerator(this);
+            foreach(var num in first)
+            {
+                yield return num;
+            }
+            foreach(var num in second)
+            {
+                yield return num;
+            }
         }
 	}
 
@@ -614,11 +603,6 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
@@ -717,7 +701,14 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-			return GetBaseEnumerator(this);
+            foreach(var num in first)
+            {
+                yield return num;
+            }
+            foreach(var num in second)
+            {
+                yield return num;
+            }
         }
 	}
 
@@ -747,11 +738,6 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return value[index];
         }
-
-		static IEnumerator GetBaseEnumerator<T>(in T value) where T : struct, IEnumerable
-		{
-		    return value.GetEnumerator();
-		}
 		
         int ICollection<TPrimitive>.Count => GetCollectionCount(first) + GetCollectionCount(second);
 
@@ -850,7 +836,14 @@ namespace IS4.HyperNumerics.NumberTypes
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-			return GetBaseEnumerator(this);
+            foreach(var num in first)
+            {
+                yield return num;
+            }
+            foreach(var num in second)
+            {
+                yield return num;
+            }
         }
 	}
 

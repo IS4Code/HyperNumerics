@@ -6,6 +6,8 @@
 <#@ output extension=".cs" #>
 using IS4.HyperNumerics.Operations;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
@@ -60,7 +62,7 @@ foreach(var info in data)
 			fullname += ">";
 		}
 #>
-	partial struct <#=fullname#> : IWrapperNumber<<#=fullname#>, <#=fullname#><#=primitiveaffix#>><#=
+	partial struct <#=fullname#> : IWrapperNumber<<#=fullname#>, <#=fullname#><#=primitiveaffix#>>, IWrapperNumber<<#=fullname#>, <#=fullname#>, <#=fullname#>><#=
 	hasinner ? primitive ? " where TInner : struct, INumber<TInner, TPrimitive>" : " where TInner : struct, INumber<TInner>" : ""
 	#><#=
 	primitive ? " where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>" : ""
@@ -74,6 +76,11 @@ foreach(var info in data)
 		{
 			return num.Call(operation, this);
 		}
+
+		<#=fullname#> INumber<<#=fullname#>, <#=fullname#>>.CallComponent(UnaryOperation operation)
+		{
+			return Call(operation);
+		}
 		
         IExtendedNumberOperations<<#=fullname#>, <#=fullname#>> IExtendedNumber<<#=fullname#>, <#=fullname#>>.GetOperations()
         {
@@ -85,15 +92,112 @@ foreach(var info in data)
         {
             return Operations.Instance;
         }<# } #>
+		
 
+		INumberOperations<<#=fullname#>, <#=fullname#>> INumber<<#=fullname#>, <#=fullname#>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
 
-		partial class Operations : IExtendedNumberOperations<<#=fullname#>, <#=fullname#><#=primitiveaffix#>>
+		IExtendedNumberOperations<<#=fullname#>, <#=fullname#>, <#=fullname#>> IExtendedNumber<<#=fullname#>, <#=fullname#>, <#=fullname#>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations : IExtendedNumberOperations<<#=fullname#>, <#=fullname#><#=primitiveaffix#>>, IExtendedNumberOperations<<#=fullname#>, <#=fullname#>, <#=fullname#>>
 		{
+            <#=fullname#> INumberOperations<<#=fullname#>, <#=fullname#>>.CallComponent(UnaryOperation operation, in <#=fullname#> num)
+            {
+                return num.Call(operation);
+            }
+
             public <#=fullname#> Create(in <#=fullname#> num)
             {
                 return num;
             }
+
+            public <#=fullname#> Create(in <#=fullname#> realUnit, in <#=fullname#> otherUnits, in <#=fullname#> someUnitsCombined, in <#=fullname#> allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public <#=fullname#> Create(IEnumerable<<#=fullname#>> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public <#=fullname#> Create(IEnumerator<<#=fullname#>> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
 		}
+		
+        int ICollection<<#=fullname#>>.Count => 1;
+
+        bool ICollection<<#=fullname#>>.IsReadOnly => true;
+
+        int IReadOnlyCollection<<#=fullname#>>.Count => 1;
+
+        <#=fullname#> IReadOnlyList<<#=fullname#>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        <#=fullname#> IList<<#=fullname#>>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<<#=fullname#>>.IndexOf(<#=fullname#> item)
+        {
+            return Equals(item) ? 0 : -1;
+        }
+
+        void IList<<#=fullname#>>.Insert(int index, <#=fullname#> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<<#=fullname#>>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<<#=fullname#>>.Add(<#=fullname#> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<<#=fullname#>>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<<#=fullname#>>.Contains(<#=fullname#> item)
+        {
+            return Equals(item);
+        }
+
+        void ICollection<<#=fullname#>>.CopyTo(<#=fullname#>[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<<#=fullname#>>.Remove(<#=fullname#> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<<#=fullname#>> IEnumerable<<#=fullname#>>.GetEnumerator()
+        {
+            yield return this;
+        }
 	}
 
 <#

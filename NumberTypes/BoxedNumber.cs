@@ -146,6 +146,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 Value = value;
             }
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield return Reference.GetEnumerator();
+        }
     }
 
     /// <summary>
@@ -251,9 +256,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.CallReversed(operation, other);
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
-            return Reference.Call(operation);
+            return Reference.CallComponent(operation);
         }
 
         public override bool Equals(object obj)
@@ -303,6 +308,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public BoxedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
+            }
+
+            public BoxedNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                return new BoxedNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
             }
 
             public BoxedNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)

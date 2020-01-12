@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using static IS4.HyperNumerics.HyperMath;
 
 namespace IS4.HyperNumerics.NumberTypes
@@ -96,6 +96,8 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new HyperDual<TInner>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
@@ -251,7 +253,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 case BinaryOperation.Divide:
                     return new HyperDual<TInner, TPrimitive>(DivVal(first, other), DivVal(second, other));
                 case BinaryOperation.Power:
-                    var exp = Std<TInner, TPrimitive>(Dec(Create<TInner, TPrimitive>(other)));
+                    var exp = Dec(Create<TInner, TPrimitive>(other)).First();
                     return new HyperDual<TInner, TPrimitive>(PowVal(first, other), Mul(MulVal(PowVal(first, exp), other), second));
                 case BinaryOperation.Atan2:
                     return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
@@ -290,6 +292,8 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new HyperDual<TInner, TPrimitive>(Neg(first), Neg(second));
                 case UnaryOperation.Increment:
@@ -339,17 +343,9 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
-            switch(operation)
-            {
-                case PrimitiveUnaryOperation.AbsoluteValue:
-                    return Abs<TInner, TPrimitive>(first);
-                case PrimitiveUnaryOperation.RealValue:
-                    return Std<TInner, TPrimitive>(first);
-                default:
-                    throw new NotSupportedException();
-            }
+            return HyperMath.CallComponent<TInner, TPrimitive>(operation, first);
         }
 
         public override bool Equals(object other)

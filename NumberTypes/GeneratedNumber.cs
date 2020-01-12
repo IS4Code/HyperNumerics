@@ -130,6 +130,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(operation));
             }
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Generator().GetEnumerator();
+        }
     }
 
     /// <summary>
@@ -232,9 +237,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call(operation, gen()));
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
-            return HyperMath.Call<TInner, TPrimitive>(operation, Generator());
+            return HyperMath.CallComponent<TInner, TPrimitive>(operation, Generator());
         }
 
         public override bool Equals(object obj)
@@ -274,6 +279,12 @@ namespace IS4.HyperNumerics.NumberTypes
             public GeneratedNumber<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Call<TInner>(operation));
+            }
+
+            public GeneratedNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                var numCopy = num;
+                return new GeneratedNumber<TInner, TPrimitive>(() => HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(numCopy));
             }
 
             public GeneratedNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)

@@ -141,6 +141,8 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new ProjectiveNumber<TInner>(HyperMath.Neg(value), true);
                 case UnaryOperation.Increment:
@@ -214,6 +216,15 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return HyperMath.Call<TInner>(operation);
             }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            if(IsInfinity)
+            {
+                throw new InvalidOperationException("Cannot obtain the numeric representation of an infinity.");
+            }
+            return Value.GetEnumerator();
         }
     }
 
@@ -352,6 +363,8 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Neg(value), true);
                 case UnaryOperation.Increment:
@@ -425,13 +438,13 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
             if(IsInfinity)
             {
                 throw new NotSupportedException();
             }
-            return HyperMath.Call<TInner, TPrimitive>(operation, value);
+            return HyperMath.CallComponent<TInner, TPrimitive>(operation, value);
         }
 
         public override bool Equals(object obj)
@@ -481,6 +494,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public ProjectiveNumber<TInner, TPrimitive> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
+            }
+
+            public ProjectiveNumber<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                return new ProjectiveNumber<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
             }
 
             public ProjectiveNumber<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)

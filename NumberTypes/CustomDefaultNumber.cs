@@ -229,6 +229,11 @@ namespace IS4.HyperNumerics.NumberTypes
             /// </summary>
             TInner DefaultValue { get; }
         }
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+            return Value.GetEnumerator();
+        }
     }
 
     /// <summary>
@@ -385,13 +390,13 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation);
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
             if(initialized)
             {
-                return HyperMath.Call<TInner, TPrimitive>(operation, value);
+                return HyperMath.CallComponent<TInner, TPrimitive>(operation, value);
             }
-            return defaultValue.Call(operation);
+            return defaultValue.CallComponent(operation);
         }
 
         public override bool Equals(object obj)
@@ -485,6 +490,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
+            }
+
+            public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in TPrimitive num)
+            {
+                return new CustomDefaultNumber<TInner, TPrimitive, TTraits>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
             }
 
             public CustomDefaultNumber<TInner, TPrimitive, TTraits> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)

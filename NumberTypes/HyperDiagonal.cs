@@ -90,6 +90,8 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new HyperDiagonal<TInner>(Neg(this.first), Neg(second));
                 case UnaryOperation.Increment:
@@ -249,6 +251,8 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return this;
                 case UnaryOperation.Negate:
                     return new HyperDiagonal<TInner, TPrimitive>(Neg(this.first), Neg(second));
                 case UnaryOperation.Increment:
@@ -273,15 +277,9 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public TPrimitive Call(PrimitiveUnaryOperation operation)
+        public TPrimitive CallComponent(UnaryOperation operation)
         {
-            switch(operation)
-            {
-                case PrimitiveUnaryOperation.RealValue:
-                    return Std<TInner, TPrimitive>(first);
-                default:
-                    throw new NotSupportedException();
-            }
+            throw new NotSupportedException();
         }
 
         public override bool Equals(object other)

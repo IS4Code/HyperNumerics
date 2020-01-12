@@ -1,5 +1,6 @@
 ﻿using IS4.HyperNumerics.Operations;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace IS4.HyperNumerics.NumberTypes
@@ -162,6 +163,18 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperComplex<TInner>(first, second);
             }
 		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			foreach(var obj in first)
+			{
+				yield return obj;
+			}
+			foreach(var obj in second)
+			{
+				yield return obj;
+			}
+        }
 	}
 
 	partial struct HyperComplex<TInner, TPrimitive> : IHyperNumber<HyperComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -335,7 +348,13 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)
             {
                 return new HyperComplex<TInner, TPrimitive>(first, second);
-            }		
+            }			
+			
+            public HyperComplex<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                return new HyperComplex<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+            }
+
             public HyperComplex<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
@@ -515,6 +534,18 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperDiagonal<TInner>(first, second);
             }
 		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			foreach(var obj in first)
+			{
+				yield return obj;
+			}
+			foreach(var obj in second)
+			{
+				yield return obj;
+			}
+        }
 	}
 
 	partial struct HyperDiagonal<TInner, TPrimitive> : IHyperNumber<HyperDiagonal<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -688,7 +719,13 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperDiagonal<TInner, TPrimitive> Create(in TInner first, in TInner second)
             {
                 return new HyperDiagonal<TInner, TPrimitive>(first, second);
-            }		
+            }			
+			
+            public HyperDiagonal<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+            }
+
             public HyperDiagonal<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperDiagonal<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
@@ -868,6 +905,18 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperDual<TInner>(first, second);
             }
 		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			foreach(var obj in first)
+			{
+				yield return obj;
+			}
+			foreach(var obj in second)
+			{
+				yield return obj;
+			}
+        }
 	}
 
 	partial struct HyperDual<TInner, TPrimitive> : IHyperNumber<HyperDual<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -1041,7 +1090,13 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperDual<TInner, TPrimitive> Create(in TInner first, in TInner second)
             {
                 return new HyperDual<TInner, TPrimitive>(first, second);
-            }		
+            }			
+			
+            public HyperDual<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                return new HyperDual<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+            }
+
             public HyperDual<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperDual<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
@@ -1221,6 +1276,18 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperSplitComplex<TInner>(first, second);
             }
 		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			foreach(var obj in first)
+			{
+				yield return obj;
+			}
+			foreach(var obj in second)
+			{
+				yield return obj;
+			}
+        }
 	}
 
 	partial struct HyperSplitComplex<TInner, TPrimitive> : IHyperNumber<HyperSplitComplex<TInner, TPrimitive>, TInner, TPrimitive> where TInner : struct, INumber<TInner, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -1394,7 +1461,13 @@ namespace IS4.HyperNumerics.NumberTypes
             public HyperSplitComplex<TInner, TPrimitive> Create(in TInner first, in TInner second)
             {
                 return new HyperSplitComplex<TInner, TPrimitive>(first, second);
-            }		
+            }			
+			
+            public HyperSplitComplex<TInner, TPrimitive> Create(in TPrimitive num)
+            {
+                return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Operations.For<TInner, TPrimitive>.Instance.Create(num));
+            }
+
             public HyperSplitComplex<TInner, TPrimitive> Create(in TPrimitive realUnit, in TPrimitive otherUnits, in TPrimitive someUnitsCombined, in TPrimitive allUnitsCombined)
             {
                 return new HyperSplitComplex<TInner, TPrimitive>(HyperMath.Create<TInner, TPrimitive>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TPrimitive>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));

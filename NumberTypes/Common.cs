@@ -277,11 +277,6 @@ namespace IS4.HyperNumerics.NumberTypes
         INumberOperations<PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
-        }		
-
-        INumberOperations<PrimitiveAbstractNumber, PrimitiveAbstractNumber> INumber<PrimitiveAbstractNumber, PrimitiveAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
         }
 
 		partial class Operations
@@ -341,21 +336,6 @@ namespace IS4.HyperNumerics.NumberTypes
             public PrimitiveAbstractNumber Call(BinaryOperation operation, in PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
-            }
-
-            public PrimitiveAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveAbstractNumber Call(BinaryOperation operation, in PrimitiveAbstractNumber num1, PrimitiveAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public PrimitiveAbstractNumber Call(BinaryOperation operation, PrimitiveAbstractNumber num1, in PrimitiveAbstractNumber num2)
-            {
-                return num2.CallReversed(operation, num1);
             }
 		}
 	}
@@ -633,11 +613,6 @@ namespace IS4.HyperNumerics.NumberTypes
         INumberOperations<PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
-        }		
-
-        INumberOperations<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber> INumber<PrimitiveUnaryAbstractNumber, PrimitiveUnaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
         }
 
 		partial class Operations
@@ -697,21 +672,6 @@ namespace IS4.HyperNumerics.NumberTypes
             public PrimitiveUnaryAbstractNumber Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
-            }
-
-            public PrimitiveUnaryAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveUnaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveUnaryAbstractNumber Call(BinaryOperation operation, in PrimitiveUnaryAbstractNumber num1, PrimitiveUnaryAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public PrimitiveUnaryAbstractNumber Call(BinaryOperation operation, PrimitiveUnaryAbstractNumber num1, in PrimitiveUnaryAbstractNumber num2)
-            {
-                return num2.CallReversed(operation, num1);
             }
 		}
 	}
@@ -989,11 +949,6 @@ namespace IS4.HyperNumerics.NumberTypes
         INumberOperations<PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber>.GetOperations()
         {
             return Operations.Instance;
-        }		
-
-        INumberOperations<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber> INumber<PrimitiveBinaryAbstractNumber, PrimitiveBinaryAbstractNumber>.GetOperations()
-        {
-            return Operations.Instance;
         }
 
 		partial class Operations
@@ -1053,21 +1008,6 @@ namespace IS4.HyperNumerics.NumberTypes
             public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
-            }
-
-            public PrimitiveBinaryAbstractNumber Call(PrimitiveUnaryOperation operation, in PrimitiveBinaryAbstractNumber num)
-            {
-                return num.Call(operation);
-            }
-
-            public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, in PrimitiveBinaryAbstractNumber num1, PrimitiveBinaryAbstractNumber num2)
-            {
-                return num1.Call(operation, num2);
-            }
-
-            public PrimitiveBinaryAbstractNumber Call(BinaryOperation operation, PrimitiveBinaryAbstractNumber num1, in PrimitiveBinaryAbstractNumber num2)
-            {
-                return num2.CallReversed(operation, num1);
             }
 		}
 	}
@@ -1736,9 +1676,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in BoxedNumber<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in BoxedNumber<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public BoxedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in BoxedNumber<TInner, TPrimitive> num1, in TPrimitive num2)
@@ -2422,9 +2362,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public CustomDefaultNumber<TInner, TPrimitive, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TPrimitive, TTraits> num1, in TPrimitive num2)
@@ -2923,9 +2863,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public GeneratedNumber<TInner, TPrimitive> Call(BinaryOperation operation, in GeneratedNumber<TInner, TPrimitive> num1, in TPrimitive num2)
@@ -3594,9 +3534,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in HyperComplex<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in HyperComplex<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public HyperComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperComplex<TInner, TPrimitive> num1, in TPrimitive num2)
@@ -4265,9 +4205,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public HyperDiagonal<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDiagonal<TInner, TPrimitive> num1, in TPrimitive num2)
@@ -4936,9 +4876,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in HyperDual<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in HyperDual<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public HyperDual<TInner, TPrimitive> Call(BinaryOperation operation, in HyperDual<TInner, TPrimitive> num1, in TPrimitive num2)
@@ -5607,9 +5547,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public HyperSplitComplex<TInner, TPrimitive> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TPrimitive> num1, in TPrimitive num2)
@@ -6278,9 +6218,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in NullableNumber<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in NullableNumber<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public NullableNumber<TInner, TPrimitive> Call(BinaryOperation operation, in NullableNumber<TInner, TPrimitive> num1, in TPrimitive num2)
@@ -6639,9 +6579,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num1.Call(operation, num2);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in NullNumber<TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in NullNumber<TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public NullNumber<TPrimitive> Call(BinaryOperation operation, in NullNumber<TPrimitive> num1, in TPrimitive num2)
@@ -7305,9 +7245,9 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public TPrimitive Call(PrimitiveUnaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num)
+            public TPrimitive CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num)
             {
-                return num.Call(operation);
+                return num.CallComponent(operation);
             }
 
             public ProjectiveNumber<TInner, TPrimitive> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TPrimitive> num1, in TPrimitive num2)

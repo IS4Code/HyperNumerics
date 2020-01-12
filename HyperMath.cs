@@ -46,12 +46,7 @@ namespace IS4.HyperNumerics
         /// <returns></returns>
         public static TPrimitive Abs<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
         {
-            return Operations.For<TNumber, TPrimitive>.Instance.Call(PrimitiveUnaryOperation.AbsoluteValue, num);
-        }
-
-        public static TPrimitive Std<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-        {
-            return Operations.For<TNumber, TPrimitive>.Instance.Call(PrimitiveUnaryOperation.RealValue, num);
+            return Operations.For<TNumber, TPrimitive>.Instance.CallComponent(UnaryOperation.Identity, num);
         }
 
         public static TNumber Mul2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
@@ -339,9 +334,9 @@ namespace IS4.HyperNumerics
             return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num1, num2);
         }
 
-        public static TPrimitive Call<TNumber, TPrimitive>(PrimitiveUnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
+        public static TPrimitive CallComponent<TNumber, TPrimitive>(UnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
         {
-            return Operations.For<TNumber, TPrimitive>.Instance.Call(operation, num);
+            return Operations.For<TNumber, TPrimitive>.Instance.CallComponent(operation, num);
         }
 
         public static TNumber Create<TNumber, TPrimitive>(in TPrimitive realUnit = default, in TPrimitive otherUnits = default, TPrimitive someUnitsCombined = default, TPrimitive allUnitsCombined = default) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
@@ -457,8 +452,7 @@ namespace IS4.HyperNumerics
             public static readonly IUnaryNumberOperation Dec = new NumberUnaryOperation(UnaryOperation.Decrement);
             public static readonly IUnaryNumberOperation Con = new NumberUnaryOperation(UnaryOperation.Conjugate);
             public static readonly IUnaryNumberOperation Mods = new NumberUnaryOperation(UnaryOperation.Modulus);
-            public static readonly IPrimitiveUnaryNumberOperation Abs = new PrimitiveNumberPrimitiveUnaryOperation(PrimitiveUnaryOperation.AbsoluteValue);
-            public static readonly IPrimitiveUnaryNumberOperation Std = new PrimitiveNumberPrimitiveUnaryOperation(PrimitiveUnaryOperation.RealValue);
+            public static readonly IPrimitiveUnaryNumberOperation Abs = new PrimitiveNumberUnaryOperation(UnaryOperation.Identity);
             public static readonly IUnaryNumberOperation Mul2 = new NumberUnaryOperation(UnaryOperation.Double);
             public static readonly IUnaryNumberOperation Div2 = new NumberUnaryOperation(UnaryOperation.Half);
             public static readonly IBinaryNumberOperation Pow = new NumberBinaryOperation(BinaryOperation.Power);
@@ -504,6 +498,8 @@ namespace IS4.HyperNumerics
             {
                 switch(operation)
                 {
+                    case UnaryOperation.Identity:
+                        return Id;
                     case UnaryOperation.Negate:
                         return Neg;
                     case UnaryOperation.Increment:
@@ -569,19 +565,6 @@ namespace IS4.HyperNumerics
                         return Atan2;
                     default:
                         return new NumberBinaryOperation(operation);
-                }
-            }
-
-            public static IPrimitiveUnaryNumberOperation GetOperation(PrimitiveUnaryOperation operation)
-            {
-                switch(operation)
-                {
-                    case PrimitiveUnaryOperation.AbsoluteValue:
-                        return Abs;
-                    case PrimitiveUnaryOperation.RealValue:
-                        return Std;
-                    default:
-                        return new PrimitiveNumberPrimitiveUnaryOperation(operation);
                 }
             }
 
@@ -732,18 +715,18 @@ namespace IS4.HyperNumerics
                 }
             }
 
-            class NumberPrimitiveUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberFunc<ValueType>>, IPrimitiveUnaryNumberFunc<ValueType>
+            class NumberUnaryComponentOperation : DynamicNumberOperation<IPrimitiveUnaryNumberFunc<ValueType>>, IPrimitiveUnaryNumberFunc<ValueType>
             {
-                readonly PrimitiveUnaryOperation type;
+                readonly UnaryOperation type;
 
-                public NumberPrimitiveUnaryOperation(PrimitiveUnaryOperation type)
+                public NumberUnaryComponentOperation(UnaryOperation type)
                 {
                     this.type = type;
                 }
 
                 public ValueType Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
                 {
-                    return For<TNumber, TPrimitive>.Instance.Call(type, num);
+                    return For<TNumber, TPrimitive>.Instance.CallComponent(type, num);
                 }
 
                 public override string ToString()
@@ -752,29 +735,24 @@ namespace IS4.HyperNumerics
                 }
             }
 
-            class PrimitiveNumberPrimitiveUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
+            class PrimitiveNumberUnaryOperation : DynamicNumberOperation<IPrimitiveUnaryNumberOperation>, IPrimitiveUnaryNumberOperation
             {
-                readonly PrimitiveUnaryOperation type;
+                readonly UnaryOperation type;
 
-                public PrimitiveNumberPrimitiveUnaryOperation(PrimitiveUnaryOperation type)
+                public PrimitiveNumberUnaryOperation(UnaryOperation type)
                 {
                     this.type = type;
                 }
 
                 public TNumber Invoke<TNumber, TPrimitive>(in TNumber num) where TNumber : struct, INumber<TNumber, TPrimitive> where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
                 {
-                    var result = For<TNumber, TPrimitive>.Instance.Call(type, num);
-                    return For<TNumber, TPrimitive>.Instance.Create(Iterator(result));
+                    var result = For<TNumber, TPrimitive>.Instance.CallComponent(type, num);
+                    return For<TNumber, TPrimitive>.Instance.Create(result);
                 }
 
                 public override string ToString()
                 {
                     return type.ToString();
-                }
-
-                IEnumerable<TPrimitive> Iterator<TPrimitive>(TPrimitive value) where TPrimitive : struct, IEquatable<TPrimitive>, IComparable<TPrimitive>
-                {
-                    yield return value;
                 }
             }
         }

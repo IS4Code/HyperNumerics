@@ -140,8 +140,15 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public ExtendedReal Call(UnaryOperation operation)
         {
+            return CallComponent(operation);
+        }
+
+        public double CallComponent(UnaryOperation operation)
+        {
             switch(operation)
             {
+                case UnaryOperation.Identity:
+                    return Value;
                 case UnaryOperation.Negate:
                     return -Value;
                 case UnaryOperation.Increment:
@@ -189,27 +196,14 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public double Call(PrimitiveUnaryOperation operation)
+        float INumber<ExtendedReal, float>.CallComponent(UnaryOperation operation)
         {
-            switch(operation)
-            {
-                case PrimitiveUnaryOperation.AbsoluteValue:
-                    return Math.Abs(Value);
-                case PrimitiveUnaryOperation.RealValue:
-                    return Value;
-                default:
-                    throw new NotSupportedException();
-            }
+            return (float)CallComponent(operation);
         }
 
-        float INumber<ExtendedReal, float>.Call(PrimitiveUnaryOperation operation)
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallComponent(UnaryOperation operation)
         {
-            return (float)Call(operation);
-        }
-
-        ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(PrimitiveUnaryOperation operation)
-        {
-            return new ExtendedReal(Call(operation));
+            return Call(operation);
         }
 
         public override bool Equals(object obj)
@@ -451,17 +445,17 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num2.CallReversed(operation, num1);
             }
 
-            public double Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            public double CallComponent(UnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
             }
 
-            float INumberOperations<ExtendedReal, float>.Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            float INumberOperations<ExtendedReal, float>.CallComponent(UnaryOperation operation, in ExtendedReal num)
             {
                 return (float)num.Call(operation);
             }
 
-            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.Call(PrimitiveUnaryOperation operation, in ExtendedReal num)
+            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.CallComponent(UnaryOperation operation, in ExtendedReal num)
             {
                 return new ExtendedReal(num.Call(operation));
             }
@@ -511,6 +505,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num;
             }
 
+            public ExtendedReal Create(in double num)
+            {
+                return new ExtendedReal(num);
+            }
+
             public ExtendedReal Create(IEnumerable<double> units)
             {
                 var ienum = units.GetEnumerator();
@@ -523,6 +522,11 @@ namespace IS4.HyperNumerics.NumberTypes
                 var value = units.Current;
                 units.MoveNext();
                 return new ExtendedReal(value);
+            }
+
+            public ExtendedReal Create(in float num)
+            {
+                return new ExtendedReal(num);
             }
 
             public ExtendedReal Create(IEnumerable<float> units)
