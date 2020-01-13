@@ -132,7 +132,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperComplex<TInner> Call(NullaryOperation operation)
+			public virtual HyperComplex<TInner> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -158,7 +158,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperComplex<TInner> Create(in TInner first, in TInner second)
+            public virtual HyperComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperComplex<TInner>(first, second);
             }
@@ -319,7 +319,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperComplex<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperComplex<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -345,29 +345,29 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperComplex<TInner, TComponent> Create(in TInner first, in TInner second)
+            public virtual HyperComplex<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperComplex<TInner, TComponent>(first, second);
             }			
 			
-            public HyperComplex<TInner, TComponent> Create(in TComponent num)
+            public virtual HyperComplex<TInner, TComponent> Create(in TComponent num)
             {
                 return new HyperComplex<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperComplex<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual HyperComplex<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperComplex<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual HyperComplex<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperComplex<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual HyperComplex<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
@@ -503,7 +503,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperDiagonal<TInner> Call(NullaryOperation operation)
+			public virtual HyperDiagonal<TInner> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -529,7 +529,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperDiagonal<TInner> Create(in TInner first, in TInner second)
+            public virtual HyperDiagonal<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDiagonal<TInner>(first, second);
             }
@@ -690,7 +690,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperDiagonal<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperDiagonal<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -716,29 +716,29 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(in TInner first, in TInner second)
+            public virtual HyperDiagonal<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperDiagonal<TInner, TComponent>(first, second);
             }			
 			
-            public HyperDiagonal<TInner, TComponent> Create(in TComponent num)
+            public virtual HyperDiagonal<TInner, TComponent> Create(in TComponent num)
             {
                 return new HyperDiagonal<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual HyperDiagonal<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual HyperDiagonal<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual HyperDiagonal<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
@@ -874,7 +874,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperDual<TInner> Call(NullaryOperation operation)
+			public virtual HyperDual<TInner> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -900,7 +900,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperDual<TInner> Create(in TInner first, in TInner second)
+            public virtual HyperDual<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDual<TInner>(first, second);
             }
@@ -1061,7 +1061,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperDual<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperDual<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -1087,29 +1087,29 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperDual<TInner, TComponent> Create(in TInner first, in TInner second)
+            public virtual HyperDual<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperDual<TInner, TComponent>(first, second);
             }			
 			
-            public HyperDual<TInner, TComponent> Create(in TComponent num)
+            public virtual HyperDual<TInner, TComponent> Create(in TComponent num)
             {
                 return new HyperDual<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperDual<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual HyperDual<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperDual<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual HyperDual<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperDual<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual HyperDual<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
@@ -1245,7 +1245,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperSplitComplex<TInner> Call(NullaryOperation operation)
+			public virtual HyperSplitComplex<TInner> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -1271,7 +1271,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperSplitComplex<TInner> Create(in TInner first, in TInner second)
+            public virtual HyperSplitComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperSplitComplex<TInner>(first, second);
             }
@@ -1432,7 +1432,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public HyperSplitComplex<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperSplitComplex<TInner, TComponent> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -1458,29 +1458,29 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(in TInner first, in TInner second)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperSplitComplex<TInner, TComponent>(first, second);
             }			
 			
-            public HyperSplitComplex<TInner, TComponent> Create(in TComponent num)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(in TComponent num)
             {
                 return new HyperSplitComplex<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);

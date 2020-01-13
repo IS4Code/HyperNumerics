@@ -115,57 +115,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in AbstractNumber num)
+            public virtual bool IsInvertible(in AbstractNumber num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in AbstractNumber num)
+            public virtual bool IsFinite(in AbstractNumber num)
             {
                 return num.IsFinite;
             }
 
-            public AbstractNumber Clone(in AbstractNumber num)
+            public virtual AbstractNumber Clone(in AbstractNumber num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(AbstractNumber num1, AbstractNumber num2)
+            public virtual bool Equals(AbstractNumber num1, AbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(AbstractNumber num1, AbstractNumber num2)
+            public virtual int Compare(AbstractNumber num1, AbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in AbstractNumber num1, in AbstractNumber num2)
+            public virtual bool Equals(in AbstractNumber num1, in AbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in AbstractNumber num1, in AbstractNumber num2)
+            public virtual int Compare(in AbstractNumber num1, in AbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(AbstractNumber num)
+            public virtual int GetHashCode(AbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in AbstractNumber num)
+            public virtual int GetHashCode(in AbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public AbstractNumber Call(UnaryOperation operation, in AbstractNumber num)
+            public virtual AbstractNumber Call(UnaryOperation operation, in AbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public AbstractNumber Call(BinaryOperation operation, in AbstractNumber num1, in AbstractNumber num2)
+            public virtual AbstractNumber Call(BinaryOperation operation, in AbstractNumber num1, in AbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -283,57 +283,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in ComponentAbstractNumber num)
+            public virtual bool IsInvertible(in ComponentAbstractNumber num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in ComponentAbstractNumber num)
+            public virtual bool IsFinite(in ComponentAbstractNumber num)
             {
                 return num.IsFinite;
             }
 
-            public ComponentAbstractNumber Clone(in ComponentAbstractNumber num)
+            public virtual ComponentAbstractNumber Clone(in ComponentAbstractNumber num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(ComponentAbstractNumber num1, ComponentAbstractNumber num2)
+            public virtual bool Equals(ComponentAbstractNumber num1, ComponentAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(ComponentAbstractNumber num1, ComponentAbstractNumber num2)
+            public virtual int Compare(ComponentAbstractNumber num1, ComponentAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
+            public virtual bool Equals(in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
+            public virtual int Compare(in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(ComponentAbstractNumber num)
+            public virtual int GetHashCode(ComponentAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in ComponentAbstractNumber num)
+            public virtual int GetHashCode(in ComponentAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public ComponentAbstractNumber Call(UnaryOperation operation, in ComponentAbstractNumber num)
+            public virtual ComponentAbstractNumber Call(UnaryOperation operation, in ComponentAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public ComponentAbstractNumber Call(BinaryOperation operation, in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
+            public virtual ComponentAbstractNumber Call(BinaryOperation operation, in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -451,57 +451,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in UnaryAbstractNumber num)
+            public virtual bool IsInvertible(in UnaryAbstractNumber num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in UnaryAbstractNumber num)
+            public virtual bool IsFinite(in UnaryAbstractNumber num)
             {
                 return num.IsFinite;
             }
 
-            public UnaryAbstractNumber Clone(in UnaryAbstractNumber num)
+            public virtual UnaryAbstractNumber Clone(in UnaryAbstractNumber num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
+            public virtual bool Equals(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
+            public virtual int Compare(UnaryAbstractNumber num1, UnaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
+            public virtual bool Equals(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
+            public virtual int Compare(in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(UnaryAbstractNumber num)
+            public virtual int GetHashCode(UnaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in UnaryAbstractNumber num)
+            public virtual int GetHashCode(in UnaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public UnaryAbstractNumber Call(UnaryOperation operation, in UnaryAbstractNumber num)
+            public virtual UnaryAbstractNumber Call(UnaryOperation operation, in UnaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
+            public virtual UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -619,57 +619,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in ComponentUnaryAbstractNumber num)
+            public virtual bool IsInvertible(in ComponentUnaryAbstractNumber num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in ComponentUnaryAbstractNumber num)
+            public virtual bool IsFinite(in ComponentUnaryAbstractNumber num)
             {
                 return num.IsFinite;
             }
 
-            public ComponentUnaryAbstractNumber Clone(in ComponentUnaryAbstractNumber num)
+            public virtual ComponentUnaryAbstractNumber Clone(in ComponentUnaryAbstractNumber num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(ComponentUnaryAbstractNumber num1, ComponentUnaryAbstractNumber num2)
+            public virtual bool Equals(ComponentUnaryAbstractNumber num1, ComponentUnaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(ComponentUnaryAbstractNumber num1, ComponentUnaryAbstractNumber num2)
+            public virtual int Compare(ComponentUnaryAbstractNumber num1, ComponentUnaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
+            public virtual bool Equals(in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
+            public virtual int Compare(in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(ComponentUnaryAbstractNumber num)
+            public virtual int GetHashCode(ComponentUnaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in ComponentUnaryAbstractNumber num)
+            public virtual int GetHashCode(in ComponentUnaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public ComponentUnaryAbstractNumber Call(UnaryOperation operation, in ComponentUnaryAbstractNumber num)
+            public virtual ComponentUnaryAbstractNumber Call(UnaryOperation operation, in ComponentUnaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public ComponentUnaryAbstractNumber Call(BinaryOperation operation, in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
+            public virtual ComponentUnaryAbstractNumber Call(BinaryOperation operation, in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -787,57 +787,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in BinaryAbstractNumber num)
+            public virtual bool IsInvertible(in BinaryAbstractNumber num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in BinaryAbstractNumber num)
+            public virtual bool IsFinite(in BinaryAbstractNumber num)
             {
                 return num.IsFinite;
             }
 
-            public BinaryAbstractNumber Clone(in BinaryAbstractNumber num)
+            public virtual BinaryAbstractNumber Clone(in BinaryAbstractNumber num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
+            public virtual bool Equals(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
+            public virtual int Compare(BinaryAbstractNumber num1, BinaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
+            public virtual bool Equals(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
+            public virtual int Compare(in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(BinaryAbstractNumber num)
+            public virtual int GetHashCode(BinaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in BinaryAbstractNumber num)
+            public virtual int GetHashCode(in BinaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public BinaryAbstractNumber Call(UnaryOperation operation, in BinaryAbstractNumber num)
+            public virtual BinaryAbstractNumber Call(UnaryOperation operation, in BinaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
+            public virtual BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -955,57 +955,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in ComponentBinaryAbstractNumber num)
+            public virtual bool IsInvertible(in ComponentBinaryAbstractNumber num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in ComponentBinaryAbstractNumber num)
+            public virtual bool IsFinite(in ComponentBinaryAbstractNumber num)
             {
                 return num.IsFinite;
             }
 
-            public ComponentBinaryAbstractNumber Clone(in ComponentBinaryAbstractNumber num)
+            public virtual ComponentBinaryAbstractNumber Clone(in ComponentBinaryAbstractNumber num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(ComponentBinaryAbstractNumber num1, ComponentBinaryAbstractNumber num2)
+            public virtual bool Equals(ComponentBinaryAbstractNumber num1, ComponentBinaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(ComponentBinaryAbstractNumber num1, ComponentBinaryAbstractNumber num2)
+            public virtual int Compare(ComponentBinaryAbstractNumber num1, ComponentBinaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
+            public virtual bool Equals(in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
+            public virtual int Compare(in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(ComponentBinaryAbstractNumber num)
+            public virtual int GetHashCode(ComponentBinaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in ComponentBinaryAbstractNumber num)
+            public virtual int GetHashCode(in ComponentBinaryAbstractNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public ComponentBinaryAbstractNumber Call(UnaryOperation operation, in ComponentBinaryAbstractNumber num)
+            public virtual ComponentBinaryAbstractNumber Call(UnaryOperation operation, in ComponentBinaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public ComponentBinaryAbstractNumber Call(BinaryOperation operation, in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
+            public virtual ComponentBinaryAbstractNumber Call(BinaryOperation operation, in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -1268,72 +1268,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in BoxedNumber<TInner> num)
+            public virtual bool IsInvertible(in BoxedNumber<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in BoxedNumber<TInner> num)
+            public virtual bool IsFinite(in BoxedNumber<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public BoxedNumber<TInner> Clone(in BoxedNumber<TInner> num)
+            public virtual BoxedNumber<TInner> Clone(in BoxedNumber<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(BoxedNumber<TInner> num1, BoxedNumber<TInner> num2)
+            public virtual bool Equals(BoxedNumber<TInner> num1, BoxedNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(BoxedNumber<TInner> num1, BoxedNumber<TInner> num2)
+            public virtual int Compare(BoxedNumber<TInner> num1, BoxedNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
+            public virtual bool Equals(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
+            public virtual int Compare(in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(BoxedNumber<TInner> num)
+            public virtual int GetHashCode(BoxedNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in BoxedNumber<TInner> num)
+            public virtual int GetHashCode(in BoxedNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public BoxedNumber<TInner> Call(UnaryOperation operation, in BoxedNumber<TInner> num)
+            public virtual BoxedNumber<TInner> Call(UnaryOperation operation, in BoxedNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
+            public virtual BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in TInner num2)
+            public virtual BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public BoxedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in BoxedNumber<TInner> num2)
+            public virtual BoxedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in BoxedNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public BoxedNumber<TInner> Create(in TInner num)
+            public virtual BoxedNumber<TInner> Create(in TInner num)
             {
                 return new BoxedNumber<TInner>(num);
             }
@@ -1611,87 +1611,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in BoxedNumber<TInner, TComponent> num)
+            public virtual bool IsInvertible(in BoxedNumber<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in BoxedNumber<TInner, TComponent> num)
+            public virtual bool IsFinite(in BoxedNumber<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public BoxedNumber<TInner, TComponent> Clone(in BoxedNumber<TInner, TComponent> num)
+            public virtual BoxedNumber<TInner, TComponent> Clone(in BoxedNumber<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(BoxedNumber<TInner, TComponent> num1, BoxedNumber<TInner, TComponent> num2)
+            public virtual bool Equals(BoxedNumber<TInner, TComponent> num1, BoxedNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(BoxedNumber<TInner, TComponent> num1, BoxedNumber<TInner, TComponent> num2)
+            public virtual int Compare(BoxedNumber<TInner, TComponent> num1, BoxedNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual bool Equals(in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual int Compare(in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(BoxedNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(BoxedNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in BoxedNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(in BoxedNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public BoxedNumber<TInner, TComponent> Call(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
+            public virtual BoxedNumber<TInner, TComponent> Call(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public BoxedNumber<TInner, TComponent> Create(in TInner num)
+            public virtual BoxedNumber<TInner, TComponent> Create(in TInner num)
             {
                 return new BoxedNumber<TInner, TComponent>(num);
             }
@@ -1954,72 +1954,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual bool IsInvertible(in CustomDefaultNumber<TInner, TTraits> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual bool IsFinite(in CustomDefaultNumber<TInner, TTraits> num)
             {
                 return num.IsFinite;
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Clone(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TTraits> Clone(in CustomDefaultNumber<TInner, TTraits> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual bool Equals(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual int Compare(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual bool Equals(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual int Compare(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(CustomDefaultNumber<TInner, TTraits> num)
+            public virtual int GetHashCode(CustomDefaultNumber<TInner, TTraits> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual int GetHashCode(in CustomDefaultNumber<TInner, TTraits> num)
             {
                 return num.GetHashCode();
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TTraits> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num)
             {
                 return num.Call(operation);
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in TInner num2)
+            public virtual CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Create(in TInner num)
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(in TInner num)
             {
                 return new CustomDefaultNumber<TInner, TTraits>(num);
             }
@@ -2297,87 +2297,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual bool IsInvertible(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual bool IsFinite(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.IsFinite;
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Clone(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Clone(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(CustomDefaultNumber<TInner, TComponent, TTraits> num1, CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual bool Equals(CustomDefaultNumber<TInner, TComponent, TTraits> num1, CustomDefaultNumber<TInner, TComponent, TTraits> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(CustomDefaultNumber<TInner, TComponent, TTraits> num1, CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual int Compare(CustomDefaultNumber<TInner, TComponent, TTraits> num1, CustomDefaultNumber<TInner, TComponent, TTraits> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual bool Equals(in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual int Compare(in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual int GetHashCode(CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual int GetHashCode(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.GetHashCode();
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.Call(operation);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in TInner num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in TComponent num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TComponent num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TComponent num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TInner num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TInner num)
             {
                 return new CustomDefaultNumber<TInner, TComponent, TTraits>(num);
             }
@@ -2550,72 +2550,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in GeneratedNumber<TInner> num)
+            public virtual bool IsInvertible(in GeneratedNumber<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in GeneratedNumber<TInner> num)
+            public virtual bool IsFinite(in GeneratedNumber<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public GeneratedNumber<TInner> Clone(in GeneratedNumber<TInner> num)
+            public virtual GeneratedNumber<TInner> Clone(in GeneratedNumber<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(GeneratedNumber<TInner> num1, GeneratedNumber<TInner> num2)
+            public virtual bool Equals(GeneratedNumber<TInner> num1, GeneratedNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(GeneratedNumber<TInner> num1, GeneratedNumber<TInner> num2)
+            public virtual int Compare(GeneratedNumber<TInner> num1, GeneratedNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
+            public virtual bool Equals(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
+            public virtual int Compare(in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(GeneratedNumber<TInner> num)
+            public virtual int GetHashCode(GeneratedNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in GeneratedNumber<TInner> num)
+            public virtual int GetHashCode(in GeneratedNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public GeneratedNumber<TInner> Call(UnaryOperation operation, in GeneratedNumber<TInner> num)
+            public virtual GeneratedNumber<TInner> Call(UnaryOperation operation, in GeneratedNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
+            public virtual GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in TInner num2)
+            public virtual GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public GeneratedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in GeneratedNumber<TInner> num2)
+            public virtual GeneratedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in GeneratedNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public GeneratedNumber<TInner> Create(in TInner num)
+            public virtual GeneratedNumber<TInner> Create(in TInner num)
             {
                 return new GeneratedNumber<TInner>(num);
             }
@@ -2798,87 +2798,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in GeneratedNumber<TInner, TComponent> num)
+            public virtual bool IsInvertible(in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in GeneratedNumber<TInner, TComponent> num)
+            public virtual bool IsFinite(in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public GeneratedNumber<TInner, TComponent> Clone(in GeneratedNumber<TInner, TComponent> num)
+            public virtual GeneratedNumber<TInner, TComponent> Clone(in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(GeneratedNumber<TInner, TComponent> num1, GeneratedNumber<TInner, TComponent> num2)
+            public virtual bool Equals(GeneratedNumber<TInner, TComponent> num1, GeneratedNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(GeneratedNumber<TInner, TComponent> num1, GeneratedNumber<TInner, TComponent> num2)
+            public virtual int Compare(GeneratedNumber<TInner, TComponent> num1, GeneratedNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual bool Equals(in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual int Compare(in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(GeneratedNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(GeneratedNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in GeneratedNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public GeneratedNumber<TInner, TComponent> Call(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
+            public virtual GeneratedNumber<TInner, TComponent> Call(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(in TInner num)
+            public virtual GeneratedNumber<TInner, TComponent> Create(in TInner num)
             {
                 return new GeneratedNumber<TInner, TComponent>(num);
             }
@@ -3136,72 +3136,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperComplex<TInner> num)
+            public virtual bool IsInvertible(in HyperComplex<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperComplex<TInner> num)
+            public virtual bool IsFinite(in HyperComplex<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperComplex<TInner> Clone(in HyperComplex<TInner> num)
+            public virtual HyperComplex<TInner> Clone(in HyperComplex<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperComplex<TInner> num1, HyperComplex<TInner> num2)
+            public virtual bool Equals(HyperComplex<TInner> num1, HyperComplex<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperComplex<TInner> num1, HyperComplex<TInner> num2)
+            public virtual int Compare(HyperComplex<TInner> num1, HyperComplex<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
+            public virtual bool Equals(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
+            public virtual int Compare(in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperComplex<TInner> num)
+            public virtual int GetHashCode(HyperComplex<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperComplex<TInner> num)
+            public virtual int GetHashCode(in HyperComplex<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperComplex<TInner> Call(UnaryOperation operation, in HyperComplex<TInner> num)
+            public virtual HyperComplex<TInner> Call(UnaryOperation operation, in HyperComplex<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
+            public virtual HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in TInner num2)
+            public virtual HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperComplex<TInner> num2)
+            public virtual HyperComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperComplex<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperComplex<TInner> Create(in TInner num)
+            public virtual HyperComplex<TInner> Create(in TInner num)
             {
                 return new HyperComplex<TInner>(num);
             }
@@ -3469,87 +3469,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperComplex<TInner, TComponent> num)
+            public virtual bool IsInvertible(in HyperComplex<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperComplex<TInner, TComponent> num)
+            public virtual bool IsFinite(in HyperComplex<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperComplex<TInner, TComponent> Clone(in HyperComplex<TInner, TComponent> num)
+            public virtual HyperComplex<TInner, TComponent> Clone(in HyperComplex<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperComplex<TInner, TComponent> num1, HyperComplex<TInner, TComponent> num2)
+            public virtual bool Equals(HyperComplex<TInner, TComponent> num1, HyperComplex<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperComplex<TInner, TComponent> num1, HyperComplex<TInner, TComponent> num2)
+            public virtual int Compare(HyperComplex<TInner, TComponent> num1, HyperComplex<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual bool Equals(in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual int Compare(in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperComplex<TInner, TComponent> num)
+            public virtual int GetHashCode(HyperComplex<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperComplex<TInner, TComponent> num)
+            public virtual int GetHashCode(in HyperComplex<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperComplex<TInner, TComponent> Call(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
+            public virtual HyperComplex<TInner, TComponent> Call(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperComplex<TInner, TComponent> Create(in TInner num)
+            public virtual HyperComplex<TInner, TComponent> Create(in TInner num)
             {
                 return new HyperComplex<TInner, TComponent>(num);
             }
@@ -3807,72 +3807,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperDiagonal<TInner> num)
+            public virtual bool IsInvertible(in HyperDiagonal<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperDiagonal<TInner> num)
+            public virtual bool IsFinite(in HyperDiagonal<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperDiagonal<TInner> Clone(in HyperDiagonal<TInner> num)
+            public virtual HyperDiagonal<TInner> Clone(in HyperDiagonal<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperDiagonal<TInner> num1, HyperDiagonal<TInner> num2)
+            public virtual bool Equals(HyperDiagonal<TInner> num1, HyperDiagonal<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperDiagonal<TInner> num1, HyperDiagonal<TInner> num2)
+            public virtual int Compare(HyperDiagonal<TInner> num1, HyperDiagonal<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
+            public virtual bool Equals(in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
+            public virtual int Compare(in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperDiagonal<TInner> num)
+            public virtual int GetHashCode(HyperDiagonal<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperDiagonal<TInner> num)
+            public virtual int GetHashCode(in HyperDiagonal<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperDiagonal<TInner> Call(UnaryOperation operation, in HyperDiagonal<TInner> num)
+            public virtual HyperDiagonal<TInner> Call(UnaryOperation operation, in HyperDiagonal<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
+            public virtual HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in TInner num2)
+            public virtual HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDiagonal<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDiagonal<TInner> num2)
+            public virtual HyperDiagonal<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDiagonal<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperDiagonal<TInner> Create(in TInner num)
+            public virtual HyperDiagonal<TInner> Create(in TInner num)
             {
                 return new HyperDiagonal<TInner>(num);
             }
@@ -4140,87 +4140,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperDiagonal<TInner, TComponent> num)
+            public virtual bool IsInvertible(in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperDiagonal<TInner, TComponent> num)
+            public virtual bool IsFinite(in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperDiagonal<TInner, TComponent> Clone(in HyperDiagonal<TInner, TComponent> num)
+            public virtual HyperDiagonal<TInner, TComponent> Clone(in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperDiagonal<TInner, TComponent> num1, HyperDiagonal<TInner, TComponent> num2)
+            public virtual bool Equals(HyperDiagonal<TInner, TComponent> num1, HyperDiagonal<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperDiagonal<TInner, TComponent> num1, HyperDiagonal<TInner, TComponent> num2)
+            public virtual int Compare(HyperDiagonal<TInner, TComponent> num1, HyperDiagonal<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual bool Equals(in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual int Compare(in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperDiagonal<TInner, TComponent> num)
+            public virtual int GetHashCode(HyperDiagonal<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperDiagonal<TInner, TComponent> num)
+            public virtual int GetHashCode(in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperDiagonal<TInner, TComponent> Call(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+            public virtual HyperDiagonal<TInner, TComponent> Call(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(in TInner num)
+            public virtual HyperDiagonal<TInner, TComponent> Create(in TInner num)
             {
                 return new HyperDiagonal<TInner, TComponent>(num);
             }
@@ -4478,72 +4478,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperDual<TInner> num)
+            public virtual bool IsInvertible(in HyperDual<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperDual<TInner> num)
+            public virtual bool IsFinite(in HyperDual<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperDual<TInner> Clone(in HyperDual<TInner> num)
+            public virtual HyperDual<TInner> Clone(in HyperDual<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperDual<TInner> num1, HyperDual<TInner> num2)
+            public virtual bool Equals(HyperDual<TInner> num1, HyperDual<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperDual<TInner> num1, HyperDual<TInner> num2)
+            public virtual int Compare(HyperDual<TInner> num1, HyperDual<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
+            public virtual bool Equals(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
+            public virtual int Compare(in HyperDual<TInner> num1, in HyperDual<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperDual<TInner> num)
+            public virtual int GetHashCode(HyperDual<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperDual<TInner> num)
+            public virtual int GetHashCode(in HyperDual<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperDual<TInner> Call(UnaryOperation operation, in HyperDual<TInner> num)
+            public virtual HyperDual<TInner> Call(UnaryOperation operation, in HyperDual<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in HyperDual<TInner> num2)
+            public virtual HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in HyperDual<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in TInner num2)
+            public virtual HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDual<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDual<TInner> num2)
+            public virtual HyperDual<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDual<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperDual<TInner> Create(in TInner num)
+            public virtual HyperDual<TInner> Create(in TInner num)
             {
                 return new HyperDual<TInner>(num);
             }
@@ -4811,87 +4811,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperDual<TInner, TComponent> num)
+            public virtual bool IsInvertible(in HyperDual<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperDual<TInner, TComponent> num)
+            public virtual bool IsFinite(in HyperDual<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperDual<TInner, TComponent> Clone(in HyperDual<TInner, TComponent> num)
+            public virtual HyperDual<TInner, TComponent> Clone(in HyperDual<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperDual<TInner, TComponent> num1, HyperDual<TInner, TComponent> num2)
+            public virtual bool Equals(HyperDual<TInner, TComponent> num1, HyperDual<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperDual<TInner, TComponent> num1, HyperDual<TInner, TComponent> num2)
+            public virtual int Compare(HyperDual<TInner, TComponent> num1, HyperDual<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
+            public virtual bool Equals(in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
+            public virtual int Compare(in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperDual<TInner, TComponent> num)
+            public virtual int GetHashCode(HyperDual<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperDual<TInner, TComponent> num)
+            public virtual int GetHashCode(in HyperDual<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperDual<TInner, TComponent> Call(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
+            public virtual HyperDual<TInner, TComponent> Call(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
+            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperDual<TInner, TComponent> num2)
+            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperDual<TInner, TComponent> num2)
+            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperDual<TInner, TComponent> Create(in TInner num)
+            public virtual HyperDual<TInner, TComponent> Create(in TInner num)
             {
                 return new HyperDual<TInner, TComponent>(num);
             }
@@ -5149,72 +5149,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperSplitComplex<TInner> num)
+            public virtual bool IsInvertible(in HyperSplitComplex<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperSplitComplex<TInner> num)
+            public virtual bool IsFinite(in HyperSplitComplex<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperSplitComplex<TInner> Clone(in HyperSplitComplex<TInner> num)
+            public virtual HyperSplitComplex<TInner> Clone(in HyperSplitComplex<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperSplitComplex<TInner> num1, HyperSplitComplex<TInner> num2)
+            public virtual bool Equals(HyperSplitComplex<TInner> num1, HyperSplitComplex<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperSplitComplex<TInner> num1, HyperSplitComplex<TInner> num2)
+            public virtual int Compare(HyperSplitComplex<TInner> num1, HyperSplitComplex<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
+            public virtual bool Equals(in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
+            public virtual int Compare(in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperSplitComplex<TInner> num)
+            public virtual int GetHashCode(HyperSplitComplex<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperSplitComplex<TInner> num)
+            public virtual int GetHashCode(in HyperSplitComplex<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperSplitComplex<TInner> Call(UnaryOperation operation, in HyperSplitComplex<TInner> num)
+            public virtual HyperSplitComplex<TInner> Call(UnaryOperation operation, in HyperSplitComplex<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
+            public virtual HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in TInner num2)
+            public virtual HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperSplitComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner> num2)
+            public virtual HyperSplitComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperSplitComplex<TInner> Create(in TInner num)
+            public virtual HyperSplitComplex<TInner> Create(in TInner num)
             {
                 return new HyperSplitComplex<TInner>(num);
             }
@@ -5482,87 +5482,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in HyperSplitComplex<TInner, TComponent> num)
+            public virtual bool IsInvertible(in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in HyperSplitComplex<TInner, TComponent> num)
+            public virtual bool IsFinite(in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public HyperSplitComplex<TInner, TComponent> Clone(in HyperSplitComplex<TInner, TComponent> num)
+            public virtual HyperSplitComplex<TInner, TComponent> Clone(in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(HyperSplitComplex<TInner, TComponent> num1, HyperSplitComplex<TInner, TComponent> num2)
+            public virtual bool Equals(HyperSplitComplex<TInner, TComponent> num1, HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(HyperSplitComplex<TInner, TComponent> num1, HyperSplitComplex<TInner, TComponent> num2)
+            public virtual int Compare(HyperSplitComplex<TInner, TComponent> num1, HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual bool Equals(in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual int Compare(in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(HyperSplitComplex<TInner, TComponent> num)
+            public virtual int GetHashCode(HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in HyperSplitComplex<TInner, TComponent> num)
+            public virtual int GetHashCode(in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public HyperSplitComplex<TInner, TComponent> Call(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(in TInner num)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(in TInner num)
             {
                 return new HyperSplitComplex<TInner, TComponent>(num);
             }
@@ -5820,72 +5820,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in NullableNumber<TInner> num)
+            public virtual bool IsInvertible(in NullableNumber<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in NullableNumber<TInner> num)
+            public virtual bool IsFinite(in NullableNumber<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public NullableNumber<TInner> Clone(in NullableNumber<TInner> num)
+            public virtual NullableNumber<TInner> Clone(in NullableNumber<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(NullableNumber<TInner> num1, NullableNumber<TInner> num2)
+            public virtual bool Equals(NullableNumber<TInner> num1, NullableNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(NullableNumber<TInner> num1, NullableNumber<TInner> num2)
+            public virtual int Compare(NullableNumber<TInner> num1, NullableNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
+            public virtual bool Equals(in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
+            public virtual int Compare(in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(NullableNumber<TInner> num)
+            public virtual int GetHashCode(NullableNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in NullableNumber<TInner> num)
+            public virtual int GetHashCode(in NullableNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public NullableNumber<TInner> Call(UnaryOperation operation, in NullableNumber<TInner> num)
+            public virtual NullableNumber<TInner> Call(UnaryOperation operation, in NullableNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
+            public virtual NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in TInner num2)
+            public virtual NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullableNumber<TInner> Call(BinaryOperation operation, in TInner num1, in NullableNumber<TInner> num2)
+            public virtual NullableNumber<TInner> Call(BinaryOperation operation, in TInner num1, in NullableNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public NullableNumber<TInner> Create(in TInner num)
+            public virtual NullableNumber<TInner> Create(in TInner num)
             {
                 return new NullableNumber<TInner>(num);
             }
@@ -6153,87 +6153,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in NullableNumber<TInner, TComponent> num)
+            public virtual bool IsInvertible(in NullableNumber<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in NullableNumber<TInner, TComponent> num)
+            public virtual bool IsFinite(in NullableNumber<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public NullableNumber<TInner, TComponent> Clone(in NullableNumber<TInner, TComponent> num)
+            public virtual NullableNumber<TInner, TComponent> Clone(in NullableNumber<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(NullableNumber<TInner, TComponent> num1, NullableNumber<TInner, TComponent> num2)
+            public virtual bool Equals(NullableNumber<TInner, TComponent> num1, NullableNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(NullableNumber<TInner, TComponent> num1, NullableNumber<TInner, TComponent> num2)
+            public virtual int Compare(NullableNumber<TInner, TComponent> num1, NullableNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual bool Equals(in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual int Compare(in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(NullableNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(NullableNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in NullableNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(in NullableNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public NullableNumber<TInner, TComponent> Call(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
+            public virtual NullableNumber<TInner, TComponent> Call(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public NullableNumber<TInner, TComponent> Create(in TInner num)
+            public virtual NullableNumber<TInner, TComponent> Create(in TInner num)
             {
                 return new NullableNumber<TInner, TComponent>(num);
             }
@@ -6351,57 +6351,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in NullNumber num)
+            public virtual bool IsInvertible(in NullNumber num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in NullNumber num)
+            public virtual bool IsFinite(in NullNumber num)
             {
                 return num.IsFinite;
             }
 
-            public NullNumber Clone(in NullNumber num)
+            public virtual NullNumber Clone(in NullNumber num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(NullNumber num1, NullNumber num2)
+            public virtual bool Equals(NullNumber num1, NullNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(NullNumber num1, NullNumber num2)
+            public virtual int Compare(NullNumber num1, NullNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in NullNumber num1, in NullNumber num2)
+            public virtual bool Equals(in NullNumber num1, in NullNumber num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in NullNumber num1, in NullNumber num2)
+            public virtual int Compare(in NullNumber num1, in NullNumber num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(NullNumber num)
+            public virtual int GetHashCode(NullNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in NullNumber num)
+            public virtual int GetHashCode(in NullNumber num)
             {
                 return num.GetHashCode();
             }
 
-            public NullNumber Call(UnaryOperation operation, in NullNumber num)
+            public virtual NullNumber Call(UnaryOperation operation, in NullNumber num)
             {
                 return num.Call(operation);
             }
 
-            public NullNumber Call(BinaryOperation operation, in NullNumber num1, in NullNumber num2)
+            public virtual NullNumber Call(BinaryOperation operation, in NullNumber num1, in NullNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -6524,72 +6524,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in NullNumber<TComponent> num)
+            public virtual bool IsInvertible(in NullNumber<TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in NullNumber<TComponent> num)
+            public virtual bool IsFinite(in NullNumber<TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public NullNumber<TComponent> Clone(in NullNumber<TComponent> num)
+            public virtual NullNumber<TComponent> Clone(in NullNumber<TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(NullNumber<TComponent> num1, NullNumber<TComponent> num2)
+            public virtual bool Equals(NullNumber<TComponent> num1, NullNumber<TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(NullNumber<TComponent> num1, NullNumber<TComponent> num2)
+            public virtual int Compare(NullNumber<TComponent> num1, NullNumber<TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
+            public virtual bool Equals(in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
+            public virtual int Compare(in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(NullNumber<TComponent> num)
+            public virtual int GetHashCode(NullNumber<TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in NullNumber<TComponent> num)
+            public virtual int GetHashCode(in NullNumber<TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public NullNumber<TComponent> Call(UnaryOperation operation, in NullNumber<TComponent> num)
+            public virtual NullNumber<TComponent> Call(UnaryOperation operation, in NullNumber<TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
+            public virtual NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in NullNumber<TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in NullNumber<TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> num1, in TComponent num2)
+            public virtual NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public NullNumber<TComponent> Call(BinaryOperation operation, in TComponent num1, in NullNumber<TComponent> num2)
+            public virtual NullNumber<TComponent> Call(BinaryOperation operation, in TComponent num1, in NullNumber<TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -6847,72 +6847,72 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in ProjectiveNumber<TInner> num)
+            public virtual bool IsInvertible(in ProjectiveNumber<TInner> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in ProjectiveNumber<TInner> num)
+            public virtual bool IsFinite(in ProjectiveNumber<TInner> num)
             {
                 return num.IsFinite;
             }
 
-            public ProjectiveNumber<TInner> Clone(in ProjectiveNumber<TInner> num)
+            public virtual ProjectiveNumber<TInner> Clone(in ProjectiveNumber<TInner> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
+            public virtual bool Equals(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
+            public virtual int Compare(ProjectiveNumber<TInner> num1, ProjectiveNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
+            public virtual bool Equals(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
+            public virtual int Compare(in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(ProjectiveNumber<TInner> num)
+            public virtual int GetHashCode(ProjectiveNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in ProjectiveNumber<TInner> num)
+            public virtual int GetHashCode(in ProjectiveNumber<TInner> num)
             {
                 return num.GetHashCode();
             }
 
-            public ProjectiveNumber<TInner> Call(UnaryOperation operation, in ProjectiveNumber<TInner> num)
+            public virtual ProjectiveNumber<TInner> Call(UnaryOperation operation, in ProjectiveNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
+            public virtual ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in TInner num2)
+            public virtual ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ProjectiveNumber<TInner> Call(BinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner> num2)
+            public virtual ProjectiveNumber<TInner> Call(BinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public ProjectiveNumber<TInner> Create(in TInner num)
+            public virtual ProjectiveNumber<TInner> Create(in TInner num)
             {
                 return new ProjectiveNumber<TInner>(num);
             }
@@ -7180,87 +7180,87 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in ProjectiveNumber<TInner, TComponent> num)
+            public virtual bool IsInvertible(in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in ProjectiveNumber<TInner, TComponent> num)
+            public virtual bool IsFinite(in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.IsFinite;
             }
 
-            public ProjectiveNumber<TInner, TComponent> Clone(in ProjectiveNumber<TInner, TComponent> num)
+            public virtual ProjectiveNumber<TInner, TComponent> Clone(in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(ProjectiveNumber<TInner, TComponent> num1, ProjectiveNumber<TInner, TComponent> num2)
+            public virtual bool Equals(ProjectiveNumber<TInner, TComponent> num1, ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(ProjectiveNumber<TInner, TComponent> num1, ProjectiveNumber<TInner, TComponent> num2)
+            public virtual int Compare(ProjectiveNumber<TInner, TComponent> num1, ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual bool Equals(in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual int Compare(in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(ProjectiveNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in ProjectiveNumber<TInner, TComponent> num)
+            public virtual int GetHashCode(in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.GetHashCode();
             }
 
-            public ProjectiveNumber<TInner, TComponent> Call(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public TComponent CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(in TInner num)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(in TInner num)
             {
                 return new ProjectiveNumber<TInner, TComponent>(num);
             }
@@ -7378,57 +7378,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in Real num)
+            public virtual bool IsInvertible(in Real num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in Real num)
+            public virtual bool IsFinite(in Real num)
             {
                 return num.IsFinite;
             }
 
-            public Real Clone(in Real num)
+            public virtual Real Clone(in Real num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(Real num1, Real num2)
+            public virtual bool Equals(Real num1, Real num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(Real num1, Real num2)
+            public virtual int Compare(Real num1, Real num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in Real num1, in Real num2)
+            public virtual bool Equals(in Real num1, in Real num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in Real num1, in Real num2)
+            public virtual int Compare(in Real num1, in Real num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(Real num)
+            public virtual int GetHashCode(Real num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in Real num)
+            public virtual int GetHashCode(in Real num)
             {
                 return num.GetHashCode();
             }
 
-            public Real Call(UnaryOperation operation, in Real num)
+            public virtual Real Call(UnaryOperation operation, in Real num)
             {
                 return num.Call(operation);
             }
 
-            public Real Call(BinaryOperation operation, in Real num1, in Real num2)
+            public virtual Real Call(BinaryOperation operation, in Real num1, in Real num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -7546,57 +7546,57 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in ExtendedReal num)
+            public virtual bool IsInvertible(in ExtendedReal num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in ExtendedReal num)
+            public virtual bool IsFinite(in ExtendedReal num)
             {
                 return num.IsFinite;
             }
 
-            public ExtendedReal Clone(in ExtendedReal num)
+            public virtual ExtendedReal Clone(in ExtendedReal num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(ExtendedReal num1, ExtendedReal num2)
+            public virtual bool Equals(ExtendedReal num1, ExtendedReal num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(ExtendedReal num1, ExtendedReal num2)
+            public virtual int Compare(ExtendedReal num1, ExtendedReal num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
+            public virtual bool Equals(in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in ExtendedReal num1, in ExtendedReal num2)
+            public virtual int Compare(in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(ExtendedReal num)
+            public virtual int GetHashCode(ExtendedReal num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in ExtendedReal num)
+            public virtual int GetHashCode(in ExtendedReal num)
             {
                 return num.GetHashCode();
             }
 
-            public ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
+            public virtual ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.Call(operation, num2);
             }

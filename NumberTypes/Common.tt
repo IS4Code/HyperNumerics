@@ -362,90 +362,90 @@ foreach(var info in data)
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public bool IsInvertible(in <#=fullname#> num)
+            public virtual bool IsInvertible(in <#=fullname#> num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in <#=fullname#> num)
+            public virtual bool IsFinite(in <#=fullname#> num)
             {
                 return num.IsFinite;
             }
 
-            public <#=fullname#> Clone(in <#=fullname#> num)
+            public virtual <#=fullname#> Clone(in <#=fullname#> num)
             {
                 return num.Clone();
             }
 
-            public bool Equals(<#=fullname#> num1, <#=fullname#> num2)
+            public virtual bool Equals(<#=fullname#> num1, <#=fullname#> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(<#=fullname#> num1, <#=fullname#> num2)
+            public virtual int Compare(<#=fullname#> num1, <#=fullname#> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public bool Equals(in <#=fullname#> num1, in <#=fullname#> num2)
+            public virtual bool Equals(in <#=fullname#> num1, in <#=fullname#> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public int Compare(in <#=fullname#> num1, in <#=fullname#> num2)
+            public virtual int Compare(in <#=fullname#> num1, in <#=fullname#> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public int GetHashCode(<#=fullname#> num)
+            public virtual int GetHashCode(<#=fullname#> num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in <#=fullname#> num)
+            public virtual int GetHashCode(in <#=fullname#> num)
             {
                 return num.GetHashCode();
             }
 
-            public <#=fullname#> Call(UnaryOperation operation, in <#=fullname#> num)
+            public virtual <#=fullname#> Call(UnaryOperation operation, in <#=fullname#> num)
             {
                 return num.Call(operation);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=fullname#> num2)
+            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=fullname#> num2)
             {
                 return num1.Call(operation, num2);
             }<# if(level >= 1) { #>
 
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in TInner num2)
+            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in TInner num1, in <#=fullname#> num2)
+            public virtual <#=fullname#> Call(BinaryOperation operation, in TInner num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
             }<# } #><# if(component) { #>
 
 
-            public <#=componenttype#> CallComponent(UnaryOperation operation, in <#=fullname#> num)
+            public virtual <#=componenttype#> CallComponent(UnaryOperation operation, in <#=fullname#> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=componenttype#> num2)
+            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=componenttype#> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public <#=fullname#> Call(BinaryOperation operation, in <#=componenttype#> num1, in <#=fullname#> num2)
+            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=componenttype#> num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
             }<# } #><# if(level >= 1) { #>
 
 
-            public <#=fullname#> Create(in TInner num)
+            public virtual <#=fullname#> Create(in TInner num)
             {
                 return new <#=fullname#>(num);
             }<# } #>

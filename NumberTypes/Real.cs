@@ -395,52 +395,52 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => 0;
 
-            public bool IsInvertible(in ExtendedReal num)
+            public virtual bool IsInvertible(in ExtendedReal num)
             {
                 return num.IsInvertible;
             }
 
-            public bool IsFinite(in ExtendedReal num)
+            public virtual bool IsFinite(in ExtendedReal num)
             {
                 return num.IsFinite;
             }
 
-            public ExtendedReal Clone(in ExtendedReal num)
+            public virtual ExtendedReal Clone(in ExtendedReal num)
             {
                 return num;
             }
 
-            public bool Equals(ExtendedReal num1, ExtendedReal num2)
+            public virtual bool Equals(ExtendedReal num1, ExtendedReal num2)
             {
                 return num1.Equals(in num2);
             }
 
-            public int Compare(ExtendedReal num1, ExtendedReal num2)
+            public virtual int Compare(ExtendedReal num1, ExtendedReal num2)
             {
                 return num1.CompareTo(in num2);
             }
 
-            public bool Equals(in ExtendedReal num1, in ExtendedReal num2)
+            public virtual bool Equals(in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.Equals(in num2);
             }
 
-            public int Compare(in ExtendedReal num1, in ExtendedReal num2)
+            public virtual int Compare(in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.CompareTo(in num2);
             }
 
-            public int GetHashCode(ExtendedReal num)
+            public virtual int GetHashCode(ExtendedReal num)
             {
                 return num.GetHashCode();
             }
 
-            public int GetHashCode(in ExtendedReal num)
+            public virtual int GetHashCode(in ExtendedReal num)
             {
                 return num.GetHashCode();
             }
 
-            public Real Call(NullaryOperation operation)
+            public virtual Real Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -476,7 +476,7 @@ namespace IS4.HyperNumerics.NumberTypes
                 }
             }
 
-            public double CallComponent(UnaryOperation operation, in Real num)
+            public virtual double CallComponent(UnaryOperation operation, in Real num)
             {
                 return num.Call(operation);
             }
@@ -491,37 +491,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new Real(num.Call(operation));
             }
 
-            public Real Call(BinaryOperation operation, in Real num1, in double num2)
+            public virtual Real Call(BinaryOperation operation, in Real num1, in double num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public Real Call(BinaryOperation operation, in double num1, in Real num2)
+            public virtual Real Call(BinaryOperation operation, in double num1, in Real num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public Real Call(BinaryOperation operation, in Real num1, in float num2)
+            public virtual Real Call(BinaryOperation operation, in Real num1, in float num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public Real Call(BinaryOperation operation, in float num1, in Real num2)
+            public virtual Real Call(BinaryOperation operation, in float num1, in Real num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
+            public virtual ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public double CallComponent(UnaryOperation operation, in ExtendedReal num)
+            public virtual double CallComponent(UnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
             }
@@ -536,52 +536,52 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new ExtendedReal(num.Call(operation));
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in double num2)
+            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in double num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in double num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(BinaryOperation operation, in double num1, in ExtendedReal num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in float num2)
+            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in float num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public ExtendedReal Call(BinaryOperation operation, in float num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(BinaryOperation operation, in float num1, in ExtendedReal num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public Real Create(in double num)
+            public virtual Real Create(in double num)
             {
                 return new Real(num);
             }
 
-            public Real Create(in double realUnit, in double otherUnits, in double someUnitsCombined, in double allUnitsCombined)
+            public virtual Real Create(in double realUnit, in double otherUnits, in double someUnitsCombined, in double allUnitsCombined)
             {
                 return new Real(realUnit);
             }
 
-            public Real Create(in float num)
+            public virtual Real Create(in float num)
             {
                 return new Real(num);
             }
 
-            public Real Create(in float realUnit, in float otherUnits, in float someUnitsCombined, in float allUnitsCombined)
+            public virtual Real Create(in float realUnit, in float otherUnits, in float someUnitsCombined, in float allUnitsCombined)
             {
                 return new Real(realUnit);
             }
 
-            public Real Create(in Real realUnit, in Real otherUnits, in Real someUnitsCombined, in Real allUnitsCombined)
+            public virtual Real Create(in Real realUnit, in Real otherUnits, in Real someUnitsCombined, in Real allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public ExtendedReal Create(in ExtendedReal realUnit, in ExtendedReal otherUnits, in ExtendedReal someUnitsCombined, in ExtendedReal allUnitsCombined)
+            public virtual ExtendedReal Create(in ExtendedReal realUnit, in ExtendedReal otherUnits, in ExtendedReal someUnitsCombined, in ExtendedReal allUnitsCombined)
             {
                 return realUnit;
             }
@@ -606,66 +606,66 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new ExtendedReal(realUnit);
             }
 
-            public Real Create(in Real num)
+            public virtual Real Create(in Real num)
             {
                 return num;
             }
 
-            public Real Create(IEnumerable<double> units)
+            public virtual Real Create(IEnumerable<double> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return new Real(ienum.Current);
             }
 
-            public Real Create(IEnumerator<double> units)
+            public virtual Real Create(IEnumerator<double> units)
             {
                 var value = units.Current;
                 units.MoveNext();
                 return new Real(value);
             }
 
-            public Real Create(IEnumerable<float> units)
+            public virtual Real Create(IEnumerable<float> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return new Real(ienum.Current);
             }
 
-            public Real Create(IEnumerator<float> units)
+            public virtual Real Create(IEnumerator<float> units)
             {
                 var value = units.Current;
                 units.MoveNext();
                 return new Real(value);
             }
 
-            public Real Create(IEnumerable<Real> units)
+            public virtual Real Create(IEnumerable<Real> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public Real Create(IEnumerator<Real> units)
+            public virtual Real Create(IEnumerator<Real> units)
             {
                 var value = units.Current;
                 units.MoveNext();
                 return value;
             }
 
-            public ExtendedReal Create(in ExtendedReal num)
+            public virtual ExtendedReal Create(in ExtendedReal num)
             {
                 return num;
             }
 
-            public ExtendedReal Create(IEnumerable<ExtendedReal> units)
+            public virtual ExtendedReal Create(IEnumerable<ExtendedReal> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public ExtendedReal Create(IEnumerator<ExtendedReal> units)
+            public virtual ExtendedReal Create(IEnumerator<ExtendedReal> units)
             {
                 var value = units.Current;
                 units.MoveNext();

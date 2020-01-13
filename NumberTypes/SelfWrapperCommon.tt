@@ -111,24 +111,24 @@ foreach(var info in data)
                 return num.Call(operation);
             }
 
-            public <#=fullname#> Create(in <#=fullname#> num)
+            public virtual <#=fullname#> Create(in <#=fullname#> num)
             {
                 return num;
             }
 
-            public <#=fullname#> Create(in <#=fullname#> realUnit, in <#=fullname#> otherUnits, in <#=fullname#> someUnitsCombined, in <#=fullname#> allUnitsCombined)
+            public virtual <#=fullname#> Create(in <#=fullname#> realUnit, in <#=fullname#> otherUnits, in <#=fullname#> someUnitsCombined, in <#=fullname#> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public <#=fullname#> Create(IEnumerable<<#=fullname#>> units)
+            public virtual <#=fullname#> Create(IEnumerable<<#=fullname#>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public <#=fullname#> Create(IEnumerator<<#=fullname#>> units)
+            public virtual <#=fullname#> Create(IEnumerator<<#=fullname#>> units)
             {
                 var value = units.Current;
                 units.MoveNext();

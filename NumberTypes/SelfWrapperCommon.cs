@@ -41,24 +41,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public AbstractNumber Create(in AbstractNumber num)
+            public virtual AbstractNumber Create(in AbstractNumber num)
             {
                 return num;
             }
 
-            public AbstractNumber Create(in AbstractNumber realUnit, in AbstractNumber otherUnits, in AbstractNumber someUnitsCombined, in AbstractNumber allUnitsCombined)
+            public virtual AbstractNumber Create(in AbstractNumber realUnit, in AbstractNumber otherUnits, in AbstractNumber someUnitsCombined, in AbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public AbstractNumber Create(IEnumerable<AbstractNumber> units)
+            public virtual AbstractNumber Create(IEnumerable<AbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public AbstractNumber Create(IEnumerator<AbstractNumber> units)
+            public virtual AbstractNumber Create(IEnumerator<AbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -166,24 +166,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public ComponentAbstractNumber Create(in ComponentAbstractNumber num)
+            public virtual ComponentAbstractNumber Create(in ComponentAbstractNumber num)
             {
                 return num;
             }
 
-            public ComponentAbstractNumber Create(in ComponentAbstractNumber realUnit, in ComponentAbstractNumber otherUnits, in ComponentAbstractNumber someUnitsCombined, in ComponentAbstractNumber allUnitsCombined)
+            public virtual ComponentAbstractNumber Create(in ComponentAbstractNumber realUnit, in ComponentAbstractNumber otherUnits, in ComponentAbstractNumber someUnitsCombined, in ComponentAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public ComponentAbstractNumber Create(IEnumerable<ComponentAbstractNumber> units)
+            public virtual ComponentAbstractNumber Create(IEnumerable<ComponentAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public ComponentAbstractNumber Create(IEnumerator<ComponentAbstractNumber> units)
+            public virtual ComponentAbstractNumber Create(IEnumerator<ComponentAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -291,24 +291,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public UnaryAbstractNumber Create(in UnaryAbstractNumber num)
+            public virtual UnaryAbstractNumber Create(in UnaryAbstractNumber num)
             {
                 return num;
             }
 
-            public UnaryAbstractNumber Create(in UnaryAbstractNumber realUnit, in UnaryAbstractNumber otherUnits, in UnaryAbstractNumber someUnitsCombined, in UnaryAbstractNumber allUnitsCombined)
+            public virtual UnaryAbstractNumber Create(in UnaryAbstractNumber realUnit, in UnaryAbstractNumber otherUnits, in UnaryAbstractNumber someUnitsCombined, in UnaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public UnaryAbstractNumber Create(IEnumerable<UnaryAbstractNumber> units)
+            public virtual UnaryAbstractNumber Create(IEnumerable<UnaryAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public UnaryAbstractNumber Create(IEnumerator<UnaryAbstractNumber> units)
+            public virtual UnaryAbstractNumber Create(IEnumerator<UnaryAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -416,24 +416,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public ComponentUnaryAbstractNumber Create(in ComponentUnaryAbstractNumber num)
+            public virtual ComponentUnaryAbstractNumber Create(in ComponentUnaryAbstractNumber num)
             {
                 return num;
             }
 
-            public ComponentUnaryAbstractNumber Create(in ComponentUnaryAbstractNumber realUnit, in ComponentUnaryAbstractNumber otherUnits, in ComponentUnaryAbstractNumber someUnitsCombined, in ComponentUnaryAbstractNumber allUnitsCombined)
+            public virtual ComponentUnaryAbstractNumber Create(in ComponentUnaryAbstractNumber realUnit, in ComponentUnaryAbstractNumber otherUnits, in ComponentUnaryAbstractNumber someUnitsCombined, in ComponentUnaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public ComponentUnaryAbstractNumber Create(IEnumerable<ComponentUnaryAbstractNumber> units)
+            public virtual ComponentUnaryAbstractNumber Create(IEnumerable<ComponentUnaryAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public ComponentUnaryAbstractNumber Create(IEnumerator<ComponentUnaryAbstractNumber> units)
+            public virtual ComponentUnaryAbstractNumber Create(IEnumerator<ComponentUnaryAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -541,24 +541,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public BinaryAbstractNumber Create(in BinaryAbstractNumber num)
+            public virtual BinaryAbstractNumber Create(in BinaryAbstractNumber num)
             {
                 return num;
             }
 
-            public BinaryAbstractNumber Create(in BinaryAbstractNumber realUnit, in BinaryAbstractNumber otherUnits, in BinaryAbstractNumber someUnitsCombined, in BinaryAbstractNumber allUnitsCombined)
+            public virtual BinaryAbstractNumber Create(in BinaryAbstractNumber realUnit, in BinaryAbstractNumber otherUnits, in BinaryAbstractNumber someUnitsCombined, in BinaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public BinaryAbstractNumber Create(IEnumerable<BinaryAbstractNumber> units)
+            public virtual BinaryAbstractNumber Create(IEnumerable<BinaryAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public BinaryAbstractNumber Create(IEnumerator<BinaryAbstractNumber> units)
+            public virtual BinaryAbstractNumber Create(IEnumerator<BinaryAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -666,24 +666,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public ComponentBinaryAbstractNumber Create(in ComponentBinaryAbstractNumber num)
+            public virtual ComponentBinaryAbstractNumber Create(in ComponentBinaryAbstractNumber num)
             {
                 return num;
             }
 
-            public ComponentBinaryAbstractNumber Create(in ComponentBinaryAbstractNumber realUnit, in ComponentBinaryAbstractNumber otherUnits, in ComponentBinaryAbstractNumber someUnitsCombined, in ComponentBinaryAbstractNumber allUnitsCombined)
+            public virtual ComponentBinaryAbstractNumber Create(in ComponentBinaryAbstractNumber realUnit, in ComponentBinaryAbstractNumber otherUnits, in ComponentBinaryAbstractNumber someUnitsCombined, in ComponentBinaryAbstractNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public ComponentBinaryAbstractNumber Create(IEnumerable<ComponentBinaryAbstractNumber> units)
+            public virtual ComponentBinaryAbstractNumber Create(IEnumerable<ComponentBinaryAbstractNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public ComponentBinaryAbstractNumber Create(IEnumerator<ComponentBinaryAbstractNumber> units)
+            public virtual ComponentBinaryAbstractNumber Create(IEnumerator<ComponentBinaryAbstractNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -791,24 +791,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public BoxedNumber<TInner> Create(in BoxedNumber<TInner> num)
+            public virtual BoxedNumber<TInner> Create(in BoxedNumber<TInner> num)
             {
                 return num;
             }
 
-            public BoxedNumber<TInner> Create(in BoxedNumber<TInner> realUnit, in BoxedNumber<TInner> otherUnits, in BoxedNumber<TInner> someUnitsCombined, in BoxedNumber<TInner> allUnitsCombined)
+            public virtual BoxedNumber<TInner> Create(in BoxedNumber<TInner> realUnit, in BoxedNumber<TInner> otherUnits, in BoxedNumber<TInner> someUnitsCombined, in BoxedNumber<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public BoxedNumber<TInner> Create(IEnumerable<BoxedNumber<TInner>> units)
+            public virtual BoxedNumber<TInner> Create(IEnumerable<BoxedNumber<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public BoxedNumber<TInner> Create(IEnumerator<BoxedNumber<TInner>> units)
+            public virtual BoxedNumber<TInner> Create(IEnumerator<BoxedNumber<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -921,24 +921,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public BoxedNumber<TInner, TComponent> Create(in BoxedNumber<TInner, TComponent> num)
+            public virtual BoxedNumber<TInner, TComponent> Create(in BoxedNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public BoxedNumber<TInner, TComponent> Create(in BoxedNumber<TInner, TComponent> realUnit, in BoxedNumber<TInner, TComponent> otherUnits, in BoxedNumber<TInner, TComponent> someUnitsCombined, in BoxedNumber<TInner, TComponent> allUnitsCombined)
+            public virtual BoxedNumber<TInner, TComponent> Create(in BoxedNumber<TInner, TComponent> realUnit, in BoxedNumber<TInner, TComponent> otherUnits, in BoxedNumber<TInner, TComponent> someUnitsCombined, in BoxedNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public BoxedNumber<TInner, TComponent> Create(IEnumerable<BoxedNumber<TInner, TComponent>> units)
+            public virtual BoxedNumber<TInner, TComponent> Create(IEnumerable<BoxedNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public BoxedNumber<TInner, TComponent> Create(IEnumerator<BoxedNumber<TInner, TComponent>> units)
+            public virtual BoxedNumber<TInner, TComponent> Create(IEnumerator<BoxedNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1046,24 +1046,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Create(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(in CustomDefaultNumber<TInner, TTraits> num)
             {
                 return num;
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Create(in CustomDefaultNumber<TInner, TTraits> realUnit, in CustomDefaultNumber<TInner, TTraits> otherUnits, in CustomDefaultNumber<TInner, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TTraits> allUnitsCombined)
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(in CustomDefaultNumber<TInner, TTraits> realUnit, in CustomDefaultNumber<TInner, TTraits> otherUnits, in CustomDefaultNumber<TInner, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TTraits> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TTraits>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public CustomDefaultNumber<TInner, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TTraits>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1176,24 +1176,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
             {
                 return num;
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> realUnit, in CustomDefaultNumber<TInner, TComponent, TTraits> otherUnits, in CustomDefaultNumber<TInner, TComponent, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TComponent, TTraits> allUnitsCombined)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> realUnit, in CustomDefaultNumber<TInner, TComponent, TTraits> otherUnits, in CustomDefaultNumber<TInner, TComponent, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TComponent, TTraits> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1301,24 +1301,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public GeneratedNumber<TInner> Create(in GeneratedNumber<TInner> num)
+            public virtual GeneratedNumber<TInner> Create(in GeneratedNumber<TInner> num)
             {
                 return num;
             }
 
-            public GeneratedNumber<TInner> Create(in GeneratedNumber<TInner> realUnit, in GeneratedNumber<TInner> otherUnits, in GeneratedNumber<TInner> someUnitsCombined, in GeneratedNumber<TInner> allUnitsCombined)
+            public virtual GeneratedNumber<TInner> Create(in GeneratedNumber<TInner> realUnit, in GeneratedNumber<TInner> otherUnits, in GeneratedNumber<TInner> someUnitsCombined, in GeneratedNumber<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public GeneratedNumber<TInner> Create(IEnumerable<GeneratedNumber<TInner>> units)
+            public virtual GeneratedNumber<TInner> Create(IEnumerable<GeneratedNumber<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public GeneratedNumber<TInner> Create(IEnumerator<GeneratedNumber<TInner>> units)
+            public virtual GeneratedNumber<TInner> Create(IEnumerator<GeneratedNumber<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1431,24 +1431,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(in GeneratedNumber<TInner, TComponent> num)
+            public virtual GeneratedNumber<TInner, TComponent> Create(in GeneratedNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(in GeneratedNumber<TInner, TComponent> realUnit, in GeneratedNumber<TInner, TComponent> otherUnits, in GeneratedNumber<TInner, TComponent> someUnitsCombined, in GeneratedNumber<TInner, TComponent> allUnitsCombined)
+            public virtual GeneratedNumber<TInner, TComponent> Create(in GeneratedNumber<TInner, TComponent> realUnit, in GeneratedNumber<TInner, TComponent> otherUnits, in GeneratedNumber<TInner, TComponent> someUnitsCombined, in GeneratedNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(IEnumerable<GeneratedNumber<TInner, TComponent>> units)
+            public virtual GeneratedNumber<TInner, TComponent> Create(IEnumerable<GeneratedNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(IEnumerator<GeneratedNumber<TInner, TComponent>> units)
+            public virtual GeneratedNumber<TInner, TComponent> Create(IEnumerator<GeneratedNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1556,24 +1556,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperComplex<TInner> Create(in HyperComplex<TInner> num)
+            public virtual HyperComplex<TInner> Create(in HyperComplex<TInner> num)
             {
                 return num;
             }
 
-            public HyperComplex<TInner> Create(in HyperComplex<TInner> realUnit, in HyperComplex<TInner> otherUnits, in HyperComplex<TInner> someUnitsCombined, in HyperComplex<TInner> allUnitsCombined)
+            public virtual HyperComplex<TInner> Create(in HyperComplex<TInner> realUnit, in HyperComplex<TInner> otherUnits, in HyperComplex<TInner> someUnitsCombined, in HyperComplex<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperComplex<TInner> Create(IEnumerable<HyperComplex<TInner>> units)
+            public virtual HyperComplex<TInner> Create(IEnumerable<HyperComplex<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperComplex<TInner> Create(IEnumerator<HyperComplex<TInner>> units)
+            public virtual HyperComplex<TInner> Create(IEnumerator<HyperComplex<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1686,24 +1686,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperComplex<TInner, TComponent> Create(in HyperComplex<TInner, TComponent> num)
+            public virtual HyperComplex<TInner, TComponent> Create(in HyperComplex<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperComplex<TInner, TComponent> Create(in HyperComplex<TInner, TComponent> realUnit, in HyperComplex<TInner, TComponent> otherUnits, in HyperComplex<TInner, TComponent> someUnitsCombined, in HyperComplex<TInner, TComponent> allUnitsCombined)
+            public virtual HyperComplex<TInner, TComponent> Create(in HyperComplex<TInner, TComponent> realUnit, in HyperComplex<TInner, TComponent> otherUnits, in HyperComplex<TInner, TComponent> someUnitsCombined, in HyperComplex<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperComplex<TInner, TComponent> Create(IEnumerable<HyperComplex<TInner, TComponent>> units)
+            public virtual HyperComplex<TInner, TComponent> Create(IEnumerable<HyperComplex<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperComplex<TInner, TComponent> Create(IEnumerator<HyperComplex<TInner, TComponent>> units)
+            public virtual HyperComplex<TInner, TComponent> Create(IEnumerator<HyperComplex<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1811,24 +1811,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperDiagonal<TInner> Create(in HyperDiagonal<TInner> num)
+            public virtual HyperDiagonal<TInner> Create(in HyperDiagonal<TInner> num)
             {
                 return num;
             }
 
-            public HyperDiagonal<TInner> Create(in HyperDiagonal<TInner> realUnit, in HyperDiagonal<TInner> otherUnits, in HyperDiagonal<TInner> someUnitsCombined, in HyperDiagonal<TInner> allUnitsCombined)
+            public virtual HyperDiagonal<TInner> Create(in HyperDiagonal<TInner> realUnit, in HyperDiagonal<TInner> otherUnits, in HyperDiagonal<TInner> someUnitsCombined, in HyperDiagonal<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperDiagonal<TInner> Create(IEnumerable<HyperDiagonal<TInner>> units)
+            public virtual HyperDiagonal<TInner> Create(IEnumerable<HyperDiagonal<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperDiagonal<TInner> Create(IEnumerator<HyperDiagonal<TInner>> units)
+            public virtual HyperDiagonal<TInner> Create(IEnumerator<HyperDiagonal<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1941,24 +1941,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(in HyperDiagonal<TInner, TComponent> num)
+            public virtual HyperDiagonal<TInner, TComponent> Create(in HyperDiagonal<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(in HyperDiagonal<TInner, TComponent> realUnit, in HyperDiagonal<TInner, TComponent> otherUnits, in HyperDiagonal<TInner, TComponent> someUnitsCombined, in HyperDiagonal<TInner, TComponent> allUnitsCombined)
+            public virtual HyperDiagonal<TInner, TComponent> Create(in HyperDiagonal<TInner, TComponent> realUnit, in HyperDiagonal<TInner, TComponent> otherUnits, in HyperDiagonal<TInner, TComponent> someUnitsCombined, in HyperDiagonal<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(IEnumerable<HyperDiagonal<TInner, TComponent>> units)
+            public virtual HyperDiagonal<TInner, TComponent> Create(IEnumerable<HyperDiagonal<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperDiagonal<TInner, TComponent> Create(IEnumerator<HyperDiagonal<TInner, TComponent>> units)
+            public virtual HyperDiagonal<TInner, TComponent> Create(IEnumerator<HyperDiagonal<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2066,24 +2066,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperDual<TInner> Create(in HyperDual<TInner> num)
+            public virtual HyperDual<TInner> Create(in HyperDual<TInner> num)
             {
                 return num;
             }
 
-            public HyperDual<TInner> Create(in HyperDual<TInner> realUnit, in HyperDual<TInner> otherUnits, in HyperDual<TInner> someUnitsCombined, in HyperDual<TInner> allUnitsCombined)
+            public virtual HyperDual<TInner> Create(in HyperDual<TInner> realUnit, in HyperDual<TInner> otherUnits, in HyperDual<TInner> someUnitsCombined, in HyperDual<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperDual<TInner> Create(IEnumerable<HyperDual<TInner>> units)
+            public virtual HyperDual<TInner> Create(IEnumerable<HyperDual<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperDual<TInner> Create(IEnumerator<HyperDual<TInner>> units)
+            public virtual HyperDual<TInner> Create(IEnumerator<HyperDual<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2196,24 +2196,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperDual<TInner, TComponent> Create(in HyperDual<TInner, TComponent> num)
+            public virtual HyperDual<TInner, TComponent> Create(in HyperDual<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperDual<TInner, TComponent> Create(in HyperDual<TInner, TComponent> realUnit, in HyperDual<TInner, TComponent> otherUnits, in HyperDual<TInner, TComponent> someUnitsCombined, in HyperDual<TInner, TComponent> allUnitsCombined)
+            public virtual HyperDual<TInner, TComponent> Create(in HyperDual<TInner, TComponent> realUnit, in HyperDual<TInner, TComponent> otherUnits, in HyperDual<TInner, TComponent> someUnitsCombined, in HyperDual<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperDual<TInner, TComponent> Create(IEnumerable<HyperDual<TInner, TComponent>> units)
+            public virtual HyperDual<TInner, TComponent> Create(IEnumerable<HyperDual<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperDual<TInner, TComponent> Create(IEnumerator<HyperDual<TInner, TComponent>> units)
+            public virtual HyperDual<TInner, TComponent> Create(IEnumerator<HyperDual<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2321,24 +2321,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperSplitComplex<TInner> Create(in HyperSplitComplex<TInner> num)
+            public virtual HyperSplitComplex<TInner> Create(in HyperSplitComplex<TInner> num)
             {
                 return num;
             }
 
-            public HyperSplitComplex<TInner> Create(in HyperSplitComplex<TInner> realUnit, in HyperSplitComplex<TInner> otherUnits, in HyperSplitComplex<TInner> someUnitsCombined, in HyperSplitComplex<TInner> allUnitsCombined)
+            public virtual HyperSplitComplex<TInner> Create(in HyperSplitComplex<TInner> realUnit, in HyperSplitComplex<TInner> otherUnits, in HyperSplitComplex<TInner> someUnitsCombined, in HyperSplitComplex<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperSplitComplex<TInner> Create(IEnumerable<HyperSplitComplex<TInner>> units)
+            public virtual HyperSplitComplex<TInner> Create(IEnumerable<HyperSplitComplex<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperSplitComplex<TInner> Create(IEnumerator<HyperSplitComplex<TInner>> units)
+            public virtual HyperSplitComplex<TInner> Create(IEnumerator<HyperSplitComplex<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2451,24 +2451,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(in HyperSplitComplex<TInner, TComponent> num)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(in HyperSplitComplex<TInner, TComponent> realUnit, in HyperSplitComplex<TInner, TComponent> otherUnits, in HyperSplitComplex<TInner, TComponent> someUnitsCombined, in HyperSplitComplex<TInner, TComponent> allUnitsCombined)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(in HyperSplitComplex<TInner, TComponent> realUnit, in HyperSplitComplex<TInner, TComponent> otherUnits, in HyperSplitComplex<TInner, TComponent> someUnitsCombined, in HyperSplitComplex<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(IEnumerable<HyperSplitComplex<TInner, TComponent>> units)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(IEnumerable<HyperSplitComplex<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public HyperSplitComplex<TInner, TComponent> Create(IEnumerator<HyperSplitComplex<TInner, TComponent>> units)
+            public virtual HyperSplitComplex<TInner, TComponent> Create(IEnumerator<HyperSplitComplex<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2576,24 +2576,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public NullableNumber<TInner> Create(in NullableNumber<TInner> num)
+            public virtual NullableNumber<TInner> Create(in NullableNumber<TInner> num)
             {
                 return num;
             }
 
-            public NullableNumber<TInner> Create(in NullableNumber<TInner> realUnit, in NullableNumber<TInner> otherUnits, in NullableNumber<TInner> someUnitsCombined, in NullableNumber<TInner> allUnitsCombined)
+            public virtual NullableNumber<TInner> Create(in NullableNumber<TInner> realUnit, in NullableNumber<TInner> otherUnits, in NullableNumber<TInner> someUnitsCombined, in NullableNumber<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public NullableNumber<TInner> Create(IEnumerable<NullableNumber<TInner>> units)
+            public virtual NullableNumber<TInner> Create(IEnumerable<NullableNumber<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public NullableNumber<TInner> Create(IEnumerator<NullableNumber<TInner>> units)
+            public virtual NullableNumber<TInner> Create(IEnumerator<NullableNumber<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2706,24 +2706,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public NullableNumber<TInner, TComponent> Create(in NullableNumber<TInner, TComponent> num)
+            public virtual NullableNumber<TInner, TComponent> Create(in NullableNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public NullableNumber<TInner, TComponent> Create(in NullableNumber<TInner, TComponent> realUnit, in NullableNumber<TInner, TComponent> otherUnits, in NullableNumber<TInner, TComponent> someUnitsCombined, in NullableNumber<TInner, TComponent> allUnitsCombined)
+            public virtual NullableNumber<TInner, TComponent> Create(in NullableNumber<TInner, TComponent> realUnit, in NullableNumber<TInner, TComponent> otherUnits, in NullableNumber<TInner, TComponent> someUnitsCombined, in NullableNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public NullableNumber<TInner, TComponent> Create(IEnumerable<NullableNumber<TInner, TComponent>> units)
+            public virtual NullableNumber<TInner, TComponent> Create(IEnumerable<NullableNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public NullableNumber<TInner, TComponent> Create(IEnumerator<NullableNumber<TInner, TComponent>> units)
+            public virtual NullableNumber<TInner, TComponent> Create(IEnumerator<NullableNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2831,24 +2831,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public NullNumber Create(in NullNumber num)
+            public virtual NullNumber Create(in NullNumber num)
             {
                 return num;
             }
 
-            public NullNumber Create(in NullNumber realUnit, in NullNumber otherUnits, in NullNumber someUnitsCombined, in NullNumber allUnitsCombined)
+            public virtual NullNumber Create(in NullNumber realUnit, in NullNumber otherUnits, in NullNumber someUnitsCombined, in NullNumber allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public NullNumber Create(IEnumerable<NullNumber> units)
+            public virtual NullNumber Create(IEnumerable<NullNumber> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public NullNumber Create(IEnumerator<NullNumber> units)
+            public virtual NullNumber Create(IEnumerator<NullNumber> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -2961,24 +2961,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public NullNumber<TComponent> Create(in NullNumber<TComponent> num)
+            public virtual NullNumber<TComponent> Create(in NullNumber<TComponent> num)
             {
                 return num;
             }
 
-            public NullNumber<TComponent> Create(in NullNumber<TComponent> realUnit, in NullNumber<TComponent> otherUnits, in NullNumber<TComponent> someUnitsCombined, in NullNumber<TComponent> allUnitsCombined)
+            public virtual NullNumber<TComponent> Create(in NullNumber<TComponent> realUnit, in NullNumber<TComponent> otherUnits, in NullNumber<TComponent> someUnitsCombined, in NullNumber<TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public NullNumber<TComponent> Create(IEnumerable<NullNumber<TComponent>> units)
+            public virtual NullNumber<TComponent> Create(IEnumerable<NullNumber<TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public NullNumber<TComponent> Create(IEnumerator<NullNumber<TComponent>> units)
+            public virtual NullNumber<TComponent> Create(IEnumerator<NullNumber<TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -3086,24 +3086,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public ProjectiveNumber<TInner> Create(in ProjectiveNumber<TInner> num)
+            public virtual ProjectiveNumber<TInner> Create(in ProjectiveNumber<TInner> num)
             {
                 return num;
             }
 
-            public ProjectiveNumber<TInner> Create(in ProjectiveNumber<TInner> realUnit, in ProjectiveNumber<TInner> otherUnits, in ProjectiveNumber<TInner> someUnitsCombined, in ProjectiveNumber<TInner> allUnitsCombined)
+            public virtual ProjectiveNumber<TInner> Create(in ProjectiveNumber<TInner> realUnit, in ProjectiveNumber<TInner> otherUnits, in ProjectiveNumber<TInner> someUnitsCombined, in ProjectiveNumber<TInner> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public ProjectiveNumber<TInner> Create(IEnumerable<ProjectiveNumber<TInner>> units)
+            public virtual ProjectiveNumber<TInner> Create(IEnumerable<ProjectiveNumber<TInner>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public ProjectiveNumber<TInner> Create(IEnumerator<ProjectiveNumber<TInner>> units)
+            public virtual ProjectiveNumber<TInner> Create(IEnumerator<ProjectiveNumber<TInner>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -3216,24 +3216,24 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.Call(operation);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(in ProjectiveNumber<TInner, TComponent> num)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num;
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(in ProjectiveNumber<TInner, TComponent> realUnit, in ProjectiveNumber<TInner, TComponent> otherUnits, in ProjectiveNumber<TInner, TComponent> someUnitsCombined, in ProjectiveNumber<TInner, TComponent> allUnitsCombined)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(in ProjectiveNumber<TInner, TComponent> realUnit, in ProjectiveNumber<TInner, TComponent> otherUnits, in ProjectiveNumber<TInner, TComponent> someUnitsCombined, in ProjectiveNumber<TInner, TComponent> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(IEnumerable<ProjectiveNumber<TInner, TComponent>> units)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(IEnumerable<ProjectiveNumber<TInner, TComponent>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(IEnumerator<ProjectiveNumber<TInner, TComponent>> units)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(IEnumerator<ProjectiveNumber<TInner, TComponent>> units)
             {
                 var value = units.Current;
                 units.MoveNext();

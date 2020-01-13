@@ -202,7 +202,7 @@ foreach(var info in data)
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public <#=fullname#> Call(NullaryOperation operation)
+			public virtual <#=fullname#> Call(NullaryOperation operation)
             {
                 switch(operation)
                 {
@@ -228,30 +228,30 @@ foreach(var info in data)
                 }
             }
 
-            public <#=fullname#> Create(in TInner first, in TInner second)
+            public virtual <#=fullname#> Create(in TInner first, in TInner second)
             {
                 return new <#=fullname#>(first, second);
             }<# if(component) { #>
 			
 			
-            public <#=fullname#> Create(in TComponent num)
+            public virtual <#=fullname#> Create(in TComponent num)
             {
                 return new <#=fullname#>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public <#=fullname#> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual <#=fullname#> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return new <#=fullname#>(HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, someUnitsCombined), HyperMath.Create<TInner, TComponent>(otherUnits, someUnitsCombined, someUnitsCombined, allUnitsCombined));
             }
 
-            public <#=fullname#> Create(IEnumerable<TComponent> units)
+            public virtual <#=fullname#> Create(IEnumerable<TComponent> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return Create(ienum);
             }
 
-            public <#=fullname#> Create(IEnumerator<TComponent> units)
+            public virtual <#=fullname#> Create(IEnumerator<TComponent> units)
             {
                 var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
