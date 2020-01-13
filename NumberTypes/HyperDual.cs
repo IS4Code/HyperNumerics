@@ -118,6 +118,10 @@ namespace IS4.HyperNumerics.NumberTypes
                     return new HyperDual<TInner>(Pow2(first), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
                     var sqrt = Sqrt(first);
+                    if(!CanInv(sqrt) && !CanInv(second))
+                    {
+                        return new HyperDual<TInner>(sqrt);
+                    }
                     return new HyperDual<TInner>(sqrt, Div(second, Mul2(sqrt)));
                 case UnaryOperation.Exponentiate:
                     var exp = Exp(first);
@@ -314,6 +318,10 @@ namespace IS4.HyperNumerics.NumberTypes
                     return new HyperDual<TInner, TComponent>(Pow2(first), Mul2(Mul(first, second)));
                 case UnaryOperation.SquareRoot:
                     var sqrt = Sqrt(first);
+                    if(!CanInv(sqrt) && !CanInv(second))
+                    {
+                        return new HyperDual<TInner, TComponent>(sqrt);
+                    }
                     return new HyperDual<TInner, TComponent>(sqrt, Div(second, Mul2(sqrt)));
                 case UnaryOperation.Exponentiate:
                     var exp = Exp(first);
