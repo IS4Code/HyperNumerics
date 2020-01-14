@@ -847,4 +847,105 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
+	partial struct WrapperNumber<TInner, TComponent> : IWrapperNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
+	{
+		partial class Operations : IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent>
+		{
+			
+		}
+        
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
+        {
+            return value.Count;
+        }
+
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
+        {
+            return value[index];
+        }
+
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
+        {
+            return value.Count;
+        }
+
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
+        {
+            return value[index];
+        }
+		
+        int ICollection<TComponent>.Count => GetCollectionCount(value);
+
+        bool ICollection<TComponent>.IsReadOnly => true;
+
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(value);
+		
+        TComponent IReadOnlyList<TComponent>.this[int index]
+        {
+            get{
+                return GetReadOnlyListItem(value, index);
+            }
+        }
+
+        TComponent IList<TComponent>.this[int index]
+        {
+            get{
+                return GetListItem(value, index);
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TComponent>.IndexOf(TComponent item)
+        {
+            return value.IndexOf(item);
+        }
+
+        void IList<TComponent>.Insert(int index, TComponent item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TComponent>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TComponent>.Add(TComponent item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TComponent>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TComponent>.Contains(TComponent item)
+        {
+            return value.Contains(item);
+        }
+		
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
+        {
+            value.CopyTo(array, arrayIndex);
+        }
+
+        bool ICollection<TComponent>.Remove(TComponent item)
+        {
+            throw new NotSupportedException();
+        }
+		
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
+        {
+			return value.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+			return value.GetEnumerator();
+        }
+	}
+
 }

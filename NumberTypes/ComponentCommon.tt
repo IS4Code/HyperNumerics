@@ -20,6 +20,7 @@ var data = new[] {
 	new{name = "HyperDiagonal", args = "", hasinner = true, value = new[]{"first", "second"}, constraints = emptyConstraints},
 	new{name = "HyperDual", args = "", hasinner = true, value = new[]{"first", "second"}, constraints = emptyConstraints},
 	new{name = "HyperSplitComplex", args = "", hasinner = true, value = new[]{"first", "second"}, constraints = emptyConstraints},
+	new{name = "WrapperNumber", args = "", hasinner = true, value = new[]{"value"}, constraints = emptyConstraints},
 };
 foreach(var info in data)
 {

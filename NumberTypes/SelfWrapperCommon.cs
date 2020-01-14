@@ -3305,4 +3305,259 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
+	partial struct WrapperNumber<TInner> : IWrapperNumber<WrapperNumber<TInner>, WrapperNumber<TInner>>, IWrapperNumber<WrapperNumber<TInner>, WrapperNumber<TInner>, WrapperNumber<TInner>> where TInner : struct, INumber<TInner>
+	{
+        WrapperNumber<TInner> IWrapperNumber<WrapperNumber<TInner>>.Value => this;
+
+		WrapperNumber<TInner> IExtendedNumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallReversed(BinaryOperation operation, in WrapperNumber<TInner> num)
+		{
+			return num.Call(operation, this);
+		}
+
+		WrapperNumber<TInner> INumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallComponent(UnaryOperation operation)
+		{
+			return Call(operation);
+		}
+		
+        IExtendedNumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>> IExtendedNumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+		INumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>> INumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		IExtendedNumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>, WrapperNumber<TInner>> IExtendedNumber<WrapperNumber<TInner>, WrapperNumber<TInner>, WrapperNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations : IExtendedNumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>>, IExtendedNumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>, WrapperNumber<TInner>>
+		{
+            WrapperNumber<TInner> INumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallComponent(UnaryOperation operation, in WrapperNumber<TInner> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual WrapperNumber<TInner> Create(in WrapperNumber<TInner> num)
+            {
+                return num;
+            }
+
+            public virtual WrapperNumber<TInner> Create(in WrapperNumber<TInner> realUnit, in WrapperNumber<TInner> otherUnits, in WrapperNumber<TInner> someUnitsCombined, in WrapperNumber<TInner> allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public virtual WrapperNumber<TInner> Create(IEnumerable<WrapperNumber<TInner>> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public virtual WrapperNumber<TInner> Create(IEnumerator<WrapperNumber<TInner>> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
+		}
+		
+        int ICollection<WrapperNumber<TInner>>.Count => 1;
+
+        bool ICollection<WrapperNumber<TInner>>.IsReadOnly => true;
+
+        int IReadOnlyCollection<WrapperNumber<TInner>>.Count => 1;
+
+        WrapperNumber<TInner> IReadOnlyList<WrapperNumber<TInner>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        WrapperNumber<TInner> IList<WrapperNumber<TInner>>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<WrapperNumber<TInner>>.IndexOf(WrapperNumber<TInner> item)
+        {
+            return Equals(item) ? 0 : -1;
+        }
+
+        void IList<WrapperNumber<TInner>>.Insert(int index, WrapperNumber<TInner> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<WrapperNumber<TInner>>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<WrapperNumber<TInner>>.Add(WrapperNumber<TInner> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<WrapperNumber<TInner>>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<WrapperNumber<TInner>>.Contains(WrapperNumber<TInner> item)
+        {
+            return Equals(item);
+        }
+
+        void ICollection<WrapperNumber<TInner>>.CopyTo(WrapperNumber<TInner>[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<WrapperNumber<TInner>>.Remove(WrapperNumber<TInner> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<WrapperNumber<TInner>> IEnumerable<WrapperNumber<TInner>>.GetEnumerator()
+        {
+            yield return this;
+        }
+	}
+
+	partial struct WrapperNumber<TInner, TComponent> : IWrapperNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent>, IWrapperNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
+	{
+        WrapperNumber<TInner, TComponent> IWrapperNumber<WrapperNumber<TInner, TComponent>>.Value => this;
+
+		WrapperNumber<TInner, TComponent> IExtendedNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+		{
+			return num.Call(operation, this);
+		}
+
+		WrapperNumber<TInner, TComponent> INumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		{
+			return Call(operation);
+		}
+		
+        IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>> IExtendedNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent> IExtendedNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+		INumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>> INumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>> IExtendedNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations : IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>
+		{
+            WrapperNumber<TInner, TComponent> INumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Create(in WrapperNumber<TInner, TComponent> num)
+            {
+                return num;
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Create(in WrapperNumber<TInner, TComponent> realUnit, in WrapperNumber<TInner, TComponent> otherUnits, in WrapperNumber<TInner, TComponent> someUnitsCombined, in WrapperNumber<TInner, TComponent> allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Create(IEnumerable<WrapperNumber<TInner, TComponent>> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Create(IEnumerator<WrapperNumber<TInner, TComponent>> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
+		}
+		
+        int ICollection<WrapperNumber<TInner, TComponent>>.Count => 1;
+
+        bool ICollection<WrapperNumber<TInner, TComponent>>.IsReadOnly => true;
+
+        int IReadOnlyCollection<WrapperNumber<TInner, TComponent>>.Count => 1;
+
+        WrapperNumber<TInner, TComponent> IReadOnlyList<WrapperNumber<TInner, TComponent>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        WrapperNumber<TInner, TComponent> IList<WrapperNumber<TInner, TComponent>>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<WrapperNumber<TInner, TComponent>>.IndexOf(WrapperNumber<TInner, TComponent> item)
+        {
+            return Equals(item) ? 0 : -1;
+        }
+
+        void IList<WrapperNumber<TInner, TComponent>>.Insert(int index, WrapperNumber<TInner, TComponent> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<WrapperNumber<TInner, TComponent>>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<WrapperNumber<TInner, TComponent>>.Add(WrapperNumber<TInner, TComponent> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<WrapperNumber<TInner, TComponent>>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<WrapperNumber<TInner, TComponent>>.Contains(WrapperNumber<TInner, TComponent> item)
+        {
+            return Equals(item);
+        }
+
+        void ICollection<WrapperNumber<TInner, TComponent>>.CopyTo(WrapperNumber<TInner, TComponent>[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<WrapperNumber<TInner, TComponent>>.Remove(WrapperNumber<TInner, TComponent> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<WrapperNumber<TInner, TComponent>> IEnumerable<WrapperNumber<TInner, TComponent>>.GetEnumerator()
+        {
+            yield return this;
+        }
+	}
+
 }

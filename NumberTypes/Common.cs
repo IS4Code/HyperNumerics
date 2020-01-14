@@ -7938,4 +7938,727 @@ namespace IS4.HyperNumerics.NumberTypes
 		}
 	}
 
+	partial struct WrapperNumber<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
+	{
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public WrapperNumber<TInner> CallReversed(BinaryOperation operation, in WrapperNumber<TInner> other)
+        {
+            return other.Call(operation, this);
+        }
+
+        bool IEquatable<WrapperNumber<TInner>>.Equals(WrapperNumber<TInner> other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<WrapperNumber<TInner>>.CompareTo(WrapperNumber<TInner> other)
+        {
+            return CompareTo(other);
+        }
+
+        bool IEquatable<TInner>.Equals(TInner other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<TInner>.CompareTo(TInner other)
+        {
+            return CompareTo(other);
+        }
+
+        public static implicit operator WrapperNumber<TInner>(TInner value)
+        {
+            return new WrapperNumber<TInner>(value);
+        }
+		
+		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		{
+			return obj.Value;
+		}
+
+		public static implicit operator TInner(WrapperNumber<TInner> value)
+        {
+            return GetAsWrapper(value);
+        }
+
+        public static WrapperNumber<TInner> operator+(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.Call(BinaryOperation.Add, b);
+        }
+		
+        public static WrapperNumber<TInner> operator-(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.Call(BinaryOperation.Subtract, b);
+        }
+		
+        public static WrapperNumber<TInner> operator*(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.Call(BinaryOperation.Multiply, b);
+        }
+		
+        public static WrapperNumber<TInner> operator/(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.Call(BinaryOperation.Divide, b);
+        }
+		
+        public static WrapperNumber<TInner> operator^(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.Call(BinaryOperation.Power, b);
+        }
+		
+        public static WrapperNumber<TInner> operator-(WrapperNumber<TInner> a)
+        {
+            return a.Call(UnaryOperation.Negate);
+        }
+		
+        public static WrapperNumber<TInner> operator~(WrapperNumber<TInner> a)
+        {
+            return a.Call(UnaryOperation.Inverse);
+        }
+		
+        public static WrapperNumber<TInner> operator++(WrapperNumber<TInner> a)
+        {
+            return a.Call(UnaryOperation.Increment);
+        }
+		
+        public static WrapperNumber<TInner> operator--(WrapperNumber<TInner> a)
+        {
+            return a.Call(UnaryOperation.Decrement);
+        }
+
+        public static bool operator==(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
+        {
+            return a.CompareTo(b) <= 0;
+        }		
+
+        public static WrapperNumber<TInner> operator+(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Add, b);
+        }
+		
+        public static WrapperNumber<TInner> operator-(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Subtract, b);
+        }
+		
+        public static WrapperNumber<TInner> operator*(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Multiply, b);
+        }
+		
+        public static WrapperNumber<TInner> operator/(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Divide, b);
+        }
+		
+        public static WrapperNumber<TInner> operator^(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Power, b);
+        }
+
+        public static WrapperNumber<TInner> operator+(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CallReversed(BinaryOperation.Add, a);
+        }
+		
+        public static WrapperNumber<TInner> operator-(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CallReversed(BinaryOperation.Subtract, a);
+        }
+		
+        public static WrapperNumber<TInner> operator*(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CallReversed(BinaryOperation.Multiply, a);
+        }
+		
+        public static WrapperNumber<TInner> operator/(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CallReversed(BinaryOperation.Divide, a);
+        }
+		
+        public static WrapperNumber<TInner> operator^(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CallReversed(BinaryOperation.Power, a);
+        }		
+
+        public static bool operator==(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(WrapperNumber<TInner> a, TInner b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(WrapperNumber<TInner> a, TInner b)
+        {
+            return a.CompareTo(b) <= 0;
+        }
+
+        public static bool operator==(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.Equals(a);
+        }
+
+        public static bool operator!=(TInner a, WrapperNumber<TInner> b)
+        {
+            return !b.Equals(a);
+        }
+
+        public static bool operator>(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CompareTo(a) < 0;
+        }
+
+        public static bool operator<(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CompareTo(a) > 0;
+        }
+
+        public static bool operator>=(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CompareTo(a) <= 0;
+        }
+
+        public static bool operator<=(TInner a, WrapperNumber<TInner> b)
+        {
+            return b.CompareTo(a) >= 0;
+        }
+
+        INumberOperations INumber.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<WrapperNumber<TInner>> INumber<WrapperNumber<TInner>>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        IExtendedNumberOperations<WrapperNumber<TInner>, TInner> IExtendedNumber<WrapperNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+		
+        INumberOperations<TInner> INumber<TInner>.GetOperations()
+        {
+            return HyperMath.Operations.For<TInner>.Instance;
+        }
+
+		INumberOperations<WrapperNumber<TInner>, TInner> INumber<WrapperNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations
+		{
+			public static readonly Operations Instance = new Operations();
+			
+            public virtual bool IsInvertible(in WrapperNumber<TInner> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public virtual bool IsFinite(in WrapperNumber<TInner> num)
+            {
+                return num.IsFinite;
+            }
+
+            public virtual WrapperNumber<TInner> Clone(in WrapperNumber<TInner> num)
+            {
+                return num.Clone();
+            }
+
+            public virtual bool Equals(WrapperNumber<TInner> num1, WrapperNumber<TInner> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(WrapperNumber<TInner> num1, WrapperNumber<TInner> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual bool Equals(in WrapperNumber<TInner> num1, in WrapperNumber<TInner> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(in WrapperNumber<TInner> num1, in WrapperNumber<TInner> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual int GetHashCode(WrapperNumber<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual int GetHashCode(in WrapperNumber<TInner> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual WrapperNumber<TInner> Call(UnaryOperation operation, in WrapperNumber<TInner> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual WrapperNumber<TInner> Call(BinaryOperation operation, in WrapperNumber<TInner> num1, in WrapperNumber<TInner> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual WrapperNumber<TInner> Call(BinaryOperation operation, in WrapperNumber<TInner> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual WrapperNumber<TInner> Call(BinaryOperation operation, in TInner num1, in WrapperNumber<TInner> num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<WrapperNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in WrapperNumber<TInner> num)
+            {
+                return num.CallComponent(operation);
+            }
+
+            public virtual WrapperNumber<TInner> Create(in TInner num)
+            {
+                return new WrapperNumber<TInner>(num);
+            }
+		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+	}
+
+	partial struct WrapperNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
+	{
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public WrapperNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in WrapperNumber<TInner, TComponent> other)
+        {
+            return other.Call(operation, this);
+        }
+
+        bool IEquatable<WrapperNumber<TInner, TComponent>>.Equals(WrapperNumber<TInner, TComponent> other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<WrapperNumber<TInner, TComponent>>.CompareTo(WrapperNumber<TInner, TComponent> other)
+        {
+            return CompareTo(other);
+        }
+
+        bool IEquatable<TInner>.Equals(TInner other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<TInner>.CompareTo(TInner other)
+        {
+            return CompareTo(other);
+        }
+
+        public static implicit operator WrapperNumber<TInner, TComponent>(TInner value)
+        {
+            return new WrapperNumber<TInner, TComponent>(value);
+        }
+		
+		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		{
+			return obj.Value;
+		}
+
+		public static implicit operator TInner(WrapperNumber<TInner, TComponent> value)
+        {
+            return GetAsWrapper(value);
+        }
+
+        public static WrapperNumber<TInner, TComponent> operator+(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.Call(BinaryOperation.Add, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator-(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.Call(BinaryOperation.Subtract, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator*(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.Call(BinaryOperation.Multiply, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator/(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.Call(BinaryOperation.Divide, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator^(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.Call(BinaryOperation.Power, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator-(WrapperNumber<TInner, TComponent> a)
+        {
+            return a.Call(UnaryOperation.Negate);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator~(WrapperNumber<TInner, TComponent> a)
+        {
+            return a.Call(UnaryOperation.Inverse);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator++(WrapperNumber<TInner, TComponent> a)
+        {
+            return a.Call(UnaryOperation.Increment);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator--(WrapperNumber<TInner, TComponent> a)
+        {
+            return a.Call(UnaryOperation.Decrement);
+        }
+
+        public static bool operator==(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
+        {
+            return a.CompareTo(b) <= 0;
+        }		
+
+        public static WrapperNumber<TInner, TComponent> operator+(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Add, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator-(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Subtract, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator*(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Multiply, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator/(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Divide, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator^(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.Call(BinaryOperation.Power, b);
+        }
+
+        public static WrapperNumber<TInner, TComponent> operator+(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CallReversed(BinaryOperation.Add, a);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator-(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CallReversed(BinaryOperation.Subtract, a);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator*(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CallReversed(BinaryOperation.Multiply, a);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator/(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CallReversed(BinaryOperation.Divide, a);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator^(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CallReversed(BinaryOperation.Power, a);
+        }		
+
+        public static bool operator==(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(WrapperNumber<TInner, TComponent> a, TInner b)
+        {
+            return a.CompareTo(b) <= 0;
+        }
+
+        public static bool operator==(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.Equals(a);
+        }
+
+        public static bool operator!=(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return !b.Equals(a);
+        }
+
+        public static bool operator>(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CompareTo(a) < 0;
+        }
+
+        public static bool operator<(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CompareTo(a) > 0;
+        }
+
+        public static bool operator>=(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CompareTo(a) <= 0;
+        }
+
+        public static bool operator<=(TInner a, WrapperNumber<TInner, TComponent> b)
+        {
+            return b.CompareTo(a) >= 0;
+        }
+
+        INumberOperations INumber.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<WrapperNumber<TInner, TComponent>> INumber<WrapperNumber<TInner, TComponent>>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        INumberOperations<WrapperNumber<TInner, TComponent>, TComponent> INumber<WrapperNumber<TInner, TComponent>, TComponent>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, TInner> IExtendedNumber<WrapperNumber<TInner, TComponent>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, TInner, TComponent> IExtendedNumber<WrapperNumber<TInner, TComponent>, TInner, TComponent>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+		
+        INumberOperations<TInner> INumber<TInner>.GetOperations()
+        {
+            return HyperMath.Operations.For<TInner>.Instance;
+        }		
+
+        INumberOperations<TInner, TComponent> INumber<TInner, TComponent>.GetOperations()
+        {
+            return HyperMath.Operations.For<TInner, TComponent>.Instance;
+        }
+
+		partial class Operations
+		{
+			public static readonly Operations Instance = new Operations();
+			
+            public virtual bool IsInvertible(in WrapperNumber<TInner, TComponent> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public virtual bool IsFinite(in WrapperNumber<TInner, TComponent> num)
+            {
+                return num.IsFinite;
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Clone(in WrapperNumber<TInner, TComponent> num)
+            {
+                return num.Clone();
+            }
+
+            public virtual bool Equals(WrapperNumber<TInner, TComponent> num1, WrapperNumber<TInner, TComponent> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(WrapperNumber<TInner, TComponent> num1, WrapperNumber<TInner, TComponent> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual bool Equals(in WrapperNumber<TInner, TComponent> num1, in WrapperNumber<TInner, TComponent> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(in WrapperNumber<TInner, TComponent> num1, in WrapperNumber<TInner, TComponent> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual int GetHashCode(WrapperNumber<TInner, TComponent> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual int GetHashCode(in WrapperNumber<TInner, TComponent> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Call(UnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in WrapperNumber<TInner, TComponent> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in WrapperNumber<TInner, TComponent> num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }
+
+            public virtual TComponent CallComponent(UnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+            {
+                return num.CallComponent(operation);
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in WrapperNumber<TInner, TComponent> num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }
+
+            public virtual WrapperNumber<TInner, TComponent> Create(in TInner num)
+            {
+                return new WrapperNumber<TInner, TComponent>(num);
+            }
+		}
+	}
+
 }
