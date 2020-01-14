@@ -14,7 +14,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TInner">The inner type.</typeparam>
     /// <typeparam name="TTraits">A type implementing <see cref="ITraits"/> which is constructed once for every number type and queried for the default value.</typeparam>
     [Serializable]
-    public readonly partial struct CustomDefaultNumber<TInner, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
+    public readonly partial struct CustomDefaultNumber<TInner, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, TInner>, INumber<CustomDefaultNumber<TInner, TTraits>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
     {
         static TInner defaultValue = default(TTraits).DefaultValue;
 
@@ -124,6 +124,15 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation);
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            if(initialized)
+            {
+                return HyperMath.Call(operation, value);
+            }
+            return defaultValue.Call(operation);
+        }
+
         public override bool Equals(object obj)
         {
             return obj is CustomDefaultNumber<TInner, TTraits> value && Equals(in value) || Value.Equals(obj);
@@ -208,13 +217,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.ToString(format, formatProvider);
         }
 
-        partial class Operations : NumberOperations<CustomDefaultNumber<TInner, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>
+        partial class Operations : NumberOperations<CustomDefaultNumber<TInner, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>, INumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public CustomDefaultNumber<TInner, TTraits> Call(NullaryOperation operation)
+            public virtual CustomDefaultNumber<TInner, TTraits> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
+            }
+
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new CustomDefaultNumber<TInner, TTraits>(realUnit);
+            }
+
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual CustomDefaultNumber<TInner, TTraits> Create(IEnumerator<TInner> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new CustomDefaultNumber<TInner, TTraits>(value);
             }
         }
 
@@ -228,6 +256,42 @@ namespace IS4.HyperNumerics.NumberTypes
             /// Obtains the default value of the type.
             /// </summary>
             TInner DefaultValue { get; }
+        }
+		
+        int ICollection<TInner>.Count => 1;
+
+        int IReadOnlyCollection<TInner>.Count => 1;
+
+        TInner IReadOnlyList<TInner>.this[int index] => index == 0 ? Value : throw new ArgumentOutOfRangeException(nameof(index));
+
+        TInner IList<TInner>.this[int index]
+        {
+            get{
+                return index == 0 ? Value : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TInner>.IndexOf(TInner item)
+        {
+            return Value.Equals(item) ? 0 : -1;
+        }
+
+        bool ICollection<TInner>.Contains(TInner item)
+        {
+            return Value.Equals(item);
+        }
+
+        void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+        {
+            array[arrayIndex] = Value;
+        }
+
+        IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+        {
+            yield return Value;
         }
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -487,27 +551,27 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Call(NullaryOperation operation)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TComponent num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TComponent num)
             {
                 return new CustomDefaultNumber<TInner, TComponent, TTraits>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerable<TComponent> units)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerable<TComponent> units)
             {
                 return new CustomDefaultNumber<TInner, TComponent, TTraits>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerator<TComponent> units)
+            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerator<TComponent> units)
             {
                 return new CustomDefaultNumber<TInner, TComponent, TTraits>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }

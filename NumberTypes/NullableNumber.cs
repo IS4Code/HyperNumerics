@@ -14,7 +14,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TInner">The inner type.</typeparam>
     [Serializable]
-    public readonly partial struct NullableNumber<TInner> : IWrapperNumber<NullableNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly partial struct NullableNumber<TInner> : IWrapperNumber<NullableNumber<TInner>, TInner>, INumber<NullableNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
         readonly bool hasValue;
         readonly TInner value;
@@ -91,6 +91,15 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            if(hasValue)
+            {
+                return HyperMath.Call(operation, value);
+            }
+            throw new InvalidOperationException("The number is null");
+        }
+
         public override bool Equals(object obj)
         {
             return obj is NullableNumber<TInner> value && Equals(in value);
@@ -155,13 +164,74 @@ namespace IS4.HyperNumerics.NumberTypes
             return hasValue ? value.ToString(format, formatProvider) : "Null";
         }
 
-        partial class Operations : NumberOperations<NullableNumber<TInner>>, IExtendedNumberOperations<NullableNumber<TInner>, TInner>
+        partial class Operations : NumberOperations<NullableNumber<TInner>>, IExtendedNumberOperations<NullableNumber<TInner>, TInner>, INumberOperations<NullableNumber<TInner>, TInner>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public NullableNumber<TInner> Call(NullaryOperation operation)
+            public virtual NullableNumber<TInner> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
+            }
+
+            public virtual NullableNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new NullableNumber<TInner>(realUnit);
+            }
+
+            public virtual NullableNumber<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual NullableNumber<TInner> Create(IEnumerator<TInner> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new NullableNumber<TInner>(value);
+            }
+        }
+		
+        int ICollection<TInner>.Count => hasValue ? 1 : 0;
+
+        int IReadOnlyCollection<TInner>.Count => hasValue ? 1 : 0;
+
+        TInner IReadOnlyList<TInner>.this[int index] => hasValue && index == 0 ? value : throw new ArgumentOutOfRangeException(nameof(index));
+
+        TInner IList<TInner>.this[int index]
+        {
+            get{
+                return hasValue && index == 0 ? value : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TInner>.IndexOf(TInner item)
+        {
+            return hasValue && item.Equals(in value) ? 0 : -1;
+        }
+
+        bool ICollection<TInner>.Contains(TInner item)
+        {
+            return hasValue && item.Equals(in value);
+        }
+
+        void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+        {
+            if(hasValue)
+            {
+                array[arrayIndex] = value;
+            }
+        }
+
+        IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+        {
+            if(hasValue)
+            {
+                yield return value;
             }
         }
 
@@ -352,27 +422,27 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public NullableNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual NullableNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public NullableNumber<TInner, TComponent> Create(in TComponent num)
+            public virtual NullableNumber<TInner, TComponent> Create(in TComponent num)
             {
                 return new NullableNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public NullableNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual NullableNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public NullableNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual NullableNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 return new NullableNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public NullableNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual NullableNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 return new NullableNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }

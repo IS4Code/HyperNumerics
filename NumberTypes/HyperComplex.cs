@@ -172,6 +172,11 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            return Magnitude().Call(operation);
+        }
+
         public override bool Equals(object other)
         {
             return other is HyperComplex<TInner> value && Equals(in value);

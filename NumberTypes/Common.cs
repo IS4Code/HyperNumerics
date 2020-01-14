@@ -1,6 +1,8 @@
 ﻿using IS4.HyperNumerics.Operations;
 using IS4.HyperNumerics.Utils;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
@@ -1264,6 +1266,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Operations.For<TInner>.Instance;
         }
 
+		INumberOperations<BoxedNumber<TInner>, TInner> INumber<BoxedNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -1331,6 +1338,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual BoxedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in BoxedNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<BoxedNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in BoxedNumber<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual BoxedNumber<TInner> Create(in TInner num)
@@ -1338,6 +1350,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new BoxedNumber<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct BoxedNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
@@ -1950,6 +1989,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Operations.For<TInner>.Instance;
         }
 
+		INumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner> INumber<CustomDefaultNumber<TInner, TTraits>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -2017,6 +2061,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TTraits> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual CustomDefaultNumber<TInner, TTraits> Create(in TInner num)
@@ -2024,6 +2073,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new CustomDefaultNumber<TInner, TTraits>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct CustomDefaultNumber<TInner, TComponent, TTraits> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTraits : struct, CustomDefaultNumber<TInner, TComponent, TTraits>.ITraits
@@ -2546,6 +2622,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+		INumberOperations<GeneratedNumber<TInner>, TInner> INumber<GeneratedNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -2613,6 +2694,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual GeneratedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in GeneratedNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<GeneratedNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in GeneratedNumber<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual GeneratedNumber<TInner> Create(in TInner num)
@@ -2620,6 +2706,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new GeneratedNumber<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct GeneratedNumber<TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
@@ -3132,6 +3245,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+		INumberOperations<HyperComplex<TInner>, TInner> INumber<HyperComplex<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -3199,6 +3317,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperComplex<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<HyperComplex<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperComplex<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual HyperComplex<TInner> Create(in TInner num)
@@ -3206,6 +3329,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperComplex<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct HyperComplex<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
@@ -3803,6 +3953,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+		INumberOperations<HyperDiagonal<TInner>, TInner> INumber<HyperDiagonal<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -3870,6 +4025,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDiagonal<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDiagonal<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<HyperDiagonal<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperDiagonal<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual HyperDiagonal<TInner> Create(in TInner num)
@@ -3877,6 +4037,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperDiagonal<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct HyperDiagonal<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
@@ -4474,6 +4661,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+		INumberOperations<HyperDual<TInner>, TInner> INumber<HyperDual<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -4541,6 +4733,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDual<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDual<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<HyperDual<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperDual<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual HyperDual<TInner> Create(in TInner num)
@@ -4548,6 +4745,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperDual<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct HyperDual<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
@@ -5145,6 +5369,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+		INumberOperations<HyperSplitComplex<TInner>, TInner> INumber<HyperSplitComplex<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -5212,6 +5441,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperSplitComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<HyperSplitComplex<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual HyperSplitComplex<TInner> Create(in TInner num)
@@ -5219,6 +5453,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new HyperSplitComplex<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct HyperSplitComplex<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
@@ -5816,6 +6077,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+		INumberOperations<NullableNumber<TInner>, TInner> INumber<NullableNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -5883,6 +6149,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual NullableNumber<TInner> Call(BinaryOperation operation, in TInner num1, in NullableNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<NullableNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in NullableNumber<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual NullableNumber<TInner> Create(in TInner num)
@@ -5890,6 +6161,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new NullableNumber<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct NullableNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
@@ -6843,6 +7141,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
+		INumberOperations<ProjectiveNumber<TInner>, TInner> INumber<ProjectiveNumber<TInner>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
 		partial class Operations
 		{
 			public static readonly Operations Instance = new Operations();
@@ -6910,6 +7213,11 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual ProjectiveNumber<TInner> Call(BinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<ProjectiveNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner> num)
+            {
+                return num.CallComponent(operation);
             }
 
             public virtual ProjectiveNumber<TInner> Create(in TInner num)
@@ -6917,6 +7225,33 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new ProjectiveNumber<TInner>(num);
             }
 		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	partial struct ProjectiveNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>

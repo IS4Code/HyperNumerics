@@ -51,6 +51,8 @@ foreach(var info in data)
 		}
 #>
 	partial struct <#=fullname#> : IHyperNumber<<#=fullname#>, TInner<#=componentaffix#>><#=
+	!component ? ", INumber<" + fullname + ", TInner>"  : ""
+	#><#=
 	hasinner ? component ? " where TInner : struct, INumber<TInner, TComponent>" : " where TInner : struct, INumber<TInner>" : ""
 	#><#=
 	component ? " where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>" : ""
@@ -198,7 +200,7 @@ foreach(var info in data)
         }<# } #>
 
 
-		partial class Operations : NumberOperations<<#=fullname#>>, IHyperNumberOperations<<#=fullname#>, TInner<#=componentaffix#>>
+		partial class Operations : NumberOperations<<#=fullname#>>, IHyperNumberOperations<<#=fullname#>, TInner<#=componentaffix#>><#=!component ? ", INumberOperations<" + fullname + ", TInner>"  : ""#>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -256,10 +258,70 @@ foreach(var info in data)
                 var first = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 var second = HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units);
                 return new <#=fullname#>(first, second);
+            }<# }else{ #>
+			
+
+            public virtual <#=fullname#> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new <#=fullname#>(realUnit, otherUnits);
+            }
+
+            public virtual <#=fullname#> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual <#=fullname#> Create(IEnumerator<TInner> units)
+            {
+                var first = units.Current;
+				units.MoveNext();
+                var second = units.Current;
+				units.MoveNext();
+                return new <#=fullname#>(first, second);
             }<# } #>
 
 		}<# if(!component) { #>
 
+
+		int ICollection<TInner>.Count => 2;
+
+		int IReadOnlyCollection<TInner>.Count => 2;
+
+		TInner IReadOnlyList<TInner>.this[int index] => index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+
+		TInner IList<TInner>.this[int index]
+		{
+			get{
+				return index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+			}
+			set{
+				throw new NotSupportedException();
+			}
+		}
+
+		int IList<TInner>.IndexOf(TInner item)
+		{
+			return item.Equals(in first) ? 0 : item.Equals(in second) ? 1 : -1;
+		}
+
+		bool ICollection<TInner>.Contains(TInner item)
+		{
+			return item.Equals(in first) || item.Equals(in second);
+		}
+
+		void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+		{
+			array[arrayIndex] = first;
+			array[arrayIndex + 1] = second;
+		}
+
+		IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+		{
+			yield return first;
+			yield return second;
+		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{

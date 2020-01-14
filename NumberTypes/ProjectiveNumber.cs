@@ -17,7 +17,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// namely multiplication with zero, and addition and subtraction of infinities.
     /// </remarks>
     [Serializable]
-    public readonly partial struct ProjectiveNumber<TInner> : IWrapperNumber<ProjectiveNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly partial struct ProjectiveNumber<TInner> : IWrapperNumber<ProjectiveNumber<TInner>, TInner>, INumber<ProjectiveNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
         readonly TInner value;
 
@@ -168,6 +168,12 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            ThrowIfInfinity();
+            return HyperMath.Call(operation, value);
+        }
+
         public override bool Equals(object obj)
         {
             return obj is ProjectiveNumber<TInner> value && Equals(in value);
@@ -208,23 +214,100 @@ namespace IS4.HyperNumerics.NumberTypes
             return IsInfinity ? "Infinity(" + value.ToString(format, formatProvider) + ")" : value.ToString(format, formatProvider);
         }
 
-        partial class Operations : NumberOperations<ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner>
+        partial class Operations : NumberOperations<ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, TInner>, INumberOperations<ProjectiveNumber<TInner>, TInner>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public ProjectiveNumber<TInner> Call(NullaryOperation operation)
+            public virtual ProjectiveNumber<TInner> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
+
+            public virtual ProjectiveNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new ProjectiveNumber<TInner>(realUnit);
+            }
+
+            public virtual ProjectiveNumber<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual ProjectiveNumber<TInner> Create(IEnumerator<TInner> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new ProjectiveNumber<TInner>(value);
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        void ThrowIfInfinity()
         {
             if(IsInfinity)
             {
                 throw new InvalidOperationException("Cannot obtain the numeric representation of an infinity.");
             }
-            return Value.GetEnumerator();
+        }
+		
+        int ICollection<TInner>.Count => 1;
+
+        int IReadOnlyCollection<TInner>.Count => 1;
+
+        TInner IReadOnlyList<TInner>.this[int index]
+        {
+            get{
+                if(index == 0)
+                {
+                    ThrowIfInfinity();
+                    return value;
+                }
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+        }
+
+        TInner IList<TInner>.this[int index]
+        {
+            get{
+                if(index == 0)
+                {
+                    ThrowIfInfinity();
+                    return value;
+                }
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TInner>.IndexOf(TInner item)
+        {
+            return !IsInfinity && item.Equals(in value) ? 0 : -1;
+        }
+
+        bool ICollection<TInner>.Contains(TInner item)
+        {
+            return !IsInfinity && item.Equals(in value);
+        }
+
+        void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+        {
+            ThrowIfInfinity();
+            array[arrayIndex] = value;
+        }
+
+        IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+        {
+            ThrowIfInfinity();
+            yield return value;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            ThrowIfInfinity();
+            return value.GetEnumerator();
         }
     }
 
@@ -491,27 +574,27 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public ProjectiveNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(in TComponent num)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(in TComponent num)
             {
                 return new ProjectiveNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 return new ProjectiveNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public ProjectiveNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 return new ProjectiveNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }

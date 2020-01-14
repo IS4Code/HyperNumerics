@@ -21,6 +21,11 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => IsFin(first) && IsFin(second);
 
+        public TInner Magnitude()
+        {
+            return Sqrt(Sub(Pow2(first), Pow2(second)));
+        }
+
         public HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> other)
         {
             switch(operation)
@@ -143,6 +148,11 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            return Magnitude().Call(operation);
+        }
+
         public override bool Equals(object other)
         {
             return other is HyperSplitComplex<TInner> value && Equals(in value);
@@ -164,6 +174,11 @@ namespace IS4.HyperNumerics.NumberTypes
         public bool IsInvertible => CanInv(Sub(Pow2(first), Pow2(second)));
 
         public bool IsFinite => IsFin(first) && IsFin(second);
+
+        public TInner Magnitude()
+        {
+            return Sqrt(Sub(Pow2(first), Pow2(second)));
+        }
 
         public HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> other)
         {
@@ -332,7 +347,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public TComponent CallComponent(UnaryOperation operation)
         {
-            return Sqrt(Sub(Pow2(first), Pow2(second))).CallComponent(operation);
+            return Magnitude().CallComponent(operation);
         }
 
         public override bool Equals(object other)

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
-	partial struct HyperComplex<TInner> : IHyperNumber<HyperComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
+	partial struct HyperComplex<TInner> : IHyperNumber<HyperComplex<TInner>, TInner>, INumber<HyperComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -128,7 +128,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperComplex<TInner>>, IHyperNumberOperations<HyperComplex<TInner>, TInner>
+		partial class Operations : NumberOperations<HyperComplex<TInner>>, IHyperNumberOperations<HyperComplex<TInner>, TInner>, INumberOperations<HyperComplex<TInner>, TInner>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -161,7 +161,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperComplex<TInner>(first, second);
+            }			
+
+            public virtual HyperComplex<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new HyperComplex<TInner>(realUnit, otherUnits);
             }
+
+            public virtual HyperComplex<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual HyperComplex<TInner> Create(IEnumerator<TInner> units)
+            {
+                var first = units.Current;
+				units.MoveNext();
+                var second = units.Current;
+				units.MoveNext();
+                return new HyperComplex<TInner>(first, second);
+            }
+		}
+
+		int ICollection<TInner>.Count => 2;
+
+		int IReadOnlyCollection<TInner>.Count => 2;
+
+		TInner IReadOnlyList<TInner>.this[int index] => index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+
+		TInner IList<TInner>.this[int index]
+		{
+			get{
+				return index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+			}
+			set{
+				throw new NotSupportedException();
+			}
+		}
+
+		int IList<TInner>.IndexOf(TInner item)
+		{
+			return item.Equals(in first) ? 0 : item.Equals(in second) ? 1 : -1;
+		}
+
+		bool ICollection<TInner>.Contains(TInner item)
+		{
+			return item.Equals(in first) || item.Equals(in second);
+		}
+
+		void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+		{
+			array[arrayIndex] = first;
+			array[arrayIndex + 1] = second;
+		}
+
+		IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+		{
+			yield return first;
+			yield return second;
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -376,7 +435,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		}
 	}
 
-	partial struct HyperDiagonal<TInner> : IHyperNumber<HyperDiagonal<TInner>, TInner> where TInner : struct, INumber<TInner>
+	partial struct HyperDiagonal<TInner> : IHyperNumber<HyperDiagonal<TInner>, TInner>, INumber<HyperDiagonal<TInner>, TInner> where TInner : struct, INumber<TInner>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -499,7 +558,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperDiagonal<TInner>>, IHyperNumberOperations<HyperDiagonal<TInner>, TInner>
+		partial class Operations : NumberOperations<HyperDiagonal<TInner>>, IHyperNumberOperations<HyperDiagonal<TInner>, TInner>, INumberOperations<HyperDiagonal<TInner>, TInner>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -532,7 +591,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDiagonal<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDiagonal<TInner>(first, second);
+            }			
+
+            public virtual HyperDiagonal<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new HyperDiagonal<TInner>(realUnit, otherUnits);
             }
+
+            public virtual HyperDiagonal<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual HyperDiagonal<TInner> Create(IEnumerator<TInner> units)
+            {
+                var first = units.Current;
+				units.MoveNext();
+                var second = units.Current;
+				units.MoveNext();
+                return new HyperDiagonal<TInner>(first, second);
+            }
+		}
+
+		int ICollection<TInner>.Count => 2;
+
+		int IReadOnlyCollection<TInner>.Count => 2;
+
+		TInner IReadOnlyList<TInner>.this[int index] => index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+
+		TInner IList<TInner>.this[int index]
+		{
+			get{
+				return index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+			}
+			set{
+				throw new NotSupportedException();
+			}
+		}
+
+		int IList<TInner>.IndexOf(TInner item)
+		{
+			return item.Equals(in first) ? 0 : item.Equals(in second) ? 1 : -1;
+		}
+
+		bool ICollection<TInner>.Contains(TInner item)
+		{
+			return item.Equals(in first) || item.Equals(in second);
+		}
+
+		void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+		{
+			array[arrayIndex] = first;
+			array[arrayIndex + 1] = second;
+		}
+
+		IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+		{
+			yield return first;
+			yield return second;
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -747,7 +865,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		}
 	}
 
-	partial struct HyperDual<TInner> : IHyperNumber<HyperDual<TInner>, TInner> where TInner : struct, INumber<TInner>
+	partial struct HyperDual<TInner> : IHyperNumber<HyperDual<TInner>, TInner>, INumber<HyperDual<TInner>, TInner> where TInner : struct, INumber<TInner>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -870,7 +988,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperDual<TInner>>, IHyperNumberOperations<HyperDual<TInner>, TInner>
+		partial class Operations : NumberOperations<HyperDual<TInner>>, IHyperNumberOperations<HyperDual<TInner>, TInner>, INumberOperations<HyperDual<TInner>, TInner>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -903,7 +1021,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDual<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDual<TInner>(first, second);
+            }			
+
+            public virtual HyperDual<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new HyperDual<TInner>(realUnit, otherUnits);
             }
+
+            public virtual HyperDual<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual HyperDual<TInner> Create(IEnumerator<TInner> units)
+            {
+                var first = units.Current;
+				units.MoveNext();
+                var second = units.Current;
+				units.MoveNext();
+                return new HyperDual<TInner>(first, second);
+            }
+		}
+
+		int ICollection<TInner>.Count => 2;
+
+		int IReadOnlyCollection<TInner>.Count => 2;
+
+		TInner IReadOnlyList<TInner>.this[int index] => index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+
+		TInner IList<TInner>.this[int index]
+		{
+			get{
+				return index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+			}
+			set{
+				throw new NotSupportedException();
+			}
+		}
+
+		int IList<TInner>.IndexOf(TInner item)
+		{
+			return item.Equals(in first) ? 0 : item.Equals(in second) ? 1 : -1;
+		}
+
+		bool ICollection<TInner>.Contains(TInner item)
+		{
+			return item.Equals(in first) || item.Equals(in second);
+		}
+
+		void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+		{
+			array[arrayIndex] = first;
+			array[arrayIndex + 1] = second;
+		}
+
+		IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+		{
+			yield return first;
+			yield return second;
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -1118,7 +1295,7 @@ namespace IS4.HyperNumerics.NumberTypes
 		}
 	}
 
-	partial struct HyperSplitComplex<TInner> : IHyperNumber<HyperSplitComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
+	partial struct HyperSplitComplex<TInner> : IHyperNumber<HyperSplitComplex<TInner>, TInner>, INumber<HyperSplitComplex<TInner>, TInner> where TInner : struct, INumber<TInner>
 	{
         readonly TInner first;
         readonly TInner second;
@@ -1241,7 +1418,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-		partial class Operations : NumberOperations<HyperSplitComplex<TInner>>, IHyperNumberOperations<HyperSplitComplex<TInner>, TInner>
+		partial class Operations : NumberOperations<HyperSplitComplex<TInner>>, IHyperNumberOperations<HyperSplitComplex<TInner>, TInner>, INumberOperations<HyperSplitComplex<TInner>, TInner>
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
@@ -1274,7 +1451,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperSplitComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperSplitComplex<TInner>(first, second);
+            }			
+
+            public virtual HyperSplitComplex<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new HyperSplitComplex<TInner>(realUnit, otherUnits);
             }
+
+            public virtual HyperSplitComplex<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual HyperSplitComplex<TInner> Create(IEnumerator<TInner> units)
+            {
+                var first = units.Current;
+				units.MoveNext();
+                var second = units.Current;
+				units.MoveNext();
+                return new HyperSplitComplex<TInner>(first, second);
+            }
+		}
+
+		int ICollection<TInner>.Count => 2;
+
+		int IReadOnlyCollection<TInner>.Count => 2;
+
+		TInner IReadOnlyList<TInner>.this[int index] => index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+
+		TInner IList<TInner>.this[int index]
+		{
+			get{
+				return index == 0 ? first : index == 1 ? second : throw new ArgumentOutOfRangeException(nameof(index));
+			}
+			set{
+				throw new NotSupportedException();
+			}
+		}
+
+		int IList<TInner>.IndexOf(TInner item)
+		{
+			return item.Equals(in first) ? 0 : item.Equals(in second) ? 1 : -1;
+		}
+
+		bool ICollection<TInner>.Contains(TInner item)
+		{
+			return item.Equals(in first) || item.Equals(in second);
+		}
+
+		void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+		{
+			array[arrayIndex] = first;
+			array[arrayIndex + 1] = second;
+		}
+
+		IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+		{
+			yield return first;
+			yield return second;
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

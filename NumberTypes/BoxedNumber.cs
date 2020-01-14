@@ -10,7 +10,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TInner">The internal number type that the instance supports.</typeparam>
     [Serializable]
-    public readonly partial struct BoxedNumber<TInner> : IWrapperNumber<BoxedNumber<TInner>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner>
+    public readonly partial struct BoxedNumber<TInner> : IWrapperNumber<BoxedNumber<TInner>, TInner>, INumber<BoxedNumber<TInner>, TInner>, INumber<TInner> where TInner : struct, INumber<TInner>
     {
         static TInner defaultValue;
 
@@ -87,6 +87,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Call(operation);
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            return Reference.Call(operation);
+        }
+
         public override bool Equals(object obj)
         {
             return obj is BoxedNumber<TInner> value && Equals(value) || Reference.Equals(obj);
@@ -127,13 +132,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.ToString(format, formatProvider);
         }
 
-        partial class Operations : NumberOperations<BoxedNumber<TInner>>, IExtendedNumberOperations<BoxedNumber<TInner>, TInner>
+        partial class Operations : NumberOperations<BoxedNumber<TInner>>, IExtendedNumberOperations<BoxedNumber<TInner>, TInner>, INumberOperations<BoxedNumber<TInner>, TInner>
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public BoxedNumber<TInner> Call(NullaryOperation operation)
+            public virtual BoxedNumber<TInner> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
+            }
+
+            public virtual BoxedNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new BoxedNumber<TInner>(realUnit);
+            }
+
+            public virtual BoxedNumber<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual BoxedNumber<TInner> Create(IEnumerator<TInner> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new BoxedNumber<TInner>(value);
             }
         }
 
@@ -145,6 +169,42 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 Value = value;
             }
+        }
+		
+        int ICollection<TInner>.Count => 1;
+
+        int IReadOnlyCollection<TInner>.Count => 1;
+
+        TInner IReadOnlyList<TInner>.this[int index] => index == 0 ? Reference : throw new ArgumentOutOfRangeException(nameof(index));
+
+        TInner IList<TInner>.this[int index]
+        {
+            get{
+                return index == 0 ? Reference : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TInner>.IndexOf(TInner item)
+        {
+            return Reference.Equals(item) ? 0 : -1;
+        }
+
+        bool ICollection<TInner>.Contains(TInner item)
+        {
+            return Reference.Equals(item);
+        }
+
+        void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+        {
+            array[arrayIndex] = Reference;
+        }
+
+        IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+        {
+            yield return Reference;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -305,29 +365,48 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public BoxedNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual BoxedNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
                 return HyperMath.Call<TInner>(operation);
             }
 
-            public BoxedNumber<TInner, TComponent> Create(in TComponent num)
+            public virtual BoxedNumber<TInner, TComponent> Create(in TComponent num)
             {
                 return new BoxedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(num));
             }
 
-            public BoxedNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual BoxedNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 return HyperMath.Create<TInner, TComponent>(realUnit, otherUnits, someUnitsCombined, allUnitsCombined);
             }
 
-            public BoxedNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual BoxedNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 return new BoxedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public BoxedNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual BoxedNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 return new BoxedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
+            }
+
+            public virtual BoxedNumber<TInner, TComponent> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new BoxedNumber<TInner, TComponent>(realUnit);
+            }
+
+            public virtual BoxedNumber<TInner, TComponent> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual BoxedNumber<TInner, TComponent> Create(IEnumerator<TInner> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new BoxedNumber<TInner, TComponent>(value);
             }
         }
 

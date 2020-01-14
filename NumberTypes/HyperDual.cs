@@ -151,6 +151,11 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            return HyperMath.Call(operation, first);
+        }
+
         public override bool Equals(object other)
         {
             return other is HyperDual<TInner> value && Equals(in value);

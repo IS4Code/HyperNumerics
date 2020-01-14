@@ -116,6 +116,11 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            throw new NotSupportedException();
+        }
+
         public override bool Equals(object other)
         {
             return other is HyperDiagonal<TInner> value && Equals(in value);

@@ -11,7 +11,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// </summary>
     /// <typeparam name="TInner">The inner type.</typeparam>
     [Serializable]
-    public readonly partial struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
+    public readonly partial struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner>, INumber<GeneratedNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
         public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
 
@@ -91,6 +91,11 @@ namespace IS4.HyperNumerics.NumberTypes
             return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen()));
         }
 
+        public TInner CallComponent(UnaryOperation operation)
+        {
+            throw new NotSupportedException();
+        }
+
         public override bool Equals(object obj)
         {
             return obj is GeneratedNumber<TInner> value && Equals(in value);
@@ -121,19 +126,74 @@ namespace IS4.HyperNumerics.NumberTypes
             return Generator.ToString();
         }
 
-        partial class Operations : NumberOperations<GeneratedNumber<TInner>>, IExtendedNumberOperations<GeneratedNumber<TInner>, TInner>
+        partial class Operations : NumberOperations<GeneratedNumber<TInner>>, IExtendedNumberOperations<GeneratedNumber<TInner>, TInner>, INumberOperations<GeneratedNumber<TInner>, TInner>
         {
             public override int Dimension => 0;
 
-            public GeneratedNumber<TInner> Call(NullaryOperation operation)
+            public virtual GeneratedNumber<TInner> Call(NullaryOperation operation)
             {
                 return new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(operation));
             }
+
+            public virtual GeneratedNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
+            {
+                return new GeneratedNumber<TInner>(realUnit);
+            }
+
+            public virtual GeneratedNumber<TInner> Create(IEnumerable<TInner> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return Create(ienum);
+            }
+
+            public virtual GeneratedNumber<TInner> Create(IEnumerator<TInner> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return new GeneratedNumber<TInner>(value);
+            }
+        }
+		
+        int ICollection<TInner>.Count => 1;
+
+        int IReadOnlyCollection<TInner>.Count => 1;
+
+        TInner IReadOnlyList<TInner>.this[int index] => throw new NotSupportedException();
+
+        TInner IList<TInner>.this[int index]
+        {
+            get{
+                throw new NotSupportedException();
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TInner>.IndexOf(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Contains(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.CopyTo(TInner[] array, int arrayIndex)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<TInner> IEnumerable<TInner>.GetEnumerator()
+        {
+            throw new NotSupportedException();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Generator().GetEnumerator();
+            throw new NotSupportedException();
         }
     }
 
@@ -276,18 +336,18 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => 0;
 
-            public GeneratedNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual GeneratedNumber<TInner, TComponent> Call(NullaryOperation operation)
             {
                 return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call<TInner>(operation));
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(in TComponent num)
+            public virtual GeneratedNumber<TInner, TComponent> Create(in TComponent num)
             {
                 var numCopy = num;
                 return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Operations.For<TInner, TComponent>.Instance.Create(numCopy));
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
+            public virtual GeneratedNumber<TInner, TComponent> Create(in TComponent realUnit, in TComponent otherUnits, in TComponent someUnitsCombined, in TComponent allUnitsCombined)
             {
                 var realUnitCopy = realUnit;
                 var otherUnitsCopy = otherUnits;
@@ -296,12 +356,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Create<TInner, TComponent>(realUnitCopy, otherUnitsCopy, someUnitsCombinedCopy, allUnitsCombinedCopy));
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
+            public virtual GeneratedNumber<TInner, TComponent> Create(IEnumerable<TComponent> units)
             {
                 return new GeneratedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
 
-            public GeneratedNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
+            public virtual GeneratedNumber<TInner, TComponent> Create(IEnumerator<TComponent> units)
             {
                 return new GeneratedNumber<TInner, TComponent>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }

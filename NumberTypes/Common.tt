@@ -7,6 +7,8 @@
 using IS4.HyperNumerics.Operations;
 using IS4.HyperNumerics.Utils;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace IS4.HyperNumerics.NumberTypes
 {
@@ -355,7 +357,13 @@ foreach(var info in data)
         INumberOperations<TInner, <#=componenttype#>> INumber<TInner, <#=componenttype#>>.GetOperations()
         {
             return HyperMath.Operations.For<TInner, <#=componenttype#>>.Instance;
-        }<# } #><# } #>
+        }<# } #><# } #><# if(level >= 1 && !component) { #>
+
+
+		INumberOperations<<#=fullname#>, TInner> INumber<<#=fullname#>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }<# } #>
 
 
 		partial class Operations
@@ -442,7 +450,13 @@ foreach(var info in data)
             public virtual <#=fullname#> Call(BinaryOperation operation, in <#=componenttype#> num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
-            }<# } #><# if(level >= 1) { #>
+            }<# }else if(level >= 1) { #>
+			
+
+			TInner INumberOperations<<#=fullname#>, TInner>.CallComponent(UnaryOperation operation, in <#=fullname#> num)
+            {
+                return num.CallComponent(operation);
+            }<# } if(level >= 1) { #>
 
 
             public virtual <#=fullname#> Create(in TInner num)
@@ -450,7 +464,36 @@ foreach(var info in data)
                 return new <#=fullname#>(num);
             }<# } #>
 
-		}
+		}<# if(level >= 1 && !component) { #>
+
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }<# } #>
+
 	}
 
 <#
