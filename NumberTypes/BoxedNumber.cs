@@ -161,7 +161,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        class Instance
+        internal class Instance
         {
             public TInner Value;
 
@@ -223,7 +223,7 @@ namespace IS4.HyperNumerics.NumberTypes
     {
         static TInner defaultValue;
 
-        readonly Instance instance;
+        readonly BoxedNumber<TInner>.Instance instance;
 
         ref TInner Reference{
             get{
@@ -247,7 +247,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public BoxedNumber(in TInner value)
         {
-            instance = defaultValue.Equals(in value) ? null : new Instance(value);
+            instance = defaultValue.Equals(in value) ? null : new BoxedNumber<TInner>.Instance(value);
         }
 
         public BoxedNumber<TInner, TComponent> Clone()
@@ -407,16 +407,6 @@ namespace IS4.HyperNumerics.NumberTypes
                 var value = units.Current;
                 units.MoveNext();
                 return new BoxedNumber<TInner, TComponent>(value);
-            }
-        }
-
-        class Instance
-        {
-            public TInner Value;
-
-            public Instance(in TInner value)
-            {
-                Value = value;
             }
         }
     }
