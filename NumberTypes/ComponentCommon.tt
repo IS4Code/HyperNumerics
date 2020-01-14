@@ -14,7 +14,7 @@ namespace IS4.HyperNumerics.NumberTypes
 Func<string, string> emptyConstraints = fn => "";
 var data = new[] {
 	new{name = "BoxedNumber", args = "", hasinner = true, value = new[]{"Reference"}, constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TTraits", hasinner = true, value = new[]{"Value"}, constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
+	new{name = "CustomDefaultNumber", args = "TProvider", hasinner = true, value = new[]{"Value"}, constraints = (Func<string, string>)(fn => " where TProvider : struct, " + fn + ".IDefaultValueProvider")},
 	new{name = "GeneratedNumber", args = "", hasinner = true, value = new[]{"Generator()"}, constraints = emptyConstraints},
 	new{name = "HyperComplex", args = "", hasinner = true, value = new[]{"first", "second"}, constraints = emptyConstraints},
 	new{name = "HyperDiagonal", args = "", hasinner = true, value = new[]{"first", "second"}, constraints = emptyConstraints},

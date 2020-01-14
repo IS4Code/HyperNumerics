@@ -21,7 +21,7 @@ var data = new[] {
 	new{name = "BinaryAbstractNumber", args = "", hasinner = false, hascomponent = false, constraints = emptyConstraints},
 	new{name = "ComponentBinaryAbstractNumber", args = "", hasinner = false, hascomponent = false, constraints = emptyConstraints},
 	new{name = "BoxedNumber", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TTraits", hasinner = true, hascomponent = true, constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
+	new{name = "CustomDefaultNumber", args = "TProvider", hasinner = true, hascomponent = true, constraints = (Func<string, string>)(fn => " where TProvider : struct, " + fn + ".IDefaultValueProvider")},
 	new{name = "GeneratedNumber", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},
 	new{name = "HyperComplex", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},
 	new{name = "HyperDiagonal", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},

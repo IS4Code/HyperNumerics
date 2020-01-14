@@ -1737,24 +1737,24 @@ namespace IS4.HyperNumerics.NumberTypes
 		}
 	}
 
-	partial struct CustomDefaultNumber<TInner, TTraits> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
+	partial struct CustomDefaultNumber<TInner, TProvider> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
 	{
         object ICloneable.Clone()
         {
             return Clone();
         }
 
-        public CustomDefaultNumber<TInner, TTraits> CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> other)
+        public CustomDefaultNumber<TInner, TProvider> CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> other)
         {
             return other.Call(operation, this);
         }
 
-        bool IEquatable<CustomDefaultNumber<TInner, TTraits>>.Equals(CustomDefaultNumber<TInner, TTraits> other)
+        bool IEquatable<CustomDefaultNumber<TInner, TProvider>>.Equals(CustomDefaultNumber<TInner, TProvider> other)
         {
             return Equals(other);
         }
 
-        int IComparable<CustomDefaultNumber<TInner, TTraits>>.CompareTo(CustomDefaultNumber<TInner, TTraits> other)
+        int IComparable<CustomDefaultNumber<TInner, TProvider>>.CompareTo(CustomDefaultNumber<TInner, TProvider> other)
         {
             return CompareTo(other);
         }
@@ -1769,9 +1769,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return CompareTo(other);
         }
 
-        public static implicit operator CustomDefaultNumber<TInner, TTraits>(TInner value)
+        public static implicit operator CustomDefaultNumber<TInner, TProvider>(TInner value)
         {
-            return new CustomDefaultNumber<TInner, TTraits>(value);
+            return new CustomDefaultNumber<TInner, TProvider>(value);
         }
 		
 		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
@@ -1779,192 +1779,192 @@ namespace IS4.HyperNumerics.NumberTypes
 			return obj.Value;
 		}
 
-		public static implicit operator TInner(CustomDefaultNumber<TInner, TTraits> value)
+		public static implicit operator TInner(CustomDefaultNumber<TInner, TProvider> value)
         {
             return GetAsWrapper(value);
         }
 
-        public static CustomDefaultNumber<TInner, TTraits> operator+(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator+(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.Call(BinaryOperation.Add, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator-(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator-(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.Call(BinaryOperation.Subtract, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator*(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator*(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.Call(BinaryOperation.Multiply, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator/(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator/(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.Call(BinaryOperation.Divide, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator^(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator^(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.Call(BinaryOperation.Power, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator-(CustomDefaultNumber<TInner, TTraits> a)
+        public static CustomDefaultNumber<TInner, TProvider> operator-(CustomDefaultNumber<TInner, TProvider> a)
         {
             return a.Call(UnaryOperation.Negate);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator~(CustomDefaultNumber<TInner, TTraits> a)
+        public static CustomDefaultNumber<TInner, TProvider> operator~(CustomDefaultNumber<TInner, TProvider> a)
         {
             return a.Call(UnaryOperation.Inverse);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator++(CustomDefaultNumber<TInner, TTraits> a)
+        public static CustomDefaultNumber<TInner, TProvider> operator++(CustomDefaultNumber<TInner, TProvider> a)
         {
             return a.Call(UnaryOperation.Increment);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator--(CustomDefaultNumber<TInner, TTraits> a)
+        public static CustomDefaultNumber<TInner, TProvider> operator--(CustomDefaultNumber<TInner, TProvider> a)
         {
             return a.Call(UnaryOperation.Decrement);
         }
 
-        public static bool operator==(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator==(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.Equals(b);
         }
 
-        public static bool operator!=(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator!=(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return !a.Equals(b);
         }
 
-        public static bool operator>(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator>(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.CompareTo(b) > 0;
         }
 
-        public static bool operator<(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator<(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.CompareTo(b) < 0;
         }
 
-        public static bool operator>=(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator>=(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.CompareTo(b) >= 0;
         }
 
-        public static bool operator<=(CustomDefaultNumber<TInner, TTraits> a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator<=(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return a.CompareTo(b) <= 0;
         }		
 
-        public static CustomDefaultNumber<TInner, TTraits> operator+(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TProvider> operator+(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Add, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator-(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TProvider> operator-(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Subtract, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator*(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TProvider> operator*(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Multiply, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator/(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TProvider> operator/(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Divide, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator^(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TProvider> operator^(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Power, b);
         }
 
-        public static CustomDefaultNumber<TInner, TTraits> operator+(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator+(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Add, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator-(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator-(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Subtract, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator*(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator*(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Multiply, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator/(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator/(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Divide, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TTraits> operator^(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static CustomDefaultNumber<TInner, TProvider> operator^(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Power, a);
         }		
 
-        public static bool operator==(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static bool operator==(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.Equals(b);
         }
 
-        public static bool operator!=(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static bool operator!=(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return !a.Equals(b);
         }
 
-        public static bool operator>(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static bool operator>(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.CompareTo(b) > 0;
         }
 
-        public static bool operator<(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static bool operator<(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.CompareTo(b) < 0;
         }
 
-        public static bool operator>=(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static bool operator>=(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.CompareTo(b) >= 0;
         }
 
-        public static bool operator<=(CustomDefaultNumber<TInner, TTraits> a, TInner b)
+        public static bool operator<=(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
             return a.CompareTo(b) <= 0;
         }
 
-        public static bool operator==(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator==(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.Equals(a);
         }
 
-        public static bool operator!=(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator!=(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return !b.Equals(a);
         }
 
-        public static bool operator>(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator>(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CompareTo(a) < 0;
         }
 
-        public static bool operator<(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator<(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CompareTo(a) > 0;
         }
 
-        public static bool operator>=(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator>=(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CompareTo(a) <= 0;
         }
 
-        public static bool operator<=(TInner a, CustomDefaultNumber<TInner, TTraits> b)
+        public static bool operator<=(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CompareTo(a) >= 0;
         }
@@ -1974,12 +1974,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        INumberOperations<CustomDefaultNumber<TInner, TTraits>> INumber<CustomDefaultNumber<TInner, TTraits>>.GetOperations()
+        INumberOperations<CustomDefaultNumber<TInner, TProvider>> INumber<CustomDefaultNumber<TInner, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner> IExtendedNumber<CustomDefaultNumber<TInner, TTraits>, TInner>.GetOperations()
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TProvider>, TInner> IExtendedNumber<CustomDefaultNumber<TInner, TProvider>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }
@@ -1989,7 +1989,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Operations.For<TInner>.Instance;
         }
 
-		INumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner> INumber<CustomDefaultNumber<TInner, TTraits>, TInner>.GetOperations()
+		INumberOperations<CustomDefaultNumber<TInner, TProvider>, TInner> INumber<CustomDefaultNumber<TInner, TProvider>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }
@@ -1998,79 +1998,79 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public virtual bool IsInvertible(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual bool IsInvertible(in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.IsInvertible;
             }
 
-            public virtual bool IsFinite(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual bool IsFinite(in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.IsFinite;
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Clone(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TProvider> Clone(in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.Clone();
             }
 
-            public virtual bool Equals(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual bool Equals(CustomDefaultNumber<TInner, TProvider> num1, CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public virtual int Compare(CustomDefaultNumber<TInner, TTraits> num1, CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual int Compare(CustomDefaultNumber<TInner, TProvider> num1, CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public virtual bool Equals(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual bool Equals(in CustomDefaultNumber<TInner, TProvider> num1, in CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public virtual int Compare(in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual int Compare(in CustomDefaultNumber<TInner, TProvider> num1, in CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public virtual int GetHashCode(CustomDefaultNumber<TInner, TTraits> num)
+            public virtual int GetHashCode(CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.GetHashCode();
             }
 
-            public virtual int GetHashCode(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual int GetHashCode(in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.GetHashCode();
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num1, in CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num1, in TInner num2)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<CustomDefaultNumber<TInner, TTraits>, TInner>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num)
+			TInner INumberOperations<CustomDefaultNumber<TInner, TProvider>, TInner>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Create(in TInner num)
+            public virtual CustomDefaultNumber<TInner, TProvider> Create(in TInner num)
             {
-                return new CustomDefaultNumber<TInner, TTraits>(num);
+                return new CustomDefaultNumber<TInner, TProvider>(num);
             }
 		}
 		
@@ -2102,24 +2102,24 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TComponent, TTraits> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTraits : struct, CustomDefaultNumber<TInner, TComponent, TTraits>.ITraits
+	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TComponent, TProvider>.IDefaultValueProvider
 	{
         object ICloneable.Clone()
         {
             return Clone();
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TTraits> CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> other)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> other)
         {
             return other.Call(operation, this);
         }
 
-        bool IEquatable<CustomDefaultNumber<TInner, TComponent, TTraits>>.Equals(CustomDefaultNumber<TInner, TComponent, TTraits> other)
+        bool IEquatable<CustomDefaultNumber<TInner, TComponent, TProvider>>.Equals(CustomDefaultNumber<TInner, TComponent, TProvider> other)
         {
             return Equals(other);
         }
 
-        int IComparable<CustomDefaultNumber<TInner, TComponent, TTraits>>.CompareTo(CustomDefaultNumber<TInner, TComponent, TTraits> other)
+        int IComparable<CustomDefaultNumber<TInner, TComponent, TProvider>>.CompareTo(CustomDefaultNumber<TInner, TComponent, TProvider> other)
         {
             return CompareTo(other);
         }
@@ -2134,9 +2134,9 @@ namespace IS4.HyperNumerics.NumberTypes
             return CompareTo(other);
         }
 
-        public static implicit operator CustomDefaultNumber<TInner, TComponent, TTraits>(TInner value)
+        public static implicit operator CustomDefaultNumber<TInner, TComponent, TProvider>(TInner value)
         {
-            return new CustomDefaultNumber<TInner, TComponent, TTraits>(value);
+            return new CustomDefaultNumber<TInner, TComponent, TProvider>(value);
         }
 		
 		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
@@ -2144,192 +2144,192 @@ namespace IS4.HyperNumerics.NumberTypes
 			return obj.Value;
 		}
 
-		public static implicit operator TInner(CustomDefaultNumber<TInner, TComponent, TTraits> value)
+		public static implicit operator TInner(CustomDefaultNumber<TInner, TComponent, TProvider> value)
         {
             return GetAsWrapper(value);
         }
 
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator+(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.Call(BinaryOperation.Add, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator-(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.Call(BinaryOperation.Subtract, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator*(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.Call(BinaryOperation.Multiply, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator/(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.Call(BinaryOperation.Divide, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator^(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.Call(BinaryOperation.Power, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator-(CustomDefaultNumber<TInner, TComponent, TTraits> a)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
             return a.Call(UnaryOperation.Negate);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator~(CustomDefaultNumber<TInner, TComponent, TTraits> a)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator~(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
             return a.Call(UnaryOperation.Inverse);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator++(CustomDefaultNumber<TInner, TComponent, TTraits> a)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator++(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
             return a.Call(UnaryOperation.Increment);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator--(CustomDefaultNumber<TInner, TComponent, TTraits> a)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator--(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
             return a.Call(UnaryOperation.Decrement);
         }
 
-        public static bool operator==(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator==(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.Equals(b);
         }
 
-        public static bool operator!=(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator!=(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return !a.Equals(b);
         }
 
-        public static bool operator>(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator>(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.CompareTo(b) > 0;
         }
 
-        public static bool operator<(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator<(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.CompareTo(b) < 0;
         }
 
-        public static bool operator>=(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator>=(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.CompareTo(b) >= 0;
         }
 
-        public static bool operator<=(CustomDefaultNumber<TInner, TComponent, TTraits> a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator<=(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return a.CompareTo(b) <= 0;
         }		
 
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator+(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Add, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator-(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Subtract, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator*(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Multiply, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator/(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Divide, b);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator^(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.Call(BinaryOperation.Power, b);
         }
 
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator+(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Add, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator-(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Subtract, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator*(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Multiply, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator/(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Divide, a);
         }
 		
-        public static CustomDefaultNumber<TInner, TComponent, TTraits> operator^(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CallReversed(BinaryOperation.Power, a);
         }		
 
-        public static bool operator==(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static bool operator==(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.Equals(b);
         }
 
-        public static bool operator!=(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static bool operator!=(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return !a.Equals(b);
         }
 
-        public static bool operator>(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static bool operator>(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.CompareTo(b) > 0;
         }
 
-        public static bool operator<(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static bool operator<(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.CompareTo(b) < 0;
         }
 
-        public static bool operator>=(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static bool operator>=(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.CompareTo(b) >= 0;
         }
 
-        public static bool operator<=(CustomDefaultNumber<TInner, TComponent, TTraits> a, TInner b)
+        public static bool operator<=(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
             return a.CompareTo(b) <= 0;
         }
 
-        public static bool operator==(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator==(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.Equals(a);
         }
 
-        public static bool operator!=(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator!=(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return !b.Equals(a);
         }
 
-        public static bool operator>(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator>(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CompareTo(a) < 0;
         }
 
-        public static bool operator<(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator<(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CompareTo(a) > 0;
         }
 
-        public static bool operator>=(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator>=(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CompareTo(a) <= 0;
         }
 
-        public static bool operator<=(TInner a, CustomDefaultNumber<TInner, TComponent, TTraits> b)
+        public static bool operator<=(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CompareTo(a) >= 0;
         }
@@ -2339,22 +2339,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operations.Instance;
         }
 
-        INumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>> INumber<CustomDefaultNumber<TInner, TComponent, TTraits>>.GetOperations()
+        INumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>> INumber<CustomDefaultNumber<TInner, TComponent, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        INumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent> INumber<CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>.GetOperations()
+        INumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent> INumber<CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, TInner> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, TInner>.GetOperations()
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, TInner> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, TInner>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-        IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, TInner, TComponent> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, TInner, TComponent>.GetOperations()
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, TInner, TComponent> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, TInner, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }
@@ -2373,89 +2373,89 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
 			public static readonly Operations Instance = new Operations();
 			
-            public virtual bool IsInvertible(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual bool IsInvertible(in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.IsInvertible;
             }
 
-            public virtual bool IsFinite(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual bool IsFinite(in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.IsFinite;
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Clone(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Clone(in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.Clone();
             }
 
-            public virtual bool Equals(CustomDefaultNumber<TInner, TComponent, TTraits> num1, CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual bool Equals(CustomDefaultNumber<TInner, TComponent, TProvider> num1, CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public virtual int Compare(CustomDefaultNumber<TInner, TComponent, TTraits> num1, CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual int Compare(CustomDefaultNumber<TInner, TComponent, TProvider> num1, CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public virtual bool Equals(in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual bool Equals(in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num1.Equals(num2);
             }
 
-            public virtual int Compare(in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual int Compare(in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num1.CompareTo(num2);
             }
 
-            public virtual int GetHashCode(CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual int GetHashCode(CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.GetHashCode();
             }
 
-            public virtual int GetHashCode(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual int GetHashCode(in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.GetHashCode();
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in TInner num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual TComponent CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num1, in TComponent num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Call(BinaryOperation operation, in TComponent num1, in CustomDefaultNumber<TInner, TComponent, TTraits> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in TComponent num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in TInner num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Create(in TInner num)
             {
-                return new CustomDefaultNumber<TInner, TComponent, TTraits>(num);
+                return new CustomDefaultNumber<TInner, TComponent, TProvider>(num);
             }
 		}
 	}

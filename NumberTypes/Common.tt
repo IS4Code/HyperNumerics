@@ -22,7 +22,7 @@ var data = new[] {
 	new{name = "BinaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
 	new{name = "ComponentBinaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
 	new{name = "BoxedNumber", args = "", level = 3, componenttype = "TComponent", constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TTraits", level = 3, componenttype = "TComponent", constraints = (Func<string, string>)(fn => " where TTraits : struct, " + fn + ".ITraits")},
+	new{name = "CustomDefaultNumber", args = "TProvider", level = 3, componenttype = "TComponent", constraints = (Func<string, string>)(fn => " where TProvider : struct, " + fn + ".IDefaultValueProvider")},
 	new{name = "GeneratedNumber", args = "", level = 1, componenttype = "TComponent", constraints = emptyConstraints},
 	new{name = "HyperComplex", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
 	new{name = "HyperDiagonal", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},

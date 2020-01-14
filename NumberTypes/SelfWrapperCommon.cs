@@ -1010,60 +1010,60 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>, IWrapperNumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>> where TInner : struct, INumber<TInner> where TTraits : struct, CustomDefaultNumber<TInner, TTraits>.ITraits
+	partial struct CustomDefaultNumber<TInner, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>, IWrapperNumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>> where TInner : struct, INumber<TInner> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
 	{
-        CustomDefaultNumber<TInner, TTraits> IWrapperNumber<CustomDefaultNumber<TInner, TTraits>>.Value => this;
+        CustomDefaultNumber<TInner, TProvider> IWrapperNumber<CustomDefaultNumber<TInner, TProvider>>.Value => this;
 
-		CustomDefaultNumber<TInner, TTraits> IExtendedNumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num)
+		CustomDefaultNumber<TInner, TProvider> IExtendedNumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		CustomDefaultNumber<TInner, TTraits> INumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>.CallComponent(UnaryOperation operation)
+		CustomDefaultNumber<TInner, TProvider> INumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>.GetOperations()
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>> IExtendedNumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>> INumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>.GetOperations()
+		INumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>> INumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>.GetOperations()
+		IExtendedNumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>> IExtendedNumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>
+		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>
 		{
-            CustomDefaultNumber<TInner, TTraits> INumberOperations<CustomDefaultNumber<TInner, TTraits>, CustomDefaultNumber<TInner, TTraits>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TTraits> num)
+            CustomDefaultNumber<TInner, TProvider> INumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Create(in CustomDefaultNumber<TInner, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TProvider> Create(in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num;
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Create(in CustomDefaultNumber<TInner, TTraits> realUnit, in CustomDefaultNumber<TInner, TTraits> otherUnits, in CustomDefaultNumber<TInner, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TTraits> allUnitsCombined)
+            public virtual CustomDefaultNumber<TInner, TProvider> Create(in CustomDefaultNumber<TInner, TProvider> realUnit, in CustomDefaultNumber<TInner, TProvider> otherUnits, in CustomDefaultNumber<TInner, TProvider> someUnitsCombined, in CustomDefaultNumber<TInner, TProvider> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TProvider> Create(IEnumerable<CustomDefaultNumber<TInner, TProvider>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public virtual CustomDefaultNumber<TInner, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TProvider> Create(IEnumerator<CustomDefaultNumber<TInner, TProvider>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1071,15 +1071,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<CustomDefaultNumber<TInner, TTraits>>.Count => 1;
+        int ICollection<CustomDefaultNumber<TInner, TProvider>>.Count => 1;
 
-        bool ICollection<CustomDefaultNumber<TInner, TTraits>>.IsReadOnly => true;
+        bool ICollection<CustomDefaultNumber<TInner, TProvider>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<CustomDefaultNumber<TInner, TTraits>>.Count => 1;
+        int IReadOnlyCollection<CustomDefaultNumber<TInner, TProvider>>.Count => 1;
 
-        CustomDefaultNumber<TInner, TTraits> IReadOnlyList<CustomDefaultNumber<TInner, TTraits>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        CustomDefaultNumber<TInner, TProvider> IReadOnlyList<CustomDefaultNumber<TInner, TProvider>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        CustomDefaultNumber<TInner, TTraits> IList<CustomDefaultNumber<TInner, TTraits>>.this[int index]
+        CustomDefaultNumber<TInner, TProvider> IList<CustomDefaultNumber<TInner, TProvider>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -1089,111 +1089,111 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<CustomDefaultNumber<TInner, TTraits>>.IndexOf(CustomDefaultNumber<TInner, TTraits> item)
+        int IList<CustomDefaultNumber<TInner, TProvider>>.IndexOf(CustomDefaultNumber<TInner, TProvider> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<CustomDefaultNumber<TInner, TTraits>>.Insert(int index, CustomDefaultNumber<TInner, TTraits> item)
+        void IList<CustomDefaultNumber<TInner, TProvider>>.Insert(int index, CustomDefaultNumber<TInner, TProvider> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<CustomDefaultNumber<TInner, TTraits>>.RemoveAt(int index)
+        void IList<CustomDefaultNumber<TInner, TProvider>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TTraits>>.Add(CustomDefaultNumber<TInner, TTraits> item)
+        void ICollection<CustomDefaultNumber<TInner, TProvider>>.Add(CustomDefaultNumber<TInner, TProvider> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TTraits>>.Clear()
+        void ICollection<CustomDefaultNumber<TInner, TProvider>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<CustomDefaultNumber<TInner, TTraits>>.Contains(CustomDefaultNumber<TInner, TTraits> item)
+        bool ICollection<CustomDefaultNumber<TInner, TProvider>>.Contains(CustomDefaultNumber<TInner, TProvider> item)
         {
             return Equals(item);
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TTraits>>.CopyTo(CustomDefaultNumber<TInner, TTraits>[] array, int arrayIndex)
+        void ICollection<CustomDefaultNumber<TInner, TProvider>>.CopyTo(CustomDefaultNumber<TInner, TProvider>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<CustomDefaultNumber<TInner, TTraits>>.Remove(CustomDefaultNumber<TInner, TTraits> item)
+        bool ICollection<CustomDefaultNumber<TInner, TProvider>>.Remove(CustomDefaultNumber<TInner, TProvider> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<CustomDefaultNumber<TInner, TTraits>> IEnumerable<CustomDefaultNumber<TInner, TTraits>>.GetEnumerator()
+        IEnumerator<CustomDefaultNumber<TInner, TProvider>> IEnumerable<CustomDefaultNumber<TInner, TProvider>>.GetEnumerator()
         {
             yield return this;
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TComponent, TTraits> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>, IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTraits : struct, CustomDefaultNumber<TInner, TComponent, TTraits>.ITraits
+	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>, IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TComponent, TProvider>.IDefaultValueProvider
 	{
-        CustomDefaultNumber<TInner, TComponent, TTraits> IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TTraits>>.Value => this;
+        CustomDefaultNumber<TInner, TComponent, TProvider> IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>>.Value => this;
 
-		CustomDefaultNumber<TInner, TComponent, TTraits> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+		CustomDefaultNumber<TInner, TComponent, TProvider> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		CustomDefaultNumber<TInner, TComponent, TTraits> INumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.CallComponent(UnaryOperation operation)
+		CustomDefaultNumber<TInner, TComponent, TProvider> INumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallComponent(UnaryOperation operation)
 		{
 			return Call(operation);
 		}
 		
-        IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.GetOperations()
+        IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>.GetOperations()
+		IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>.GetOperations()
         {
             return Operations.Instance;
         }		
 
-		INumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> INumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.GetOperations()
+		INumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>> INumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.GetOperations()
+		IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.GetOperations()
         {
             return Operations.Instance;
         }
 
-		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, TComponent>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>
+		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>
 		{
-            CustomDefaultNumber<TInner, TComponent, TTraits> INumberOperations<CustomDefaultNumber<TInner, TComponent, TTraits>, CustomDefaultNumber<TInner, TComponent, TTraits>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            CustomDefaultNumber<TInner, TComponent, TProvider> INumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Create(in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num;
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(in CustomDefaultNumber<TInner, TComponent, TTraits> realUnit, in CustomDefaultNumber<TInner, TComponent, TTraits> otherUnits, in CustomDefaultNumber<TInner, TComponent, TTraits> someUnitsCombined, in CustomDefaultNumber<TInner, TComponent, TTraits> allUnitsCombined)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Create(in CustomDefaultNumber<TInner, TComponent, TProvider> realUnit, in CustomDefaultNumber<TInner, TComponent, TProvider> otherUnits, in CustomDefaultNumber<TInner, TComponent, TProvider> someUnitsCombined, in CustomDefaultNumber<TInner, TComponent, TProvider> allUnitsCombined)
             {
                 return realUnit;
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerable<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Create(IEnumerable<CustomDefaultNumber<TInner, TComponent, TProvider>> units)
             {
                 var ienum = units.GetEnumerator();
                 ienum.MoveNext();
                 return ienum.Current;
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TTraits> Create(IEnumerator<CustomDefaultNumber<TInner, TComponent, TTraits>> units)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Create(IEnumerator<CustomDefaultNumber<TInner, TComponent, TProvider>> units)
             {
                 var value = units.Current;
                 units.MoveNext();
@@ -1201,15 +1201,15 @@ namespace IS4.HyperNumerics.NumberTypes
             }
 		}
 		
-        int ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Count => 1;
+        int ICollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.Count => 1;
 
-        bool ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.IsReadOnly => true;
+        bool ICollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.IsReadOnly => true;
 
-        int IReadOnlyCollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Count => 1;
+        int IReadOnlyCollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.Count => 1;
 
-        CustomDefaultNumber<TInner, TComponent, TTraits> IReadOnlyList<CustomDefaultNumber<TInner, TComponent, TTraits>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+        CustomDefaultNumber<TInner, TComponent, TProvider> IReadOnlyList<CustomDefaultNumber<TInner, TComponent, TProvider>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
 
-        CustomDefaultNumber<TInner, TComponent, TTraits> IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.this[int index]
+        CustomDefaultNumber<TInner, TComponent, TProvider> IList<CustomDefaultNumber<TInner, TComponent, TProvider>>.this[int index]
         {
             get{
                 return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
@@ -1219,47 +1219,47 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        int IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.IndexOf(CustomDefaultNumber<TInner, TComponent, TTraits> item)
+        int IList<CustomDefaultNumber<TInner, TComponent, TProvider>>.IndexOf(CustomDefaultNumber<TInner, TComponent, TProvider> item)
         {
             return Equals(item) ? 0 : -1;
         }
 
-        void IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.Insert(int index, CustomDefaultNumber<TInner, TComponent, TTraits> item)
+        void IList<CustomDefaultNumber<TInner, TComponent, TProvider>>.Insert(int index, CustomDefaultNumber<TInner, TComponent, TProvider> item)
         {
             throw new NotSupportedException();
         }
 
-        void IList<CustomDefaultNumber<TInner, TComponent, TTraits>>.RemoveAt(int index)
+        void IList<CustomDefaultNumber<TInner, TComponent, TProvider>>.RemoveAt(int index)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Add(CustomDefaultNumber<TInner, TComponent, TTraits> item)
+        void ICollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.Add(CustomDefaultNumber<TInner, TComponent, TProvider> item)
         {
             throw new NotSupportedException();
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Clear()
+        void ICollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.Clear()
         {
             throw new NotSupportedException();
         }
 
-        bool ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Contains(CustomDefaultNumber<TInner, TComponent, TTraits> item)
+        bool ICollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.Contains(CustomDefaultNumber<TInner, TComponent, TProvider> item)
         {
             return Equals(item);
         }
 
-        void ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.CopyTo(CustomDefaultNumber<TInner, TComponent, TTraits>[] array, int arrayIndex)
+        void ICollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.CopyTo(CustomDefaultNumber<TInner, TComponent, TProvider>[] array, int arrayIndex)
         {
             array[arrayIndex] = this;
         }
 
-        bool ICollection<CustomDefaultNumber<TInner, TComponent, TTraits>>.Remove(CustomDefaultNumber<TInner, TComponent, TTraits> item)
+        bool ICollection<CustomDefaultNumber<TInner, TComponent, TProvider>>.Remove(CustomDefaultNumber<TInner, TComponent, TProvider> item)
         {
             throw new NotSupportedException();
         }
 
-        IEnumerator<CustomDefaultNumber<TInner, TComponent, TTraits>> IEnumerable<CustomDefaultNumber<TInner, TComponent, TTraits>>.GetEnumerator()
+        IEnumerator<CustomDefaultNumber<TInner, TComponent, TProvider>> IEnumerable<CustomDefaultNumber<TInner, TComponent, TProvider>>.GetEnumerator()
         {
             yield return this;
         }
