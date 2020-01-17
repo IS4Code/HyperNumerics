@@ -55,7 +55,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return new NullableNumber<TInner>(value);
         }
 
-        public NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> other)
+        public NullableNumber<TInner> Call(StandardBinaryOperation operation, in NullableNumber<TInner> other)
         {
             if(hasValue && other.hasValue)
             {
@@ -64,7 +64,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner> Call(BinaryOperation operation, in TInner other)
+        public NullableNumber<TInner> Call(StandardBinaryOperation operation, in TInner other)
         {
             if(hasValue)
             {
@@ -73,7 +73,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        public NullableNumber<TInner> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(hasValue)
             {
@@ -82,7 +82,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner> Call(UnaryOperation operation)
+        public NullableNumber<TInner> Call(StandardUnaryOperation operation)
         {
             if(hasValue)
             {
@@ -91,7 +91,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             if(hasValue)
             {
@@ -168,9 +168,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual NullableNumber<TInner> Call(NullaryOperation operation)
+            public virtual NullableNumber<TInner> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual NullableNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -295,7 +295,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return new NullableNumber<TInner, TComponent>(value);
         }
 
-        public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> other)
+        public NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in NullableNumber<TInner, TComponent> other)
         {
             if(hasValue && other.hasValue)
             {
@@ -304,7 +304,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
+        public NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner other)
         {
             if(hasValue)
             {
@@ -313,7 +313,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
+        public NullableNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(hasValue)
             {
@@ -322,7 +322,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
+        public NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             if(hasValue)
             {
@@ -331,7 +331,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public NullableNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             if(hasValue)
             {
@@ -340,7 +340,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullableNumber<TInner, TComponent> Call(UnaryOperation operation)
+        public NullableNumber<TInner, TComponent> Call(StandardUnaryOperation operation)
         {
             if(hasValue)
             {
@@ -349,7 +349,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             return Value?.CallComponent(operation) ?? default;
         }
@@ -422,9 +422,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual NullableNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual NullableNumber<TInner, TComponent> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual NullableNumber<TInner, TComponent> Create(in TComponent num)

@@ -54,7 +54,7 @@ namespace IS4.HyperNumerics
         /// <param name="operation">The operation that will be invoked.</param>
         /// <returns>The result of the operation when invoked on the first component, with the second component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber FirstCall(UnaryOperation operation);
+        TNumber FirstCall(StandardUnaryOperation operation);
 
         /// <summary>
         /// Invokes a binary operation on the first component of the number and <paramref name="other"/>.
@@ -63,7 +63,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation when invoked on the first component, with the second component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber FirstCall(BinaryOperation operation, in TInner other);
+        TNumber FirstCall(StandardBinaryOperation operation, in TInner other);
 
         /// <summary>
         /// Invokes a unary operation on the second component of the number.
@@ -71,7 +71,7 @@ namespace IS4.HyperNumerics
         /// <param name="operation">The operation that will be invoked.</param>
         /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber SecondCall(UnaryOperation operation);
+        TNumber SecondCall(StandardUnaryOperation operation);
 
         /// <summary>
         /// Invokes a binary operation on the second component of the number and <paramref name="other"/>.
@@ -80,7 +80,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber SecondCall(BinaryOperation operation, in TInner other);
+        TNumber SecondCall(StandardBinaryOperation operation, in TInner other);
 
         /// <summary>
         /// Retrieves an instance of <see cref="IHyperNumberOperations{TNumber, TInner}"/> providing the supported operations on this type.
@@ -104,7 +104,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation when invoked on the first component, with the second component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber FirstCall(BinaryOperation operation, in TComponent other);
+        TNumber FirstCall(StandardBinaryOperation operation, in TComponent other);
 
         /// <summary>
         /// Invokes a binary operation on the second component of the number and <paramref name="other"/>.
@@ -113,7 +113,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber SecondCall(BinaryOperation operation, in TComponent other);
+        TNumber SecondCall(StandardBinaryOperation operation, in TComponent other);
 
         /// <summary>
         /// Retrieves an instance of <see cref="IHyperNumberOperations{TNumber, TInner, TComponent}"/> providing the supported operations on this type.

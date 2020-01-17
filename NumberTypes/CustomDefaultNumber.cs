@@ -53,7 +53,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Clone();
         }
 
-        public CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> other)
+        public CustomDefaultNumber<TInner, TProvider> Call(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> other)
         {
             if(initialized)
             {
@@ -70,7 +70,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Call(operation, defaultValue, defaultValue);
         }
 
-        public CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in TInner other)
+        public CustomDefaultNumber<TInner, TProvider> Call(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -79,7 +79,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TProvider> CallReversed(BinaryOperation operation, in TInner other)
+        public CustomDefaultNumber<TInner, TProvider> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -88,7 +88,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.Call(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -97,7 +97,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -106,7 +106,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TProvider> Call(UnaryOperation operation)
+        public CustomDefaultNumber<TInner, TProvider> Call(StandardUnaryOperation operation)
         {
             if(initialized)
             {
@@ -115,7 +115,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation);
         }
 
-        TInner INumber<TInner>.Call(UnaryOperation operation)
+        TInner INumber<TInner>.Call(StandardUnaryOperation operation)
         {
             if(initialized)
             {
@@ -124,7 +124,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation);
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             if(initialized)
             {
@@ -221,9 +221,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual CustomDefaultNumber<TInner, TProvider> Call(NullaryOperation operation)
+            public virtual CustomDefaultNumber<TInner, TProvider> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual CustomDefaultNumber<TInner, TProvider> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -247,8 +247,8 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 
         /// <summary>
-        /// An interface that a user of <see cref="CustomDefaultNumber{TInner, TProvider}"/> must provide
-        /// to specify the default value of the type.
+        /// An interface that a user of <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/> must provide
+        /// an implementation of to specify the default value of the type.
         /// </summary>
         public interface IDefaultValueProvider
         {
@@ -257,7 +257,7 @@ namespace IS4.HyperNumerics.NumberTypes
             /// </summary>
             TInner DefaultValue { get; }
         }
-		
+
         int ICollection<TInner>.Count => 1;
 
         int IReadOnlyCollection<TInner>.Count => 1;
@@ -308,7 +308,7 @@ namespace IS4.HyperNumerics.NumberTypes
     /// <typeparam name="TComponent">The component type the number uses.</typeparam>
     /// <typeparam name="TProvider">A type implementing <see cref="IProvider"/> which is constructed once for every number type and queried for the default value.</typeparam>
     [Serializable]
-    public readonly partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, TInner, TComponent>, INumber<TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TComponent, TProvider>.IDefaultValueProvider
+    public readonly partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, TInner, TComponent>, INumber<TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
     {
         static TInner defaultValue = default(TProvider).DefaultValue;
 
@@ -347,7 +347,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Clone();
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> other)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> other)
         {
             if(initialized)
             {
@@ -364,7 +364,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Call(operation, defaultValue, defaultValue);
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in TInner other)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -373,7 +373,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TProvider> CallReversed(BinaryOperation operation, in TInner other)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -382,7 +382,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.Call(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -391,7 +391,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(initialized)
             {
@@ -400,7 +400,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in TComponent other)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
@@ -409,7 +409,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TProvider> CallReversed(BinaryOperation operation, in TComponent other)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
@@ -418,7 +418,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner, TComponent>.Call(BinaryOperation operation, in TComponent other)
+        TInner INumber<TInner, TComponent>.Call(StandardBinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
@@ -427,7 +427,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation, other);
         }
 
-        TInner INumber<TInner, TComponent>.CallReversed(BinaryOperation operation, in TComponent other)
+        TInner INumber<TInner, TComponent>.CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             if(initialized)
             {
@@ -436,7 +436,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.CallReversed(operation, other);
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(UnaryOperation operation)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardUnaryOperation operation)
         {
             if(initialized)
             {
@@ -445,7 +445,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation);
         }
 
-        TInner INumber<TInner>.Call(UnaryOperation operation)
+        TInner INumber<TInner>.Call(StandardUnaryOperation operation)
         {
             if(initialized)
             {
@@ -454,7 +454,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return defaultValue.Call(operation);
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             if(initialized)
             {
@@ -551,9 +551,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(NullaryOperation operation)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Create(in TComponent num)
@@ -575,18 +575,6 @@ namespace IS4.HyperNumerics.NumberTypes
             {
                 return new CustomDefaultNumber<TInner, TComponent, TProvider>(HyperMath.Operations.For<TInner, TComponent>.Instance.Create(units));
             }
-        }
-        
-        /// <summary>
-        /// An interface that a user of <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/> must provide
-        /// to specify the default value of the type.
-        /// </summary>
-        public interface IDefaultValueProvider
-        {
-            /// <summary>
-            /// Obtains the default value of the type.
-            /// </summary>
-            TInner DefaultValue { get; }
         }
     }
 }

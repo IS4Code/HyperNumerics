@@ -21,137 +21,137 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => IsFin(first);
 
-        public HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> other)
+        public HyperDual<TInner> Call(StandardBinaryOperation operation, in HyperDual<TInner> other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner>(Add(first, other.first), Add(second, other.second));
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner>(Sub(first, other.first), Sub(second, other.second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner>(Mul(first, other.first), Add(Mul(first, other.second), Mul(second, other.first)));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     if(!CanInv(first) && !CanInv(other.first))
                     {
                         return new HyperDual<TInner>(Div(second, other.second));
                     }
                     return new HyperDual<TInner>(Div(first, other.first), Div(Sub(Mul(second, other.first), Mul(first, other.second)), Pow2(other.first)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner> Call(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner> Call(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner>(Add(first, other), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner>(Sub(first, other), second);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner>(Mul(first, other), Mul(second, other));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new HyperDual<TInner>(Div(first, other), Div(second, other));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner>(Add(other, first), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner>(Sub(other, first), Neg(second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner>(Mul(other, first), Mul(other, second));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     if(!CanInv(other) && !CanInv(first))
                     {
-                        return Div(HyperMath.Operations.For<TInner>.Instance.Call(NullaryOperation.Zero), second);
+                        return Div(HyperMath.Operations.For<TInner>.Instance.Create(StandardNumber.Zero), second);
                     }
                     return new HyperDual<TInner>(Div(other, first), Div(Neg(Mul(other, second)), Pow2(first)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(other, this);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(other, this);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner> Call(UnaryOperation operation)
+        public HyperDual<TInner> Call(StandardUnaryOperation operation)
         {
             switch(operation)
             {
-                case UnaryOperation.Identity:
+                case StandardUnaryOperation.Identity:
                     return this;
-                case UnaryOperation.Negate:
+                case StandardUnaryOperation.Negate:
                     return new HyperDual<TInner>(Neg(first), Neg(second));
-                case UnaryOperation.Increment:
+                case StandardUnaryOperation.Increment:
                     return new HyperDual<TInner>(Inc(first), second);
-                case UnaryOperation.Decrement:
+                case StandardUnaryOperation.Decrement:
                     return new HyperDual<TInner>(Dec(first), second);
-                case UnaryOperation.Inverse:
+                case StandardUnaryOperation.Inverse:
                     return new HyperDual<TInner>(Inv(first), Div(Neg(second), Pow2(first)));
-                case UnaryOperation.Conjugate:
+                case StandardUnaryOperation.Conjugate:
                     return new HyperDual<TInner>(first, Neg(second));
-                case UnaryOperation.Modulus:
+                case StandardUnaryOperation.Modulus:
                     return Sqrt(Pow2(first));
-                case UnaryOperation.Double:
+                case StandardUnaryOperation.Double:
                     return new HyperDual<TInner>(Mul2(first), Mul2(second));
-                case UnaryOperation.Half:
+                case StandardUnaryOperation.Half:
                     return new HyperDual<TInner>(Div2(first), Div2(second));
-                case UnaryOperation.Square:
+                case StandardUnaryOperation.Square:
                     return new HyperDual<TInner>(Pow2(first), Mul2(Mul(first, second)));
-                case UnaryOperation.SquareRoot:
+                case StandardUnaryOperation.SquareRoot:
                     var sqrt = Sqrt(first);
                     if(!CanInv(sqrt) && !CanInv(second))
                     {
                         return new HyperDual<TInner>(sqrt);
                     }
                     return new HyperDual<TInner>(sqrt, Div(second, Mul2(sqrt)));
-                case UnaryOperation.Exponentiate:
+                case StandardUnaryOperation.Exponentiate:
                     var exp = Exp(first);
                     return new HyperDual<TInner>(exp, Mul(exp, second));
-                case UnaryOperation.Logarithm:
+                case StandardUnaryOperation.Logarithm:
                     return new HyperDual<TInner>(Log(first), Div(second, first));
-                case UnaryOperation.Sine:
+                case StandardUnaryOperation.Sine:
                     return new HyperDual<TInner>(Sin(first), Mul(Cos(first), second));
-                case UnaryOperation.Cosine:
+                case StandardUnaryOperation.Cosine:
                     return new HyperDual<TInner>(Cos(first), Mul(Neg(Sin(first)), second));
-                case UnaryOperation.Tangent:
+                case StandardUnaryOperation.Tangent:
                     return new HyperDual<TInner>(Tan(first), Div(second, Pow2(Cos(first))));
-                case UnaryOperation.HyperbolicSine:
+                case StandardUnaryOperation.HyperbolicSine:
                     return SinhDefault(this);
-                case UnaryOperation.HyperbolicCosine:
+                case StandardUnaryOperation.HyperbolicCosine:
                     return CoshDefault(this);
-                case UnaryOperation.HyperbolicTangent:
+                case StandardUnaryOperation.HyperbolicTangent:
                     return TanhDefault(this);
-                case UnaryOperation.ArcSine:
+                case StandardUnaryOperation.ArcSine:
                     return new HyperDual<TInner>(Asin(first), Div(second, Sqrt(Inc(Neg(Pow2(first))))));
-                case UnaryOperation.ArcCosine:
+                case StandardUnaryOperation.ArcCosine:
                     return new HyperDual<TInner>(Acos(first), Neg(Div(second, Sqrt(Inc(Neg(Pow2(first)))))));
-                case UnaryOperation.ArcTangent:
+                case StandardUnaryOperation.ArcTangent:
                     return new HyperDual<TInner>(Atan(first), Div(second, Inc(Pow2(first))));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             return HyperMath.Call(operation, first);
         }
@@ -178,185 +178,185 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => IsFin(first);
 
-        public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> other)
+        public HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner, TComponent>(Add(first, other.first), Add(second, other.second));
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner, TComponent>(Sub(first, other.first), Sub(second, other.second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner, TComponent>(Mul(first, other.first), Add(Mul(first, other.second), Mul(second, other.first)));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     if(!CanInv(first) && !CanInv(other.first))
                     {
                         return new HyperDual<TInner, TComponent>(Div(second, other.second));
                     }
                     return new HyperDual<TInner, TComponent>(Div(first, other.first), Div(Sub(Mul(second, other.first), Mul(first, other.second)), Pow2(other.first)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner, TComponent>(Add(first, other), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner, TComponent>(Sub(first, other), second);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner, TComponent>(Mul(first, other), Mul(second, other));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new HyperDual<TInner, TComponent>(Div(first, other), Div(second, other));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner, TComponent>(Add(other, first), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner, TComponent>(Sub(other, first), Neg(second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner, TComponent>(Mul(other, first), Mul(other, second));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     if(!CanInv(other) && !CanInv(first))
                     {
-                        return Div(HyperMath.Operations.For<TInner>.Instance.Call(NullaryOperation.Zero), second);
+                        return Div(HyperMath.Operations.For<TInner>.Instance.Create(StandardNumber.Zero), second);
                     }
                     return new HyperDual<TInner, TComponent>(Div(other, first), Div(Neg(Mul(other, second)), Pow2(first)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(other, this);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(other, this);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
+        public HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner, TComponent>(AddVal(first, other), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner, TComponent>(SubVal(first, other), second);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner, TComponent>(MulVal(first, other), MulVal(second, other));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new HyperDual<TInner, TComponent>(DivVal(first, other), DivVal(second, other));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     var exp = Dec(Create<TInner, TComponent>(other)).First();
                     return new HyperDual<TInner, TComponent>(PowVal(first, other), Mul(MulVal(PowVal(first, exp), other), second));
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public HyperDual<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDual<TInner, TComponent>(AddValRev(other, first), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDual<TInner, TComponent>(SubValRev(other, first), Neg(second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDual<TInner, TComponent>(MulValRev(other, first), MulValRev(other, second));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     bool caninv = other is INumber num ? num.IsInvertible : !other.Equals(default);
                     if(!caninv && !CanInv(first))
                     {
-                        return Div(HyperMath.Operations.For<TInner>.Instance.Call(NullaryOperation.Zero), second);
+                        return Div(HyperMath.Operations.For<TInner>.Instance.Create(StandardNumber.Zero), second);
                     }
                     return new HyperDual<TInner, TComponent>(DivValRev(other, first), Div(Neg(MulValRev(other, second)), Pow2(first)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(Operations.Instance.Create(other, default, default, default), this);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(Operations.Instance.Create(other, default, default, default), this);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDual<TInner, TComponent> Call(UnaryOperation operation)
+        public HyperDual<TInner, TComponent> Call(StandardUnaryOperation operation)
         {
             switch(operation)
             {
-                case UnaryOperation.Identity:
+                case StandardUnaryOperation.Identity:
                     return this;
-                case UnaryOperation.Negate:
+                case StandardUnaryOperation.Negate:
                     return new HyperDual<TInner, TComponent>(Neg(first), Neg(second));
-                case UnaryOperation.Increment:
+                case StandardUnaryOperation.Increment:
                     return new HyperDual<TInner, TComponent>(Inc(first), second);
-                case UnaryOperation.Decrement:
+                case StandardUnaryOperation.Decrement:
                     return new HyperDual<TInner, TComponent>(Dec(first), second);
-                case UnaryOperation.Inverse:
+                case StandardUnaryOperation.Inverse:
                     return new HyperDual<TInner, TComponent>(Inv(first), Div(Neg(second), Pow2(first)));
-                case UnaryOperation.Conjugate:
+                case StandardUnaryOperation.Conjugate:
                     return new HyperDual<TInner, TComponent>(first, Neg(second));
-                case UnaryOperation.Modulus:
+                case StandardUnaryOperation.Modulus:
                     return Sqrt(Pow2(first));
-                case UnaryOperation.Double:
+                case StandardUnaryOperation.Double:
                     return new HyperDual<TInner, TComponent>(Mul2(first), Mul2(second));
-                case UnaryOperation.Half:
+                case StandardUnaryOperation.Half:
                     return new HyperDual<TInner, TComponent>(Div2(first), Div2(second));
-                case UnaryOperation.Square:
+                case StandardUnaryOperation.Square:
                     return new HyperDual<TInner, TComponent>(Pow2(first), Mul2(Mul(first, second)));
-                case UnaryOperation.SquareRoot:
+                case StandardUnaryOperation.SquareRoot:
                     var sqrt = Sqrt(first);
                     if(!CanInv(sqrt) && !CanInv(second))
                     {
                         return new HyperDual<TInner, TComponent>(sqrt);
                     }
                     return new HyperDual<TInner, TComponent>(sqrt, Div(second, Mul2(sqrt)));
-                case UnaryOperation.Exponentiate:
+                case StandardUnaryOperation.Exponentiate:
                     var exp = Exp(first);
                     return new HyperDual<TInner, TComponent>(exp, Mul(exp, second));
-                case UnaryOperation.Logarithm:
+                case StandardUnaryOperation.Logarithm:
                     return new HyperDual<TInner, TComponent>(Log(first), Div(second, first));
-                case UnaryOperation.Sine:
+                case StandardUnaryOperation.Sine:
                     return new HyperDual<TInner, TComponent>(Sin(first), Mul(Cos(first), second));
-                case UnaryOperation.Cosine:
+                case StandardUnaryOperation.Cosine:
                     return new HyperDual<TInner, TComponent>(Cos(first), Mul(Neg(Sin(first)), second));
-                case UnaryOperation.Tangent:
+                case StandardUnaryOperation.Tangent:
                     return new HyperDual<TInner, TComponent>(Tan(first), Div(second, Pow2(Cos(first))));
-                case UnaryOperation.HyperbolicSine:
+                case StandardUnaryOperation.HyperbolicSine:
                     return SinhDefault(this);
-                case UnaryOperation.HyperbolicCosine:
+                case StandardUnaryOperation.HyperbolicCosine:
                     return CoshDefault(this);
-                case UnaryOperation.HyperbolicTangent:
+                case StandardUnaryOperation.HyperbolicTangent:
                     return TanhDefault(this);
-                case UnaryOperation.ArcSine:
+                case StandardUnaryOperation.ArcSine:
                     return new HyperDual<TInner, TComponent>(Asin(first), Div(second, Sqrt(Inc(Neg(Pow2(first))))));
-                case UnaryOperation.ArcCosine:
+                case StandardUnaryOperation.ArcCosine:
                     return new HyperDual<TInner, TComponent>(Acos(first), Neg(Div(second, Sqrt(Inc(Neg(Pow2(first)))))));
-                case UnaryOperation.ArcTangent:
+                case StandardUnaryOperation.ArcTangent:
                     return new HyperDual<TInner, TComponent>(Atan(first), Div(second, Inc(Pow2(first))));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             return HyperMath.CallComponent<TInner, TComponent>(operation, first);
         }

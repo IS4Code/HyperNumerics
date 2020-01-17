@@ -72,7 +72,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(func));
             }
-            return new FuncAsNullaryOperation(func);
+            return new FuncAsStandardNumber(func);
         }
 
         public static AbstractNumber AsNumber(this INumberOperation operation)
@@ -170,7 +170,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(inner));
             }
-            return new UnaryNullaryOperation(outer, inner);
+            return new UnaryStandardNumber(outer, inner);
         }
 
         public static INumberOperation Apply(this IBinaryNumberOperation outer, INumberOperation left, INumberOperation right)
@@ -187,7 +187,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(right));
             }
-            return new BinaryNullaryNullaryOperation(outer, left, right);
+            return new BinaryNullaryStandardNumber(outer, left, right);
         }
 
         public static IUnaryNumberOperation Apply(this IBinaryNumberOperation outer, IUnaryNumberOperation left, INumberOperation right)
@@ -200,7 +200,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(right));
             }
-            return new BinaryUnaryNullaryOperation(outer, left, right);
+            return new BinaryUnaryStandardNumber(outer, left, right);
         }
 
         public static IUnaryNumberOperation Apply(this IBinaryNumberOperation outer, INumberOperation left, IUnaryNumberOperation right)
@@ -255,11 +255,11 @@ namespace IS4.HyperNumerics.Operations
             return new UnaryBinaryOperation(outer, inner);
         }
 
-        private class FuncAsNullaryOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+        private class FuncAsStandardNumber : DynamicNumberOperation<INumberOperation>, INumberOperation
         {
             readonly Func<AbstractNumber> func;
 
-            public FuncAsNullaryOperation(Func<AbstractNumber> func)
+            public FuncAsStandardNumber(Func<AbstractNumber> func)
             {
                 this.func = func;
             }
@@ -432,12 +432,12 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class UnaryNullaryOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+        private class UnaryStandardNumber : DynamicNumberOperation<INumberOperation>, INumberOperation
         {
             readonly IUnaryNumberOperation outer;
             readonly INumberOperation inner;
 
-            public UnaryNullaryOperation(IUnaryNumberOperation outer, INumberOperation inner)
+            public UnaryStandardNumber(IUnaryNumberOperation outer, INumberOperation inner)
             {
                 this.outer = outer;
                 this.inner = inner;
@@ -459,13 +459,13 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class BinaryNullaryNullaryOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+        private class BinaryNullaryStandardNumber : DynamicNumberOperation<INumberOperation>, INumberOperation
         {
             readonly IBinaryNumberOperation outer;
             readonly INumberOperation left;
             readonly INumberOperation right;
 
-            public BinaryNullaryNullaryOperation(IBinaryNumberOperation outer, INumberOperation left, INumberOperation right)
+            public BinaryNullaryStandardNumber(IBinaryNumberOperation outer, INumberOperation left, INumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
@@ -488,13 +488,13 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class BinaryUnaryNullaryOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
+        private class BinaryUnaryStandardNumber : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
         {
             readonly IBinaryNumberOperation outer;
             readonly IUnaryNumberOperation left;
             readonly INumberOperation right;
 
-            public BinaryUnaryNullaryOperation(IBinaryNumberOperation outer, IUnaryNumberOperation left, INumberOperation right)
+            public BinaryUnaryStandardNumber(IBinaryNumberOperation outer, IUnaryNumberOperation left, INumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
@@ -687,7 +687,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(func));
             }
-            return new ComponentFuncAsNullaryOperation(func);
+            return new ComponentFuncAsStandardNumber(func);
         }
 
         public static ComponentAbstractNumber AsNumber(this IComponentNumberOperation operation)
@@ -785,7 +785,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(inner));
             }
-            return new ComponentUnaryNullaryOperation(outer, inner);
+            return new ComponentUnaryStandardNumber(outer, inner);
         }
 
         public static IComponentNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentNumberOperation right)
@@ -802,7 +802,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(right));
             }
-            return new ComponentBinaryNullaryNullaryOperation(outer, left, right);
+            return new ComponentBinaryNullaryStandardNumber(outer, left, right);
         }
 
         public static IComponentUnaryNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentUnaryNumberOperation left, IComponentNumberOperation right)
@@ -815,7 +815,7 @@ namespace IS4.HyperNumerics.Operations
             {
                 throw new ArgumentNullException(nameof(right));
             }
-            return new ComponentBinaryUnaryNullaryOperation(outer, left, right);
+            return new ComponentBinaryUnaryStandardNumber(outer, left, right);
         }
 
         public static IComponentUnaryNumberOperation Apply(this IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentUnaryNumberOperation right)
@@ -870,11 +870,11 @@ namespace IS4.HyperNumerics.Operations
             return new ComponentUnaryBinaryOperation(outer, inner);
         }
 
-        private class ComponentFuncAsNullaryOperation : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
+        private class ComponentFuncAsStandardNumber : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
         {
             readonly Func<ComponentAbstractNumber> func;
 
-            public ComponentFuncAsNullaryOperation(Func<ComponentAbstractNumber> func)
+            public ComponentFuncAsStandardNumber(Func<ComponentAbstractNumber> func)
             {
                 this.func = func;
             }
@@ -1012,12 +1012,12 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class ComponentUnaryNullaryOperation : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
+        private class ComponentUnaryStandardNumber : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
         {
             readonly IComponentUnaryNumberOperation outer;
             readonly IComponentNumberOperation inner;
 
-            public ComponentUnaryNullaryOperation(IComponentUnaryNumberOperation outer, IComponentNumberOperation inner)
+            public ComponentUnaryStandardNumber(IComponentUnaryNumberOperation outer, IComponentNumberOperation inner)
             {
                 this.outer = outer;
                 this.inner = inner;
@@ -1034,13 +1034,13 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class ComponentBinaryNullaryNullaryOperation : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
+        private class ComponentBinaryNullaryStandardNumber : DynamicNumberOperation<IComponentNumberOperation>, IComponentNumberOperation
         {
             readonly IComponentBinaryNumberOperation outer;
             readonly IComponentNumberOperation left;
             readonly IComponentNumberOperation right;
 
-            public ComponentBinaryNullaryNullaryOperation(IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentNumberOperation right)
+            public ComponentBinaryNullaryStandardNumber(IComponentBinaryNumberOperation outer, IComponentNumberOperation left, IComponentNumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;
@@ -1058,13 +1058,13 @@ namespace IS4.HyperNumerics.Operations
             }
         }
 
-        private class ComponentBinaryUnaryNullaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
+        private class ComponentBinaryUnaryStandardNumber : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
         {
             readonly IComponentBinaryNumberOperation outer;
             readonly IComponentUnaryNumberOperation left;
             readonly IComponentNumberOperation right;
 
-            public ComponentBinaryUnaryNullaryOperation(IComponentBinaryNumberOperation outer, IComponentUnaryNumberOperation left, IComponentNumberOperation right)
+            public ComponentBinaryUnaryStandardNumber(IComponentBinaryNumberOperation outer, IComponentUnaryNumberOperation left, IComponentNumberOperation right)
             {
                 this.outer = outer;
                 this.left = left;

@@ -1,6 +1,6 @@
 ﻿namespace IS4.HyperNumerics.Operations
 {
-    public enum BinaryOperation
+    public enum StandardBinaryOperation
     {
         Add,
         Subtract,

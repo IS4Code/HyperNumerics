@@ -12,7 +12,7 @@ namespace IS4.HyperNumerics
     {
         static class Constants<TNumber> where TNumber : struct, INumber<TNumber>
         {
-            public static readonly TNumber RealOne = Call<TNumber>(NullaryOperation.RealOne);
+            public static readonly TNumber RealOne = Create<TNumber>(StandardNumber.One);
             public static readonly TNumber PI = Mul2(Mul2(Atan(RealOne)));
             public static readonly TNumber E = Exp(RealOne);
         }
@@ -46,42 +46,42 @@ namespace IS4.HyperNumerics
         /// <returns></returns>
         public static TComponent Abs<TNumber, TComponent>(in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return Operations.For<TNumber, TComponent>.Instance.CallComponent(UnaryOperation.Identity, num);
+            return Operations.For<TNumber, TComponent>.Instance.CallComponent(StandardUnaryOperation.Identity, num);
         }
 
         public static TNumber Mul2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Double, num);
+            return Call(StandardUnaryOperation.Double, num);
         }
 
         public static TNumber Div2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Half, num);
+            return Call(StandardUnaryOperation.Half, num);
         }
 
         public static TNumber Add<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
         {
-            return Call(BinaryOperation.Add, x, in y);
+            return Call(StandardBinaryOperation.Add, x, in y);
         }
 
         public static TNumber Sub<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
         {
-            return Call(BinaryOperation.Subtract, x, in y);
+            return Call(StandardBinaryOperation.Subtract, x, in y);
         }
 
         public static TNumber Mul<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
         {
-            return Call(BinaryOperation.Multiply, x, in y);
+            return Call(StandardBinaryOperation.Multiply, x, in y);
         }
 
         public static TNumber Div<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
         {
-            return Call(BinaryOperation.Divide, x, in y);
+            return Call(StandardBinaryOperation.Divide, x, in y);
         }
 
         public static TNumber Pow<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
         {
-            return Call(BinaryOperation.Power, x, in y);
+            return Call(StandardBinaryOperation.Power, x, in y);
         }
 
         internal static TNumber PowDefault<TNumber>(in TNumber x, in TNumber y) where TNumber : struct, INumber<TNumber>
@@ -96,82 +96,82 @@ namespace IS4.HyperNumerics
 
         public static TNumber AddVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponent(BinaryOperation.Add, x, y);
+            return CallComponent(StandardBinaryOperation.Add, x, y);
         }
 
         public static TNumber SubVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponent(BinaryOperation.Subtract, x, y);
+            return CallComponent(StandardBinaryOperation.Subtract, x, y);
         }
 
         public static TNumber MulVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponent(BinaryOperation.Multiply, x, y);
+            return CallComponent(StandardBinaryOperation.Multiply, x, y);
         }
 
         public static TNumber DivVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponent(BinaryOperation.Divide, x, y);
+            return CallComponent(StandardBinaryOperation.Divide, x, y);
         }
 
         public static TNumber PowVal<TNumber, TComponent>(in TNumber x, in TComponent y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponent(BinaryOperation.Power, x, y);
+            return CallComponent(StandardBinaryOperation.Power, x, y);
         }
 
         public static TNumber AddValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponentReversed(BinaryOperation.Add, x, y);
+            return CallComponentReversed(StandardBinaryOperation.Add, x, y);
         }
 
         public static TNumber SubValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponentReversed(BinaryOperation.Subtract, x, y);
+            return CallComponentReversed(StandardBinaryOperation.Subtract, x, y);
         }
 
         public static TNumber MulValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponentReversed(BinaryOperation.Multiply, x, y);
+            return CallComponentReversed(StandardBinaryOperation.Multiply, x, y);
         }
 
         public static TNumber DivValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponentReversed(BinaryOperation.Divide, x, y);
+            return CallComponentReversed(StandardBinaryOperation.Divide, x, y);
         }
 
         public static TNumber PowValRev<TNumber, TComponent>(in TComponent x, in TNumber y) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
-            return CallComponentReversed(BinaryOperation.Power, x, y);
+            return CallComponentReversed(StandardBinaryOperation.Power, x, y);
         }
 
         public static TNumber Neg<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Negate, num);
+            return Call(StandardUnaryOperation.Negate, num);
         }
 
         public static TNumber Inc<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Increment, num);
+            return Call(StandardUnaryOperation.Increment, num);
         }
 
         public static TNumber Dec<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Decrement, num);
+            return Call(StandardUnaryOperation.Decrement, num);
         }
 
         public static TNumber Inv<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Inverse, num);
+            return Call(StandardUnaryOperation.Inverse, num);
         }
 
         public static TNumber Con<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Conjugate, num);
+            return Call(StandardUnaryOperation.Conjugate, num);
         }
 
         public static TNumber Mods<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Modulus, num);
+            return Call(StandardUnaryOperation.Modulus, num);
         }
 
         public static bool CanInv<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
@@ -186,12 +186,12 @@ namespace IS4.HyperNumerics
 
         public static TNumber Pow2<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Square, num);
+            return Call(StandardUnaryOperation.Square, num);
         }
 
         public static TNumber Sqrt<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.SquareRoot, num);
+            return Call(StandardUnaryOperation.SquareRoot, num);
         }
 
         internal static TNumber SqrtDefault<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
@@ -201,32 +201,32 @@ namespace IS4.HyperNumerics
 
         public static TNumber Sin<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Sine, num);
+            return Call(StandardUnaryOperation.Sine, num);
         }
 
         public static TNumber Cos<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Cosine, num);
+            return Call(StandardUnaryOperation.Cosine, num);
         }
 
         public static TNumber Tan<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Tangent, num);
+            return Call(StandardUnaryOperation.Tangent, num);
         }
 
         public static TNumber Sinh<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.HyperbolicSine, num);
+            return Call(StandardUnaryOperation.HyperbolicSine, num);
         }
 
         public static TNumber Cosh<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.HyperbolicCosine, num);
+            return Call(StandardUnaryOperation.HyperbolicCosine, num);
         }
 
         public static TNumber Tanh<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.HyperbolicTangent, num);
+            return Call(StandardUnaryOperation.HyperbolicTangent, num);
         }
 
         internal static TNumber SinhDefault<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
@@ -247,22 +247,22 @@ namespace IS4.HyperNumerics
 
         public static TNumber Asin<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.ArcSine, num);
+            return Call(StandardUnaryOperation.ArcSine, num);
         }
 
         public static TNumber Acos<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.ArcCosine, num);
+            return Call(StandardUnaryOperation.ArcCosine, num);
         }
 
         public static TNumber Atan<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.ArcTangent, num);
+            return Call(StandardUnaryOperation.ArcTangent, num);
         }
 
         public static TNumber Atan2<TNumber>(in TNumber y, in TNumber x) where TNumber : struct, INumber<TNumber>
         {
-            return Call<TNumber>(BinaryOperation.Atan2, in y, in x);
+            return Call<TNumber>(StandardBinaryOperation.Atan2, in y, in x);
         }
 
         internal static TNumber Atan2Default<TNumber>(in TNumber y, in TNumber x) where TNumber : struct, INumber<TNumber>
@@ -281,12 +281,12 @@ namespace IS4.HyperNumerics
 
         public static TNumber Exp<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Exponentiate, num);
+            return Call(StandardUnaryOperation.Exponentiate, num);
         }
 
         public static TNumber Log<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Call(UnaryOperation.Logarithm, num);
+            return Call(StandardUnaryOperation.Logarithm, num);
         }
 
         public static TNumber Clone<TNumber>(in TNumber num) where TNumber : struct, INumber<TNumber>
@@ -304,37 +304,37 @@ namespace IS4.HyperNumerics
             return Operations.For<TNumber>.Instance.Compare(num1, num2);
         }
 
-        public static TNumber Call<TNumber>(NullaryOperation operation) where TNumber : struct, INumber<TNumber>
+        public static TNumber Create<TNumber>(StandardNumber num) where TNumber : struct, INumber<TNumber>
         {
-            return Operations.For<TNumber>.Instance.Call(operation);
+            return Operations.For<TNumber>.Instance.Create(num);
         }
 
-        public static TNumber Call<TNumber>(UnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber>
+        public static TNumber Call<TNumber>(StandardUnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber>
         {
             return Operations.For<TNumber>.Instance.Call(operation, num);
         }
 
-        public static TNumber Call<TNumber>(BinaryOperation operation, in TNumber num1, in TNumber num2) where TNumber : struct, INumber<TNumber>
+        public static TNumber Call<TNumber>(StandardBinaryOperation operation, in TNumber num1, in TNumber num2) where TNumber : struct, INumber<TNumber>
         {
             return Operations.For<TNumber>.Instance.Call(operation, num1, num2);
         }
 
-        public static TNumber CallInner<TNumber, TInner>(BinaryOperation operation, in TNumber num1, in TInner num2) where TNumber : struct, IExtendedNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
+        public static TNumber CallInner<TNumber, TInner>(StandardBinaryOperation operation, in TNumber num1, in TInner num2) where TNumber : struct, IExtendedNumber<TNumber, TInner> where TInner : struct, INumber<TInner>
         {
             return Operations.ForExtended<TNumber, TInner>.Instance.Call(operation, num1, num2);
         }
 
-        public static TNumber CallComponent<TNumber, TComponent>(BinaryOperation operation, in TNumber num1, in TComponent num2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
+        public static TNumber CallComponent<TNumber, TComponent>(StandardBinaryOperation operation, in TNumber num1, in TComponent num2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
             return Operations.For<TNumber, TComponent>.Instance.Call(operation, num1, num2);
         }
 
-        public static TNumber CallComponentReversed<TNumber, TComponent>(BinaryOperation operation, in TComponent num1, in TNumber num2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
+        public static TNumber CallComponentReversed<TNumber, TComponent>(StandardBinaryOperation operation, in TComponent num1, in TNumber num2) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
             return Operations.For<TNumber, TComponent>.Instance.Call(operation, num1, num2);
         }
 
-        public static TComponent CallComponent<TNumber, TComponent>(UnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
+        public static TComponent CallComponent<TNumber, TComponent>(StandardUnaryOperation operation, in TNumber num) where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
         {
             return Operations.For<TNumber, TComponent>.Instance.CallComponent(operation, num);
         }
@@ -431,137 +431,137 @@ namespace IS4.HyperNumerics
                 public static readonly IHyperNumberOperations<TNumber, TInner, TComponent> Instance = default(TNumber).GetOperations();
             }
 
-            public static readonly INumberOperation Default = new DefaultNullaryOperation();
-            public static readonly INumberOperation Zero = new NumberNullaryOperation(NullaryOperation.Zero);
-            public static readonly INumberOperation RealOne = new NumberNullaryOperation(NullaryOperation.RealOne);
-            public static readonly INumberOperation SpecialOne = new NumberNullaryOperation(NullaryOperation.SpecialOne);
-            public static readonly INumberOperation UnitsOne = new NumberNullaryOperation(NullaryOperation.UnitsOne);
-            public static readonly INumberOperation NonRealUnitsOne = new NumberNullaryOperation(NullaryOperation.NonRealUnitsOne);
-            public static readonly INumberOperation CombinedOne = new NumberNullaryOperation(NullaryOperation.CombinedOne);
-            public static readonly INumberOperation AllOne = new NumberNullaryOperation(NullaryOperation.AllOne);
+            public static readonly INumberOperation Default = new DefaultStandardNumber();
+            public static readonly INumberOperation Zero = new StandardNumberOperation(StandardNumber.Zero);
+            public static readonly INumberOperation RealOne = new StandardNumberOperation(StandardNumber.One);
+            public static readonly INumberOperation SpecialOne = new StandardNumberOperation(StandardNumber.SpecialOne);
+            public static readonly INumberOperation UnitsOne = new StandardNumberOperation(StandardNumber.UnitsOne);
+            public static readonly INumberOperation NonRealUnitsOne = new StandardNumberOperation(StandardNumber.NonRealUnitsOne);
+            public static readonly INumberOperation CombinedOne = new StandardNumberOperation(StandardNumber.CombinedOne);
+            public static readonly INumberOperation AllOne = new StandardNumberOperation(StandardNumber.AllOne);
             public static readonly INumberOperation PI = new PIOperation();
             public static readonly INumberOperation E = new EOperation();
             public static readonly IUnaryNumberOperation Id = new IdOperation();
-            public static readonly IBinaryNumberOperation Add = new NumberBinaryOperation(BinaryOperation.Add);
-            public static readonly IBinaryNumberOperation Sub = new NumberBinaryOperation(BinaryOperation.Subtract);
-            public static readonly IBinaryNumberOperation Mul = new NumberBinaryOperation(BinaryOperation.Multiply);
-            public static readonly IBinaryNumberOperation Div = new NumberBinaryOperation(BinaryOperation.Divide);
-            public static readonly IUnaryNumberOperation Neg = new NumberUnaryOperation(UnaryOperation.Negate);
-            public static readonly IUnaryNumberOperation Inv = new NumberUnaryOperation(UnaryOperation.Inverse);
-            public static readonly IUnaryNumberOperation Inc = new NumberUnaryOperation(UnaryOperation.Increment);
-            public static readonly IUnaryNumberOperation Dec = new NumberUnaryOperation(UnaryOperation.Decrement);
-            public static readonly IUnaryNumberOperation Con = new NumberUnaryOperation(UnaryOperation.Conjugate);
-            public static readonly IUnaryNumberOperation Mods = new NumberUnaryOperation(UnaryOperation.Modulus);
-            public static readonly IComponentUnaryNumberOperation Abs = new ComponentNumberUnaryOperation(UnaryOperation.Identity);
-            public static readonly IUnaryNumberOperation Mul2 = new NumberUnaryOperation(UnaryOperation.Double);
-            public static readonly IUnaryNumberOperation Div2 = new NumberUnaryOperation(UnaryOperation.Half);
-            public static readonly IBinaryNumberOperation Pow = new NumberBinaryOperation(BinaryOperation.Power);
-            public static readonly IUnaryNumberOperation Pow2 = new NumberUnaryOperation(UnaryOperation.Square);
-            public static readonly IUnaryNumberOperation Sqrt = new NumberUnaryOperation(UnaryOperation.SquareRoot);
-            public static readonly IUnaryNumberOperation Sin = new NumberUnaryOperation(UnaryOperation.Sine);
-            public static readonly IUnaryNumberOperation Cos = new NumberUnaryOperation(UnaryOperation.Cosine);
-            public static readonly IUnaryNumberOperation Tan = new NumberUnaryOperation(UnaryOperation.Tangent);
-            public static readonly IUnaryNumberOperation Sinh = new NumberUnaryOperation(UnaryOperation.HyperbolicSine);
-            public static readonly IUnaryNumberOperation Cosh = new NumberUnaryOperation(UnaryOperation.HyperbolicCosine);
-            public static readonly IUnaryNumberOperation Tanh = new NumberUnaryOperation(UnaryOperation.HyperbolicTangent);
-            public static readonly IUnaryNumberOperation Asin = new NumberUnaryOperation(UnaryOperation.ArcSine);
-            public static readonly IUnaryNumberOperation Acos = new NumberUnaryOperation(UnaryOperation.ArcCosine);
-            public static readonly IUnaryNumberOperation Atan = new NumberUnaryOperation(UnaryOperation.ArcTangent);
-            public static readonly IBinaryNumberOperation Atan2 = new NumberBinaryOperation(BinaryOperation.Atan2);
-            public static readonly IUnaryNumberOperation Exp = new NumberUnaryOperation(UnaryOperation.Exponentiate);
-            public static readonly IUnaryNumberOperation Log = new NumberUnaryOperation(UnaryOperation.Logarithm);
+            public static readonly IBinaryNumberOperation Add = new NumberBinaryOperation(StandardBinaryOperation.Add);
+            public static readonly IBinaryNumberOperation Sub = new NumberBinaryOperation(StandardBinaryOperation.Subtract);
+            public static readonly IBinaryNumberOperation Mul = new NumberBinaryOperation(StandardBinaryOperation.Multiply);
+            public static readonly IBinaryNumberOperation Div = new NumberBinaryOperation(StandardBinaryOperation.Divide);
+            public static readonly IUnaryNumberOperation Neg = new NumberUnaryOperation(StandardUnaryOperation.Negate);
+            public static readonly IUnaryNumberOperation Inv = new NumberUnaryOperation(StandardUnaryOperation.Inverse);
+            public static readonly IUnaryNumberOperation Inc = new NumberUnaryOperation(StandardUnaryOperation.Increment);
+            public static readonly IUnaryNumberOperation Dec = new NumberUnaryOperation(StandardUnaryOperation.Decrement);
+            public static readonly IUnaryNumberOperation Con = new NumberUnaryOperation(StandardUnaryOperation.Conjugate);
+            public static readonly IUnaryNumberOperation Mods = new NumberUnaryOperation(StandardUnaryOperation.Modulus);
+            public static readonly IComponentUnaryNumberOperation Abs = new ComponentNumberUnaryOperation(StandardUnaryOperation.Identity);
+            public static readonly IUnaryNumberOperation Mul2 = new NumberUnaryOperation(StandardUnaryOperation.Double);
+            public static readonly IUnaryNumberOperation Div2 = new NumberUnaryOperation(StandardUnaryOperation.Half);
+            public static readonly IBinaryNumberOperation Pow = new NumberBinaryOperation(StandardBinaryOperation.Power);
+            public static readonly IUnaryNumberOperation Pow2 = new NumberUnaryOperation(StandardUnaryOperation.Square);
+            public static readonly IUnaryNumberOperation Sqrt = new NumberUnaryOperation(StandardUnaryOperation.SquareRoot);
+            public static readonly IUnaryNumberOperation Sin = new NumberUnaryOperation(StandardUnaryOperation.Sine);
+            public static readonly IUnaryNumberOperation Cos = new NumberUnaryOperation(StandardUnaryOperation.Cosine);
+            public static readonly IUnaryNumberOperation Tan = new NumberUnaryOperation(StandardUnaryOperation.Tangent);
+            public static readonly IUnaryNumberOperation Sinh = new NumberUnaryOperation(StandardUnaryOperation.HyperbolicSine);
+            public static readonly IUnaryNumberOperation Cosh = new NumberUnaryOperation(StandardUnaryOperation.HyperbolicCosine);
+            public static readonly IUnaryNumberOperation Tanh = new NumberUnaryOperation(StandardUnaryOperation.HyperbolicTangent);
+            public static readonly IUnaryNumberOperation Asin = new NumberUnaryOperation(StandardUnaryOperation.ArcSine);
+            public static readonly IUnaryNumberOperation Acos = new NumberUnaryOperation(StandardUnaryOperation.ArcCosine);
+            public static readonly IUnaryNumberOperation Atan = new NumberUnaryOperation(StandardUnaryOperation.ArcTangent);
+            public static readonly IBinaryNumberOperation Atan2 = new NumberBinaryOperation(StandardBinaryOperation.Atan2);
+            public static readonly IUnaryNumberOperation Exp = new NumberUnaryOperation(StandardUnaryOperation.Exponentiate);
+            public static readonly IUnaryNumberOperation Log = new NumberUnaryOperation(StandardUnaryOperation.Logarithm);
 
-            public static INumberOperation GetOperation(NullaryOperation operation)
+            public static INumberOperation GetOperation(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                         return Zero;
-                    case NullaryOperation.RealOne:
+                    case StandardNumber.One:
                         return RealOne;
-                    case NullaryOperation.SpecialOne:
+                    case StandardNumber.SpecialOne:
                         return SpecialOne;
-                    case NullaryOperation.UnitsOne:
+                    case StandardNumber.UnitsOne:
                         return UnitsOne;
-                    case NullaryOperation.NonRealUnitsOne:
+                    case StandardNumber.NonRealUnitsOne:
                         return NonRealUnitsOne;
-                    case NullaryOperation.CombinedOne:
+                    case StandardNumber.CombinedOne:
                         return CombinedOne;
-                    case NullaryOperation.AllOne:
+                    case StandardNumber.AllOne:
                         return AllOne;
                     default:
-                        return new NumberNullaryOperation(operation);
+                        return new StandardNumberOperation(num);
                 }
             }
 
-            public static IUnaryNumberOperation GetOperation(UnaryOperation operation)
+            public static IUnaryNumberOperation GetOperation(StandardUnaryOperation operation)
             {
                 switch(operation)
                 {
-                    case UnaryOperation.Identity:
+                    case StandardUnaryOperation.Identity:
                         return Id;
-                    case UnaryOperation.Negate:
+                    case StandardUnaryOperation.Negate:
                         return Neg;
-                    case UnaryOperation.Increment:
+                    case StandardUnaryOperation.Increment:
                         return Inc;
-                    case UnaryOperation.Decrement:
+                    case StandardUnaryOperation.Decrement:
                         return Dec;
-                    case UnaryOperation.Inverse:
+                    case StandardUnaryOperation.Inverse:
                         return Inv;
-                    case UnaryOperation.Conjugate:
+                    case StandardUnaryOperation.Conjugate:
                         return Con;
-                    case UnaryOperation.Modulus:
+                    case StandardUnaryOperation.Modulus:
                         return Mods;
-                    case UnaryOperation.Double:
+                    case StandardUnaryOperation.Double:
                         return Mul2;
-                    case UnaryOperation.Half:
+                    case StandardUnaryOperation.Half:
                         return Div2;
-                    case UnaryOperation.Square:
+                    case StandardUnaryOperation.Square:
                         return Pow2;
-                    case UnaryOperation.SquareRoot:
+                    case StandardUnaryOperation.SquareRoot:
                         return Sqrt;
-                    case UnaryOperation.Exponentiate:
+                    case StandardUnaryOperation.Exponentiate:
                         return Exp;
-                    case UnaryOperation.Logarithm:
+                    case StandardUnaryOperation.Logarithm:
                         return Log;
-                    case UnaryOperation.Sine:
+                    case StandardUnaryOperation.Sine:
                         return Sin;
-                    case UnaryOperation.Cosine:
+                    case StandardUnaryOperation.Cosine:
                         return Cos;
-                    case UnaryOperation.Tangent:
+                    case StandardUnaryOperation.Tangent:
                         return Tan;
-                    case UnaryOperation.HyperbolicSine:
+                    case StandardUnaryOperation.HyperbolicSine:
                         return Sinh;
-                    case UnaryOperation.HyperbolicCosine:
+                    case StandardUnaryOperation.HyperbolicCosine:
                         return Cosh;
-                    case UnaryOperation.HyperbolicTangent:
+                    case StandardUnaryOperation.HyperbolicTangent:
                         return Tanh;
-                    case UnaryOperation.ArcSine:
+                    case StandardUnaryOperation.ArcSine:
                         return Asin;
-                    case UnaryOperation.ArcCosine:
+                    case StandardUnaryOperation.ArcCosine:
                         return Acos;
-                    case UnaryOperation.ArcTangent:
+                    case StandardUnaryOperation.ArcTangent:
                         return Atan;
                     default:
                         return new NumberUnaryOperation(operation);
                 }
             }
 
-            public static IBinaryNumberOperation GetOperation(BinaryOperation operation)
+            public static IBinaryNumberOperation GetOperation(StandardBinaryOperation operation)
             {
                 switch(operation)
                 {
-                    case BinaryOperation.Add:
+                    case StandardBinaryOperation.Add:
                         return Add;
-                    case BinaryOperation.Subtract:
+                    case StandardBinaryOperation.Subtract:
                         return Sub;
-                    case BinaryOperation.Multiply:
+                    case StandardBinaryOperation.Multiply:
                         return Mul;
-                    case BinaryOperation.Divide:
+                    case StandardBinaryOperation.Divide:
                         return Div;
-                    case BinaryOperation.Power:
+                    case StandardBinaryOperation.Power:
                         return Pow;
-                    case BinaryOperation.Atan2:
+                    case StandardBinaryOperation.Atan2:
                         return Atan2;
                     default:
                         return new NumberBinaryOperation(operation);
@@ -622,7 +622,7 @@ namespace IS4.HyperNumerics
                 }
             }
 
-            class DefaultNullaryOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+            class DefaultStandardNumber : DynamicNumberOperation<INumberOperation>, INumberOperation
             {
                 public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
                 {
@@ -640,23 +640,23 @@ namespace IS4.HyperNumerics
                 }
             }
 
-            class NumberNullaryOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
+            class StandardNumberOperation : DynamicNumberOperation<INumberOperation>, INumberOperation
             {
-                readonly NullaryOperation type;
+                readonly StandardNumber type;
 
-                public NumberNullaryOperation(NullaryOperation type)
+                public StandardNumberOperation(StandardNumber type)
                 {
                     this.type = type;
                 }
 
                 public TNumber Invoke<TNumber>() where TNumber : struct, INumber<TNumber>
                 {
-                    return For<TNumber>.Instance.Call(type);
+                    return For<TNumber>.Instance.Create(type);
                 }
 
                 public TNumber Invoke<TNumber, TComponent>() where TNumber : struct, INumber<TNumber, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
                 {
-                    return For<TNumber, TComponent>.Instance.Call(type);
+                    return For<TNumber, TComponent>.Instance.Create(type);
                 }
 
                 public override string ToString()
@@ -667,9 +667,9 @@ namespace IS4.HyperNumerics
 
             class NumberUnaryOperation : DynamicNumberOperation<IUnaryNumberOperation>, IUnaryNumberOperation
             {
-                readonly UnaryOperation type;
+                readonly StandardUnaryOperation type;
 
-                public NumberUnaryOperation(UnaryOperation type)
+                public NumberUnaryOperation(StandardUnaryOperation type)
                 {
                     this.type = type;
                 }
@@ -692,9 +692,9 @@ namespace IS4.HyperNumerics
 
             class NumberBinaryOperation : DynamicNumberOperation<IBinaryNumberOperation>, IBinaryNumberOperation
             {
-                readonly BinaryOperation type;
+                readonly StandardBinaryOperation type;
 
-                public NumberBinaryOperation(BinaryOperation type)
+                public NumberBinaryOperation(StandardBinaryOperation type)
                 {
                     this.type = type;
                 }
@@ -717,9 +717,9 @@ namespace IS4.HyperNumerics
 
             class NumberUnaryComponentOperation : DynamicNumberOperation<IComponentUnaryNumberFunc<ValueType>>, IComponentUnaryNumberFunc<ValueType>
             {
-                readonly UnaryOperation type;
+                readonly StandardUnaryOperation type;
 
-                public NumberUnaryComponentOperation(UnaryOperation type)
+                public NumberUnaryComponentOperation(StandardUnaryOperation type)
                 {
                     this.type = type;
                 }
@@ -737,9 +737,9 @@ namespace IS4.HyperNumerics
 
             class ComponentNumberUnaryOperation : DynamicNumberOperation<IComponentUnaryNumberOperation>, IComponentUnaryNumberOperation
             {
-                readonly UnaryOperation type;
+                readonly StandardUnaryOperation type;
 
-                public ComponentNumberUnaryOperation(UnaryOperation type)
+                public ComponentNumberUnaryOperation(StandardUnaryOperation type)
                 {
                     this.type = type;
                 }

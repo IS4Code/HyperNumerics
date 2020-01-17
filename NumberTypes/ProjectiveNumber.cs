@@ -44,7 +44,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return new ProjectiveNumber<TInner>(HyperMath.Clone(value), IsInfinity);
         }
 
-        public ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> other)
+        public ProjectiveNumber<TInner> Call(StandardBinaryOperation operation, in ProjectiveNumber<TInner> other)
         {
             if(!other.IsInfinity)
             {
@@ -52,25 +52,25 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Add(other.value, value)), true);
                     }
                     return new ProjectiveNumber<TInner>(other.value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Sub(other.value, value)), true);
                     }
                     return new ProjectiveNumber<TInner>(other.value, true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner>(HyperMath.Mul(value, other.value), true);
                     }
                     return new ProjectiveNumber<TInner>(HyperMath.Div(value, other.value), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner>(HyperMath.Div(value, other.value));
@@ -81,34 +81,34 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public ProjectiveNumber<TInner> Call(BinaryOperation operation, in TInner other)
+        public ProjectiveNumber<TInner> Call(StandardBinaryOperation operation, in TInner other)
         {
             if(!IsInfinity)
             {
-                if(operation == BinaryOperation.Divide && !HyperMath.CanInv(other))
+                if(operation == StandardBinaryOperation.Divide && !HyperMath.CanInv(other))
                 {
-                    return Call(BinaryOperation.Multiply, new ProjectiveNumber<TInner>(other, true));
+                    return Call(StandardBinaryOperation.Multiply, new ProjectiveNumber<TInner>(other, true));
                 }
                 return HyperMath.Call<TInner>(operation, value, other);
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new ProjectiveNumber<TInner>(value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new ProjectiveNumber<TInner>(value, true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new ProjectiveNumber<TInner>(HyperMath.Div(value, other), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new ProjectiveNumber<TInner>(HyperMath.Mul(value, other), true);
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return new ProjectiveNumber<TInner>(HyperMath.Pow<TInner>(value, other), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        public ProjectiveNumber<TInner> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(!IsInfinity)
             {
@@ -116,24 +116,24 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new ProjectiveNumber<TInner>(value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new ProjectiveNumber<TInner>(HyperMath.Neg(value), true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new ProjectiveNumber<TInner>(HyperMath.Div(value, other), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new ProjectiveNumber<TInner>(HyperMath.Mul(value, other));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner> Call(UnaryOperation operation)
+        public ProjectiveNumber<TInner> Call(StandardUnaryOperation operation)
         {
             if(!IsInfinity)
             {
-                if(operation == UnaryOperation.Inverse && !HyperMath.CanInv(value))
+                if(operation == StandardUnaryOperation.Inverse && !HyperMath.CanInv(value))
                 {
                     return new ProjectiveNumber<TInner>(value, true);
                 }
@@ -141,34 +141,34 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
-                case UnaryOperation.Identity:
+                case StandardUnaryOperation.Identity:
                     return this;
-                case UnaryOperation.Negate:
+                case StandardUnaryOperation.Negate:
                     return new ProjectiveNumber<TInner>(HyperMath.Neg(value), true);
-                case UnaryOperation.Increment:
+                case StandardUnaryOperation.Increment:
                     return new ProjectiveNumber<TInner>(value, true);
-                case UnaryOperation.Decrement:
+                case StandardUnaryOperation.Decrement:
                     return new ProjectiveNumber<TInner>(value, true);
-                case UnaryOperation.Inverse:
+                case StandardUnaryOperation.Inverse:
                     return new ProjectiveNumber<TInner>(value, false);
-                case UnaryOperation.Conjugate:
+                case StandardUnaryOperation.Conjugate:
                     return new ProjectiveNumber<TInner>(HyperMath.Con(value), true);
-                case UnaryOperation.Modulus:
+                case StandardUnaryOperation.Modulus:
                     return new ProjectiveNumber<TInner>(HyperMath.Mods(value), true);
-                case UnaryOperation.Double:
+                case StandardUnaryOperation.Double:
                     return new ProjectiveNumber<TInner>(HyperMath.Div2(value), true);
-                case UnaryOperation.Half:
+                case StandardUnaryOperation.Half:
                     return new ProjectiveNumber<TInner>(HyperMath.Mul2(value), true);
-                case UnaryOperation.Square:
+                case StandardUnaryOperation.Square:
                     return new ProjectiveNumber<TInner>(HyperMath.Pow2(value), true);
-                case UnaryOperation.SquareRoot:
+                case StandardUnaryOperation.SquareRoot:
                     return new ProjectiveNumber<TInner>(HyperMath.Sqrt(value), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             ThrowIfInfinity();
             return HyperMath.Call(operation, value);
@@ -218,9 +218,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual ProjectiveNumber<TInner> Call(NullaryOperation operation)
+            public virtual ProjectiveNumber<TInner> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual ProjectiveNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -349,7 +349,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return new ProjectiveNumber<TInner, TComponent>(HyperMath.Clone(value), IsInfinity);
         }
 
-        public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> other)
+        public ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in ProjectiveNumber<TInner, TComponent> other)
         {
             if(!other.IsInfinity)
             {
@@ -357,25 +357,25 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Add(other.value, value)), true);
                     }
                     return new ProjectiveNumber<TInner, TComponent>(other.value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(HyperMath.Mul(value, other.value), HyperMath.Sub(other.value, value)), true);
                     }
                     return new ProjectiveNumber<TInner, TComponent>(other.value, true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul(value, other.value), true);
                     }
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other.value), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     if(IsInfinity)
                     {
                         return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other.value));
@@ -386,34 +386,34 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
+        public ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner other)
         {
             if(!IsInfinity)
             {
-                if(operation == BinaryOperation.Divide && !HyperMath.CanInv(other))
+                if(operation == StandardBinaryOperation.Divide && !HyperMath.CanInv(other))
                 {
-                    return Call(BinaryOperation.Multiply, new ProjectiveNumber<TInner, TComponent>(other, true));
+                    return Call(StandardBinaryOperation.Multiply, new ProjectiveNumber<TInner, TComponent>(other, true));
                 }
                 return HyperMath.Call<TInner>(operation, value, other);
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul(value, other), true);
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Pow(value, other), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
+        public ProjectiveNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             if(!IsInfinity)
             {
@@ -421,24 +421,24 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Neg(value), true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div(value, other), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul(other, value));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TComponent> Call(UnaryOperation operation)
+        public ProjectiveNumber<TInner, TComponent> Call(StandardUnaryOperation operation)
         {
             if(!IsInfinity)
             {
-                if(operation == UnaryOperation.Inverse && !HyperMath.CanInv(value))
+                if(operation == StandardUnaryOperation.Inverse && !HyperMath.CanInv(value))
                 {
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
                 }
@@ -446,61 +446,61 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
-                case UnaryOperation.Identity:
+                case StandardUnaryOperation.Identity:
                     return this;
-                case UnaryOperation.Negate:
+                case StandardUnaryOperation.Negate:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Neg(value), true);
-                case UnaryOperation.Increment:
+                case StandardUnaryOperation.Increment:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case UnaryOperation.Decrement:
+                case StandardUnaryOperation.Decrement:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case UnaryOperation.Inverse:
+                case StandardUnaryOperation.Inverse:
                     return new ProjectiveNumber<TInner, TComponent>(value, false);
-                case UnaryOperation.Conjugate:
+                case StandardUnaryOperation.Conjugate:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Con(value), true);
-                case UnaryOperation.Modulus:
+                case StandardUnaryOperation.Modulus:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mods(value), true);
-                case UnaryOperation.Double:
+                case StandardUnaryOperation.Double:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Div2(value), true);
-                case UnaryOperation.Half:
+                case StandardUnaryOperation.Half:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Mul2(value), true);
-                case UnaryOperation.Square:
+                case StandardUnaryOperation.Square:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Pow2(value), true);
-                case UnaryOperation.SquareRoot:
+                case StandardUnaryOperation.SquareRoot:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Sqrt(value), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
+        public ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             if(!IsInfinity)
             {
-                if(operation == BinaryOperation.Divide)
+                if(operation == StandardBinaryOperation.Divide)
                 {
-                    return Call(BinaryOperation.Divide, HyperMath.Create<TInner, TComponent>(other));
+                    return Call(StandardBinaryOperation.Divide, HyperMath.Create<TInner, TComponent>(other));
                 }
                 return HyperMath.CallComponent(operation, value, other);
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.DivVal(value, other), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.MulVal(value, other), true);
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.PowVal(value, other), true);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public ProjectiveNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public ProjectiveNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             if(!IsInfinity)
             {
@@ -508,20 +508,20 @@ namespace IS4.HyperNumerics.NumberTypes
             }
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new ProjectiveNumber<TInner, TComponent>(value, true);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.Neg(value), true);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.DivVal(value, other), true);
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new ProjectiveNumber<TInner, TComponent>(HyperMath.MulVal(value, other));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             if(IsInfinity)
             {
@@ -574,9 +574,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual ProjectiveNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual ProjectiveNumber<TInner, TComponent> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual ProjectiveNumber<TInner, TComponent> Create(in TComponent num)

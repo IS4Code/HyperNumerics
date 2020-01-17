@@ -54,12 +54,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TComponent>();
         }
 
-        public AbstractNumber Call(BinaryOperation operation, in AbstractNumber other)
+        public AbstractNumber Call(StandardBinaryOperation operation, in AbstractNumber other)
         {
             return new AbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public AbstractNumber Call(UnaryOperation operation)
+        public AbstractNumber Call(StandardUnaryOperation operation)
         {
             return new AbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -98,9 +98,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => -1;
 
-            public AbstractNumber Call(NullaryOperation operation)
+            public AbstractNumber Create(StandardNumber num)
             {
-                return new AbstractNumber(HyperMath.Operations.GetOperation(operation));
+                return new AbstractNumber(HyperMath.Operations.GetOperation(num));
             }
         }
 
@@ -187,12 +187,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TComponent>();
         }
 
-        public ComponentAbstractNumber Call(BinaryOperation operation, in ComponentAbstractNumber other)
+        public ComponentAbstractNumber Call(StandardBinaryOperation operation, in ComponentAbstractNumber other)
         {
             return new ComponentAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public ComponentAbstractNumber Call(UnaryOperation operation)
+        public ComponentAbstractNumber Call(StandardUnaryOperation operation)
         {
             return new ComponentAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -231,9 +231,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => -1;
 
-            public ComponentAbstractNumber Call(NullaryOperation operation)
+            public ComponentAbstractNumber Create(StandardNumber num)
             {
-                return new ComponentAbstractNumber(HyperMath.Operations.GetOperation(operation));
+                return new ComponentAbstractNumber(HyperMath.Operations.GetOperation(num));
             }
         }
 
@@ -324,12 +324,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TComponent>(num);
         }
 
-        public UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber other)
+        public UnaryAbstractNumber Call(StandardBinaryOperation operation, in UnaryAbstractNumber other)
         {
             return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public UnaryAbstractNumber Call(UnaryOperation operation)
+        public UnaryAbstractNumber Call(StandardUnaryOperation operation)
         {
             return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -368,9 +368,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => -1;
 
-            public UnaryAbstractNumber Call(NullaryOperation operation)
+            public UnaryAbstractNumber Create(StandardNumber num)
             {
-                return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
+                return new UnaryAbstractNumber(HyperMath.Operations.GetOperation(num).AsUnary());
             }
         }
 
@@ -435,12 +435,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TComponent>(num);
         }
 
-        public ComponentUnaryAbstractNumber Call(BinaryOperation operation, in ComponentUnaryAbstractNumber other)
+        public ComponentUnaryAbstractNumber Call(StandardBinaryOperation operation, in ComponentUnaryAbstractNumber other)
         {
             return new ComponentUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public ComponentUnaryAbstractNumber Call(UnaryOperation operation)
+        public ComponentUnaryAbstractNumber Call(StandardUnaryOperation operation)
         {
             return new ComponentUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -479,9 +479,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => -1;
 
-            public ComponentUnaryAbstractNumber Call(NullaryOperation operation)
+            public ComponentUnaryAbstractNumber Create(StandardNumber num)
             {
-                return new ComponentUnaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsUnary());
+                return new ComponentUnaryAbstractNumber(HyperMath.Operations.GetOperation(num).AsUnary());
             }
         }
 
@@ -546,12 +546,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TComponent>(numArg1, numArg2);
         }
 
-        public BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber other)
+        public BinaryAbstractNumber Call(StandardBinaryOperation operation, in BinaryAbstractNumber other)
         {
             return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public BinaryAbstractNumber Call(UnaryOperation operation)
+        public BinaryAbstractNumber Call(StandardUnaryOperation operation)
         {
             return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -590,9 +590,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => -1;
 
-            public BinaryAbstractNumber Call(NullaryOperation operation)
+            public BinaryAbstractNumber Create(StandardNumber num)
             {
-                return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
+                return new BinaryAbstractNumber(HyperMath.Operations.GetOperation(num).AsBinary());
             }
         }
 
@@ -667,12 +667,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return Operation.Invoke<TNumber, TComponent>(numArg1, numArg2);
         }
 
-        public ComponentBinaryAbstractNumber Call(BinaryOperation operation, in ComponentBinaryAbstractNumber other)
+        public ComponentBinaryAbstractNumber Call(StandardBinaryOperation operation, in ComponentBinaryAbstractNumber other)
         {
             return new ComponentBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation, other.Operation));
         }
 
-        public ComponentBinaryAbstractNumber Call(UnaryOperation operation)
+        public ComponentBinaryAbstractNumber Call(StandardUnaryOperation operation)
         {
             return new ComponentBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).Apply(Operation));
         }
@@ -711,9 +711,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => -1;
 
-            public ComponentBinaryAbstractNumber Call(NullaryOperation operation)
+            public ComponentBinaryAbstractNumber Create(StandardNumber num)
             {
-                return new ComponentBinaryAbstractNumber(HyperMath.Operations.GetOperation(operation).AsBinary());
+                return new ComponentBinaryAbstractNumber(HyperMath.Operations.GetOperation(num).AsBinary());
             }
         }
 

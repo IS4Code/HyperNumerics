@@ -21,94 +21,94 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => IsFin(first) && IsFin(second);
 
-        public HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> other)
+        public HyperDiagonal<TInner> Call(StandardBinaryOperation operation, in HyperDiagonal<TInner> other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner>(Add(first, other.first), Add(second, other.second));
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner>(Sub(first, other.first), Sub(second, other.second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner>(Mul(first, other.first), Add(Add(Mul(first, other.second), Mul(second, other.first)), Mul(second, other.second)));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     var denom = Add(Pow2(other.first), Pow2(other.second));
                     return new HyperDiagonal<TInner>(Div(first, other.first), Div(Sub(second, Div(Mul(first, other.second), other.first)), Add(other.first, other.second)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner> Call(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner> Call(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner>(Add(first, other), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner>(Sub(first, other), second);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner>(Mul(first, other), Mul(second, other));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new HyperDiagonal<TInner>(Div(first, other), Div(second, other));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner>(Add(other, first), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner>(Sub(other, first), Neg(second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner>(Mul(other, first), Mul(other, second));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     var denom = Add(Pow2(first), Pow2(second));
                     return new HyperDiagonal<TInner>(Div(other, first), Div(Neg(Div(Mul(other, second), first)), Add(first, second)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(other, this);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(other, this);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner> Call(UnaryOperation operation)
+        public HyperDiagonal<TInner> Call(StandardUnaryOperation operation)
         {
             switch(operation)
             {
-                case UnaryOperation.Identity:
+                case StandardUnaryOperation.Identity:
                     return this;
-                case UnaryOperation.Negate:
+                case StandardUnaryOperation.Negate:
                     return new HyperDiagonal<TInner>(Neg(this.first), Neg(second));
-                case UnaryOperation.Increment:
+                case StandardUnaryOperation.Increment:
                     return new HyperDiagonal<TInner>(Inc(this.first), second);
-                case UnaryOperation.Decrement:
+                case StandardUnaryOperation.Decrement:
                     return new HyperDiagonal<TInner>(Dec(this.first), second);
-                case UnaryOperation.Inverse:
+                case StandardUnaryOperation.Inverse:
                     return new HyperDiagonal<TInner>(Inv(this.first), Div(Neg(second), Mul(Add(this.first, second), this.first)));
-                case UnaryOperation.Conjugate:
+                case StandardUnaryOperation.Conjugate:
                     return new HyperDiagonal<TInner>(this.first, Neg(second));
-                case UnaryOperation.Modulus:
+                case StandardUnaryOperation.Modulus:
                     return Mul(Add(this.first, second), this.first);
-                case UnaryOperation.Double:
+                case StandardUnaryOperation.Double:
                     return new HyperDiagonal<TInner>(Mul2(this.first), Mul2(second));
-                case UnaryOperation.Half:
+                case StandardUnaryOperation.Half:
                     return new HyperDiagonal<TInner>(Div2(this.first), Div2(second));
-                case UnaryOperation.Square:
+                case StandardUnaryOperation.Square:
                     return new HyperDiagonal<TInner>(Pow2(this.first), Add(Mul2(Mul(this.first, second)), Pow2(second)));
                 default:
                     var first = HyperMath.Call(operation, this.first);
@@ -116,7 +116,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             throw new NotSupportedException();
         }
@@ -143,138 +143,138 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool IsFinite => IsFin(first) && IsFin(second);
 
-        public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> other)
+        public HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner, TComponent>(Add(first, other.first), Add(second, other.second));
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner, TComponent>(Sub(first, other.first), Sub(second, other.second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner, TComponent>(Mul(first, other.first), Add(Add(Mul(first, other.second), Mul(second, other.first)), Mul(second, other.second)));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     var denom = Add(Pow2(other.first), Pow2(other.second));
                     return new HyperDiagonal<TInner, TComponent>(Div(first, other.first), Div(Sub(second, Div(Mul(first, other.second), other.first)), Add(other.first, other.second)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner, TComponent>(Add(first, other), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner, TComponent>(Sub(first, other), second);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner, TComponent>(Mul(first, other), Mul(second, other));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new HyperDiagonal<TInner, TComponent>(Div(first, other), Div(second, other));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(this, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner, TComponent>(Add(other, first), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner, TComponent>(Sub(other, first), Neg(second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner, TComponent>(Mul(other, first), Mul(other, second));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     var denom = Add(Pow2(first), Pow2(second));
                     return new HyperDiagonal<TInner, TComponent>(Div(other, first), Div(Neg(Div(Mul(other, second), first)), Add(first, second)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(other, this);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(other, this);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
+        public HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner, TComponent>(AddVal(this.first, other), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner, TComponent>(SubVal(this.first, other), second);
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner, TComponent>(MulVal(this.first, other), MulVal(second, other));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return new HyperDiagonal<TInner, TComponent>(DivVal(this.first, other), DivVal(second, other));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     var first = PowVal(this.first, other);
                     return new HyperDiagonal<TInner, TComponent>(first, Sub(PowVal(Add(this.first, second), other), first));
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(this, Operations.Instance.Create(other, default, default, default));
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public HyperDiagonal<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return new HyperDiagonal<TInner, TComponent>(AddValRev(other, first), second);
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return new HyperDiagonal<TInner, TComponent>(SubValRev(other, first), Neg(second));
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return new HyperDiagonal<TInner, TComponent>(MulValRev(other, first), MulValRev(other, second));
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     var denom = Add(Pow2(first), Pow2(second));
                     return new HyperDiagonal<TInner, TComponent>(DivValRev(other, first), Div(Neg(Div(MulValRev(other, second), first)), Add(first, second)));
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return PowDefault(Operations.Instance.Create(other, default, default, default), this);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Atan2Default(Operations.Instance.Create(other, default, default, default), this);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public HyperDiagonal<TInner, TComponent> Call(UnaryOperation operation)
+        public HyperDiagonal<TInner, TComponent> Call(StandardUnaryOperation operation)
         {
             switch(operation)
             {
-                case UnaryOperation.Identity:
+                case StandardUnaryOperation.Identity:
                     return this;
-                case UnaryOperation.Negate:
+                case StandardUnaryOperation.Negate:
                     return new HyperDiagonal<TInner, TComponent>(Neg(this.first), Neg(second));
-                case UnaryOperation.Increment:
+                case StandardUnaryOperation.Increment:
                     return new HyperDiagonal<TInner, TComponent>(Inc(this.first), second);
-                case UnaryOperation.Decrement:
+                case StandardUnaryOperation.Decrement:
                     return new HyperDiagonal<TInner, TComponent>(Dec(this.first), second);
-                case UnaryOperation.Inverse:
+                case StandardUnaryOperation.Inverse:
                     return new HyperDiagonal<TInner, TComponent>(Inv(this.first), Div(Neg(second), Mul(Add(this.first, second), this.first)));
-                case UnaryOperation.Conjugate:
+                case StandardUnaryOperation.Conjugate:
                     return new HyperDiagonal<TInner, TComponent>(this.first, Neg(second));
-                case UnaryOperation.Modulus:
+                case StandardUnaryOperation.Modulus:
                     return Mul(Add(this.first, second), this.first);
-                case UnaryOperation.Double:
+                case StandardUnaryOperation.Double:
                     return new HyperDiagonal<TInner, TComponent>(Mul2(this.first), Mul2(second));
-                case UnaryOperation.Half:
+                case StandardUnaryOperation.Half:
                     return new HyperDiagonal<TInner, TComponent>(Div2(this.first), Div2(second));
-                case UnaryOperation.Square:
+                case StandardUnaryOperation.Square:
                     return new HyperDiagonal<TInner, TComponent>(Pow2(this.first), Add(Mul2(Mul(this.first, second)), Pow2(second)));
                 default:
                     var first = HyperMath.Call(operation, this.first);
@@ -282,7 +282,7 @@ namespace IS4.HyperNumerics.NumberTypes
             }
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             throw new NotSupportedException();
         }

@@ -21,7 +21,7 @@ var data = new[] {
 	new{name = "BinaryAbstractNumber", args = "", hasinner = false, hascomponent = false, constraints = emptyConstraints},
 	new{name = "ComponentBinaryAbstractNumber", args = "", hasinner = false, hascomponent = false, constraints = emptyConstraints},
 	new{name = "BoxedNumber", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TProvider", hasinner = true, hascomponent = true, constraints = (Func<string, string>)(fn => " where TProvider : struct, " + fn + ".IDefaultValueProvider")},
+	new{name = "CustomDefaultNumber", args = "TProvider", hasinner = true, hascomponent = true, constraints = (Func<string, string>)(fn => " where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider")},
 	new{name = "GeneratedNumber", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},
 	new{name = "HyperComplex", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},
 	new{name = "HyperDiagonal", args = "", hasinner = true, hascomponent = true, constraints = emptyConstraints},
@@ -73,12 +73,12 @@ foreach(var info in data)
 	{
         <#=fullname#> IWrapperNumber<<#=fullname#>>.Value => this;
 
-		<#=fullname#> IExtendedNumber<<#=fullname#>, <#=fullname#>>.CallReversed(BinaryOperation operation, in <#=fullname#> num)
+		<#=fullname#> IExtendedNumber<<#=fullname#>, <#=fullname#>>.CallReversed(StandardBinaryOperation operation, in <#=fullname#> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		<#=fullname#> INumber<<#=fullname#>, <#=fullname#>>.CallComponent(UnaryOperation operation)
+		<#=fullname#> INumber<<#=fullname#>, <#=fullname#>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -107,7 +107,7 @@ foreach(var info in data)
 
 		partial class Operations : IExtendedNumberOperations<<#=fullname#>, <#=fullname#><#=componentaffix#>>, IExtendedNumberOperations<<#=fullname#>, <#=fullname#>, <#=fullname#>>
 		{
-            <#=fullname#> INumberOperations<<#=fullname#>, <#=fullname#>>.CallComponent(UnaryOperation operation, in <#=fullname#> num)
+            <#=fullname#> INumberOperations<<#=fullname#>, <#=fullname#>>.CallComponent(StandardUnaryOperation operation, in <#=fullname#> num)
             {
                 return num.Call(operation);
             }

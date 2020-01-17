@@ -39,42 +39,42 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Clone(value);
         }
 
-        public WrapperNumber<TInner> Call(BinaryOperation operation, in WrapperNumber<TInner> other)
+        public WrapperNumber<TInner> Call(StandardBinaryOperation operation, in WrapperNumber<TInner> other)
         {
             return HyperMath.Call(operation, value, other.value);
         }
 
-        public WrapperNumber<TInner> Call(BinaryOperation operation, in TInner other)
+        public WrapperNumber<TInner> Call(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, value, other);
         }
 
-        public WrapperNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        public WrapperNumber<TInner> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, other, value);
         }
 
-        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.Call(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, value, other);
         }
 
-        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, other, value);
         }
 
-        public WrapperNumber<TInner> Call(UnaryOperation operation)
+        public WrapperNumber<TInner> Call(StandardUnaryOperation operation)
         {
             return HyperMath.Call(operation, value);
         }
 
-        TInner INumber<TInner>.Call(UnaryOperation operation)
+        TInner INumber<TInner>.Call(StandardUnaryOperation operation)
         {
             return HyperMath.Call(operation, value);
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             return HyperMath.Call(operation, value);
         }
@@ -123,9 +123,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual WrapperNumber<TInner> Call(NullaryOperation operation)
+            public virtual WrapperNumber<TInner> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual WrapperNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -235,62 +235,62 @@ namespace IS4.HyperNumerics.NumberTypes
             return HyperMath.Clone(value);
         }
 
-        public WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in WrapperNumber<TInner, TComponent> other)
+        public WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in WrapperNumber<TInner, TComponent> other)
         {
             return HyperMath.Call(operation, value, other.value);
         }
 
-        public WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
+        public WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, value, other);
         }
 
-        public WrapperNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
+        public WrapperNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, other, value);
         }
 
-        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.Call(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, value, other);
         }
 
-        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return HyperMath.Call(operation, other, value);
         }
 
-        public WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
+        public WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             return HyperMath.CallComponent(operation, value, other);
         }
 
-        public WrapperNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public WrapperNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             return HyperMath.CallComponentReversed(operation, other, value);
         }
 
-        TInner INumber<TInner, TComponent>.Call(BinaryOperation operation, in TComponent other)
+        TInner INumber<TInner, TComponent>.Call(StandardBinaryOperation operation, in TComponent other)
         {
             return HyperMath.CallComponent(operation, value, other);
         }
 
-        TInner INumber<TInner, TComponent>.CallReversed(BinaryOperation operation, in TComponent other)
+        TInner INumber<TInner, TComponent>.CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             return HyperMath.CallComponentReversed(operation, other, value);
         }
 
-        public WrapperNumber<TInner, TComponent> Call(UnaryOperation operation)
+        public WrapperNumber<TInner, TComponent> Call(StandardUnaryOperation operation)
         {
             return HyperMath.Call(operation, value);
         }
 
-        TInner INumber<TInner>.Call(UnaryOperation operation)
+        TInner INumber<TInner>.Call(StandardUnaryOperation operation)
         {
             return HyperMath.Call(operation, value);
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             return HyperMath.CallComponent<TInner, TComponent>(operation, value);
         }
@@ -339,9 +339,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual WrapperNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual WrapperNumber<TInner, TComponent> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual WrapperNumber<TInner, TComponent> Create(in TComponent num)

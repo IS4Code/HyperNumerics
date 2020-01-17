@@ -71,182 +71,182 @@ namespace IS4.HyperNumerics.NumberTypes
             return new ExtendedReal(Value);
         }
 
-        public Real Call(BinaryOperation operation, in Real other)
+        public Real Call(StandardBinaryOperation operation, in Real other)
         {
             return Call(operation, other.Value);
         }
 
-        public ExtendedReal Call(BinaryOperation operation, in ExtendedReal other)
+        public ExtendedReal Call(StandardBinaryOperation operation, in ExtendedReal other)
         {
             return other.CallReversed(operation, Value);
         }
 
-        public ExtendedReal CallReversed(BinaryOperation operation, in ExtendedReal other)
+        public ExtendedReal CallReversed(StandardBinaryOperation operation, in ExtendedReal other)
         {
             return other.Call(operation, Value);
         }
 
-        public Real Call(BinaryOperation operation, in double other)
+        public Real Call(StandardBinaryOperation operation, in double other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return Value + other;
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return Value - other;
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return Value * other;
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return Value / other;
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return Math.Pow(Value, other);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Math.Atan2(Value, other);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public Real CallReversed(BinaryOperation operation, in double other)
+        public Real CallReversed(StandardBinaryOperation operation, in double other)
         {
             switch(operation)
             {
-                case BinaryOperation.Add:
+                case StandardBinaryOperation.Add:
                     return other + Value;
-                case BinaryOperation.Subtract:
+                case StandardBinaryOperation.Subtract:
                     return other - Value;
-                case BinaryOperation.Multiply:
+                case StandardBinaryOperation.Multiply:
                     return other * Value;
-                case BinaryOperation.Divide:
+                case StandardBinaryOperation.Divide:
                     return other / Value;
-                case BinaryOperation.Power:
+                case StandardBinaryOperation.Power:
                     return Math.Pow(other, Value);
-                case BinaryOperation.Atan2:
+                case StandardBinaryOperation.Atan2:
                     return Math.Atan2(other, Value);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        ExtendedReal INumber<ExtendedReal, double>.Call(BinaryOperation operation, in double other)
+        ExtendedReal INumber<ExtendedReal, double>.Call(StandardBinaryOperation operation, in double other)
         {
             return new ExtendedReal(Value).Call(operation, other);
         }
 
-        ExtendedReal INumber<ExtendedReal, double>.CallReversed(BinaryOperation operation, in double other)
+        ExtendedReal INumber<ExtendedReal, double>.CallReversed(StandardBinaryOperation operation, in double other)
         {
             return new ExtendedReal(Value).CallReversed(operation, other);
         }
 
-        public Real Call(BinaryOperation operation, in float other)
+        public Real Call(StandardBinaryOperation operation, in float other)
         {
             return Call(operation, (double)other);
         }
 
-        public Real CallReversed(BinaryOperation operation, in float other)
+        public Real CallReversed(StandardBinaryOperation operation, in float other)
         {
             return CallReversed(operation, (double)other);
         }
 
-        ExtendedReal INumber<ExtendedReal, float>.Call(BinaryOperation operation, in float other)
+        ExtendedReal INumber<ExtendedReal, float>.Call(StandardBinaryOperation operation, in float other)
         {
             return new ExtendedReal(Value).Call(operation, other);
         }
 
-        ExtendedReal INumber<ExtendedReal, float>.CallReversed(BinaryOperation operation, in float other)
+        ExtendedReal INumber<ExtendedReal, float>.CallReversed(StandardBinaryOperation operation, in float other)
         {
             return new ExtendedReal(Value).CallReversed(operation, other);
         }
 
-        ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(BinaryOperation operation, in ExtendedReal other)
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.Call(StandardBinaryOperation operation, in ExtendedReal other)
         {
             return Call(operation, other);
         }
 
-        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallReversed(BinaryOperation operation, in ExtendedReal other)
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallReversed(StandardBinaryOperation operation, in ExtendedReal other)
         {
             return CallReversed(operation, other);
         }
 
-        public Real Call(UnaryOperation operation)
+        public Real Call(StandardUnaryOperation operation)
         {
             return CallComponent(operation);
         }
 
-        ExtendedReal INumber<ExtendedReal>.Call(UnaryOperation operation)
+        ExtendedReal INumber<ExtendedReal>.Call(StandardUnaryOperation operation)
         {
             return CallComponent(operation);
         }
 
-        public double CallComponent(UnaryOperation operation)
+        public double CallComponent(StandardUnaryOperation operation)
         {
             switch(operation)
             {
-                case UnaryOperation.Identity:
+                case StandardUnaryOperation.Identity:
                     return Value;
-                case UnaryOperation.Negate:
+                case StandardUnaryOperation.Negate:
                     return -Value;
-                case UnaryOperation.Increment:
+                case StandardUnaryOperation.Increment:
                     return Value + 1;
-                case UnaryOperation.Decrement:
+                case StandardUnaryOperation.Decrement:
                     return Value - 1;
-                case UnaryOperation.Inverse:
+                case StandardUnaryOperation.Inverse:
                     return 1.0 / Value;
-                case UnaryOperation.Conjugate:
+                case StandardUnaryOperation.Conjugate:
                     return Value;
-                case UnaryOperation.Modulus:
+                case StandardUnaryOperation.Modulus:
                     return Math.Abs(Value);
-                case UnaryOperation.Double:
+                case StandardUnaryOperation.Double:
                     return Value * 2.0;
-                case UnaryOperation.Half:
+                case StandardUnaryOperation.Half:
                     return Value * 0.5;
-                case UnaryOperation.Square:
+                case StandardUnaryOperation.Square:
                     return Value * Value;
-                case UnaryOperation.SquareRoot:
+                case StandardUnaryOperation.SquareRoot:
                     return Math.Sqrt(Value);
-                case UnaryOperation.Exponentiate:
+                case StandardUnaryOperation.Exponentiate:
                     return Math.Exp(Value);
-                case UnaryOperation.Logarithm:
+                case StandardUnaryOperation.Logarithm:
                     return Math.Log(Value);
-                case UnaryOperation.Sine:
+                case StandardUnaryOperation.Sine:
                     return Math.Sin(Value);
-                case UnaryOperation.Cosine:
+                case StandardUnaryOperation.Cosine:
                     return Math.Cos(Value);
-                case UnaryOperation.Tangent:
+                case StandardUnaryOperation.Tangent:
                     return Math.Tan(Value);
-                case UnaryOperation.HyperbolicSine:
+                case StandardUnaryOperation.HyperbolicSine:
                     return Math.Sinh(Value);
-                case UnaryOperation.HyperbolicCosine:
+                case StandardUnaryOperation.HyperbolicCosine:
                     return Math.Cosh(Value);
-                case UnaryOperation.HyperbolicTangent:
+                case StandardUnaryOperation.HyperbolicTangent:
                     return Math.Tanh(Value);
-                case UnaryOperation.ArcSine:
+                case StandardUnaryOperation.ArcSine:
                     return Math.Asin(Value);
-                case UnaryOperation.ArcCosine:
+                case StandardUnaryOperation.ArcCosine:
                     return Math.Acos(Value);
-                case UnaryOperation.ArcTangent:
+                case StandardUnaryOperation.ArcTangent:
                     return Math.Atan(Value);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        float INumber<Real, float>.CallComponent(UnaryOperation operation)
+        float INumber<Real, float>.CallComponent(StandardUnaryOperation operation)
         {
             return (float)CallComponent(operation);
         }
 
-        float INumber<ExtendedReal, float>.CallComponent(UnaryOperation operation)
+        float INumber<ExtendedReal, float>.CallComponent(StandardUnaryOperation operation)
         {
             return (float)CallComponent(operation);
         }
 
-        Real INumber<Real, Real>.CallComponent(UnaryOperation operation)
+        Real INumber<Real, Real>.CallComponent(StandardUnaryOperation operation)
         {
             return new Real(Call(operation));
         }
 
-        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallComponent(UnaryOperation operation)
+        ExtendedReal INumber<ExtendedReal, ExtendedReal>.CallComponent(StandardUnaryOperation operation)
         {
             return new ExtendedReal(Call(operation));
         }
@@ -440,118 +440,122 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual Real Call(NullaryOperation operation)
+            public virtual Real Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.RealOne:
-                    case NullaryOperation.UnitsOne:
-                    case NullaryOperation.AllOne:
+                    case StandardNumber.One:
+                    case StandardNumber.UnitsOne:
+                    case StandardNumber.AllOne:
+                    case StandardNumber.CombinedOne:
                         return 1.0;
-                    case NullaryOperation.Zero:
-                    case NullaryOperation.SpecialOne:
-                    case NullaryOperation.NonRealUnitsOne:
-                    case NullaryOperation.CombinedOne:
+                    case StandardNumber.Zero:
+                    case StandardNumber.SpecialOne:
+                    case StandardNumber.NonRealUnitsOne:
+                        return 0.0;
+                    case StandardNumber.NegativeOne:
+                        return -1.0;
+                    case StandardNumber.Two:
+                        return 2.0;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            ExtendedReal INumberOperations<ExtendedReal>.Create(StandardNumber num)
+            {
+                switch(num)
+                {
+                    case StandardNumber.One:
+                    case StandardNumber.UnitsOne:
+                    case StandardNumber.AllOne:
+                        return 1.0;
+                    case StandardNumber.Zero:
+                    case StandardNumber.SpecialOne:
+                    case StandardNumber.NonRealUnitsOne:
+                    case StandardNumber.CombinedOne:
                         return 0.0;
                     default:
                         throw new NotSupportedException();
                 }
             }
 
-            ExtendedReal INumberOperations<ExtendedReal>.Call(NullaryOperation operation)
-            {
-                switch(operation)
-                {
-                    case NullaryOperation.RealOne:
-                    case NullaryOperation.UnitsOne:
-                    case NullaryOperation.AllOne:
-                        return 1.0;
-                    case NullaryOperation.Zero:
-                    case NullaryOperation.SpecialOne:
-                    case NullaryOperation.NonRealUnitsOne:
-                    case NullaryOperation.CombinedOne:
-                        return 0.0;
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-
-            public virtual double CallComponent(UnaryOperation operation, in Real num)
+            public virtual double CallComponent(StandardUnaryOperation operation, in Real num)
             {
                 return num.Call(operation);
             }
 
-            float INumberOperations<Real, float>.CallComponent(UnaryOperation operation, in Real num)
+            float INumberOperations<Real, float>.CallComponent(StandardUnaryOperation operation, in Real num)
             {
                 return (float)num.Call(operation);
             }
 
-            Real INumberOperations<Real, Real>.CallComponent(UnaryOperation operation, in Real num)
+            Real INumberOperations<Real, Real>.CallComponent(StandardUnaryOperation operation, in Real num)
             {
                 return new Real(num.Call(operation));
             }
 
-            public virtual Real Call(BinaryOperation operation, in Real num1, in double num2)
+            public virtual Real Call(StandardBinaryOperation operation, in Real num1, in double num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual Real Call(BinaryOperation operation, in double num1, in Real num2)
+            public virtual Real Call(StandardBinaryOperation operation, in double num1, in Real num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual Real Call(BinaryOperation operation, in Real num1, in float num2)
+            public virtual Real Call(StandardBinaryOperation operation, in Real num1, in float num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual Real Call(BinaryOperation operation, in float num1, in Real num2)
+            public virtual Real Call(StandardBinaryOperation operation, in float num1, in Real num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
+            public virtual ExtendedReal Call(StandardUnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
             }
 
-            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(StandardBinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual double CallComponent(UnaryOperation operation, in ExtendedReal num)
+            public virtual double CallComponent(StandardUnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
             }
 
-            float INumberOperations<ExtendedReal, float>.CallComponent(UnaryOperation operation, in ExtendedReal num)
+            float INumberOperations<ExtendedReal, float>.CallComponent(StandardUnaryOperation operation, in ExtendedReal num)
             {
                 return (float)num.Call(operation);
             }
 
-            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.CallComponent(UnaryOperation operation, in ExtendedReal num)
+            ExtendedReal INumberOperations<ExtendedReal, ExtendedReal>.CallComponent(StandardUnaryOperation operation, in ExtendedReal num)
             {
                 return new ExtendedReal(num.Call(operation));
             }
 
-            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in double num2)
+            public virtual ExtendedReal Call(StandardBinaryOperation operation, in ExtendedReal num1, in double num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual ExtendedReal Call(BinaryOperation operation, in double num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(StandardBinaryOperation operation, in double num1, in ExtendedReal num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in float num2)
+            public virtual ExtendedReal Call(StandardBinaryOperation operation, in ExtendedReal num1, in float num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual ExtendedReal Call(BinaryOperation operation, in float num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(StandardBinaryOperation operation, in float num1, in ExtendedReal num2)
             {
                 return num2.CallReversed(operation, num1);
             }

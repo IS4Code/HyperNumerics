@@ -105,7 +105,7 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TComponent, TProvider>.IDefaultValueProvider
+	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
 	{
 		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>
 		{

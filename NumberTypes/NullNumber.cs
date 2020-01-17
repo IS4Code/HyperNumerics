@@ -24,12 +24,12 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullNumber Call(BinaryOperation operation, in NullNumber other)
+        public NullNumber Call(StandardBinaryOperation operation, in NullNumber other)
         {
             return default;
         }
 
-        public NullNumber Call(UnaryOperation operation)
+        public NullNumber Call(StandardUnaryOperation operation)
         {
             return default;
         }
@@ -68,7 +68,7 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => 0;
 
-            public NullNumber Call(NullaryOperation operation)
+            public NullNumber Create(StandardNumber num)
             {
                 return default;
             }
@@ -100,27 +100,27 @@ namespace IS4.HyperNumerics.NumberTypes
             return default;
         }
 
-        public NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> other)
+        public NullNumber<TComponent> Call(StandardBinaryOperation operation, in NullNumber<TComponent> other)
         {
             return default;
         }
 
-        public NullNumber<TComponent> Call(BinaryOperation operation, in TComponent other)
+        public NullNumber<TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             return default;
         }
 
-        public NullNumber<TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public NullNumber<TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             return default;
         }
 
-        public NullNumber<TComponent> Call(UnaryOperation operation)
+        public NullNumber<TComponent> Call(StandardUnaryOperation operation)
         {
             return default;
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             return default;
         }
@@ -159,7 +159,7 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => 0;
 
-            public NullNumber<TComponent> Call(NullaryOperation operation)
+            public NullNumber<TComponent> Create(StandardNumber num)
             {
                 return default;
             }

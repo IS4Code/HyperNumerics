@@ -1,9 +1,11 @@
-﻿namespace IS4.HyperNumerics.Operations
+﻿namespace IS4.HyperNumerics
 {
-    public enum NullaryOperation
+    public enum StandardNumber
     {
         Zero,
-        RealOne,
+        One,
+        NegativeOne,
+        Two,
         SpecialOne,
         UnitsOne,
         NonRealUnitsOne,

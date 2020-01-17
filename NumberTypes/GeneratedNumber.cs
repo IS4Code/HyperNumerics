@@ -13,7 +13,7 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly partial struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner>, INumber<GeneratedNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
+        public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => HyperMath.Create<TInner>(StandardNumber.Zero));
 
         readonly Func<TInner> generator;
 
@@ -64,34 +64,34 @@ namespace IS4.HyperNumerics.NumberTypes
             return this;
         }
 
-        public GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> other)
+        public GeneratedNumber<TInner> Call(StandardBinaryOperation operation, in GeneratedNumber<TInner> other)
         {
             var gen1 = Generator;
             var gen2 = other.Generator;
             return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen1(), gen2()));
         }
 
-        public GeneratedNumber<TInner> Call(BinaryOperation operation, in TInner other)
+        public GeneratedNumber<TInner> Call(StandardBinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
             return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        public GeneratedNumber<TInner> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
             return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, value, gen()));
         }
 
-        public GeneratedNumber<TInner> Call(UnaryOperation operation)
+        public GeneratedNumber<TInner> Call(StandardUnaryOperation operation)
         {
             var gen = Generator;
             return new GeneratedNumber<TInner>(() => HyperMath.Call(operation, gen()));
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             throw new NotSupportedException();
         }
@@ -130,9 +130,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => 0;
 
-            public virtual GeneratedNumber<TInner> Call(NullaryOperation operation)
+            public virtual GeneratedNumber<TInner> Create(StandardNumber num)
             {
-                return new GeneratedNumber<TInner>(() => HyperMath.Call<TInner>(operation));
+                return new GeneratedNumber<TInner>(() => HyperMath.Create<TInner>(num));
             }
 
             public virtual GeneratedNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -205,7 +205,7 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly partial struct GeneratedNumber<TInner, TComponent> : IExtendedNumber<GeneratedNumber<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
-        public static GeneratedNumber<TInner, TComponent> Zero => new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call<TInner>(NullaryOperation.Zero));
+        public static GeneratedNumber<TInner, TComponent> Zero => new GeneratedNumber<TInner, TComponent>(() => HyperMath.Create<TInner>(StandardNumber.Zero));
 
         readonly Func<TInner> generator;
 
@@ -256,48 +256,48 @@ namespace IS4.HyperNumerics.NumberTypes
             return this;
         }
 
-        public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> other)
+        public GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in GeneratedNumber<TInner, TComponent> other)
         {
             var gen1 = Generator;
             var gen2 = other.Generator;
             return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, gen1(), gen2()));
         }
 
-        public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
+        public GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
             return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
+        public GeneratedNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             var gen = Generator;
             var value = other;
             return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, value, gen()));
         }
 
-        public GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
+        public GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             var gen = Generator;
             var value = other;
             return new GeneratedNumber<TInner, TComponent>(() => HyperMath.CallComponent(operation, gen(), value));
         }
 
-        public GeneratedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public GeneratedNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             var gen = Generator;
             var value = other;
             return new GeneratedNumber<TInner, TComponent>(() => HyperMath.CallComponentReversed(operation, value, gen()));
         }
 
-        public GeneratedNumber<TInner, TComponent> Call(UnaryOperation operation)
+        public GeneratedNumber<TInner, TComponent> Call(StandardUnaryOperation operation)
         {
             var gen = Generator;
             return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call(operation, gen()));
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             return HyperMath.CallComponent<TInner, TComponent>(operation, Generator());
         }
@@ -336,9 +336,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => 0;
 
-            public virtual GeneratedNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual GeneratedNumber<TInner, TComponent> Create(StandardNumber num)
             {
-                return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Call<TInner>(operation));
+                return new GeneratedNumber<TInner, TComponent>(() => HyperMath.Create<TInner>(num));
             }
 
             public virtual GeneratedNumber<TInner, TComponent> Create(in TComponent num)

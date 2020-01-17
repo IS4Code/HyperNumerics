@@ -73,7 +73,7 @@ foreach(var info in data)
         public <#=info.name#>(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public <#=info.name#>(in TInner first, in TInner second)
@@ -119,34 +119,34 @@ foreach(var info in data)
             return (value.first, value.second);
         }
 
-        public <#=fullname#> FirstCall(BinaryOperation operation, in TInner other)
+        public <#=fullname#> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new <#=fullname#>(HyperMath.Call(operation, first, other), second);
         }
 
-        public <#=fullname#> SecondCall(BinaryOperation operation, in TInner other)
+        public <#=fullname#> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new <#=fullname#>(first, HyperMath.Call(operation, second, other));
         }
 		<# if(component) { #>
 		
-        public <#=fullname#> FirstCall(BinaryOperation operation, in TComponent other)
+        public <#=fullname#> FirstCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new <#=fullname#>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public <#=fullname#> SecondCall(BinaryOperation operation, in TComponent other)
+        public <#=fullname#> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new <#=fullname#>(first, HyperMath.CallComponent(operation, second, other));
         }
 		<# } #>
 
-        public <#=fullname#> FirstCall(UnaryOperation operation)
+        public <#=fullname#> FirstCall(StandardUnaryOperation operation)
         {
             return new <#=fullname#>(HyperMath.Call(operation, first), second);
         }
 
-        public <#=fullname#> SecondCall(UnaryOperation operation)
+        public <#=fullname#> SecondCall(StandardUnaryOperation operation)
         {
             return new <#=fullname#>(first, HyperMath.Call(operation, second));
         }
@@ -164,13 +164,13 @@ foreach(var info in data)
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -204,29 +204,27 @@ foreach(var info in data)
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual <#=fullname#> Call(NullaryOperation operation)
+			public virtual <#=fullname#> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new <#=fullname#>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new <#=fullname#>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new <#=fullname#>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new <#=fullname#>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new <#=fullname#>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new <#=fullname#>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new <#=fullname#>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new <#=fullname#>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 

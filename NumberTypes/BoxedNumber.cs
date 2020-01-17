@@ -52,42 +52,42 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Clone();
         }
 
-        public BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> other)
+        public BoxedNumber<TInner> Call(StandardBinaryOperation operation, in BoxedNumber<TInner> other)
         {
             return Reference.Call(operation, other.Reference);
         }
 
-        public BoxedNumber<TInner> Call(BinaryOperation operation, in TInner other)
+        public BoxedNumber<TInner> Call(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.Call(operation, other);
         }
 
-        public BoxedNumber<TInner> CallReversed(BinaryOperation operation, in TInner other)
+        public BoxedNumber<TInner> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.Call(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        public BoxedNumber<TInner> Call(UnaryOperation operation)
+        public BoxedNumber<TInner> Call(StandardUnaryOperation operation)
         {
             return Reference.Call(operation);
         }
 
-        TInner INumber<TInner>.Call(UnaryOperation operation)
+        TInner INumber<TInner>.Call(StandardUnaryOperation operation)
         {
             return Reference.Call(operation);
         }
 
-        public TInner CallComponent(UnaryOperation operation)
+        public TInner CallComponent(StandardUnaryOperation operation)
         {
             return Reference.Call(operation);
         }
@@ -136,9 +136,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual BoxedNumber<TInner> Call(NullaryOperation operation)
+            public virtual BoxedNumber<TInner> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual BoxedNumber<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -261,62 +261,62 @@ namespace IS4.HyperNumerics.NumberTypes
             return Reference.Clone();
         }
 
-        public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> other)
+        public BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in BoxedNumber<TInner, TComponent> other)
         {
             return Reference.Call(operation, other.Reference);
         }
 
-        public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner other)
+        public BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner>.Call(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.Call(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.Call(operation, other);
         }
 
-        public BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent other)
+        public BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent other)
         {
             return Reference.Call(operation, other);
         }
 
-        public BoxedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TComponent other)
+        public BoxedNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner, TComponent>.Call(BinaryOperation operation, in TComponent other)
+        TInner INumber<TInner, TComponent>.Call(StandardBinaryOperation operation, in TComponent other)
         {
             return Reference.Call(operation, other);
         }
 
-        TInner INumber<TInner, TComponent>.CallReversed(BinaryOperation operation, in TComponent other)
+        TInner INumber<TInner, TComponent>.CallReversed(StandardBinaryOperation operation, in TComponent other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        public BoxedNumber<TInner, TComponent> Call(UnaryOperation operation)
+        public BoxedNumber<TInner, TComponent> Call(StandardUnaryOperation operation)
         {
             return Reference.Call(operation);
         }
 
-        public BoxedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in TInner other)
+        public BoxedNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        TInner INumber<TInner>.Call(UnaryOperation operation)
+        TInner INumber<TInner>.Call(StandardUnaryOperation operation)
         {
             return Reference.Call(operation);
         }
 
-        TInner INumber<TInner>.CallReversed(BinaryOperation operation, in TInner other)
+        TInner INumber<TInner>.CallReversed(StandardBinaryOperation operation, in TInner other)
         {
             return Reference.CallReversed(operation, other);
         }
 
-        public TComponent CallComponent(UnaryOperation operation)
+        public TComponent CallComponent(StandardUnaryOperation operation)
         {
             return Reference.CallComponent(operation);
         }
@@ -365,9 +365,9 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension;
 
-            public virtual BoxedNumber<TInner, TComponent> Call(NullaryOperation operation)
+            public virtual BoxedNumber<TInner, TComponent> Create(StandardNumber num)
             {
-                return HyperMath.Call<TInner>(operation);
+                return HyperMath.Create<TInner>(num);
             }
 
             public virtual BoxedNumber<TInner, TComponent> Create(in TComponent num)

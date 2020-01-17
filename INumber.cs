@@ -56,7 +56,7 @@ namespace IS4.HyperNumerics
         /// <param name="operation">The operation that will be invoked.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(UnaryOperation operation);
+        TNumber Call(StandardUnaryOperation operation);
 
         /// <summary>
         /// Invokes a binary operation on this number and <paramref name="other"/>.
@@ -65,7 +65,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TNumber other);
+        TNumber Call(StandardBinaryOperation operation, in TNumber other);
 
         /// <summary>
         /// Invokes a binary operation on <paramref name="other"/> and this number.
@@ -74,7 +74,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The first argument to the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber CallReversed(BinaryOperation operation, in TNumber other);
+        TNumber CallReversed(StandardBinaryOperation operation, in TNumber other);
 
         /// <summary>
         /// Retrieves an instance of <see cref="INumberOperation{TNumber}"/> providing the supported operations on this type.
@@ -100,7 +100,7 @@ namespace IS4.HyperNumerics
         /// <param name="operation">The operation that will be invoked.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TComponent CallComponent(UnaryOperation operation);
+        TComponent CallComponent(StandardUnaryOperation operation);
 
         /// <summary>
         /// Invokes a binary operation on this number and <paramref name="other"/>.
@@ -109,7 +109,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TComponent other);
+        TNumber Call(StandardBinaryOperation operation, in TComponent other);
 
         /// <summary>
         /// Invokes a binary operation on <paramref name="other"/> and this number.
@@ -118,7 +118,7 @@ namespace IS4.HyperNumerics
         /// <param name="other">The second argument to the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber CallReversed(BinaryOperation operation, in TComponent other);
+        TNumber CallReversed(StandardBinaryOperation operation, in TComponent other);
 
         /// <summary>
         /// Retrieves an instance of <see cref="INumberOperation{TNumber, TComponent}"/> providing the supported operations on this type.

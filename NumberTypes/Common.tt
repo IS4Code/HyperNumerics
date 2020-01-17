@@ -22,7 +22,7 @@ var data = new[] {
 	new{name = "BinaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
 	new{name = "ComponentBinaryAbstractNumber", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
 	new{name = "BoxedNumber", args = "", level = 3, componenttype = "TComponent", constraints = emptyConstraints},
-	new{name = "CustomDefaultNumber", args = "TProvider", level = 3, componenttype = "TComponent", constraints = (Func<string, string>)(fn => " where TProvider : struct, " + fn + ".IDefaultValueProvider")},
+	new{name = "CustomDefaultNumber", args = "TProvider", level = 3, componenttype = "TComponent", constraints = (Func<string, string>)(fn => " where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider")},
 	new{name = "GeneratedNumber", args = "", level = 1, componenttype = "TComponent", constraints = emptyConstraints},
 	new{name = "HyperComplex", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
 	new{name = "HyperDiagonal", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
@@ -83,7 +83,7 @@ foreach(var info in data)
             return Clone();
         }
 
-        public <#=fullname#> CallReversed(BinaryOperation operation, in <#=fullname#> other)
+        public <#=fullname#> CallReversed(StandardBinaryOperation operation, in <#=fullname#> other)
         {
             return other.Call(operation, this);
         }
@@ -134,47 +134,47 @@ foreach(var info in data)
 
         public static <#=fullname#> operator+(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static <#=fullname#> operator-(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static <#=fullname#> operator*(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static <#=fullname#> operator/(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static <#=fullname#> operator^(<#=fullname#> a, <#=fullname#> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static <#=fullname#> operator-(<#=fullname#> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static <#=fullname#> operator~(<#=fullname#> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static <#=fullname#> operator++(<#=fullname#> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static <#=fullname#> operator--(<#=fullname#> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(<#=fullname#> a, <#=fullname#> b)
@@ -210,52 +210,52 @@ foreach(var info in data)
 
         public static <#=fullname#> operator+(<#=fullname#> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static <#=fullname#> operator-(<#=fullname#> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static <#=fullname#> operator*(<#=fullname#> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static <#=fullname#> operator/(<#=fullname#> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static <#=fullname#> operator^(<#=fullname#> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static <#=fullname#> operator+(TInner a, <#=fullname#> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static <#=fullname#> operator-(TInner a, <#=fullname#> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static <#=fullname#> operator*(TInner a, <#=fullname#> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static <#=fullname#> operator/(TInner a, <#=fullname#> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static <#=fullname#> operator^(TInner a, <#=fullname#> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }<# } #><# if(level >= 2) { #>
 		
 
@@ -319,6 +319,116 @@ foreach(var info in data)
             return b.CompareTo(a) >= 0;
         }<# } #>
 
+
+		public static <#=fullname#> operator+(<#=fullname#> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static <#=fullname#> operator-(<#=fullname#> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static <#=fullname#> operator*(<#=fullname#> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static <#=fullname#> operator/(<#=fullname#> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static <#=fullname#> operator^(<#=fullname#> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static <#=fullname#> operator+(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static <#=fullname#> operator-(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static <#=fullname#> operator*(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static <#=fullname#> operator/(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static <#=fullname#> operator^(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(<#=fullname#> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(<#=fullname#> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(<#=fullname#> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(<#=fullname#> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(<#=fullname#> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(<#=fullname#> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, <#=fullname#> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, <#=fullname#> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
+        }
 
         INumberOperations INumber.GetOperations()
         {
@@ -416,45 +526,45 @@ foreach(var info in data)
                 return num.GetHashCode();
             }
 
-            public virtual <#=fullname#> Call(UnaryOperation operation, in <#=fullname#> num)
+            public virtual <#=fullname#> Call(StandardUnaryOperation operation, in <#=fullname#> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=fullname#> num2)
+            public virtual <#=fullname#> Call(StandardBinaryOperation operation, in <#=fullname#> num1, in <#=fullname#> num2)
             {
                 return num1.Call(operation, num2);
             }<# if(level >= 1) { #>
 
 
-            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in TInner num2)
+            public virtual <#=fullname#> Call(StandardBinaryOperation operation, in <#=fullname#> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual <#=fullname#> Call(BinaryOperation operation, in TInner num1, in <#=fullname#> num2)
+            public virtual <#=fullname#> Call(StandardBinaryOperation operation, in TInner num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
             }<# } #><# if(component) { #>
 
 
-            public virtual <#=componenttype#> CallComponent(UnaryOperation operation, in <#=fullname#> num)
+            public virtual <#=componenttype#> CallComponent(StandardUnaryOperation operation, in <#=fullname#> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=fullname#> num1, in <#=componenttype#> num2)
+            public virtual <#=fullname#> Call(StandardBinaryOperation operation, in <#=fullname#> num1, in <#=componenttype#> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual <#=fullname#> Call(BinaryOperation operation, in <#=componenttype#> num1, in <#=fullname#> num2)
+            public virtual <#=fullname#> Call(StandardBinaryOperation operation, in <#=componenttype#> num1, in <#=fullname#> num2)
             {
                 return num2.CallReversed(operation, num1);
             }<# }else if(level >= 1) { #>
 			
 
-			TInner INumberOperations<<#=fullname#>, TInner>.CallComponent(UnaryOperation operation, in <#=fullname#> num)
+			TInner INumberOperations<<#=fullname#>, TInner>.CallComponent(StandardUnaryOperation operation, in <#=fullname#> num)
             {
                 return num.CallComponent(operation);
             }<# } if(level >= 1) { #>

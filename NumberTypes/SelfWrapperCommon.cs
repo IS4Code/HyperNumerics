@@ -9,12 +9,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         AbstractNumber IWrapperNumber<AbstractNumber>.Value => this;
 
-		AbstractNumber IExtendedNumber<AbstractNumber, AbstractNumber>.CallReversed(BinaryOperation operation, in AbstractNumber num)
+		AbstractNumber IExtendedNumber<AbstractNumber, AbstractNumber>.CallReversed(StandardBinaryOperation operation, in AbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		AbstractNumber INumber<AbstractNumber, AbstractNumber>.CallComponent(UnaryOperation operation)
+		AbstractNumber INumber<AbstractNumber, AbstractNumber>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -36,7 +36,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<AbstractNumber, AbstractNumber>, IExtendedNumberOperations<AbstractNumber, AbstractNumber, AbstractNumber>
 		{
-            AbstractNumber INumberOperations<AbstractNumber, AbstractNumber>.CallComponent(UnaryOperation operation, in AbstractNumber num)
+            AbstractNumber INumberOperations<AbstractNumber, AbstractNumber>.CallComponent(StandardUnaryOperation operation, in AbstractNumber num)
             {
                 return num.Call(operation);
             }
@@ -134,12 +134,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         ComponentAbstractNumber IWrapperNumber<ComponentAbstractNumber>.Value => this;
 
-		ComponentAbstractNumber IExtendedNumber<ComponentAbstractNumber, ComponentAbstractNumber>.CallReversed(BinaryOperation operation, in ComponentAbstractNumber num)
+		ComponentAbstractNumber IExtendedNumber<ComponentAbstractNumber, ComponentAbstractNumber>.CallReversed(StandardBinaryOperation operation, in ComponentAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		ComponentAbstractNumber INumber<ComponentAbstractNumber, ComponentAbstractNumber>.CallComponent(UnaryOperation operation)
+		ComponentAbstractNumber INumber<ComponentAbstractNumber, ComponentAbstractNumber>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -161,7 +161,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<ComponentAbstractNumber, ComponentAbstractNumber>, IExtendedNumberOperations<ComponentAbstractNumber, ComponentAbstractNumber, ComponentAbstractNumber>
 		{
-            ComponentAbstractNumber INumberOperations<ComponentAbstractNumber, ComponentAbstractNumber>.CallComponent(UnaryOperation operation, in ComponentAbstractNumber num)
+            ComponentAbstractNumber INumberOperations<ComponentAbstractNumber, ComponentAbstractNumber>.CallComponent(StandardUnaryOperation operation, in ComponentAbstractNumber num)
             {
                 return num.Call(operation);
             }
@@ -259,12 +259,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         UnaryAbstractNumber IWrapperNumber<UnaryAbstractNumber>.Value => this;
 
-		UnaryAbstractNumber IExtendedNumber<UnaryAbstractNumber, UnaryAbstractNumber>.CallReversed(BinaryOperation operation, in UnaryAbstractNumber num)
+		UnaryAbstractNumber IExtendedNumber<UnaryAbstractNumber, UnaryAbstractNumber>.CallReversed(StandardBinaryOperation operation, in UnaryAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		UnaryAbstractNumber INumber<UnaryAbstractNumber, UnaryAbstractNumber>.CallComponent(UnaryOperation operation)
+		UnaryAbstractNumber INumber<UnaryAbstractNumber, UnaryAbstractNumber>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -286,7 +286,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<UnaryAbstractNumber, UnaryAbstractNumber>, IExtendedNumberOperations<UnaryAbstractNumber, UnaryAbstractNumber, UnaryAbstractNumber>
 		{
-            UnaryAbstractNumber INumberOperations<UnaryAbstractNumber, UnaryAbstractNumber>.CallComponent(UnaryOperation operation, in UnaryAbstractNumber num)
+            UnaryAbstractNumber INumberOperations<UnaryAbstractNumber, UnaryAbstractNumber>.CallComponent(StandardUnaryOperation operation, in UnaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
@@ -384,12 +384,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         ComponentUnaryAbstractNumber IWrapperNumber<ComponentUnaryAbstractNumber>.Value => this;
 
-		ComponentUnaryAbstractNumber IExtendedNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallReversed(BinaryOperation operation, in ComponentUnaryAbstractNumber num)
+		ComponentUnaryAbstractNumber IExtendedNumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallReversed(StandardBinaryOperation operation, in ComponentUnaryAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		ComponentUnaryAbstractNumber INumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallComponent(UnaryOperation operation)
+		ComponentUnaryAbstractNumber INumber<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -411,7 +411,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>, IExtendedNumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>
 		{
-            ComponentUnaryAbstractNumber INumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallComponent(UnaryOperation operation, in ComponentUnaryAbstractNumber num)
+            ComponentUnaryAbstractNumber INumberOperations<ComponentUnaryAbstractNumber, ComponentUnaryAbstractNumber>.CallComponent(StandardUnaryOperation operation, in ComponentUnaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
@@ -509,12 +509,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         BinaryAbstractNumber IWrapperNumber<BinaryAbstractNumber>.Value => this;
 
-		BinaryAbstractNumber IExtendedNumber<BinaryAbstractNumber, BinaryAbstractNumber>.CallReversed(BinaryOperation operation, in BinaryAbstractNumber num)
+		BinaryAbstractNumber IExtendedNumber<BinaryAbstractNumber, BinaryAbstractNumber>.CallReversed(StandardBinaryOperation operation, in BinaryAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		BinaryAbstractNumber INumber<BinaryAbstractNumber, BinaryAbstractNumber>.CallComponent(UnaryOperation operation)
+		BinaryAbstractNumber INumber<BinaryAbstractNumber, BinaryAbstractNumber>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -536,7 +536,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<BinaryAbstractNumber, BinaryAbstractNumber>, IExtendedNumberOperations<BinaryAbstractNumber, BinaryAbstractNumber, BinaryAbstractNumber>
 		{
-            BinaryAbstractNumber INumberOperations<BinaryAbstractNumber, BinaryAbstractNumber>.CallComponent(UnaryOperation operation, in BinaryAbstractNumber num)
+            BinaryAbstractNumber INumberOperations<BinaryAbstractNumber, BinaryAbstractNumber>.CallComponent(StandardUnaryOperation operation, in BinaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
@@ -634,12 +634,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         ComponentBinaryAbstractNumber IWrapperNumber<ComponentBinaryAbstractNumber>.Value => this;
 
-		ComponentBinaryAbstractNumber IExtendedNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallReversed(BinaryOperation operation, in ComponentBinaryAbstractNumber num)
+		ComponentBinaryAbstractNumber IExtendedNumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallReversed(StandardBinaryOperation operation, in ComponentBinaryAbstractNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		ComponentBinaryAbstractNumber INumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallComponent(UnaryOperation operation)
+		ComponentBinaryAbstractNumber INumber<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -661,7 +661,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>, IExtendedNumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>
 		{
-            ComponentBinaryAbstractNumber INumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallComponent(UnaryOperation operation, in ComponentBinaryAbstractNumber num)
+            ComponentBinaryAbstractNumber INumberOperations<ComponentBinaryAbstractNumber, ComponentBinaryAbstractNumber>.CallComponent(StandardUnaryOperation operation, in ComponentBinaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
@@ -759,12 +759,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         BoxedNumber<TInner> IWrapperNumber<BoxedNumber<TInner>>.Value => this;
 
-		BoxedNumber<TInner> IExtendedNumber<BoxedNumber<TInner>, BoxedNumber<TInner>>.CallReversed(BinaryOperation operation, in BoxedNumber<TInner> num)
+		BoxedNumber<TInner> IExtendedNumber<BoxedNumber<TInner>, BoxedNumber<TInner>>.CallReversed(StandardBinaryOperation operation, in BoxedNumber<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		BoxedNumber<TInner> INumber<BoxedNumber<TInner>, BoxedNumber<TInner>>.CallComponent(UnaryOperation operation)
+		BoxedNumber<TInner> INumber<BoxedNumber<TInner>, BoxedNumber<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -786,7 +786,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<BoxedNumber<TInner>, BoxedNumber<TInner>>, IExtendedNumberOperations<BoxedNumber<TInner>, BoxedNumber<TInner>, BoxedNumber<TInner>>
 		{
-            BoxedNumber<TInner> INumberOperations<BoxedNumber<TInner>, BoxedNumber<TInner>>.CallComponent(UnaryOperation operation, in BoxedNumber<TInner> num)
+            BoxedNumber<TInner> INumberOperations<BoxedNumber<TInner>, BoxedNumber<TInner>>.CallComponent(StandardUnaryOperation operation, in BoxedNumber<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -884,12 +884,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         BoxedNumber<TInner, TComponent> IWrapperNumber<BoxedNumber<TInner, TComponent>>.Value => this;
 
-		BoxedNumber<TInner, TComponent> IExtendedNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num)
+		BoxedNumber<TInner, TComponent> IExtendedNumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in BoxedNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		BoxedNumber<TInner, TComponent> INumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		BoxedNumber<TInner, TComponent> INumber<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -916,7 +916,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>
 		{
-            BoxedNumber<TInner, TComponent> INumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
+            BoxedNumber<TInner, TComponent> INumberOperations<BoxedNumber<TInner, TComponent>, BoxedNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -1014,12 +1014,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         CustomDefaultNumber<TInner, TProvider> IWrapperNumber<CustomDefaultNumber<TInner, TProvider>>.Value => this;
 
-		CustomDefaultNumber<TInner, TProvider> IExtendedNumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
+		CustomDefaultNumber<TInner, TProvider> IExtendedNumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallReversed(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		CustomDefaultNumber<TInner, TProvider> INumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallComponent(UnaryOperation operation)
+		CustomDefaultNumber<TInner, TProvider> INumber<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1041,7 +1041,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>
 		{
-            CustomDefaultNumber<TInner, TProvider> INumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
+            CustomDefaultNumber<TInner, TProvider> INumberOperations<CustomDefaultNumber<TInner, TProvider>, CustomDefaultNumber<TInner, TProvider>>.CallComponent(StandardUnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.Call(operation);
             }
@@ -1135,16 +1135,16 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>, IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TComponent, TProvider>.IDefaultValueProvider
+	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>, IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
 	{
         CustomDefaultNumber<TInner, TComponent, TProvider> IWrapperNumber<CustomDefaultNumber<TInner, TComponent, TProvider>>.Value => this;
 
-		CustomDefaultNumber<TInner, TComponent, TProvider> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
+		CustomDefaultNumber<TInner, TComponent, TProvider> IExtendedNumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallReversed(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		CustomDefaultNumber<TInner, TComponent, TProvider> INumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallComponent(UnaryOperation operation)
+		CustomDefaultNumber<TInner, TComponent, TProvider> INumber<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1171,7 +1171,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, TComponent>, IExtendedNumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>
 		{
-            CustomDefaultNumber<TInner, TComponent, TProvider> INumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
+            CustomDefaultNumber<TInner, TComponent, TProvider> INumberOperations<CustomDefaultNumber<TInner, TComponent, TProvider>, CustomDefaultNumber<TInner, TComponent, TProvider>>.CallComponent(StandardUnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.Call(operation);
             }
@@ -1269,12 +1269,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         GeneratedNumber<TInner> IWrapperNumber<GeneratedNumber<TInner>>.Value => this;
 
-		GeneratedNumber<TInner> IExtendedNumber<GeneratedNumber<TInner>, GeneratedNumber<TInner>>.CallReversed(BinaryOperation operation, in GeneratedNumber<TInner> num)
+		GeneratedNumber<TInner> IExtendedNumber<GeneratedNumber<TInner>, GeneratedNumber<TInner>>.CallReversed(StandardBinaryOperation operation, in GeneratedNumber<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>, GeneratedNumber<TInner>>.CallComponent(UnaryOperation operation)
+		GeneratedNumber<TInner> INumber<GeneratedNumber<TInner>, GeneratedNumber<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1296,7 +1296,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<GeneratedNumber<TInner>, GeneratedNumber<TInner>>, IExtendedNumberOperations<GeneratedNumber<TInner>, GeneratedNumber<TInner>, GeneratedNumber<TInner>>
 		{
-            GeneratedNumber<TInner> INumberOperations<GeneratedNumber<TInner>, GeneratedNumber<TInner>>.CallComponent(UnaryOperation operation, in GeneratedNumber<TInner> num)
+            GeneratedNumber<TInner> INumberOperations<GeneratedNumber<TInner>, GeneratedNumber<TInner>>.CallComponent(StandardUnaryOperation operation, in GeneratedNumber<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -1394,12 +1394,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         GeneratedNumber<TInner, TComponent> IWrapperNumber<GeneratedNumber<TInner, TComponent>>.Value => this;
 
-		GeneratedNumber<TInner, TComponent> IExtendedNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
+		GeneratedNumber<TInner, TComponent> IExtendedNumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		GeneratedNumber<TInner, TComponent> INumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		GeneratedNumber<TInner, TComponent> INumber<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1426,7 +1426,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>
 		{
-            GeneratedNumber<TInner, TComponent> INumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
+            GeneratedNumber<TInner, TComponent> INumberOperations<GeneratedNumber<TInner, TComponent>, GeneratedNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -1524,12 +1524,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperComplex<TInner> IWrapperNumber<HyperComplex<TInner>>.Value => this;
 
-		HyperComplex<TInner> IExtendedNumber<HyperComplex<TInner>, HyperComplex<TInner>>.CallReversed(BinaryOperation operation, in HyperComplex<TInner> num)
+		HyperComplex<TInner> IExtendedNumber<HyperComplex<TInner>, HyperComplex<TInner>>.CallReversed(StandardBinaryOperation operation, in HyperComplex<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperComplex<TInner> INumber<HyperComplex<TInner>, HyperComplex<TInner>>.CallComponent(UnaryOperation operation)
+		HyperComplex<TInner> INumber<HyperComplex<TInner>, HyperComplex<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1551,7 +1551,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperComplex<TInner>, HyperComplex<TInner>>, IExtendedNumberOperations<HyperComplex<TInner>, HyperComplex<TInner>, HyperComplex<TInner>>
 		{
-            HyperComplex<TInner> INumberOperations<HyperComplex<TInner>, HyperComplex<TInner>>.CallComponent(UnaryOperation operation, in HyperComplex<TInner> num)
+            HyperComplex<TInner> INumberOperations<HyperComplex<TInner>, HyperComplex<TInner>>.CallComponent(StandardUnaryOperation operation, in HyperComplex<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -1649,12 +1649,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperComplex<TInner, TComponent> IWrapperNumber<HyperComplex<TInner, TComponent>>.Value => this;
 
-		HyperComplex<TInner, TComponent> IExtendedNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperComplex<TInner, TComponent> num)
+		HyperComplex<TInner, TComponent> IExtendedNumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperComplex<TInner, TComponent> INumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		HyperComplex<TInner, TComponent> INumber<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1681,7 +1681,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>
 		{
-            HyperComplex<TInner, TComponent> INumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
+            HyperComplex<TInner, TComponent> INumberOperations<HyperComplex<TInner, TComponent>, HyperComplex<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in HyperComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -1779,12 +1779,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperDiagonal<TInner> IWrapperNumber<HyperDiagonal<TInner>>.Value => this;
 
-		HyperDiagonal<TInner> IExtendedNumber<HyperDiagonal<TInner>, HyperDiagonal<TInner>>.CallReversed(BinaryOperation operation, in HyperDiagonal<TInner> num)
+		HyperDiagonal<TInner> IExtendedNumber<HyperDiagonal<TInner>, HyperDiagonal<TInner>>.CallReversed(StandardBinaryOperation operation, in HyperDiagonal<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>, HyperDiagonal<TInner>>.CallComponent(UnaryOperation operation)
+		HyperDiagonal<TInner> INumber<HyperDiagonal<TInner>, HyperDiagonal<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1806,7 +1806,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperDiagonal<TInner>, HyperDiagonal<TInner>>, IExtendedNumberOperations<HyperDiagonal<TInner>, HyperDiagonal<TInner>, HyperDiagonal<TInner>>
 		{
-            HyperDiagonal<TInner> INumberOperations<HyperDiagonal<TInner>, HyperDiagonal<TInner>>.CallComponent(UnaryOperation operation, in HyperDiagonal<TInner> num)
+            HyperDiagonal<TInner> INumberOperations<HyperDiagonal<TInner>, HyperDiagonal<TInner>>.CallComponent(StandardUnaryOperation operation, in HyperDiagonal<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -1904,12 +1904,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperDiagonal<TInner, TComponent> IWrapperNumber<HyperDiagonal<TInner, TComponent>>.Value => this;
 
-		HyperDiagonal<TInner, TComponent> IExtendedNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+		HyperDiagonal<TInner, TComponent> IExtendedNumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperDiagonal<TInner, TComponent> INumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		HyperDiagonal<TInner, TComponent> INumber<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -1936,7 +1936,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>
 		{
-            HyperDiagonal<TInner, TComponent> INumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+            HyperDiagonal<TInner, TComponent> INumberOperations<HyperDiagonal<TInner, TComponent>, HyperDiagonal<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -2034,12 +2034,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperDual<TInner> IWrapperNumber<HyperDual<TInner>>.Value => this;
 
-		HyperDual<TInner> IExtendedNumber<HyperDual<TInner>, HyperDual<TInner>>.CallReversed(BinaryOperation operation, in HyperDual<TInner> num)
+		HyperDual<TInner> IExtendedNumber<HyperDual<TInner>, HyperDual<TInner>>.CallReversed(StandardBinaryOperation operation, in HyperDual<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperDual<TInner> INumber<HyperDual<TInner>, HyperDual<TInner>>.CallComponent(UnaryOperation operation)
+		HyperDual<TInner> INumber<HyperDual<TInner>, HyperDual<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2061,7 +2061,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperDual<TInner>, HyperDual<TInner>>, IExtendedNumberOperations<HyperDual<TInner>, HyperDual<TInner>, HyperDual<TInner>>
 		{
-            HyperDual<TInner> INumberOperations<HyperDual<TInner>, HyperDual<TInner>>.CallComponent(UnaryOperation operation, in HyperDual<TInner> num)
+            HyperDual<TInner> INumberOperations<HyperDual<TInner>, HyperDual<TInner>>.CallComponent(StandardUnaryOperation operation, in HyperDual<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -2159,12 +2159,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperDual<TInner, TComponent> IWrapperNumber<HyperDual<TInner, TComponent>>.Value => this;
 
-		HyperDual<TInner, TComponent> IExtendedNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperDual<TInner, TComponent> num)
+		HyperDual<TInner, TComponent> IExtendedNumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperDual<TInner, TComponent> INumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		HyperDual<TInner, TComponent> INumber<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2191,7 +2191,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>
 		{
-            HyperDual<TInner, TComponent> INumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
+            HyperDual<TInner, TComponent> INumberOperations<HyperDual<TInner, TComponent>, HyperDual<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in HyperDual<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -2289,12 +2289,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperSplitComplex<TInner> IWrapperNumber<HyperSplitComplex<TInner>>.Value => this;
 
-		HyperSplitComplex<TInner> IExtendedNumber<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>.CallReversed(BinaryOperation operation, in HyperSplitComplex<TInner> num)
+		HyperSplitComplex<TInner> IExtendedNumber<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>.CallReversed(StandardBinaryOperation operation, in HyperSplitComplex<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperSplitComplex<TInner> INumber<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>.CallComponent(UnaryOperation operation)
+		HyperSplitComplex<TInner> INumber<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2316,7 +2316,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>, IExtendedNumberOperations<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>
 		{
-            HyperSplitComplex<TInner> INumberOperations<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>.CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner> num)
+            HyperSplitComplex<TInner> INumberOperations<HyperSplitComplex<TInner>, HyperSplitComplex<TInner>>.CallComponent(StandardUnaryOperation operation, in HyperSplitComplex<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -2414,12 +2414,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         HyperSplitComplex<TInner, TComponent> IWrapperNumber<HyperSplitComplex<TInner, TComponent>>.Value => this;
 
-		HyperSplitComplex<TInner, TComponent> IExtendedNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallReversed(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+		HyperSplitComplex<TInner, TComponent> IExtendedNumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		HyperSplitComplex<TInner, TComponent> INumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		HyperSplitComplex<TInner, TComponent> INumber<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2446,7 +2446,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, TComponent>, IExtendedNumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>
 		{
-            HyperSplitComplex<TInner, TComponent> INumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+            HyperSplitComplex<TInner, TComponent> INumberOperations<HyperSplitComplex<TInner, TComponent>, HyperSplitComplex<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -2544,12 +2544,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         NullableNumber<TInner> IWrapperNumber<NullableNumber<TInner>>.Value => this;
 
-		NullableNumber<TInner> IExtendedNumber<NullableNumber<TInner>, NullableNumber<TInner>>.CallReversed(BinaryOperation operation, in NullableNumber<TInner> num)
+		NullableNumber<TInner> IExtendedNumber<NullableNumber<TInner>, NullableNumber<TInner>>.CallReversed(StandardBinaryOperation operation, in NullableNumber<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		NullableNumber<TInner> INumber<NullableNumber<TInner>, NullableNumber<TInner>>.CallComponent(UnaryOperation operation)
+		NullableNumber<TInner> INumber<NullableNumber<TInner>, NullableNumber<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2571,7 +2571,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<NullableNumber<TInner>, NullableNumber<TInner>>, IExtendedNumberOperations<NullableNumber<TInner>, NullableNumber<TInner>, NullableNumber<TInner>>
 		{
-            NullableNumber<TInner> INumberOperations<NullableNumber<TInner>, NullableNumber<TInner>>.CallComponent(UnaryOperation operation, in NullableNumber<TInner> num)
+            NullableNumber<TInner> INumberOperations<NullableNumber<TInner>, NullableNumber<TInner>>.CallComponent(StandardUnaryOperation operation, in NullableNumber<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -2669,12 +2669,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         NullableNumber<TInner, TComponent> IWrapperNumber<NullableNumber<TInner, TComponent>>.Value => this;
 
-		NullableNumber<TInner, TComponent> IExtendedNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in NullableNumber<TInner, TComponent> num)
+		NullableNumber<TInner, TComponent> IExtendedNumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in NullableNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		NullableNumber<TInner, TComponent> INumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		NullableNumber<TInner, TComponent> INumber<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2701,7 +2701,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>
 		{
-            NullableNumber<TInner, TComponent> INumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
+            NullableNumber<TInner, TComponent> INumberOperations<NullableNumber<TInner, TComponent>, NullableNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in NullableNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -2799,12 +2799,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         NullNumber IWrapperNumber<NullNumber>.Value => this;
 
-		NullNumber IExtendedNumber<NullNumber, NullNumber>.CallReversed(BinaryOperation operation, in NullNumber num)
+		NullNumber IExtendedNumber<NullNumber, NullNumber>.CallReversed(StandardBinaryOperation operation, in NullNumber num)
 		{
 			return num.Call(operation, this);
 		}
 
-		NullNumber INumber<NullNumber, NullNumber>.CallComponent(UnaryOperation operation)
+		NullNumber INumber<NullNumber, NullNumber>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2826,7 +2826,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<NullNumber, NullNumber>, IExtendedNumberOperations<NullNumber, NullNumber, NullNumber>
 		{
-            NullNumber INumberOperations<NullNumber, NullNumber>.CallComponent(UnaryOperation operation, in NullNumber num)
+            NullNumber INumberOperations<NullNumber, NullNumber>.CallComponent(StandardUnaryOperation operation, in NullNumber num)
             {
                 return num.Call(operation);
             }
@@ -2924,12 +2924,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         NullNumber<TComponent> IWrapperNumber<NullNumber<TComponent>>.Value => this;
 
-		NullNumber<TComponent> IExtendedNumber<NullNumber<TComponent>, NullNumber<TComponent>>.CallReversed(BinaryOperation operation, in NullNumber<TComponent> num)
+		NullNumber<TComponent> IExtendedNumber<NullNumber<TComponent>, NullNumber<TComponent>>.CallReversed(StandardBinaryOperation operation, in NullNumber<TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		NullNumber<TComponent> INumber<NullNumber<TComponent>, NullNumber<TComponent>>.CallComponent(UnaryOperation operation)
+		NullNumber<TComponent> INumber<NullNumber<TComponent>, NullNumber<TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -2956,7 +2956,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<NullNumber<TComponent>, NullNumber<TComponent>, TComponent>, IExtendedNumberOperations<NullNumber<TComponent>, NullNumber<TComponent>, NullNumber<TComponent>>
 		{
-            NullNumber<TComponent> INumberOperations<NullNumber<TComponent>, NullNumber<TComponent>>.CallComponent(UnaryOperation operation, in NullNumber<TComponent> num)
+            NullNumber<TComponent> INumberOperations<NullNumber<TComponent>, NullNumber<TComponent>>.CallComponent(StandardUnaryOperation operation, in NullNumber<TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -3054,12 +3054,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         ProjectiveNumber<TInner> IWrapperNumber<ProjectiveNumber<TInner>>.Value => this;
 
-		ProjectiveNumber<TInner> IExtendedNumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.CallReversed(BinaryOperation operation, in ProjectiveNumber<TInner> num)
+		ProjectiveNumber<TInner> IExtendedNumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.CallReversed(StandardBinaryOperation operation, in ProjectiveNumber<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		ProjectiveNumber<TInner> INumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.CallComponent(UnaryOperation operation)
+		ProjectiveNumber<TInner> INumber<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -3081,7 +3081,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>, IExtendedNumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>
 		{
-            ProjectiveNumber<TInner> INumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner> num)
+            ProjectiveNumber<TInner> INumberOperations<ProjectiveNumber<TInner>, ProjectiveNumber<TInner>>.CallComponent(StandardUnaryOperation operation, in ProjectiveNumber<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -3179,12 +3179,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         ProjectiveNumber<TInner, TComponent> IWrapperNumber<ProjectiveNumber<TInner, TComponent>>.Value => this;
 
-		ProjectiveNumber<TInner, TComponent> IExtendedNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
+		ProjectiveNumber<TInner, TComponent> IExtendedNumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		ProjectiveNumber<TInner, TComponent> INumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		ProjectiveNumber<TInner, TComponent> INumber<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -3211,7 +3211,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>
 		{
-            ProjectiveNumber<TInner, TComponent> INumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
+            ProjectiveNumber<TInner, TComponent> INumberOperations<ProjectiveNumber<TInner, TComponent>, ProjectiveNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
@@ -3309,12 +3309,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         WrapperNumber<TInner> IWrapperNumber<WrapperNumber<TInner>>.Value => this;
 
-		WrapperNumber<TInner> IExtendedNumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallReversed(BinaryOperation operation, in WrapperNumber<TInner> num)
+		WrapperNumber<TInner> IExtendedNumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallReversed(StandardBinaryOperation operation, in WrapperNumber<TInner> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		WrapperNumber<TInner> INumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallComponent(UnaryOperation operation)
+		WrapperNumber<TInner> INumber<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -3336,7 +3336,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>>, IExtendedNumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>, WrapperNumber<TInner>>
 		{
-            WrapperNumber<TInner> INumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallComponent(UnaryOperation operation, in WrapperNumber<TInner> num)
+            WrapperNumber<TInner> INumberOperations<WrapperNumber<TInner>, WrapperNumber<TInner>>.CallComponent(StandardUnaryOperation operation, in WrapperNumber<TInner> num)
             {
                 return num.Call(operation);
             }
@@ -3434,12 +3434,12 @@ namespace IS4.HyperNumerics.NumberTypes
 	{
         WrapperNumber<TInner, TComponent> IWrapperNumber<WrapperNumber<TInner, TComponent>>.Value => this;
 
-		WrapperNumber<TInner, TComponent> IExtendedNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallReversed(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+		WrapperNumber<TInner, TComponent> IExtendedNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallReversed(StandardBinaryOperation operation, in WrapperNumber<TInner, TComponent> num)
 		{
 			return num.Call(operation, this);
 		}
 
-		WrapperNumber<TInner, TComponent> INumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation)
+		WrapperNumber<TInner, TComponent> INumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation)
 		{
 			return Call(operation);
 		}
@@ -3466,7 +3466,7 @@ namespace IS4.HyperNumerics.NumberTypes
 
 		partial class Operations : IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent>, IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>
 		{
-            WrapperNumber<TInner, TComponent> INumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallComponent(UnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+            WrapperNumber<TInner, TComponent> INumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>>.CallComponent(StandardUnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }

@@ -1,6 +1,6 @@
 ﻿namespace IS4.HyperNumerics.Operations
 {
-    public enum UnaryOperation
+    public enum StandardUnaryOperation
     {
         Identity,
         Negate,

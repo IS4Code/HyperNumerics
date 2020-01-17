@@ -16,11 +16,11 @@ namespace IS4.HyperNumerics
         int Dimension { get; }
 
         /// <summary>
-        /// Invokes a nullary operation for the number type, i.e. obtains a specific value of the type.
+        /// Creates a new instance of the number type based on a value of the <see cref="StandardNumber"/> enum.
         /// </summary>
-        /// <param name="operation">The operation that will be invoked.</param>
-        /// <returns>The result of the operation.</returns>
-        INumber Call(NullaryOperation operation);
+        /// <param name="num">The specific number that should be obtained.</param>
+        /// <returns>The concrete instance of the number corresponding to <paramref name="num"/>.</returns>
+        INumber Create(StandardNumber num);
 
         /// <summary>
         /// Invokes a unary operation for the number type.
@@ -30,7 +30,7 @@ namespace IS4.HyperNumerics
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
         /// <exception cref="System.ArgumentException">Thrown if the argument doesn't have the same type that is supported by the instance.</exception>
-        INumber Call(UnaryOperation operation, INumber num);
+        INumber Call(StandardUnaryOperation operation, INumber num);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -41,7 +41,7 @@ namespace IS4.HyperNumerics
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
         /// <exception cref="System.ArgumentException">Thrown if the argument doesn't have the same type that is supported by the instance.</exception>
-        INumber Call(BinaryOperation operation, INumber num1, INumber num2);
+        INumber Call(StandardBinaryOperation operation, INumber num1, INumber num2);
     }
 
     /// <summary>
@@ -71,11 +71,11 @@ namespace IS4.HyperNumerics
         TNumber Clone(in TNumber num);
 
         /// <summary>
-        /// Invokes a nullary operation for the number type, i.e. obtains a specific value of the type.
+        /// Creates a new instance of the number type based on a value of the <see cref="StandardNumber"/> enum.
         /// </summary>
-        /// <param name="operation">The operation that will be invoked.</param>
-        /// <returns>The result of the operation.</returns>
-        new TNumber Call(NullaryOperation operation);
+        /// <param name="num">The specific number that should be obtained.</param>
+        /// <returns>The concrete instance of the number corresponding to <paramref name="num"/>.</returns>
+        new TNumber Create(StandardNumber num);
 
         /// <summary>
         /// Invokes a unary operation for the number type.
@@ -84,7 +84,7 @@ namespace IS4.HyperNumerics
         /// <param name="num">The argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(UnaryOperation operation, in TNumber num);
+        TNumber Call(StandardUnaryOperation operation, in TNumber num);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -94,7 +94,7 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TNumber num1, in TNumber num2);
+        TNumber Call(StandardBinaryOperation operation, in TNumber num1, in TNumber num2);
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ namespace IS4.HyperNumerics
         /// <param name="num">The argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TComponent CallComponent(UnaryOperation operation, in TNumber num);
+        TComponent CallComponent(StandardUnaryOperation operation, in TNumber num);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -150,7 +150,7 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TNumber num1, in TComponent num2);
+        TNumber Call(StandardBinaryOperation operation, in TNumber num1, in TComponent num2);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -160,6 +160,6 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TComponent num1, in TNumber num2);
+        TNumber Call(StandardBinaryOperation operation, in TComponent num1, in TNumber num2);
     }
 }

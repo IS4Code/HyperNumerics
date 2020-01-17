@@ -13,7 +13,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public AbstractNumber CallReversed(BinaryOperation operation, in AbstractNumber other)
+        public AbstractNumber CallReversed(StandardBinaryOperation operation, in AbstractNumber other)
         {
             return other.Call(operation, this);
         }
@@ -30,47 +30,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static AbstractNumber operator+(AbstractNumber a, AbstractNumber b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static AbstractNumber operator-(AbstractNumber a, AbstractNumber b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static AbstractNumber operator*(AbstractNumber a, AbstractNumber b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static AbstractNumber operator/(AbstractNumber a, AbstractNumber b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static AbstractNumber operator^(AbstractNumber a, AbstractNumber b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static AbstractNumber operator-(AbstractNumber a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static AbstractNumber operator~(AbstractNumber a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static AbstractNumber operator++(AbstractNumber a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static AbstractNumber operator--(AbstractNumber a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(AbstractNumber a, AbstractNumber b)
@@ -101,6 +101,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(AbstractNumber a, AbstractNumber b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static AbstractNumber operator+(AbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static AbstractNumber operator-(AbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static AbstractNumber operator*(AbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static AbstractNumber operator/(AbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static AbstractNumber operator^(AbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static AbstractNumber operator+(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static AbstractNumber operator-(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static AbstractNumber operator*(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static AbstractNumber operator/(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static AbstractNumber operator^(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(AbstractNumber a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(AbstractNumber a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(AbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(AbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(AbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(AbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, AbstractNumber b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, AbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -162,12 +272,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual AbstractNumber Call(UnaryOperation operation, in AbstractNumber num)
+            public virtual AbstractNumber Call(StandardUnaryOperation operation, in AbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public virtual AbstractNumber Call(BinaryOperation operation, in AbstractNumber num1, in AbstractNumber num2)
+            public virtual AbstractNumber Call(StandardBinaryOperation operation, in AbstractNumber num1, in AbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -181,7 +291,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public ComponentAbstractNumber CallReversed(BinaryOperation operation, in ComponentAbstractNumber other)
+        public ComponentAbstractNumber CallReversed(StandardBinaryOperation operation, in ComponentAbstractNumber other)
         {
             return other.Call(operation, this);
         }
@@ -198,47 +308,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ComponentAbstractNumber operator+(ComponentAbstractNumber a, ComponentAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ComponentAbstractNumber operator-(ComponentAbstractNumber a, ComponentAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ComponentAbstractNumber operator*(ComponentAbstractNumber a, ComponentAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ComponentAbstractNumber operator/(ComponentAbstractNumber a, ComponentAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ComponentAbstractNumber operator^(ComponentAbstractNumber a, ComponentAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static ComponentAbstractNumber operator-(ComponentAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static ComponentAbstractNumber operator~(ComponentAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static ComponentAbstractNumber operator++(ComponentAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static ComponentAbstractNumber operator--(ComponentAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(ComponentAbstractNumber a, ComponentAbstractNumber b)
@@ -269,6 +379,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(ComponentAbstractNumber a, ComponentAbstractNumber b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static ComponentAbstractNumber operator+(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentAbstractNumber operator-(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentAbstractNumber operator*(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentAbstractNumber operator/(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentAbstractNumber operator^(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static ComponentAbstractNumber operator+(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static ComponentAbstractNumber operator-(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static ComponentAbstractNumber operator*(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static ComponentAbstractNumber operator/(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static ComponentAbstractNumber operator^(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(ComponentAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, ComponentAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -330,12 +550,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual ComponentAbstractNumber Call(UnaryOperation operation, in ComponentAbstractNumber num)
+            public virtual ComponentAbstractNumber Call(StandardUnaryOperation operation, in ComponentAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public virtual ComponentAbstractNumber Call(BinaryOperation operation, in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
+            public virtual ComponentAbstractNumber Call(StandardBinaryOperation operation, in ComponentAbstractNumber num1, in ComponentAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -349,7 +569,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public UnaryAbstractNumber CallReversed(BinaryOperation operation, in UnaryAbstractNumber other)
+        public UnaryAbstractNumber CallReversed(StandardBinaryOperation operation, in UnaryAbstractNumber other)
         {
             return other.Call(operation, this);
         }
@@ -366,47 +586,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static UnaryAbstractNumber operator+(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static UnaryAbstractNumber operator-(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static UnaryAbstractNumber operator*(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static UnaryAbstractNumber operator/(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static UnaryAbstractNumber operator^(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static UnaryAbstractNumber operator-(UnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static UnaryAbstractNumber operator~(UnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static UnaryAbstractNumber operator++(UnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static UnaryAbstractNumber operator--(UnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(UnaryAbstractNumber a, UnaryAbstractNumber b)
@@ -437,6 +657,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(UnaryAbstractNumber a, UnaryAbstractNumber b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static UnaryAbstractNumber operator+(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static UnaryAbstractNumber operator-(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static UnaryAbstractNumber operator*(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static UnaryAbstractNumber operator/(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static UnaryAbstractNumber operator^(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static UnaryAbstractNumber operator+(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static UnaryAbstractNumber operator-(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static UnaryAbstractNumber operator*(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static UnaryAbstractNumber operator/(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static UnaryAbstractNumber operator^(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(UnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, UnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -498,12 +828,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual UnaryAbstractNumber Call(UnaryOperation operation, in UnaryAbstractNumber num)
+            public virtual UnaryAbstractNumber Call(StandardUnaryOperation operation, in UnaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public virtual UnaryAbstractNumber Call(BinaryOperation operation, in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
+            public virtual UnaryAbstractNumber Call(StandardBinaryOperation operation, in UnaryAbstractNumber num1, in UnaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -517,7 +847,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public ComponentUnaryAbstractNumber CallReversed(BinaryOperation operation, in ComponentUnaryAbstractNumber other)
+        public ComponentUnaryAbstractNumber CallReversed(StandardBinaryOperation operation, in ComponentUnaryAbstractNumber other)
         {
             return other.Call(operation, this);
         }
@@ -534,47 +864,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ComponentUnaryAbstractNumber operator+(ComponentUnaryAbstractNumber a, ComponentUnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ComponentUnaryAbstractNumber operator-(ComponentUnaryAbstractNumber a, ComponentUnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ComponentUnaryAbstractNumber operator*(ComponentUnaryAbstractNumber a, ComponentUnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ComponentUnaryAbstractNumber operator/(ComponentUnaryAbstractNumber a, ComponentUnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ComponentUnaryAbstractNumber operator^(ComponentUnaryAbstractNumber a, ComponentUnaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static ComponentUnaryAbstractNumber operator-(ComponentUnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static ComponentUnaryAbstractNumber operator~(ComponentUnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static ComponentUnaryAbstractNumber operator++(ComponentUnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static ComponentUnaryAbstractNumber operator--(ComponentUnaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(ComponentUnaryAbstractNumber a, ComponentUnaryAbstractNumber b)
@@ -605,6 +935,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(ComponentUnaryAbstractNumber a, ComponentUnaryAbstractNumber b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static ComponentUnaryAbstractNumber operator+(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentUnaryAbstractNumber operator-(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentUnaryAbstractNumber operator*(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentUnaryAbstractNumber operator/(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentUnaryAbstractNumber operator^(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static ComponentUnaryAbstractNumber operator+(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static ComponentUnaryAbstractNumber operator-(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static ComponentUnaryAbstractNumber operator*(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static ComponentUnaryAbstractNumber operator/(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static ComponentUnaryAbstractNumber operator^(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(ComponentUnaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, ComponentUnaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -666,12 +1106,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual ComponentUnaryAbstractNumber Call(UnaryOperation operation, in ComponentUnaryAbstractNumber num)
+            public virtual ComponentUnaryAbstractNumber Call(StandardUnaryOperation operation, in ComponentUnaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public virtual ComponentUnaryAbstractNumber Call(BinaryOperation operation, in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
+            public virtual ComponentUnaryAbstractNumber Call(StandardBinaryOperation operation, in ComponentUnaryAbstractNumber num1, in ComponentUnaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -685,7 +1125,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public BinaryAbstractNumber CallReversed(BinaryOperation operation, in BinaryAbstractNumber other)
+        public BinaryAbstractNumber CallReversed(StandardBinaryOperation operation, in BinaryAbstractNumber other)
         {
             return other.Call(operation, this);
         }
@@ -702,47 +1142,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static BinaryAbstractNumber operator+(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static BinaryAbstractNumber operator-(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static BinaryAbstractNumber operator*(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static BinaryAbstractNumber operator/(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static BinaryAbstractNumber operator^(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static BinaryAbstractNumber operator-(BinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static BinaryAbstractNumber operator~(BinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static BinaryAbstractNumber operator++(BinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static BinaryAbstractNumber operator--(BinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(BinaryAbstractNumber a, BinaryAbstractNumber b)
@@ -773,6 +1213,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(BinaryAbstractNumber a, BinaryAbstractNumber b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static BinaryAbstractNumber operator+(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static BinaryAbstractNumber operator-(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static BinaryAbstractNumber operator*(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static BinaryAbstractNumber operator/(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static BinaryAbstractNumber operator^(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static BinaryAbstractNumber operator+(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static BinaryAbstractNumber operator-(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static BinaryAbstractNumber operator*(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static BinaryAbstractNumber operator/(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static BinaryAbstractNumber operator^(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(BinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, BinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -834,12 +1384,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual BinaryAbstractNumber Call(UnaryOperation operation, in BinaryAbstractNumber num)
+            public virtual BinaryAbstractNumber Call(StandardUnaryOperation operation, in BinaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public virtual BinaryAbstractNumber Call(BinaryOperation operation, in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
+            public virtual BinaryAbstractNumber Call(StandardBinaryOperation operation, in BinaryAbstractNumber num1, in BinaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -853,7 +1403,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public ComponentBinaryAbstractNumber CallReversed(BinaryOperation operation, in ComponentBinaryAbstractNumber other)
+        public ComponentBinaryAbstractNumber CallReversed(StandardBinaryOperation operation, in ComponentBinaryAbstractNumber other)
         {
             return other.Call(operation, this);
         }
@@ -870,47 +1420,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ComponentBinaryAbstractNumber operator+(ComponentBinaryAbstractNumber a, ComponentBinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ComponentBinaryAbstractNumber operator-(ComponentBinaryAbstractNumber a, ComponentBinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ComponentBinaryAbstractNumber operator*(ComponentBinaryAbstractNumber a, ComponentBinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ComponentBinaryAbstractNumber operator/(ComponentBinaryAbstractNumber a, ComponentBinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ComponentBinaryAbstractNumber operator^(ComponentBinaryAbstractNumber a, ComponentBinaryAbstractNumber b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static ComponentBinaryAbstractNumber operator-(ComponentBinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static ComponentBinaryAbstractNumber operator~(ComponentBinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static ComponentBinaryAbstractNumber operator++(ComponentBinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static ComponentBinaryAbstractNumber operator--(ComponentBinaryAbstractNumber a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(ComponentBinaryAbstractNumber a, ComponentBinaryAbstractNumber b)
@@ -941,6 +1491,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(ComponentBinaryAbstractNumber a, ComponentBinaryAbstractNumber b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static ComponentBinaryAbstractNumber operator+(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentBinaryAbstractNumber operator-(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentBinaryAbstractNumber operator*(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentBinaryAbstractNumber operator/(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static ComponentBinaryAbstractNumber operator^(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static ComponentBinaryAbstractNumber operator+(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static ComponentBinaryAbstractNumber operator-(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static ComponentBinaryAbstractNumber operator*(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static ComponentBinaryAbstractNumber operator/(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static ComponentBinaryAbstractNumber operator^(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(ComponentBinaryAbstractNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, ComponentBinaryAbstractNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -1002,12 +1662,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual ComponentBinaryAbstractNumber Call(UnaryOperation operation, in ComponentBinaryAbstractNumber num)
+            public virtual ComponentBinaryAbstractNumber Call(StandardUnaryOperation operation, in ComponentBinaryAbstractNumber num)
             {
                 return num.Call(operation);
             }
 
-            public virtual ComponentBinaryAbstractNumber Call(BinaryOperation operation, in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
+            public virtual ComponentBinaryAbstractNumber Call(StandardBinaryOperation operation, in ComponentBinaryAbstractNumber num1, in ComponentBinaryAbstractNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -1021,7 +1681,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public BoxedNumber<TInner> CallReversed(BinaryOperation operation, in BoxedNumber<TInner> other)
+        public BoxedNumber<TInner> CallReversed(StandardBinaryOperation operation, in BoxedNumber<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -1063,47 +1723,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static BoxedNumber<TInner> operator+(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static BoxedNumber<TInner> operator-(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static BoxedNumber<TInner> operator*(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static BoxedNumber<TInner> operator/(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static BoxedNumber<TInner> operator^(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static BoxedNumber<TInner> operator-(BoxedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static BoxedNumber<TInner> operator~(BoxedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static BoxedNumber<TInner> operator++(BoxedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static BoxedNumber<TInner> operator--(BoxedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
@@ -1138,52 +1798,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static BoxedNumber<TInner> operator+(BoxedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static BoxedNumber<TInner> operator-(BoxedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static BoxedNumber<TInner> operator*(BoxedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static BoxedNumber<TInner> operator/(BoxedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static BoxedNumber<TInner> operator^(BoxedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static BoxedNumber<TInner> operator+(TInner a, BoxedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static BoxedNumber<TInner> operator-(TInner a, BoxedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static BoxedNumber<TInner> operator*(TInner a, BoxedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static BoxedNumber<TInner> operator/(TInner a, BoxedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static BoxedNumber<TInner> operator^(TInner a, BoxedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(BoxedNumber<TInner> a, TInner b)
@@ -1244,6 +1904,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, BoxedNumber<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static BoxedNumber<TInner> operator+(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner> operator-(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner> operator*(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner> operator/(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner> operator^(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static BoxedNumber<TInner> operator+(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static BoxedNumber<TInner> operator-(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static BoxedNumber<TInner> operator*(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static BoxedNumber<TInner> operator/(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static BoxedNumber<TInner> operator^(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(BoxedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, BoxedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -1320,27 +2090,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual BoxedNumber<TInner> Call(UnaryOperation operation, in BoxedNumber<TInner> num)
+            public virtual BoxedNumber<TInner> Call(StandardUnaryOperation operation, in BoxedNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
+            public virtual BoxedNumber<TInner> Call(StandardBinaryOperation operation, in BoxedNumber<TInner> num1, in BoxedNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual BoxedNumber<TInner> Call(BinaryOperation operation, in BoxedNumber<TInner> num1, in TInner num2)
+            public virtual BoxedNumber<TInner> Call(StandardBinaryOperation operation, in BoxedNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual BoxedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in BoxedNumber<TInner> num2)
+            public virtual BoxedNumber<TInner> Call(StandardBinaryOperation operation, in TInner num1, in BoxedNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<BoxedNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in BoxedNumber<TInner> num)
+			TInner INumberOperations<BoxedNumber<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in BoxedNumber<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -1386,7 +2156,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public BoxedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in BoxedNumber<TInner, TComponent> other)
+        public BoxedNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in BoxedNumber<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -1428,47 +2198,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static BoxedNumber<TInner, TComponent> operator+(BoxedNumber<TInner, TComponent> a, BoxedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator-(BoxedNumber<TInner, TComponent> a, BoxedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator*(BoxedNumber<TInner, TComponent> a, BoxedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator/(BoxedNumber<TInner, TComponent> a, BoxedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator^(BoxedNumber<TInner, TComponent> a, BoxedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator-(BoxedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator~(BoxedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator++(BoxedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator--(BoxedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(BoxedNumber<TInner, TComponent> a, BoxedNumber<TInner, TComponent> b)
@@ -1503,52 +2273,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static BoxedNumber<TInner, TComponent> operator+(BoxedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator-(BoxedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator*(BoxedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator/(BoxedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator^(BoxedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static BoxedNumber<TInner, TComponent> operator+(TInner a, BoxedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator-(TInner a, BoxedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator*(TInner a, BoxedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator/(TInner a, BoxedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static BoxedNumber<TInner, TComponent> operator^(TInner a, BoxedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(BoxedNumber<TInner, TComponent> a, TInner b)
@@ -1609,6 +2379,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, BoxedNumber<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static BoxedNumber<TInner, TComponent> operator+(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator-(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator*(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator/(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator^(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static BoxedNumber<TInner, TComponent> operator+(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator-(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator*(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator/(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static BoxedNumber<TInner, TComponent> operator^(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(BoxedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, BoxedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -1695,37 +2575,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual BoxedNumber<TInner, TComponent> Call(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
+            public virtual BoxedNumber<TInner, TComponent> Call(StandardUnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in BoxedNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in BoxedNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual BoxedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in BoxedNumber<TInner, TComponent> num2)
+            public virtual BoxedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in BoxedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -1744,7 +2624,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public CustomDefaultNumber<TInner, TProvider> CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> other)
+        public CustomDefaultNumber<TInner, TProvider> CallReversed(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> other)
         {
             return other.Call(operation, this);
         }
@@ -1786,47 +2666,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static CustomDefaultNumber<TInner, TProvider> operator+(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator-(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator*(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator/(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator^(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator-(CustomDefaultNumber<TInner, TProvider> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator~(CustomDefaultNumber<TInner, TProvider> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator++(CustomDefaultNumber<TInner, TProvider> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator--(CustomDefaultNumber<TInner, TProvider> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
@@ -1861,52 +2741,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static CustomDefaultNumber<TInner, TProvider> operator+(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator-(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator*(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator/(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator^(CustomDefaultNumber<TInner, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static CustomDefaultNumber<TInner, TProvider> operator+(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator-(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator*(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator/(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static CustomDefaultNumber<TInner, TProvider> operator^(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(CustomDefaultNumber<TInner, TProvider> a, TInner b)
@@ -1967,6 +2847,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, CustomDefaultNumber<TInner, TProvider> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static CustomDefaultNumber<TInner, TProvider> operator+(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator-(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator*(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator/(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator^(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static CustomDefaultNumber<TInner, TProvider> operator+(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator-(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator*(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator/(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TProvider> operator^(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(CustomDefaultNumber<TInner, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, CustomDefaultNumber<TInner, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -2043,27 +3033,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual CustomDefaultNumber<TInner, TProvider> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(StandardUnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num1, in CustomDefaultNumber<TInner, TProvider> num2)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num1, in CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num1, in TInner num2)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TProvider> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TProvider> num2)
+            public virtual CustomDefaultNumber<TInner, TProvider> Call(StandardBinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TProvider> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<CustomDefaultNumber<TInner, TProvider>, TInner>.CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
+			TInner INumberOperations<CustomDefaultNumber<TInner, TProvider>, TInner>.CallComponent(StandardUnaryOperation operation, in CustomDefaultNumber<TInner, TProvider> num)
             {
                 return num.CallComponent(operation);
             }
@@ -2102,14 +3092,14 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
-	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TComponent, TProvider>.IDefaultValueProvider
+	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
 	{
         object ICloneable.Clone()
         {
             return Clone();
         }
 
-        public CustomDefaultNumber<TInner, TComponent, TProvider> CallReversed(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> other)
+        public CustomDefaultNumber<TInner, TComponent, TProvider> CallReversed(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> other)
         {
             return other.Call(operation, this);
         }
@@ -2151,47 +3141,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator~(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator++(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator--(CustomDefaultNumber<TInner, TComponent, TProvider> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
@@ -2226,52 +3216,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(CustomDefaultNumber<TInner, TComponent, TProvider> a, TInner b)
@@ -2332,6 +3322,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator-(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator*(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator/(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> operator^(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(CustomDefaultNumber<TInner, TComponent, TProvider> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -2418,37 +3518,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardUnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in TInner num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in TInner num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in TComponent num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in CustomDefaultNumber<TInner, TComponent, TProvider> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(BinaryOperation operation, in TComponent num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
+            public virtual CustomDefaultNumber<TInner, TComponent, TProvider> Call(StandardBinaryOperation operation, in TComponent num1, in CustomDefaultNumber<TInner, TComponent, TProvider> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -2467,7 +3567,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public GeneratedNumber<TInner> CallReversed(BinaryOperation operation, in GeneratedNumber<TInner> other)
+        public GeneratedNumber<TInner> CallReversed(StandardBinaryOperation operation, in GeneratedNumber<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -2484,47 +3584,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static GeneratedNumber<TInner> operator+(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static GeneratedNumber<TInner> operator-(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static GeneratedNumber<TInner> operator*(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static GeneratedNumber<TInner> operator/(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static GeneratedNumber<TInner> operator^(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static GeneratedNumber<TInner> operator-(GeneratedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static GeneratedNumber<TInner> operator~(GeneratedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static GeneratedNumber<TInner> operator++(GeneratedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static GeneratedNumber<TInner> operator--(GeneratedNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(GeneratedNumber<TInner> a, GeneratedNumber<TInner> b)
@@ -2559,52 +3659,162 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static GeneratedNumber<TInner> operator+(GeneratedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static GeneratedNumber<TInner> operator-(GeneratedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static GeneratedNumber<TInner> operator*(GeneratedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static GeneratedNumber<TInner> operator/(GeneratedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static GeneratedNumber<TInner> operator^(GeneratedNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static GeneratedNumber<TInner> operator+(TInner a, GeneratedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static GeneratedNumber<TInner> operator-(TInner a, GeneratedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static GeneratedNumber<TInner> operator*(TInner a, GeneratedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static GeneratedNumber<TInner> operator/(TInner a, GeneratedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static GeneratedNumber<TInner> operator^(TInner a, GeneratedNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
+        }
+
+		public static GeneratedNumber<TInner> operator+(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner> operator-(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner> operator*(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner> operator/(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner> operator^(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static GeneratedNumber<TInner> operator+(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static GeneratedNumber<TInner> operator-(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static GeneratedNumber<TInner> operator*(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static GeneratedNumber<TInner> operator/(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static GeneratedNumber<TInner> operator^(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(GeneratedNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, GeneratedNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -2676,27 +3886,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual GeneratedNumber<TInner> Call(UnaryOperation operation, in GeneratedNumber<TInner> num)
+            public virtual GeneratedNumber<TInner> Call(StandardUnaryOperation operation, in GeneratedNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
+            public virtual GeneratedNumber<TInner> Call(StandardBinaryOperation operation, in GeneratedNumber<TInner> num1, in GeneratedNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual GeneratedNumber<TInner> Call(BinaryOperation operation, in GeneratedNumber<TInner> num1, in TInner num2)
+            public virtual GeneratedNumber<TInner> Call(StandardBinaryOperation operation, in GeneratedNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual GeneratedNumber<TInner> Call(BinaryOperation operation, in TInner num1, in GeneratedNumber<TInner> num2)
+            public virtual GeneratedNumber<TInner> Call(StandardBinaryOperation operation, in TInner num1, in GeneratedNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<GeneratedNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in GeneratedNumber<TInner> num)
+			TInner INumberOperations<GeneratedNumber<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in GeneratedNumber<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -2742,7 +3952,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public GeneratedNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> other)
+        public GeneratedNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in GeneratedNumber<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -2759,47 +3969,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static GeneratedNumber<TInner, TComponent> operator+(GeneratedNumber<TInner, TComponent> a, GeneratedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator-(GeneratedNumber<TInner, TComponent> a, GeneratedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator*(GeneratedNumber<TInner, TComponent> a, GeneratedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator/(GeneratedNumber<TInner, TComponent> a, GeneratedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator^(GeneratedNumber<TInner, TComponent> a, GeneratedNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator-(GeneratedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator~(GeneratedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator++(GeneratedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator--(GeneratedNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(GeneratedNumber<TInner, TComponent> a, GeneratedNumber<TInner, TComponent> b)
@@ -2834,52 +4044,162 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static GeneratedNumber<TInner, TComponent> operator+(GeneratedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator-(GeneratedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator*(GeneratedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator/(GeneratedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator^(GeneratedNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static GeneratedNumber<TInner, TComponent> operator+(TInner a, GeneratedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator-(TInner a, GeneratedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator*(TInner a, GeneratedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator/(TInner a, GeneratedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static GeneratedNumber<TInner, TComponent> operator^(TInner a, GeneratedNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
+        }
+
+		public static GeneratedNumber<TInner, TComponent> operator+(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator-(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator*(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator/(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator^(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static GeneratedNumber<TInner, TComponent> operator+(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator-(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator*(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator/(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static GeneratedNumber<TInner, TComponent> operator^(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(GeneratedNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, GeneratedNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -2956,37 +4276,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual GeneratedNumber<TInner, TComponent> Call(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
+            public virtual GeneratedNumber<TInner, TComponent> Call(StandardUnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in GeneratedNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in GeneratedNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual GeneratedNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in GeneratedNumber<TInner, TComponent> num2)
+            public virtual GeneratedNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in GeneratedNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -3005,7 +4325,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperComplex<TInner> CallReversed(BinaryOperation operation, in HyperComplex<TInner> other)
+        public HyperComplex<TInner> CallReversed(StandardBinaryOperation operation, in HyperComplex<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -3047,47 +4367,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperComplex<TInner> operator+(HyperComplex<TInner> a, HyperComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperComplex<TInner> operator-(HyperComplex<TInner> a, HyperComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperComplex<TInner> operator*(HyperComplex<TInner> a, HyperComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperComplex<TInner> operator/(HyperComplex<TInner> a, HyperComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperComplex<TInner> operator^(HyperComplex<TInner> a, HyperComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperComplex<TInner> operator-(HyperComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperComplex<TInner> operator~(HyperComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperComplex<TInner> operator++(HyperComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperComplex<TInner> operator--(HyperComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperComplex<TInner> a, HyperComplex<TInner> b)
@@ -3122,52 +4442,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperComplex<TInner> operator+(HyperComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperComplex<TInner> operator-(HyperComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperComplex<TInner> operator*(HyperComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperComplex<TInner> operator/(HyperComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperComplex<TInner> operator^(HyperComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperComplex<TInner> operator+(TInner a, HyperComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperComplex<TInner> operator-(TInner a, HyperComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperComplex<TInner> operator*(TInner a, HyperComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperComplex<TInner> operator/(TInner a, HyperComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperComplex<TInner> operator^(TInner a, HyperComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperComplex<TInner> a, TInner b)
@@ -3228,6 +4548,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperComplex<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperComplex<TInner> operator+(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner> operator-(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner> operator*(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner> operator/(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner> operator^(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperComplex<TInner> operator+(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperComplex<TInner> operator-(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperComplex<TInner> operator*(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperComplex<TInner> operator/(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperComplex<TInner> operator^(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -3299,27 +4729,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperComplex<TInner> Call(UnaryOperation operation, in HyperComplex<TInner> num)
+            public virtual HyperComplex<TInner> Call(StandardUnaryOperation operation, in HyperComplex<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
+            public virtual HyperComplex<TInner> Call(StandardBinaryOperation operation, in HyperComplex<TInner> num1, in HyperComplex<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperComplex<TInner> Call(BinaryOperation operation, in HyperComplex<TInner> num1, in TInner num2)
+            public virtual HyperComplex<TInner> Call(StandardBinaryOperation operation, in HyperComplex<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperComplex<TInner> num2)
+            public virtual HyperComplex<TInner> Call(StandardBinaryOperation operation, in TInner num1, in HyperComplex<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<HyperComplex<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperComplex<TInner> num)
+			TInner INumberOperations<HyperComplex<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in HyperComplex<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -3365,7 +4795,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperComplex<TInner, TComponent> CallReversed(BinaryOperation operation, in HyperComplex<TInner, TComponent> other)
+        public HyperComplex<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -3407,47 +4837,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperComplex<TInner, TComponent> operator+(HyperComplex<TInner, TComponent> a, HyperComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator-(HyperComplex<TInner, TComponent> a, HyperComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator*(HyperComplex<TInner, TComponent> a, HyperComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator/(HyperComplex<TInner, TComponent> a, HyperComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator^(HyperComplex<TInner, TComponent> a, HyperComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator-(HyperComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperComplex<TInner, TComponent> operator~(HyperComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperComplex<TInner, TComponent> operator++(HyperComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperComplex<TInner, TComponent> operator--(HyperComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperComplex<TInner, TComponent> a, HyperComplex<TInner, TComponent> b)
@@ -3482,52 +4912,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperComplex<TInner, TComponent> operator+(HyperComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator-(HyperComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator*(HyperComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator/(HyperComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperComplex<TInner, TComponent> operator^(HyperComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperComplex<TInner, TComponent> operator+(TInner a, HyperComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperComplex<TInner, TComponent> operator-(TInner a, HyperComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperComplex<TInner, TComponent> operator*(TInner a, HyperComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperComplex<TInner, TComponent> operator/(TInner a, HyperComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperComplex<TInner, TComponent> operator^(TInner a, HyperComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperComplex<TInner, TComponent> a, TInner b)
@@ -3588,6 +5018,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperComplex<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperComplex<TInner, TComponent> operator+(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator-(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator*(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator/(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator^(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperComplex<TInner, TComponent> operator+(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator-(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator*(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator/(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperComplex<TInner, TComponent> operator^(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -3664,37 +5204,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperComplex<TInner, TComponent> Call(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
+            public virtual HyperComplex<TInner, TComponent> Call(StandardUnaryOperation operation, in HyperComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual HyperComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual HyperComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in HyperComplex<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in HyperComplex<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperComplex<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperComplex<TInner, TComponent> num2)
+            public virtual HyperComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in HyperComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -3713,7 +5253,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperDiagonal<TInner> CallReversed(BinaryOperation operation, in HyperDiagonal<TInner> other)
+        public HyperDiagonal<TInner> CallReversed(StandardBinaryOperation operation, in HyperDiagonal<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -3755,47 +5295,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDiagonal<TInner> operator+(HyperDiagonal<TInner> a, HyperDiagonal<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDiagonal<TInner> operator-(HyperDiagonal<TInner> a, HyperDiagonal<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDiagonal<TInner> operator*(HyperDiagonal<TInner> a, HyperDiagonal<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDiagonal<TInner> operator/(HyperDiagonal<TInner> a, HyperDiagonal<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDiagonal<TInner> operator^(HyperDiagonal<TInner> a, HyperDiagonal<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperDiagonal<TInner> operator-(HyperDiagonal<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperDiagonal<TInner> operator~(HyperDiagonal<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperDiagonal<TInner> operator++(HyperDiagonal<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperDiagonal<TInner> operator--(HyperDiagonal<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperDiagonal<TInner> a, HyperDiagonal<TInner> b)
@@ -3830,52 +5370,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDiagonal<TInner> operator+(HyperDiagonal<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDiagonal<TInner> operator-(HyperDiagonal<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDiagonal<TInner> operator*(HyperDiagonal<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDiagonal<TInner> operator/(HyperDiagonal<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDiagonal<TInner> operator^(HyperDiagonal<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperDiagonal<TInner> operator+(TInner a, HyperDiagonal<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperDiagonal<TInner> operator-(TInner a, HyperDiagonal<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperDiagonal<TInner> operator*(TInner a, HyperDiagonal<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperDiagonal<TInner> operator/(TInner a, HyperDiagonal<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperDiagonal<TInner> operator^(TInner a, HyperDiagonal<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperDiagonal<TInner> a, TInner b)
@@ -3936,6 +5476,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperDiagonal<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperDiagonal<TInner> operator+(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner> operator-(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner> operator*(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner> operator/(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner> operator^(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperDiagonal<TInner> operator+(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperDiagonal<TInner> operator-(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperDiagonal<TInner> operator*(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperDiagonal<TInner> operator/(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperDiagonal<TInner> operator^(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperDiagonal<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperDiagonal<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -4007,27 +5657,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperDiagonal<TInner> Call(UnaryOperation operation, in HyperDiagonal<TInner> num)
+            public virtual HyperDiagonal<TInner> Call(StandardUnaryOperation operation, in HyperDiagonal<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
+            public virtual HyperDiagonal<TInner> Call(StandardBinaryOperation operation, in HyperDiagonal<TInner> num1, in HyperDiagonal<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDiagonal<TInner> Call(BinaryOperation operation, in HyperDiagonal<TInner> num1, in TInner num2)
+            public virtual HyperDiagonal<TInner> Call(StandardBinaryOperation operation, in HyperDiagonal<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDiagonal<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDiagonal<TInner> num2)
+            public virtual HyperDiagonal<TInner> Call(StandardBinaryOperation operation, in TInner num1, in HyperDiagonal<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<HyperDiagonal<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperDiagonal<TInner> num)
+			TInner INumberOperations<HyperDiagonal<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in HyperDiagonal<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -4073,7 +5723,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperDiagonal<TInner, TComponent> CallReversed(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> other)
+        public HyperDiagonal<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -4115,47 +5765,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDiagonal<TInner, TComponent> operator+(HyperDiagonal<TInner, TComponent> a, HyperDiagonal<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator-(HyperDiagonal<TInner, TComponent> a, HyperDiagonal<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator*(HyperDiagonal<TInner, TComponent> a, HyperDiagonal<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator/(HyperDiagonal<TInner, TComponent> a, HyperDiagonal<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator^(HyperDiagonal<TInner, TComponent> a, HyperDiagonal<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator-(HyperDiagonal<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator~(HyperDiagonal<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator++(HyperDiagonal<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator--(HyperDiagonal<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperDiagonal<TInner, TComponent> a, HyperDiagonal<TInner, TComponent> b)
@@ -4190,52 +5840,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDiagonal<TInner, TComponent> operator+(HyperDiagonal<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator-(HyperDiagonal<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator*(HyperDiagonal<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator/(HyperDiagonal<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator^(HyperDiagonal<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperDiagonal<TInner, TComponent> operator+(TInner a, HyperDiagonal<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator-(TInner a, HyperDiagonal<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator*(TInner a, HyperDiagonal<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator/(TInner a, HyperDiagonal<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperDiagonal<TInner, TComponent> operator^(TInner a, HyperDiagonal<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperDiagonal<TInner, TComponent> a, TInner b)
@@ -4296,6 +5946,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperDiagonal<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperDiagonal<TInner, TComponent> operator+(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator-(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator*(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator/(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator^(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperDiagonal<TInner, TComponent> operator+(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator-(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator*(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator/(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperDiagonal<TInner, TComponent> operator^(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperDiagonal<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperDiagonal<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -4372,37 +6132,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperDiagonal<TInner, TComponent> Call(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+            public virtual HyperDiagonal<TInner, TComponent> Call(StandardUnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDiagonal<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperDiagonal<TInner, TComponent> num2)
+            public virtual HyperDiagonal<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in HyperDiagonal<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -4421,7 +6181,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperDual<TInner> CallReversed(BinaryOperation operation, in HyperDual<TInner> other)
+        public HyperDual<TInner> CallReversed(StandardBinaryOperation operation, in HyperDual<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -4463,47 +6223,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDual<TInner> operator+(HyperDual<TInner> a, HyperDual<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDual<TInner> operator-(HyperDual<TInner> a, HyperDual<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDual<TInner> operator*(HyperDual<TInner> a, HyperDual<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDual<TInner> operator/(HyperDual<TInner> a, HyperDual<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDual<TInner> operator^(HyperDual<TInner> a, HyperDual<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperDual<TInner> operator-(HyperDual<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperDual<TInner> operator~(HyperDual<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperDual<TInner> operator++(HyperDual<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperDual<TInner> operator--(HyperDual<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperDual<TInner> a, HyperDual<TInner> b)
@@ -4538,52 +6298,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDual<TInner> operator+(HyperDual<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDual<TInner> operator-(HyperDual<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDual<TInner> operator*(HyperDual<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDual<TInner> operator/(HyperDual<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDual<TInner> operator^(HyperDual<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperDual<TInner> operator+(TInner a, HyperDual<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperDual<TInner> operator-(TInner a, HyperDual<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperDual<TInner> operator*(TInner a, HyperDual<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperDual<TInner> operator/(TInner a, HyperDual<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperDual<TInner> operator^(TInner a, HyperDual<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperDual<TInner> a, TInner b)
@@ -4644,6 +6404,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperDual<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperDual<TInner> operator+(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner> operator-(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner> operator*(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner> operator/(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner> operator^(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperDual<TInner> operator+(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperDual<TInner> operator-(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperDual<TInner> operator*(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperDual<TInner> operator/(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperDual<TInner> operator^(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperDual<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperDual<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperDual<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperDual<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -4715,27 +6585,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperDual<TInner> Call(UnaryOperation operation, in HyperDual<TInner> num)
+            public virtual HyperDual<TInner> Call(StandardUnaryOperation operation, in HyperDual<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in HyperDual<TInner> num2)
+            public virtual HyperDual<TInner> Call(StandardBinaryOperation operation, in HyperDual<TInner> num1, in HyperDual<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDual<TInner> Call(BinaryOperation operation, in HyperDual<TInner> num1, in TInner num2)
+            public virtual HyperDual<TInner> Call(StandardBinaryOperation operation, in HyperDual<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDual<TInner> Call(BinaryOperation operation, in TInner num1, in HyperDual<TInner> num2)
+            public virtual HyperDual<TInner> Call(StandardBinaryOperation operation, in TInner num1, in HyperDual<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<HyperDual<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperDual<TInner> num)
+			TInner INumberOperations<HyperDual<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in HyperDual<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -4781,7 +6651,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperDual<TInner, TComponent> CallReversed(BinaryOperation operation, in HyperDual<TInner, TComponent> other)
+        public HyperDual<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -4823,47 +6693,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDual<TInner, TComponent> operator+(HyperDual<TInner, TComponent> a, HyperDual<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator-(HyperDual<TInner, TComponent> a, HyperDual<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator*(HyperDual<TInner, TComponent> a, HyperDual<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator/(HyperDual<TInner, TComponent> a, HyperDual<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator^(HyperDual<TInner, TComponent> a, HyperDual<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator-(HyperDual<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperDual<TInner, TComponent> operator~(HyperDual<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperDual<TInner, TComponent> operator++(HyperDual<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperDual<TInner, TComponent> operator--(HyperDual<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperDual<TInner, TComponent> a, HyperDual<TInner, TComponent> b)
@@ -4898,52 +6768,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperDual<TInner, TComponent> operator+(HyperDual<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator-(HyperDual<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator*(HyperDual<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator/(HyperDual<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperDual<TInner, TComponent> operator^(HyperDual<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperDual<TInner, TComponent> operator+(TInner a, HyperDual<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperDual<TInner, TComponent> operator-(TInner a, HyperDual<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperDual<TInner, TComponent> operator*(TInner a, HyperDual<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperDual<TInner, TComponent> operator/(TInner a, HyperDual<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperDual<TInner, TComponent> operator^(TInner a, HyperDual<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperDual<TInner, TComponent> a, TInner b)
@@ -5004,6 +6874,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperDual<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperDual<TInner, TComponent> operator+(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner, TComponent> operator-(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner, TComponent> operator*(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner, TComponent> operator/(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperDual<TInner, TComponent> operator^(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperDual<TInner, TComponent> operator+(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperDual<TInner, TComponent> operator-(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperDual<TInner, TComponent> operator*(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperDual<TInner, TComponent> operator/(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperDual<TInner, TComponent> operator^(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperDual<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperDual<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -5080,37 +7060,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperDual<TInner, TComponent> Call(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
+            public virtual HyperDual<TInner, TComponent> Call(StandardUnaryOperation operation, in HyperDual<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
+            public virtual HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperDual<TInner, TComponent> num2)
+            public virtual HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in HyperDual<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in HyperDual<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperDual<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperDual<TInner, TComponent> num2)
+            public virtual HyperDual<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in HyperDual<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -5129,7 +7109,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperSplitComplex<TInner> CallReversed(BinaryOperation operation, in HyperSplitComplex<TInner> other)
+        public HyperSplitComplex<TInner> CallReversed(StandardBinaryOperation operation, in HyperSplitComplex<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -5171,47 +7151,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperSplitComplex<TInner> operator+(HyperSplitComplex<TInner> a, HyperSplitComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperSplitComplex<TInner> operator-(HyperSplitComplex<TInner> a, HyperSplitComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperSplitComplex<TInner> operator*(HyperSplitComplex<TInner> a, HyperSplitComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperSplitComplex<TInner> operator/(HyperSplitComplex<TInner> a, HyperSplitComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperSplitComplex<TInner> operator^(HyperSplitComplex<TInner> a, HyperSplitComplex<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperSplitComplex<TInner> operator-(HyperSplitComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperSplitComplex<TInner> operator~(HyperSplitComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperSplitComplex<TInner> operator++(HyperSplitComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperSplitComplex<TInner> operator--(HyperSplitComplex<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperSplitComplex<TInner> a, HyperSplitComplex<TInner> b)
@@ -5246,52 +7226,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperSplitComplex<TInner> operator+(HyperSplitComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperSplitComplex<TInner> operator-(HyperSplitComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperSplitComplex<TInner> operator*(HyperSplitComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperSplitComplex<TInner> operator/(HyperSplitComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperSplitComplex<TInner> operator^(HyperSplitComplex<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperSplitComplex<TInner> operator+(TInner a, HyperSplitComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperSplitComplex<TInner> operator-(TInner a, HyperSplitComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperSplitComplex<TInner> operator*(TInner a, HyperSplitComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperSplitComplex<TInner> operator/(TInner a, HyperSplitComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperSplitComplex<TInner> operator^(TInner a, HyperSplitComplex<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperSplitComplex<TInner> a, TInner b)
@@ -5352,6 +7332,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperSplitComplex<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperSplitComplex<TInner> operator+(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner> operator-(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner> operator*(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner> operator/(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner> operator^(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperSplitComplex<TInner> operator+(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperSplitComplex<TInner> operator-(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperSplitComplex<TInner> operator*(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperSplitComplex<TInner> operator/(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperSplitComplex<TInner> operator^(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperSplitComplex<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperSplitComplex<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -5423,27 +7513,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperSplitComplex<TInner> Call(UnaryOperation operation, in HyperSplitComplex<TInner> num)
+            public virtual HyperSplitComplex<TInner> Call(StandardUnaryOperation operation, in HyperSplitComplex<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
+            public virtual HyperSplitComplex<TInner> Call(StandardBinaryOperation operation, in HyperSplitComplex<TInner> num1, in HyperSplitComplex<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperSplitComplex<TInner> Call(BinaryOperation operation, in HyperSplitComplex<TInner> num1, in TInner num2)
+            public virtual HyperSplitComplex<TInner> Call(StandardBinaryOperation operation, in HyperSplitComplex<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperSplitComplex<TInner> Call(BinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner> num2)
+            public virtual HyperSplitComplex<TInner> Call(StandardBinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<HyperSplitComplex<TInner>, TInner>.CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner> num)
+			TInner INumberOperations<HyperSplitComplex<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in HyperSplitComplex<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -5489,7 +7579,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public HyperSplitComplex<TInner, TComponent> CallReversed(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> other)
+        public HyperSplitComplex<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -5531,47 +7621,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperSplitComplex<TInner, TComponent> operator+(HyperSplitComplex<TInner, TComponent> a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator-(HyperSplitComplex<TInner, TComponent> a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator*(HyperSplitComplex<TInner, TComponent> a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator/(HyperSplitComplex<TInner, TComponent> a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator^(HyperSplitComplex<TInner, TComponent> a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator-(HyperSplitComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator~(HyperSplitComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator++(HyperSplitComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator--(HyperSplitComplex<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(HyperSplitComplex<TInner, TComponent> a, HyperSplitComplex<TInner, TComponent> b)
@@ -5606,52 +7696,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static HyperSplitComplex<TInner, TComponent> operator+(HyperSplitComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator-(HyperSplitComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator*(HyperSplitComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator/(HyperSplitComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator^(HyperSplitComplex<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static HyperSplitComplex<TInner, TComponent> operator+(TInner a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator-(TInner a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator*(TInner a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator/(TInner a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static HyperSplitComplex<TInner, TComponent> operator^(TInner a, HyperSplitComplex<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(HyperSplitComplex<TInner, TComponent> a, TInner b)
@@ -5712,6 +7802,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, HyperSplitComplex<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static HyperSplitComplex<TInner, TComponent> operator+(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator-(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator*(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator/(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator^(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static HyperSplitComplex<TInner, TComponent> operator+(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator-(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator*(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator/(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static HyperSplitComplex<TInner, TComponent> operator^(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(HyperSplitComplex<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, HyperSplitComplex<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -5788,37 +7988,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual HyperSplitComplex<TInner, TComponent> Call(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(StandardUnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TInner num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TComponent num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual HyperSplitComplex<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in HyperSplitComplex<TInner, TComponent> num2)
+            public virtual HyperSplitComplex<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in HyperSplitComplex<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -5837,7 +8037,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public NullableNumber<TInner> CallReversed(BinaryOperation operation, in NullableNumber<TInner> other)
+        public NullableNumber<TInner> CallReversed(StandardBinaryOperation operation, in NullableNumber<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -5879,47 +8079,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static NullableNumber<TInner> operator+(NullableNumber<TInner> a, NullableNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static NullableNumber<TInner> operator-(NullableNumber<TInner> a, NullableNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static NullableNumber<TInner> operator*(NullableNumber<TInner> a, NullableNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static NullableNumber<TInner> operator/(NullableNumber<TInner> a, NullableNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static NullableNumber<TInner> operator^(NullableNumber<TInner> a, NullableNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static NullableNumber<TInner> operator-(NullableNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static NullableNumber<TInner> operator~(NullableNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static NullableNumber<TInner> operator++(NullableNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static NullableNumber<TInner> operator--(NullableNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(NullableNumber<TInner> a, NullableNumber<TInner> b)
@@ -5954,52 +8154,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static NullableNumber<TInner> operator+(NullableNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static NullableNumber<TInner> operator-(NullableNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static NullableNumber<TInner> operator*(NullableNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static NullableNumber<TInner> operator/(NullableNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static NullableNumber<TInner> operator^(NullableNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static NullableNumber<TInner> operator+(TInner a, NullableNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static NullableNumber<TInner> operator-(TInner a, NullableNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static NullableNumber<TInner> operator*(TInner a, NullableNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static NullableNumber<TInner> operator/(TInner a, NullableNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static NullableNumber<TInner> operator^(TInner a, NullableNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(NullableNumber<TInner> a, TInner b)
@@ -6060,6 +8260,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, NullableNumber<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static NullableNumber<TInner> operator+(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner> operator-(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner> operator*(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner> operator/(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner> operator^(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static NullableNumber<TInner> operator+(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static NullableNumber<TInner> operator-(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static NullableNumber<TInner> operator*(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static NullableNumber<TInner> operator/(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static NullableNumber<TInner> operator^(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(NullableNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, NullableNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -6131,27 +8441,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual NullableNumber<TInner> Call(UnaryOperation operation, in NullableNumber<TInner> num)
+            public virtual NullableNumber<TInner> Call(StandardUnaryOperation operation, in NullableNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
+            public virtual NullableNumber<TInner> Call(StandardBinaryOperation operation, in NullableNumber<TInner> num1, in NullableNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual NullableNumber<TInner> Call(BinaryOperation operation, in NullableNumber<TInner> num1, in TInner num2)
+            public virtual NullableNumber<TInner> Call(StandardBinaryOperation operation, in NullableNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual NullableNumber<TInner> Call(BinaryOperation operation, in TInner num1, in NullableNumber<TInner> num2)
+            public virtual NullableNumber<TInner> Call(StandardBinaryOperation operation, in TInner num1, in NullableNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<NullableNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in NullableNumber<TInner> num)
+			TInner INumberOperations<NullableNumber<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in NullableNumber<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -6197,7 +8507,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public NullableNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in NullableNumber<TInner, TComponent> other)
+        public NullableNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in NullableNumber<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -6239,47 +8549,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static NullableNumber<TInner, TComponent> operator+(NullableNumber<TInner, TComponent> a, NullableNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator-(NullableNumber<TInner, TComponent> a, NullableNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator*(NullableNumber<TInner, TComponent> a, NullableNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator/(NullableNumber<TInner, TComponent> a, NullableNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator^(NullableNumber<TInner, TComponent> a, NullableNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator-(NullableNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static NullableNumber<TInner, TComponent> operator~(NullableNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static NullableNumber<TInner, TComponent> operator++(NullableNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static NullableNumber<TInner, TComponent> operator--(NullableNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(NullableNumber<TInner, TComponent> a, NullableNumber<TInner, TComponent> b)
@@ -6314,52 +8624,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static NullableNumber<TInner, TComponent> operator+(NullableNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator-(NullableNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator*(NullableNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator/(NullableNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static NullableNumber<TInner, TComponent> operator^(NullableNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static NullableNumber<TInner, TComponent> operator+(TInner a, NullableNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static NullableNumber<TInner, TComponent> operator-(TInner a, NullableNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static NullableNumber<TInner, TComponent> operator*(TInner a, NullableNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static NullableNumber<TInner, TComponent> operator/(TInner a, NullableNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static NullableNumber<TInner, TComponent> operator^(TInner a, NullableNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(NullableNumber<TInner, TComponent> a, TInner b)
@@ -6420,6 +8730,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, NullableNumber<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static NullableNumber<TInner, TComponent> operator+(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator-(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator*(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator/(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator^(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static NullableNumber<TInner, TComponent> operator+(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator-(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator*(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator/(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static NullableNumber<TInner, TComponent> operator^(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(NullableNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, NullableNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -6496,37 +8916,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual NullableNumber<TInner, TComponent> Call(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
+            public virtual NullableNumber<TInner, TComponent> Call(StandardUnaryOperation operation, in NullableNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in NullableNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in NullableNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in NullableNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual NullableNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in NullableNumber<TInner, TComponent> num2)
+            public virtual NullableNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in NullableNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -6545,7 +8965,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public NullNumber CallReversed(BinaryOperation operation, in NullNumber other)
+        public NullNumber CallReversed(StandardBinaryOperation operation, in NullNumber other)
         {
             return other.Call(operation, this);
         }
@@ -6562,47 +8982,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static NullNumber operator+(NullNumber a, NullNumber b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static NullNumber operator-(NullNumber a, NullNumber b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static NullNumber operator*(NullNumber a, NullNumber b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static NullNumber operator/(NullNumber a, NullNumber b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static NullNumber operator^(NullNumber a, NullNumber b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static NullNumber operator-(NullNumber a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static NullNumber operator~(NullNumber a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static NullNumber operator++(NullNumber a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static NullNumber operator--(NullNumber a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(NullNumber a, NullNumber b)
@@ -6633,6 +9053,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(NullNumber a, NullNumber b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static NullNumber operator+(NullNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber operator-(NullNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber operator*(NullNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber operator/(NullNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber operator^(NullNumber a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static NullNumber operator+(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static NullNumber operator-(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static NullNumber operator*(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static NullNumber operator/(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static NullNumber operator^(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(NullNumber a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(NullNumber a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(NullNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(NullNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(NullNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(NullNumber a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, NullNumber b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, NullNumber b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -6694,12 +9224,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual NullNumber Call(UnaryOperation operation, in NullNumber num)
+            public virtual NullNumber Call(StandardUnaryOperation operation, in NullNumber num)
             {
                 return num.Call(operation);
             }
 
-            public virtual NullNumber Call(BinaryOperation operation, in NullNumber num1, in NullNumber num2)
+            public virtual NullNumber Call(StandardBinaryOperation operation, in NullNumber num1, in NullNumber num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -6713,7 +9243,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public NullNumber<TComponent> CallReversed(BinaryOperation operation, in NullNumber<TComponent> other)
+        public NullNumber<TComponent> CallReversed(StandardBinaryOperation operation, in NullNumber<TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -6730,47 +9260,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static NullNumber<TComponent> operator+(NullNumber<TComponent> a, NullNumber<TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static NullNumber<TComponent> operator-(NullNumber<TComponent> a, NullNumber<TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static NullNumber<TComponent> operator*(NullNumber<TComponent> a, NullNumber<TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static NullNumber<TComponent> operator/(NullNumber<TComponent> a, NullNumber<TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static NullNumber<TComponent> operator^(NullNumber<TComponent> a, NullNumber<TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static NullNumber<TComponent> operator-(NullNumber<TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static NullNumber<TComponent> operator~(NullNumber<TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static NullNumber<TComponent> operator++(NullNumber<TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static NullNumber<TComponent> operator--(NullNumber<TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(NullNumber<TComponent> a, NullNumber<TComponent> b)
@@ -6801,6 +9331,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(NullNumber<TComponent> a, NullNumber<TComponent> b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static NullNumber<TComponent> operator+(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber<TComponent> operator-(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber<TComponent> operator*(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber<TComponent> operator/(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static NullNumber<TComponent> operator^(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static NullNumber<TComponent> operator+(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static NullNumber<TComponent> operator-(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static NullNumber<TComponent> operator*(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static NullNumber<TComponent> operator/(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static NullNumber<TComponent> operator^(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(NullNumber<TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, NullNumber<TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -6867,27 +9507,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual NullNumber<TComponent> Call(UnaryOperation operation, in NullNumber<TComponent> num)
+            public virtual NullNumber<TComponent> Call(StandardUnaryOperation operation, in NullNumber<TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
+            public virtual NullNumber<TComponent> Call(StandardBinaryOperation operation, in NullNumber<TComponent> num1, in NullNumber<TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in NullNumber<TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in NullNumber<TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual NullNumber<TComponent> Call(BinaryOperation operation, in NullNumber<TComponent> num1, in TComponent num2)
+            public virtual NullNumber<TComponent> Call(StandardBinaryOperation operation, in NullNumber<TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual NullNumber<TComponent> Call(BinaryOperation operation, in TComponent num1, in NullNumber<TComponent> num2)
+            public virtual NullNumber<TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in NullNumber<TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -6901,7 +9541,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public ProjectiveNumber<TInner> CallReversed(BinaryOperation operation, in ProjectiveNumber<TInner> other)
+        public ProjectiveNumber<TInner> CallReversed(StandardBinaryOperation operation, in ProjectiveNumber<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -6943,47 +9583,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ProjectiveNumber<TInner> operator+(ProjectiveNumber<TInner> a, ProjectiveNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ProjectiveNumber<TInner> operator-(ProjectiveNumber<TInner> a, ProjectiveNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ProjectiveNumber<TInner> operator*(ProjectiveNumber<TInner> a, ProjectiveNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ProjectiveNumber<TInner> operator/(ProjectiveNumber<TInner> a, ProjectiveNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ProjectiveNumber<TInner> operator^(ProjectiveNumber<TInner> a, ProjectiveNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static ProjectiveNumber<TInner> operator-(ProjectiveNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static ProjectiveNumber<TInner> operator~(ProjectiveNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static ProjectiveNumber<TInner> operator++(ProjectiveNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static ProjectiveNumber<TInner> operator--(ProjectiveNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(ProjectiveNumber<TInner> a, ProjectiveNumber<TInner> b)
@@ -7018,52 +9658,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ProjectiveNumber<TInner> operator+(ProjectiveNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ProjectiveNumber<TInner> operator-(ProjectiveNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ProjectiveNumber<TInner> operator*(ProjectiveNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ProjectiveNumber<TInner> operator/(ProjectiveNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ProjectiveNumber<TInner> operator^(ProjectiveNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static ProjectiveNumber<TInner> operator+(TInner a, ProjectiveNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static ProjectiveNumber<TInner> operator-(TInner a, ProjectiveNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static ProjectiveNumber<TInner> operator*(TInner a, ProjectiveNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static ProjectiveNumber<TInner> operator/(TInner a, ProjectiveNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static ProjectiveNumber<TInner> operator^(TInner a, ProjectiveNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(ProjectiveNumber<TInner> a, TInner b)
@@ -7124,6 +9764,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, ProjectiveNumber<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static ProjectiveNumber<TInner> operator+(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner> operator-(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner> operator*(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner> operator/(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner> operator^(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static ProjectiveNumber<TInner> operator+(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static ProjectiveNumber<TInner> operator-(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static ProjectiveNumber<TInner> operator*(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static ProjectiveNumber<TInner> operator/(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static ProjectiveNumber<TInner> operator^(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(ProjectiveNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, ProjectiveNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -7195,27 +9945,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual ProjectiveNumber<TInner> Call(UnaryOperation operation, in ProjectiveNumber<TInner> num)
+            public virtual ProjectiveNumber<TInner> Call(StandardUnaryOperation operation, in ProjectiveNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
+            public virtual ProjectiveNumber<TInner> Call(StandardBinaryOperation operation, in ProjectiveNumber<TInner> num1, in ProjectiveNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual ProjectiveNumber<TInner> Call(BinaryOperation operation, in ProjectiveNumber<TInner> num1, in TInner num2)
+            public virtual ProjectiveNumber<TInner> Call(StandardBinaryOperation operation, in ProjectiveNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual ProjectiveNumber<TInner> Call(BinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner> num2)
+            public virtual ProjectiveNumber<TInner> Call(StandardBinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<ProjectiveNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner> num)
+			TInner INumberOperations<ProjectiveNumber<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in ProjectiveNumber<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -7261,7 +10011,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public ProjectiveNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> other)
+        public ProjectiveNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in ProjectiveNumber<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -7303,47 +10053,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ProjectiveNumber<TInner, TComponent> operator+(ProjectiveNumber<TInner, TComponent> a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator-(ProjectiveNumber<TInner, TComponent> a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator*(ProjectiveNumber<TInner, TComponent> a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator/(ProjectiveNumber<TInner, TComponent> a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator^(ProjectiveNumber<TInner, TComponent> a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator-(ProjectiveNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator~(ProjectiveNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator++(ProjectiveNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator--(ProjectiveNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(ProjectiveNumber<TInner, TComponent> a, ProjectiveNumber<TInner, TComponent> b)
@@ -7378,52 +10128,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ProjectiveNumber<TInner, TComponent> operator+(ProjectiveNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator-(ProjectiveNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator*(ProjectiveNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator/(ProjectiveNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator^(ProjectiveNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static ProjectiveNumber<TInner, TComponent> operator+(TInner a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator-(TInner a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator*(TInner a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator/(TInner a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static ProjectiveNumber<TInner, TComponent> operator^(TInner a, ProjectiveNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(ProjectiveNumber<TInner, TComponent> a, TInner b)
@@ -7484,6 +10234,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, ProjectiveNumber<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static ProjectiveNumber<TInner, TComponent> operator+(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator-(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator*(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator/(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator^(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static ProjectiveNumber<TInner, TComponent> operator+(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator-(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator*(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator/(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static ProjectiveNumber<TInner, TComponent> operator^(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(ProjectiveNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, ProjectiveNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -7560,37 +10420,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual ProjectiveNumber<TInner, TComponent> Call(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(StandardUnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in ProjectiveNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in ProjectiveNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual ProjectiveNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in ProjectiveNumber<TInner, TComponent> num2)
+            public virtual ProjectiveNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in ProjectiveNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
@@ -7609,7 +10469,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public Real CallReversed(BinaryOperation operation, in Real other)
+        public Real CallReversed(StandardBinaryOperation operation, in Real other)
         {
             return other.Call(operation, this);
         }
@@ -7626,47 +10486,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static Real operator+(Real a, Real b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static Real operator-(Real a, Real b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static Real operator*(Real a, Real b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static Real operator/(Real a, Real b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static Real operator^(Real a, Real b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static Real operator-(Real a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static Real operator~(Real a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static Real operator++(Real a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static Real operator--(Real a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(Real a, Real b)
@@ -7697,6 +10557,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(Real a, Real b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static Real operator+(Real a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static Real operator-(Real a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static Real operator*(Real a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static Real operator/(Real a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static Real operator^(Real a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static Real operator+(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static Real operator-(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static Real operator*(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static Real operator/(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static Real operator^(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(Real a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(Real a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(Real a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(Real a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(Real a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(Real a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, Real b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, Real b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -7758,12 +10728,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual Real Call(UnaryOperation operation, in Real num)
+            public virtual Real Call(StandardUnaryOperation operation, in Real num)
             {
                 return num.Call(operation);
             }
 
-            public virtual Real Call(BinaryOperation operation, in Real num1, in Real num2)
+            public virtual Real Call(StandardBinaryOperation operation, in Real num1, in Real num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -7777,7 +10747,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public ExtendedReal CallReversed(BinaryOperation operation, in ExtendedReal other)
+        public ExtendedReal CallReversed(StandardBinaryOperation operation, in ExtendedReal other)
         {
             return other.Call(operation, this);
         }
@@ -7794,47 +10764,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static ExtendedReal operator+(ExtendedReal a, ExtendedReal b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static ExtendedReal operator-(ExtendedReal a, ExtendedReal b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static ExtendedReal operator*(ExtendedReal a, ExtendedReal b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static ExtendedReal operator/(ExtendedReal a, ExtendedReal b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static ExtendedReal operator^(ExtendedReal a, ExtendedReal b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static ExtendedReal operator-(ExtendedReal a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static ExtendedReal operator~(ExtendedReal a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static ExtendedReal operator++(ExtendedReal a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static ExtendedReal operator--(ExtendedReal a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(ExtendedReal a, ExtendedReal b)
@@ -7865,6 +10835,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(ExtendedReal a, ExtendedReal b)
         {
             return a.CompareTo(b) <= 0;
+        }
+
+		public static ExtendedReal operator+(ExtendedReal a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static ExtendedReal operator-(ExtendedReal a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static ExtendedReal operator*(ExtendedReal a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static ExtendedReal operator/(ExtendedReal a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static ExtendedReal operator^(ExtendedReal a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static ExtendedReal operator+(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static ExtendedReal operator-(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static ExtendedReal operator*(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static ExtendedReal operator/(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static ExtendedReal operator^(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(ExtendedReal a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(ExtendedReal a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(ExtendedReal a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(ExtendedReal a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(ExtendedReal a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(ExtendedReal a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, ExtendedReal b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, ExtendedReal b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -7926,12 +11006,12 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual ExtendedReal Call(UnaryOperation operation, in ExtendedReal num)
+            public virtual ExtendedReal Call(StandardUnaryOperation operation, in ExtendedReal num)
             {
                 return num.Call(operation);
             }
 
-            public virtual ExtendedReal Call(BinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
+            public virtual ExtendedReal Call(StandardBinaryOperation operation, in ExtendedReal num1, in ExtendedReal num2)
             {
                 return num1.Call(operation, num2);
             }
@@ -7945,7 +11025,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public WrapperNumber<TInner> CallReversed(BinaryOperation operation, in WrapperNumber<TInner> other)
+        public WrapperNumber<TInner> CallReversed(StandardBinaryOperation operation, in WrapperNumber<TInner> other)
         {
             return other.Call(operation, this);
         }
@@ -7987,47 +11067,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static WrapperNumber<TInner> operator+(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static WrapperNumber<TInner> operator-(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static WrapperNumber<TInner> operator*(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static WrapperNumber<TInner> operator/(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static WrapperNumber<TInner> operator^(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static WrapperNumber<TInner> operator-(WrapperNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static WrapperNumber<TInner> operator~(WrapperNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static WrapperNumber<TInner> operator++(WrapperNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static WrapperNumber<TInner> operator--(WrapperNumber<TInner> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
@@ -8062,52 +11142,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static WrapperNumber<TInner> operator+(WrapperNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static WrapperNumber<TInner> operator-(WrapperNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static WrapperNumber<TInner> operator*(WrapperNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static WrapperNumber<TInner> operator/(WrapperNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static WrapperNumber<TInner> operator^(WrapperNumber<TInner> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static WrapperNumber<TInner> operator+(TInner a, WrapperNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static WrapperNumber<TInner> operator-(TInner a, WrapperNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static WrapperNumber<TInner> operator*(TInner a, WrapperNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static WrapperNumber<TInner> operator/(TInner a, WrapperNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static WrapperNumber<TInner> operator^(TInner a, WrapperNumber<TInner> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(WrapperNumber<TInner> a, TInner b)
@@ -8168,6 +11248,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, WrapperNumber<TInner> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static WrapperNumber<TInner> operator+(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner> operator-(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner> operator*(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner> operator/(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner> operator^(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static WrapperNumber<TInner> operator+(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static WrapperNumber<TInner> operator-(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static WrapperNumber<TInner> operator*(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static WrapperNumber<TInner> operator/(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static WrapperNumber<TInner> operator^(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(WrapperNumber<TInner> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, WrapperNumber<TInner> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -8244,27 +11434,27 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual WrapperNumber<TInner> Call(UnaryOperation operation, in WrapperNumber<TInner> num)
+            public virtual WrapperNumber<TInner> Call(StandardUnaryOperation operation, in WrapperNumber<TInner> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual WrapperNumber<TInner> Call(BinaryOperation operation, in WrapperNumber<TInner> num1, in WrapperNumber<TInner> num2)
+            public virtual WrapperNumber<TInner> Call(StandardBinaryOperation operation, in WrapperNumber<TInner> num1, in WrapperNumber<TInner> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual WrapperNumber<TInner> Call(BinaryOperation operation, in WrapperNumber<TInner> num1, in TInner num2)
+            public virtual WrapperNumber<TInner> Call(StandardBinaryOperation operation, in WrapperNumber<TInner> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual WrapperNumber<TInner> Call(BinaryOperation operation, in TInner num1, in WrapperNumber<TInner> num2)
+            public virtual WrapperNumber<TInner> Call(StandardBinaryOperation operation, in TInner num1, in WrapperNumber<TInner> num2)
             {
                 return num2.CallReversed(operation, num1);
             }			
 
-			TInner INumberOperations<WrapperNumber<TInner>, TInner>.CallComponent(UnaryOperation operation, in WrapperNumber<TInner> num)
+			TInner INumberOperations<WrapperNumber<TInner>, TInner>.CallComponent(StandardUnaryOperation operation, in WrapperNumber<TInner> num)
             {
                 return num.CallComponent(operation);
             }
@@ -8310,7 +11500,7 @@ namespace IS4.HyperNumerics.NumberTypes
             return Clone();
         }
 
-        public WrapperNumber<TInner, TComponent> CallReversed(BinaryOperation operation, in WrapperNumber<TInner, TComponent> other)
+        public WrapperNumber<TInner, TComponent> CallReversed(StandardBinaryOperation operation, in WrapperNumber<TInner, TComponent> other)
         {
             return other.Call(operation, this);
         }
@@ -8352,47 +11542,47 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static WrapperNumber<TInner, TComponent> operator+(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator-(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator*(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator/(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator^(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator-(WrapperNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Negate);
+            return a.Call(StandardUnaryOperation.Negate);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator~(WrapperNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Inverse);
+            return a.Call(StandardUnaryOperation.Inverse);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator++(WrapperNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Increment);
+            return a.Call(StandardUnaryOperation.Increment);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator--(WrapperNumber<TInner, TComponent> a)
         {
-            return a.Call(UnaryOperation.Decrement);
+            return a.Call(StandardUnaryOperation.Decrement);
         }
 
         public static bool operator==(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)
@@ -8427,52 +11617,52 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public static WrapperNumber<TInner, TComponent> operator+(WrapperNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Add, b);
+            return a.Call(StandardBinaryOperation.Add, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator-(WrapperNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Subtract, b);
+            return a.Call(StandardBinaryOperation.Subtract, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator*(WrapperNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Multiply, b);
+            return a.Call(StandardBinaryOperation.Multiply, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator/(WrapperNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Divide, b);
+            return a.Call(StandardBinaryOperation.Divide, b);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator^(WrapperNumber<TInner, TComponent> a, TInner b)
         {
-            return a.Call(BinaryOperation.Power, b);
+            return a.Call(StandardBinaryOperation.Power, b);
         }
 
         public static WrapperNumber<TInner, TComponent> operator+(TInner a, WrapperNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Add, a);
+            return b.CallReversed(StandardBinaryOperation.Add, a);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator-(TInner a, WrapperNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Subtract, a);
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator*(TInner a, WrapperNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Multiply, a);
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator/(TInner a, WrapperNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Divide, a);
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
         }
 		
         public static WrapperNumber<TInner, TComponent> operator^(TInner a, WrapperNumber<TInner, TComponent> b)
         {
-            return b.CallReversed(BinaryOperation.Power, a);
+            return b.CallReversed(StandardBinaryOperation.Power, a);
         }		
 
         public static bool operator==(WrapperNumber<TInner, TComponent> a, TInner b)
@@ -8533,6 +11723,116 @@ namespace IS4.HyperNumerics.NumberTypes
         public static bool operator<=(TInner a, WrapperNumber<TInner, TComponent> b)
         {
             return b.CompareTo(a) >= 0;
+        }
+
+		public static WrapperNumber<TInner, TComponent> operator+(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator-(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator*(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator/(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator^(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static WrapperNumber<TInner, TComponent> operator+(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator-(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator*(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator/(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static WrapperNumber<TInner, TComponent> operator^(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(WrapperNumber<TInner, TComponent> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, WrapperNumber<TInner, TComponent> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
         }
 
         INumberOperations INumber.GetOperations()
@@ -8619,37 +11919,37 @@ namespace IS4.HyperNumerics.NumberTypes
                 return num.GetHashCode();
             }
 
-            public virtual WrapperNumber<TInner, TComponent> Call(UnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+            public virtual WrapperNumber<TInner, TComponent> Call(StandardUnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
             {
                 return num.Call(operation);
             }
 
-            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in WrapperNumber<TInner, TComponent> num2)
+            public virtual WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in WrapperNumber<TInner, TComponent> num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in TInner num2)
+            public virtual WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in TInner num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in TInner num1, in WrapperNumber<TInner, TComponent> num2)
+            public virtual WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TInner num1, in WrapperNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }
 
-            public virtual TComponent CallComponent(UnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in WrapperNumber<TInner, TComponent> num)
             {
                 return num.CallComponent(operation);
             }
 
-            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in TComponent num2)
+            public virtual WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in WrapperNumber<TInner, TComponent> num1, in TComponent num2)
             {
                 return num1.Call(operation, num2);
             }
 
-            public virtual WrapperNumber<TInner, TComponent> Call(BinaryOperation operation, in TComponent num1, in WrapperNumber<TInner, TComponent> num2)
+            public virtual WrapperNumber<TInner, TComponent> Call(StandardBinaryOperation operation, in TComponent num1, in WrapperNumber<TInner, TComponent> num2)
             {
                 return num2.CallReversed(operation, num1);
             }

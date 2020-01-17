@@ -18,12 +18,12 @@ namespace IS4.HyperNumerics
             }
         }
 
-        INumber INumberOperations.Call(NullaryOperation operation)
+        INumber INumberOperations.Create(StandardNumber num)
         {
-            return thisOperations.Call(operation);
+            return thisOperations.Create(num);
         }
 
-        INumber INumberOperations.Call(UnaryOperation operation, INumber num)
+        INumber INumberOperations.Call(StandardUnaryOperation operation, INumber num)
         {
             if(!(num is INumber<TNumber> tnum))
             {
@@ -32,7 +32,7 @@ namespace IS4.HyperNumerics
             return tnum.Call(operation);
         }
 
-        INumber INumberOperations.Call(BinaryOperation operation, INumber num1, INumber num2)
+        INumber INumberOperations.Call(StandardBinaryOperation operation, INumber num1, INumber num2)
         {
             if(!(num1 is INumber<TNumber> tnum1))
             {

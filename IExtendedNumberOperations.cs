@@ -25,7 +25,7 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TNumber num1, in TInner num2);
+        TNumber Call(StandardBinaryOperation operation, in TNumber num1, in TInner num2);
 
         /// <summary>
         /// Invokes a binary operation for the number type.
@@ -35,7 +35,7 @@ namespace IS4.HyperNumerics
         /// <param name="num2">The second argument of the operation.</param>
         /// <returns>The result of the operation.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
-        TNumber Call(BinaryOperation operation, in TInner num1, in TNumber num2);
+        TNumber Call(StandardBinaryOperation operation, in TInner num1, in TNumber num2);
     }
 
     /// <summary>

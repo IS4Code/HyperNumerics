@@ -20,7 +20,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperComplex(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperComplex(in TInner first, in TInner second)
@@ -66,22 +66,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperComplex<TInner> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperComplex<TInner> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperComplex<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperComplex<TInner> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperComplex<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperComplex<TInner>(first, HyperMath.Call(operation, second, other));
         }
 		
-        public HyperComplex<TInner> FirstCall(UnaryOperation operation)
+        public HyperComplex<TInner> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperComplex<TInner>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperComplex<TInner> SecondCall(UnaryOperation operation)
+        public HyperComplex<TInner> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperComplex<TInner>(first, HyperMath.Call(operation, second));
         }
@@ -99,13 +99,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -132,29 +132,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperComplex<TInner> Call(NullaryOperation operation)
+			public virtual HyperComplex<TInner> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperComplex<TInner>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperComplex<TInner>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
@@ -251,7 +249,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperComplex(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperComplex(in TInner first, in TInner second)
@@ -297,32 +295,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperComplex<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperComplex<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
+        public HyperComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperComplex<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
+        public HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperComplex<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperComplex<TInner, TComponent> FirstCall(UnaryOperation operation)
+        public HyperComplex<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperComplex<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperComplex<TInner, TComponent> SecondCall(UnaryOperation operation)
+        public HyperComplex<TInner, TComponent> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperComplex<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
@@ -340,13 +338,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -378,29 +376,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperComplex<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperComplex<TInner, TComponent> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperComplex<TInner, TComponent>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperComplex<TInner, TComponent>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
@@ -450,7 +446,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperDiagonal(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperDiagonal(in TInner first, in TInner second)
@@ -496,22 +492,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperDiagonal<TInner> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDiagonal<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperDiagonal<TInner> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDiagonal<TInner>(first, HyperMath.Call(operation, second, other));
         }
 		
-        public HyperDiagonal<TInner> FirstCall(UnaryOperation operation)
+        public HyperDiagonal<TInner> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperDiagonal<TInner>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperDiagonal<TInner> SecondCall(UnaryOperation operation)
+        public HyperDiagonal<TInner> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperDiagonal<TInner>(first, HyperMath.Call(operation, second));
         }
@@ -529,13 +525,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -562,29 +558,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperDiagonal<TInner> Call(NullaryOperation operation)
+			public virtual HyperDiagonal<TInner> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperDiagonal<TInner>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperDiagonal<TInner>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperDiagonal<TInner>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperDiagonal<TInner>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
@@ -681,7 +675,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperDiagonal(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperDiagonal(in TInner first, in TInner second)
@@ -727,32 +721,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperDiagonal<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDiagonal<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperDiagonal<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDiagonal<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperDiagonal<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
+        public HyperDiagonal<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperDiagonal<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperDiagonal<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
+        public HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperDiagonal<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperDiagonal<TInner, TComponent> FirstCall(UnaryOperation operation)
+        public HyperDiagonal<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperDiagonal<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperDiagonal<TInner, TComponent> SecondCall(UnaryOperation operation)
+        public HyperDiagonal<TInner, TComponent> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperDiagonal<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
@@ -770,13 +764,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -808,29 +802,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperDiagonal<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperDiagonal<TInner, TComponent> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperDiagonal<TInner, TComponent>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperDiagonal<TInner, TComponent>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
@@ -880,7 +872,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperDual(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperDual(in TInner first, in TInner second)
@@ -926,22 +918,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperDual<TInner> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDual<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperDual<TInner> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDual<TInner>(first, HyperMath.Call(operation, second, other));
         }
 		
-        public HyperDual<TInner> FirstCall(UnaryOperation operation)
+        public HyperDual<TInner> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperDual<TInner>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperDual<TInner> SecondCall(UnaryOperation operation)
+        public HyperDual<TInner> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperDual<TInner>(first, HyperMath.Call(operation, second));
         }
@@ -959,13 +951,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -992,29 +984,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperDual<TInner> Call(NullaryOperation operation)
+			public virtual HyperDual<TInner> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperDual<TInner>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperDual<TInner>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperDual<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperDual<TInner>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperDual<TInner>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperDual<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperDual<TInner>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperDual<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperDual<TInner>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperDual<TInner>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperDual<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperDual<TInner>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperDual<TInner>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
@@ -1111,7 +1101,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperDual(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperDual(in TInner first, in TInner second)
@@ -1157,32 +1147,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperDual<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDual<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperDual<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDual<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperDual<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
+        public HyperDual<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperDual<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperDual<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
+        public HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperDual<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperDual<TInner, TComponent> FirstCall(UnaryOperation operation)
+        public HyperDual<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperDual<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperDual<TInner, TComponent> SecondCall(UnaryOperation operation)
+        public HyperDual<TInner, TComponent> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperDual<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
@@ -1200,13 +1190,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -1238,29 +1228,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperDual<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperDual<TInner, TComponent> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperDual<TInner, TComponent>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperDual<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperDual<TInner, TComponent>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
@@ -1310,7 +1298,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperSplitComplex(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperSplitComplex(in TInner first, in TInner second)
@@ -1356,22 +1344,22 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperSplitComplex<TInner> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperSplitComplex<TInner> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperSplitComplex<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperSplitComplex<TInner> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperSplitComplex<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperSplitComplex<TInner>(first, HyperMath.Call(operation, second, other));
         }
 		
-        public HyperSplitComplex<TInner> FirstCall(UnaryOperation operation)
+        public HyperSplitComplex<TInner> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperSplitComplex<TInner>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperSplitComplex<TInner> SecondCall(UnaryOperation operation)
+        public HyperSplitComplex<TInner> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperSplitComplex<TInner>(first, HyperMath.Call(operation, second));
         }
@@ -1389,13 +1377,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -1422,29 +1410,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperSplitComplex<TInner> Call(NullaryOperation operation)
+			public virtual HyperSplitComplex<TInner> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperSplitComplex<TInner>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperSplitComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperSplitComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperSplitComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperSplitComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperSplitComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperSplitComplex<TInner>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperSplitComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperSplitComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperSplitComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperSplitComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperSplitComplex<TInner>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperSplitComplex<TInner>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
@@ -1541,7 +1527,7 @@ namespace IS4.HyperNumerics.NumberTypes
         public HyperSplitComplex(in TInner first)
         {
             this.first = first;
-            second = HyperMath.Call<TInner>(NullaryOperation.Zero);
+            second = HyperMath.Create<TInner>(StandardNumber.Zero);
         }
 
         public HyperSplitComplex(in TInner first, in TInner second)
@@ -1587,32 +1573,32 @@ namespace IS4.HyperNumerics.NumberTypes
             return (value.first, value.second);
         }
 
-        public HyperSplitComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TInner other)
+        public HyperSplitComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
-        public HyperSplitComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TInner other)
+        public HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
         }
 				
-        public HyperSplitComplex<TInner, TComponent> FirstCall(BinaryOperation operation, in TComponent other)
+        public HyperSplitComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperSplitComplex<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
-        public HyperSplitComplex<TInner, TComponent> SecondCall(BinaryOperation operation, in TComponent other)
+        public HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
         }
 		
-        public HyperSplitComplex<TInner, TComponent> FirstCall(UnaryOperation operation)
+        public HyperSplitComplex<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
         {
             return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call(operation, first), second);
         }
 
-        public HyperSplitComplex<TInner, TComponent> SecondCall(UnaryOperation operation)
+        public HyperSplitComplex<TInner, TComponent> SecondCall(StandardUnaryOperation operation)
         {
             return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.Call(operation, second));
         }
@@ -1630,13 +1616,13 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public bool Equals(in TInner other)
         {
-            return HyperMath.Equals(first, other) && HyperMath.Call<TInner>(NullaryOperation.Zero).Equals(second);
+            return HyperMath.Equals(first, other) && HyperMath.Create<TInner>(StandardNumber.Zero).Equals(second);
         }
 
         public int CompareTo(in TInner other)
         {
             int value = HyperMath.Compare(first, other);
-            return value != 0 ? value : -HyperMath.Call<TInner>(NullaryOperation.Zero).CompareTo(second);
+            return value != 0 ? value : -HyperMath.Create<TInner>(StandardNumber.Zero).CompareTo(second);
         }
 
         public override int GetHashCode()
@@ -1668,29 +1654,27 @@ namespace IS4.HyperNumerics.NumberTypes
 		{
             public override int Dimension => HyperMath.Operations.For<TInner>.Instance.Dimension * 2;
 
-			public virtual HyperSplitComplex<TInner, TComponent> Call(NullaryOperation operation)
+			public virtual HyperSplitComplex<TInner, TComponent> Create(StandardNumber num)
             {
-                switch(operation)
+                switch(num)
                 {
-                    case NullaryOperation.Zero:
+                    case StandardNumber.Zero:
                     {
-                        var zero = HyperMath.Call<TInner>(NullaryOperation.Zero);
+                        var zero = HyperMath.Create<TInner>(StandardNumber.Zero);
                         return new HyperSplitComplex<TInner, TComponent>(zero, zero);
                     }
-                    case NullaryOperation.RealOne:
-                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.RealOne), HyperMath.Call<TInner>(NullaryOperation.Zero));
-                    case NullaryOperation.SpecialOne:
-                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.UnitsOne:
-                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.UnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.NonRealUnitsOne:
-                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.NonRealUnitsOne), HyperMath.Call<TInner>(NullaryOperation.RealOne));
-                    case NullaryOperation.CombinedOne:
-                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.Zero), HyperMath.Call<TInner>(NullaryOperation.CombinedOne));
-                    case NullaryOperation.AllOne:
-                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call<TInner>(NullaryOperation.AllOne), HyperMath.Call<TInner>(NullaryOperation.AllOne));
+                    case StandardNumber.SpecialOne:
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.UnitsOne:
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.UnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.NonRealUnitsOne:
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.NonRealUnitsOne), HyperMath.Create<TInner>(StandardNumber.One));
+                    case StandardNumber.CombinedOne:
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.Zero), HyperMath.Create<TInner>(StandardNumber.CombinedOne));
+                    case StandardNumber.AllOne:
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner>(StandardNumber.AllOne), HyperMath.Create<TInner>(StandardNumber.AllOne));
                     default:
-                        throw new NotSupportedException();
+                        return new HyperSplitComplex<TInner, TComponent>(HyperMath.Create<TInner>(num), HyperMath.Create<TInner>(StandardNumber.Zero));
                 }
             }
 
