@@ -13,11 +13,11 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly partial struct GeneratedNumber<TInner> : IExtendedNumber<GeneratedNumber<TInner>, TInner>, INumber<GeneratedNumber<TInner>, TInner> where TInner : struct, INumber<TInner>
     {
-        public static GeneratedNumber<TInner> Zero => new GeneratedNumber<TInner>(() => HyperMath.Create<TInner>(StandardNumber.Zero));
+        static GeneratedNumber<TInner> zero = new GeneratedNumber<TInner>(() => HyperMath.Create<TInner>(StandardNumber.Zero));
 
         readonly Func<TInner> generator;
 
-        public Func<TInner> Generator => generator ?? Zero.Generator;
+        public Func<TInner> Generator => generator ?? zero.Generator;
 
         public bool IsInvertible => true;
 
@@ -205,11 +205,11 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly partial struct GeneratedNumber<TInner, TComponent> : IExtendedNumber<GeneratedNumber<TInner, TComponent>, TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
     {
-        public static GeneratedNumber<TInner, TComponent> Zero => new GeneratedNumber<TInner, TComponent>(() => HyperMath.Create<TInner>(StandardNumber.Zero));
+        static GeneratedNumber<TInner, TComponent> zero = new GeneratedNumber<TInner, TComponent>(() => HyperMath.Create<TInner>(StandardNumber.Zero));
 
         readonly Func<TInner> generator;
 
-        public Func<TInner> Generator => generator ?? Zero.Generator;
+        public Func<TInner> Generator => generator ?? zero.Generator;
 
         public bool IsInvertible => true;
 

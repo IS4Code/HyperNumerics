@@ -8,6 +8,17 @@ namespace IS4.HyperNumerics.NumberTypes
 {
 	partial struct AbstractNumber
 	{
+		public static readonly AbstractNumber Zero = Create(StandardNumber.Zero);
+		public static readonly AbstractNumber One = Create(StandardNumber.One);
+		public static readonly AbstractNumber Two = Create(StandardNumber.Two);
+		public static readonly AbstractNumber NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly AbstractNumber SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static AbstractNumber Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -286,6 +297,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct ComponentAbstractNumber
 	{
+		public static readonly ComponentAbstractNumber Zero = Create(StandardNumber.Zero);
+		public static readonly ComponentAbstractNumber One = Create(StandardNumber.One);
+		public static readonly ComponentAbstractNumber Two = Create(StandardNumber.Two);
+		public static readonly ComponentAbstractNumber NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly ComponentAbstractNumber SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static ComponentAbstractNumber Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -564,6 +586,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct UnaryAbstractNumber
 	{
+		public static readonly UnaryAbstractNumber Zero = Create(StandardNumber.Zero);
+		public static readonly UnaryAbstractNumber One = Create(StandardNumber.One);
+		public static readonly UnaryAbstractNumber Two = Create(StandardNumber.Two);
+		public static readonly UnaryAbstractNumber NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly UnaryAbstractNumber SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static UnaryAbstractNumber Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -842,6 +875,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct ComponentUnaryAbstractNumber
 	{
+		public static readonly ComponentUnaryAbstractNumber Zero = Create(StandardNumber.Zero);
+		public static readonly ComponentUnaryAbstractNumber One = Create(StandardNumber.One);
+		public static readonly ComponentUnaryAbstractNumber Two = Create(StandardNumber.Two);
+		public static readonly ComponentUnaryAbstractNumber NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly ComponentUnaryAbstractNumber SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static ComponentUnaryAbstractNumber Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -1120,6 +1164,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct BinaryAbstractNumber
 	{
+		public static readonly BinaryAbstractNumber Zero = Create(StandardNumber.Zero);
+		public static readonly BinaryAbstractNumber One = Create(StandardNumber.One);
+		public static readonly BinaryAbstractNumber Two = Create(StandardNumber.Two);
+		public static readonly BinaryAbstractNumber NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly BinaryAbstractNumber SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static BinaryAbstractNumber Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -1398,6 +1453,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct ComponentBinaryAbstractNumber
 	{
+		public static readonly ComponentBinaryAbstractNumber Zero = Create(StandardNumber.Zero);
+		public static readonly ComponentBinaryAbstractNumber One = Create(StandardNumber.One);
+		public static readonly ComponentBinaryAbstractNumber Two = Create(StandardNumber.Two);
+		public static readonly ComponentBinaryAbstractNumber NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly ComponentBinaryAbstractNumber SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static ComponentBinaryAbstractNumber Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -1676,6 +1742,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct BoxedNumber<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly BoxedNumber<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly BoxedNumber<TInner> One = Create(StandardNumber.One);
+		public static readonly BoxedNumber<TInner> Two = Create(StandardNumber.Two);
+		public static readonly BoxedNumber<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly BoxedNumber<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static BoxedNumber<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -1710,15 +1787,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new BoxedNumber<TInner>(value);
         }
+
+        public static implicit operator BoxedNumber<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static implicit operator TInner(BoxedNumber<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static BoxedNumber<TInner> operator+(BoxedNumber<TInner> a, BoxedNumber<TInner> b)
@@ -2151,6 +2233,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct BoxedNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly BoxedNumber<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly BoxedNumber<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly BoxedNumber<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly BoxedNumber<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly BoxedNumber<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static BoxedNumber<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -2185,15 +2278,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new BoxedNumber<TInner, TComponent>(value);
         }
+
+        public static implicit operator BoxedNumber<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static implicit operator TInner(BoxedNumber<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static BoxedNumber<TInner, TComponent> operator+(BoxedNumber<TInner, TComponent> a, BoxedNumber<TInner, TComponent> b)
@@ -2619,6 +2717,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct CustomDefaultNumber<TInner, TProvider> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
 	{
+		public static readonly CustomDefaultNumber<TInner, TProvider> Zero = Create(StandardNumber.Zero);
+		public static readonly CustomDefaultNumber<TInner, TProvider> One = Create(StandardNumber.One);
+		public static readonly CustomDefaultNumber<TInner, TProvider> Two = Create(StandardNumber.Two);
+		public static readonly CustomDefaultNumber<TInner, TProvider> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly CustomDefaultNumber<TInner, TProvider> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static CustomDefaultNumber<TInner, TProvider> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -2653,15 +2762,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new CustomDefaultNumber<TInner, TProvider>(value);
         }
+
+        public static implicit operator CustomDefaultNumber<TInner, TProvider>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static implicit operator TInner(CustomDefaultNumber<TInner, TProvider> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static CustomDefaultNumber<TInner, TProvider> operator+(CustomDefaultNumber<TInner, TProvider> a, CustomDefaultNumber<TInner, TProvider> b)
@@ -3094,6 +3208,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct CustomDefaultNumber<TInner, TComponent, TProvider> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TProvider : struct, CustomDefaultNumber<TInner, TProvider>.IDefaultValueProvider
 	{
+		public static readonly CustomDefaultNumber<TInner, TComponent, TProvider> Zero = Create(StandardNumber.Zero);
+		public static readonly CustomDefaultNumber<TInner, TComponent, TProvider> One = Create(StandardNumber.One);
+		public static readonly CustomDefaultNumber<TInner, TComponent, TProvider> Two = Create(StandardNumber.Two);
+		public static readonly CustomDefaultNumber<TInner, TComponent, TProvider> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly CustomDefaultNumber<TInner, TComponent, TProvider> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static CustomDefaultNumber<TInner, TComponent, TProvider> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -3128,15 +3253,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new CustomDefaultNumber<TInner, TComponent, TProvider>(value);
         }
+
+        public static implicit operator CustomDefaultNumber<TInner, TComponent, TProvider>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static implicit operator TInner(CustomDefaultNumber<TInner, TComponent, TProvider> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static CustomDefaultNumber<TInner, TComponent, TProvider> operator+(CustomDefaultNumber<TInner, TComponent, TProvider> a, CustomDefaultNumber<TInner, TComponent, TProvider> b)
@@ -3562,6 +3692,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct GeneratedNumber<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly GeneratedNumber<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly GeneratedNumber<TInner> One = Create(StandardNumber.One);
+		public static readonly GeneratedNumber<TInner> Two = Create(StandardNumber.Two);
+		public static readonly GeneratedNumber<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly GeneratedNumber<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static GeneratedNumber<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -3947,6 +4088,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct GeneratedNumber<TInner, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly GeneratedNumber<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly GeneratedNumber<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly GeneratedNumber<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly GeneratedNumber<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly GeneratedNumber<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static GeneratedNumber<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -4320,6 +4472,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperComplex<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly HyperComplex<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperComplex<TInner> One = Create(StandardNumber.One);
+		public static readonly HyperComplex<TInner> Two = Create(StandardNumber.Two);
+		public static readonly HyperComplex<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperComplex<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperComplex<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -4354,15 +4517,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperComplex<TInner>(value);
         }
+
+        public static implicit operator HyperComplex<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperComplex<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperComplex<TInner> operator+(HyperComplex<TInner> a, HyperComplex<TInner> b)
@@ -4790,6 +4958,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperComplex<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly HyperComplex<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperComplex<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly HyperComplex<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly HyperComplex<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperComplex<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperComplex<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -4824,15 +5003,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperComplex<TInner, TComponent>(value);
         }
+
+        public static implicit operator HyperComplex<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperComplex<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperComplex<TInner, TComponent> operator+(HyperComplex<TInner, TComponent> a, HyperComplex<TInner, TComponent> b)
@@ -5248,6 +5432,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperDiagonal<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly HyperDiagonal<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperDiagonal<TInner> One = Create(StandardNumber.One);
+		public static readonly HyperDiagonal<TInner> Two = Create(StandardNumber.Two);
+		public static readonly HyperDiagonal<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperDiagonal<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperDiagonal<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -5282,15 +5477,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperDiagonal<TInner>(value);
         }
+
+        public static implicit operator HyperDiagonal<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperDiagonal<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperDiagonal<TInner> operator+(HyperDiagonal<TInner> a, HyperDiagonal<TInner> b)
@@ -5718,6 +5918,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperDiagonal<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly HyperDiagonal<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperDiagonal<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly HyperDiagonal<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly HyperDiagonal<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperDiagonal<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperDiagonal<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -5752,15 +5963,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperDiagonal<TInner, TComponent>(value);
         }
+
+        public static implicit operator HyperDiagonal<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperDiagonal<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperDiagonal<TInner, TComponent> operator+(HyperDiagonal<TInner, TComponent> a, HyperDiagonal<TInner, TComponent> b)
@@ -6176,6 +6392,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperDual<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly HyperDual<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperDual<TInner> One = Create(StandardNumber.One);
+		public static readonly HyperDual<TInner> Two = Create(StandardNumber.Two);
+		public static readonly HyperDual<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperDual<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperDual<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -6210,15 +6437,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperDual<TInner>(value);
         }
+
+        public static implicit operator HyperDual<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperDual<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperDual<TInner> operator+(HyperDual<TInner> a, HyperDual<TInner> b)
@@ -6646,6 +6878,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperDual<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly HyperDual<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperDual<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly HyperDual<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly HyperDual<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperDual<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperDual<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -6680,15 +6923,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperDual<TInner, TComponent>(value);
         }
+
+        public static implicit operator HyperDual<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperDual<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperDual<TInner, TComponent> operator+(HyperDual<TInner, TComponent> a, HyperDual<TInner, TComponent> b)
@@ -7104,6 +7352,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperSplitComplex<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly HyperSplitComplex<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperSplitComplex<TInner> One = Create(StandardNumber.One);
+		public static readonly HyperSplitComplex<TInner> Two = Create(StandardNumber.Two);
+		public static readonly HyperSplitComplex<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperSplitComplex<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperSplitComplex<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -7138,15 +7397,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperSplitComplex<TInner>(value);
         }
+
+        public static implicit operator HyperSplitComplex<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperSplitComplex<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperSplitComplex<TInner> operator+(HyperSplitComplex<TInner> a, HyperSplitComplex<TInner> b)
@@ -7574,6 +7838,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct HyperSplitComplex<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly HyperSplitComplex<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly HyperSplitComplex<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly HyperSplitComplex<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly HyperSplitComplex<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly HyperSplitComplex<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static HyperSplitComplex<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -7608,15 +7883,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new HyperSplitComplex<TInner, TComponent>(value);
         }
+
+        public static implicit operator HyperSplitComplex<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(HyperSplitComplex<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static HyperSplitComplex<TInner, TComponent> operator+(HyperSplitComplex<TInner, TComponent> a, HyperSplitComplex<TInner, TComponent> b)
@@ -8032,6 +8312,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct NullableNumber<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly NullableNumber<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly NullableNumber<TInner> One = Create(StandardNumber.One);
+		public static readonly NullableNumber<TInner> Two = Create(StandardNumber.Two);
+		public static readonly NullableNumber<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly NullableNumber<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static NullableNumber<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -8066,15 +8357,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new NullableNumber<TInner>(value);
         }
+
+        public static implicit operator NullableNumber<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(NullableNumber<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static NullableNumber<TInner> operator+(NullableNumber<TInner> a, NullableNumber<TInner> b)
@@ -8502,6 +8798,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct NullableNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly NullableNumber<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly NullableNumber<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly NullableNumber<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly NullableNumber<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly NullableNumber<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static NullableNumber<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -8536,15 +8843,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new NullableNumber<TInner, TComponent>(value);
         }
+
+        public static implicit operator NullableNumber<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(NullableNumber<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static NullableNumber<TInner, TComponent> operator+(NullableNumber<TInner, TComponent> a, NullableNumber<TInner, TComponent> b)
@@ -8960,6 +9272,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct NullNumber
 	{
+		public static readonly NullNumber Zero = Create(StandardNumber.Zero);
+		public static readonly NullNumber One = Create(StandardNumber.One);
+		public static readonly NullNumber Two = Create(StandardNumber.Two);
+		public static readonly NullNumber NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly NullNumber SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static NullNumber Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -9238,6 +9561,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct NullNumber<TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly NullNumber<TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly NullNumber<TComponent> One = Create(StandardNumber.One);
+		public static readonly NullNumber<TComponent> Two = Create(StandardNumber.Two);
+		public static readonly NullNumber<TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly NullNumber<TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static NullNumber<TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -9536,6 +9870,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct ProjectiveNumber<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly ProjectiveNumber<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly ProjectiveNumber<TInner> One = Create(StandardNumber.One);
+		public static readonly ProjectiveNumber<TInner> Two = Create(StandardNumber.Two);
+		public static readonly ProjectiveNumber<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly ProjectiveNumber<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static ProjectiveNumber<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -9570,15 +9915,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new ProjectiveNumber<TInner>(value);
         }
+
+        public static implicit operator ProjectiveNumber<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(ProjectiveNumber<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static ProjectiveNumber<TInner> operator+(ProjectiveNumber<TInner> a, ProjectiveNumber<TInner> b)
@@ -10006,6 +10356,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct ProjectiveNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly ProjectiveNumber<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly ProjectiveNumber<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly ProjectiveNumber<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly ProjectiveNumber<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly ProjectiveNumber<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static ProjectiveNumber<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -10040,15 +10401,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new ProjectiveNumber<TInner, TComponent>(value);
         }
+
+        public static implicit operator ProjectiveNumber<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static explicit operator TInner(ProjectiveNumber<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static ProjectiveNumber<TInner, TComponent> operator+(ProjectiveNumber<TInner, TComponent> a, ProjectiveNumber<TInner, TComponent> b)
@@ -10464,6 +10830,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct Real
 	{
+		public static readonly Real Zero = Create(StandardNumber.Zero);
+		public static readonly Real One = Create(StandardNumber.One);
+		public static readonly Real Two = Create(StandardNumber.Two);
+		public static readonly Real NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly Real SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static Real Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -10742,6 +11119,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct ExtendedReal
 	{
+		public static readonly ExtendedReal Zero = Create(StandardNumber.Zero);
+		public static readonly ExtendedReal One = Create(StandardNumber.One);
+		public static readonly ExtendedReal Two = Create(StandardNumber.Two);
+		public static readonly ExtendedReal NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly ExtendedReal SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static ExtendedReal Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -11020,6 +11408,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct WrapperNumber<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
+		public static readonly WrapperNumber<TInner> Zero = Create(StandardNumber.Zero);
+		public static readonly WrapperNumber<TInner> One = Create(StandardNumber.One);
+		public static readonly WrapperNumber<TInner> Two = Create(StandardNumber.Two);
+		public static readonly WrapperNumber<TInner> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly WrapperNumber<TInner> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static WrapperNumber<TInner> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -11054,15 +11453,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new WrapperNumber<TInner>(value);
         }
+
+        public static implicit operator WrapperNumber<TInner>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static implicit operator TInner(WrapperNumber<TInner> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static WrapperNumber<TInner> operator+(WrapperNumber<TInner> a, WrapperNumber<TInner> b)
@@ -11495,6 +11899,17 @@ namespace IS4.HyperNumerics.NumberTypes
 
 	partial struct WrapperNumber<TInner, TComponent> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
+		public static readonly WrapperNumber<TInner, TComponent> Zero = Create(StandardNumber.Zero);
+		public static readonly WrapperNumber<TInner, TComponent> One = Create(StandardNumber.One);
+		public static readonly WrapperNumber<TInner, TComponent> Two = Create(StandardNumber.Two);
+		public static readonly WrapperNumber<TInner, TComponent> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly WrapperNumber<TInner, TComponent> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static WrapperNumber<TInner, TComponent> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -11529,15 +11944,20 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             return new WrapperNumber<TInner, TComponent>(value);
         }
+
+        public static implicit operator WrapperNumber<TInner, TComponent>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}
 
 		public static implicit operator TInner(WrapperNumber<TInner, TComponent> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }
 
         public static WrapperNumber<TInner, TComponent> operator+(WrapperNumber<TInner, TComponent> a, WrapperNumber<TInner, TComponent> b)

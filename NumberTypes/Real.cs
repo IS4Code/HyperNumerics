@@ -14,9 +14,6 @@ namespace IS4.HyperNumerics.NumberTypes
     [Serializable]
     public readonly partial struct Real : ISimpleNumber<Real, double>, ISimpleNumber<Real, float>, ISimpleNumber<Real, Real>, IWrapperNumber<Real, Real, double>, IWrapperNumber<Real, Real, float>, IWrapperNumber<Real, Real, Real>, ISimpleNumber<ExtendedReal, double>, ISimpleNumber<ExtendedReal, float>, ISimpleNumber<ExtendedReal, ExtendedReal>
     {
-        public static readonly Real Zero = new Real(0.0);
-        public static readonly Real One = new Real(1.0);
-
         public double Value { get; }
 
         float ISimpleNumber<float>.Value => (float)Value;

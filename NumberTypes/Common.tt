@@ -78,6 +78,17 @@ foreach(var info in data)
 	info.constraints(fullname)
 	#>
 	{
+		public static readonly <#=fullname#> Zero = Create(StandardNumber.Zero);
+		public static readonly <#=fullname#> One = Create(StandardNumber.One);
+		public static readonly <#=fullname#> Two = Create(StandardNumber.Two);
+		public static readonly <#=fullname#> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly <#=fullname#> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static <#=fullname#> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
@@ -113,8 +124,13 @@ foreach(var info in data)
         {
             return new <#=fullname#>(value);
         }
+
+        public static implicit operator <#=fullname#>(StandardNumber num)
+        {
+            return Create(num);
+        }
 		
-		private static TInner GetAsWrapper<T>(in T obj) where T : IWrapperNumber<TInner>
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
 		{
 			return obj.Value;
 		}<# if(level >= 3) { #>
@@ -122,13 +138,13 @@ foreach(var info in data)
 
 		public static implicit operator TInner(<#=fullname#> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }<# }else{ #>
 
 
 		public static explicit operator TInner(<#=fullname#> value)
         {
-            return GetAsWrapper(value);
+            return GetAsWrapper(ref value);
         }<# } #><# } #>
 
 
