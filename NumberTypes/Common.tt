@@ -33,6 +33,7 @@ var data = new[] {
 	new{name = "ProjectiveNumber", args = "", level = 2, componenttype = "TComponent", constraints = emptyConstraints},
 	new{name = "Real", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
 	new{name = "ExtendedReal", args = "", level = 0, componenttype = "", constraints = emptyConstraints},
+	new{name = "TransformedNumber", args = "TTransformation", level = 3, componenttype = "TComponent", constraints = (Func<string, string>)(fn => " where TTransformation : struct, TransformedNumber<TInner, TTransformation>.ITransformation")},
 	new{name = "WrapperNumber", args = "", level = 3, componenttype = "TComponent", constraints = emptyConstraints},
 };
 foreach(var info in data)

@@ -847,6 +847,107 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
+	partial struct TransformedNumber<TInner, TComponent, TTransformation> : IWrapperNumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTransformation : struct, TransformedNumber<TInner, TTransformation>.ITransformation
+	{
+		partial class Operations : IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TComponent>
+		{
+			
+		}
+        
+        static int GetCollectionCount<T>(in T value) where T : struct, ICollection<TComponent>
+        {
+            return value.Count;
+        }
+
+        static TComponent GetListItem<T>(in T value, int index) where T : struct, IList<TComponent>
+        {
+            return value[index];
+        }
+
+        static int GetReadOnlyCollectionCount<T>(in T value) where T : struct, IReadOnlyCollection<TComponent>
+        {
+            return value.Count;
+        }
+
+        static TComponent GetReadOnlyListItem<T>(in T value, int index) where T : struct, IReadOnlyList<TComponent>
+        {
+            return value[index];
+        }
+		
+        int ICollection<TComponent>.Count => GetCollectionCount(Value);
+
+        bool ICollection<TComponent>.IsReadOnly => true;
+
+        int IReadOnlyCollection<TComponent>.Count => GetReadOnlyCollectionCount(Value);
+		
+        TComponent IReadOnlyList<TComponent>.this[int index]
+        {
+            get{
+                return GetReadOnlyListItem(Value, index);
+            }
+        }
+
+        TComponent IList<TComponent>.this[int index]
+        {
+            get{
+                return GetListItem(Value, index);
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TComponent>.IndexOf(TComponent item)
+        {
+            return Value.IndexOf(item);
+        }
+
+        void IList<TComponent>.Insert(int index, TComponent item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TComponent>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TComponent>.Add(TComponent item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TComponent>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TComponent>.Contains(TComponent item)
+        {
+            return Value.Contains(item);
+        }
+		
+        void ICollection<TComponent>.CopyTo(TComponent[] array, int arrayIndex)
+        {
+            Value.CopyTo(array, arrayIndex);
+        }
+
+        bool ICollection<TComponent>.Remove(TComponent item)
+        {
+            throw new NotSupportedException();
+        }
+		
+        IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator()
+        {
+			return Value.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+			return Value.GetEnumerator();
+        }
+	}
+
 	partial struct WrapperNumber<TInner, TComponent> : IWrapperNumber<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
 	{
 		partial class Operations : IExtendedNumberOperations<WrapperNumber<TInner, TComponent>, WrapperNumber<TInner, TComponent>, TComponent>

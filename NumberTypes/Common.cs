@@ -11406,6 +11406,981 @@ namespace IS4.HyperNumerics.NumberTypes
 		}
 	}
 
+	partial struct TransformedNumber<TInner, TTransformation> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner> where TTransformation : struct, TransformedNumber<TInner, TTransformation>.ITransformation
+	{
+		public static readonly TransformedNumber<TInner, TTransformation> Zero = Create(StandardNumber.Zero);
+		public static readonly TransformedNumber<TInner, TTransformation> One = Create(StandardNumber.One);
+		public static readonly TransformedNumber<TInner, TTransformation> Two = Create(StandardNumber.Two);
+		public static readonly TransformedNumber<TInner, TTransformation> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly TransformedNumber<TInner, TTransformation> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static TransformedNumber<TInner, TTransformation> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public TransformedNumber<TInner, TTransformation> CallReversed(StandardBinaryOperation operation, in TransformedNumber<TInner, TTransformation> other)
+        {
+            return other.Call(operation, this);
+        }
+
+        bool IEquatable<TransformedNumber<TInner, TTransformation>>.Equals(TransformedNumber<TInner, TTransformation> other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<TransformedNumber<TInner, TTransformation>>.CompareTo(TransformedNumber<TInner, TTransformation> other)
+        {
+            return CompareTo(other);
+        }
+
+        bool IEquatable<TInner>.Equals(TInner other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<TInner>.CompareTo(TInner other)
+        {
+            return CompareTo(other);
+        }
+
+        public static implicit operator TransformedNumber<TInner, TTransformation>(TInner value)
+        {
+            return new TransformedNumber<TInner, TTransformation>(value);
+        }
+
+        public static implicit operator TransformedNumber<TInner, TTransformation>(StandardNumber num)
+        {
+            return Create(num);
+        }
+		
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
+		{
+			return obj.Value;
+		}
+
+		public static implicit operator TInner(TransformedNumber<TInner, TTransformation> value)
+        {
+            return GetAsWrapper(ref value);
+        }
+
+        public static TransformedNumber<TInner, TTransformation> operator+(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator-(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator*(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator/(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator^(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Power, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator-(TransformedNumber<TInner, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Negate);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator~(TransformedNumber<TInner, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Inverse);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator++(TransformedNumber<TInner, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Increment);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator--(TransformedNumber<TInner, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Decrement);
+        }
+
+        public static bool operator==(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(TransformedNumber<TInner, TTransformation> a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return a.CompareTo(b) <= 0;
+        }		
+
+        public static TransformedNumber<TInner, TTransformation> operator+(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator-(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator*(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator/(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator^(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static TransformedNumber<TInner, TTransformation> operator+(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Add, a);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator-(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator*(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator/(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator^(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Power, a);
+        }		
+
+        public static bool operator==(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(TransformedNumber<TInner, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) <= 0;
+        }
+
+        public static bool operator==(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.Equals(a);
+        }
+
+        public static bool operator!=(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return !b.Equals(a);
+        }
+
+        public static bool operator>(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CompareTo(a) < 0;
+        }
+
+        public static bool operator<(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CompareTo(a) > 0;
+        }
+
+        public static bool operator>=(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CompareTo(a) <= 0;
+        }
+
+        public static bool operator<=(TInner a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return b.CompareTo(a) >= 0;
+        }
+
+		public static TransformedNumber<TInner, TTransformation> operator+(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator-(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator*(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator/(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator^(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static TransformedNumber<TInner, TTransformation> operator+(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator-(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator*(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator/(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static TransformedNumber<TInner, TTransformation> operator^(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(TransformedNumber<TInner, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, TransformedNumber<TInner, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
+        }
+
+        INumberOperations INumber.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<TransformedNumber<TInner, TTransformation>> INumber<TransformedNumber<TInner, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        IExtendedNumberOperations<TransformedNumber<TInner, TTransformation>, TInner> IExtendedNumber<TransformedNumber<TInner, TTransformation>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+		
+        INumberOperations<TInner> INumber<TInner>.GetOperations()
+        {
+            return HyperMath.Operations.For<TInner>.Instance;
+        }
+
+		INumberOperations<TransformedNumber<TInner, TTransformation>, TInner> INumber<TransformedNumber<TInner, TTransformation>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations
+		{
+			public static readonly Operations Instance = new Operations();
+			
+            public virtual bool IsInvertible(in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public virtual bool IsFinite(in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.IsFinite;
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Clone(in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.Clone();
+            }
+
+            public virtual bool Equals(TransformedNumber<TInner, TTransformation> num1, TransformedNumber<TInner, TTransformation> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(TransformedNumber<TInner, TTransformation> num1, TransformedNumber<TInner, TTransformation> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual bool Equals(in TransformedNumber<TInner, TTransformation> num1, in TransformedNumber<TInner, TTransformation> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(in TransformedNumber<TInner, TTransformation> num1, in TransformedNumber<TInner, TTransformation> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual int GetHashCode(TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual int GetHashCode(in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Call(StandardUnaryOperation operation, in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Call(StandardBinaryOperation operation, in TransformedNumber<TInner, TTransformation> num1, in TransformedNumber<TInner, TTransformation> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Call(StandardBinaryOperation operation, in TransformedNumber<TInner, TTransformation> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Call(StandardBinaryOperation operation, in TInner num1, in TransformedNumber<TInner, TTransformation> num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }			
+
+			TInner INumberOperations<TransformedNumber<TInner, TTransformation>, TInner>.CallComponent(StandardUnaryOperation operation, in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.CallComponent(operation);
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Create(in TInner num)
+            {
+                return new TransformedNumber<TInner, TTransformation>(num);
+            }
+		}
+		
+        bool ICollection<TInner>.IsReadOnly => true;
+
+        void IList<TInner>.Insert(int index, TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TInner>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Add(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TInner>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TInner>.Remove(TInner item)
+        {
+            throw new NotSupportedException();
+        }
+	}
+
+	partial struct TransformedNumber<TInner, TComponent, TTransformation> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTransformation : struct, TransformedNumber<TInner, TTransformation>.ITransformation
+	{
+		public static readonly TransformedNumber<TInner, TComponent, TTransformation> Zero = Create(StandardNumber.Zero);
+		public static readonly TransformedNumber<TInner, TComponent, TTransformation> One = Create(StandardNumber.One);
+		public static readonly TransformedNumber<TInner, TComponent, TTransformation> Two = Create(StandardNumber.Two);
+		public static readonly TransformedNumber<TInner, TComponent, TTransformation> NegativeOne = Create(StandardNumber.NegativeOne);
+		public static readonly TransformedNumber<TInner, TComponent, TTransformation> SpecialOne = Create(StandardNumber.SpecialOne);
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> Create(StandardNumber num)
+        {
+            return Operations.Instance.Create(num);
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public TransformedNumber<TInner, TComponent, TTransformation> CallReversed(StandardBinaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> other)
+        {
+            return other.Call(operation, this);
+        }
+
+        bool IEquatable<TransformedNumber<TInner, TComponent, TTransformation>>.Equals(TransformedNumber<TInner, TComponent, TTransformation> other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<TransformedNumber<TInner, TComponent, TTransformation>>.CompareTo(TransformedNumber<TInner, TComponent, TTransformation> other)
+        {
+            return CompareTo(other);
+        }
+
+        bool IEquatable<TInner>.Equals(TInner other)
+        {
+            return Equals(other);
+        }
+
+        int IComparable<TInner>.CompareTo(TInner other)
+        {
+            return CompareTo(other);
+        }
+
+        public static implicit operator TransformedNumber<TInner, TComponent, TTransformation>(TInner value)
+        {
+            return new TransformedNumber<TInner, TComponent, TTransformation>(value);
+        }
+
+        public static implicit operator TransformedNumber<TInner, TComponent, TTransformation>(StandardNumber num)
+        {
+            return Create(num);
+        }
+		
+		private static TInner GetAsWrapper<T>(ref T obj) where T : IWrapperNumber<TInner>
+		{
+			return obj.Value;
+		}
+
+		public static implicit operator TInner(TransformedNumber<TInner, TComponent, TTransformation> value)
+        {
+            return GetAsWrapper(ref value);
+        }
+
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator+(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator-(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator*(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator/(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator^(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.Call(StandardBinaryOperation.Power, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator-(TransformedNumber<TInner, TComponent, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Negate);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator~(TransformedNumber<TInner, TComponent, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Inverse);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator++(TransformedNumber<TInner, TComponent, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Increment);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator--(TransformedNumber<TInner, TComponent, TTransformation> a)
+        {
+            return a.Call(StandardUnaryOperation.Decrement);
+        }
+
+        public static bool operator==(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(TransformedNumber<TInner, TComponent, TTransformation> a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return a.CompareTo(b) <= 0;
+        }		
+
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator+(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator-(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator*(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator/(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator^(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator+(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Add, a);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator-(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Subtract, a);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator*(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Multiply, a);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator/(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Divide, a);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator^(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CallReversed(StandardBinaryOperation.Power, a);
+        }		
+
+        public static bool operator==(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return !a.Equals(b);
+        }
+
+        public static bool operator>(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) > 0;
+        }
+
+        public static bool operator<(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(TransformedNumber<TInner, TComponent, TTransformation> a, TInner b)
+        {
+            return a.CompareTo(b) <= 0;
+        }
+
+        public static bool operator==(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.Equals(a);
+        }
+
+        public static bool operator!=(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return !b.Equals(a);
+        }
+
+        public static bool operator>(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CompareTo(a) < 0;
+        }
+
+        public static bool operator<(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CompareTo(a) > 0;
+        }
+
+        public static bool operator>=(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CompareTo(a) <= 0;
+        }
+
+        public static bool operator<=(TInner a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return b.CompareTo(a) >= 0;
+        }
+
+		public static TransformedNumber<TInner, TComponent, TTransformation> operator+(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Add, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator-(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Subtract, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator*(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Multiply, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator/(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Divide, Operations.Instance.Create(b));
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator^(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.Call(StandardBinaryOperation.Power, Operations.Instance.Create(b));
+        }
+
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator+(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Add, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator-(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Subtract, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator*(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Multiply, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator/(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Divide, b);
+        }
+		
+        public static TransformedNumber<TInner, TComponent, TTransformation> operator^(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Call(StandardBinaryOperation.Power, b);
+        }
+
+        public static bool operator==(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator!=(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return !a.Equals(Operations.Instance.Create(b));
+        }
+
+        public static bool operator>(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) > 0;
+        }
+
+        public static bool operator<(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) < 0;
+        }
+
+        public static bool operator>=(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) >= 0;
+        }
+
+        public static bool operator<=(TransformedNumber<TInner, TComponent, TTransformation> a, StandardNumber b)
+        {
+            return a.CompareTo(Operations.Instance.Create(b)) <= 0;
+        }
+
+        public static bool operator==(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator!=(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return !Operations.Instance.Create(a).Equals(b);
+        }
+
+        public static bool operator>(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) > 0;
+        }
+
+        public static bool operator<(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) < 0;
+        }
+
+        public static bool operator>=(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) >= 0;
+        }
+
+        public static bool operator<=(StandardNumber a, TransformedNumber<TInner, TComponent, TTransformation> b)
+        {
+            return Operations.Instance.Create(a).CompareTo(b) <= 0;
+        }
+
+        INumberOperations INumber.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+        INumberOperations<TransformedNumber<TInner, TComponent, TTransformation>> INumber<TransformedNumber<TInner, TComponent, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        INumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TComponent> INumber<TransformedNumber<TInner, TComponent, TTransformation>, TComponent>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TInner> IExtendedNumber<TransformedNumber<TInner, TComponent, TTransformation>, TInner>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+        IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TInner, TComponent> IExtendedNumber<TransformedNumber<TInner, TComponent, TTransformation>, TInner, TComponent>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+		
+        INumberOperations<TInner> INumber<TInner>.GetOperations()
+        {
+            return HyperMath.Operations.For<TInner>.Instance;
+        }		
+
+        INumberOperations<TInner, TComponent> INumber<TInner, TComponent>.GetOperations()
+        {
+            return HyperMath.Operations.For<TInner, TComponent>.Instance;
+        }
+
+		partial class Operations
+		{
+			public static readonly Operations Instance = new Operations();
+			
+            public virtual bool IsInvertible(in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.IsInvertible;
+            }
+
+            public virtual bool IsFinite(in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.IsFinite;
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Clone(in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.Clone();
+            }
+
+            public virtual bool Equals(TransformedNumber<TInner, TComponent, TTransformation> num1, TransformedNumber<TInner, TComponent, TTransformation> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(TransformedNumber<TInner, TComponent, TTransformation> num1, TransformedNumber<TInner, TComponent, TTransformation> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual bool Equals(in TransformedNumber<TInner, TComponent, TTransformation> num1, in TransformedNumber<TInner, TComponent, TTransformation> num2)
+            {
+                return num1.Equals(num2);
+            }
+
+            public virtual int Compare(in TransformedNumber<TInner, TComponent, TTransformation> num1, in TransformedNumber<TInner, TComponent, TTransformation> num2)
+            {
+                return num1.CompareTo(num2);
+            }
+
+            public virtual int GetHashCode(TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual int GetHashCode(in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.GetHashCode();
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Call(StandardUnaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Call(StandardBinaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> num1, in TransformedNumber<TInner, TComponent, TTransformation> num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Call(StandardBinaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> num1, in TInner num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Call(StandardBinaryOperation operation, in TInner num1, in TransformedNumber<TInner, TComponent, TTransformation> num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }
+
+            public virtual TComponent CallComponent(StandardUnaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.CallComponent(operation);
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Call(StandardBinaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> num1, in TComponent num2)
+            {
+                return num1.Call(operation, num2);
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Call(StandardBinaryOperation operation, in TComponent num1, in TransformedNumber<TInner, TComponent, TTransformation> num2)
+            {
+                return num2.CallReversed(operation, num1);
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Create(in TInner num)
+            {
+                return new TransformedNumber<TInner, TComponent, TTransformation>(num);
+            }
+		}
+	}
+
 	partial struct WrapperNumber<TInner> : IReadOnlyRefEquatable<TInner>, IReadOnlyRefComparable<TInner> where TInner : struct, INumber<TInner>
 	{
 		public static readonly WrapperNumber<TInner> Zero = Create(StandardNumber.Zero);

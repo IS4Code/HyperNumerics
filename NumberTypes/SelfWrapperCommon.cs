@@ -3305,6 +3305,261 @@ namespace IS4.HyperNumerics.NumberTypes
         }
 	}
 
+	partial struct TransformedNumber<TInner, TTransformation> : IWrapperNumber<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>, IWrapperNumber<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>> where TInner : struct, INumber<TInner> where TTransformation : struct, TransformedNumber<TInner, TTransformation>.ITransformation
+	{
+        TransformedNumber<TInner, TTransformation> IWrapperNumber<TransformedNumber<TInner, TTransformation>>.Value => this;
+
+		TransformedNumber<TInner, TTransformation> IExtendedNumber<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>.CallReversed(StandardBinaryOperation operation, in TransformedNumber<TInner, TTransformation> num)
+		{
+			return num.Call(operation, this);
+		}
+
+		TransformedNumber<TInner, TTransformation> INumber<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>.CallComponent(StandardUnaryOperation operation)
+		{
+			return Call(operation);
+		}
+		
+        IExtendedNumberOperations<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>> IExtendedNumber<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+		INumberOperations<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>> INumber<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		IExtendedNumberOperations<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>> IExtendedNumber<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations : IExtendedNumberOperations<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>, IExtendedNumberOperations<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>
+		{
+            TransformedNumber<TInner, TTransformation> INumberOperations<TransformedNumber<TInner, TTransformation>, TransformedNumber<TInner, TTransformation>>.CallComponent(StandardUnaryOperation operation, in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Create(in TransformedNumber<TInner, TTransformation> num)
+            {
+                return num;
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Create(in TransformedNumber<TInner, TTransformation> realUnit, in TransformedNumber<TInner, TTransformation> otherUnits, in TransformedNumber<TInner, TTransformation> someUnitsCombined, in TransformedNumber<TInner, TTransformation> allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Create(IEnumerable<TransformedNumber<TInner, TTransformation>> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public virtual TransformedNumber<TInner, TTransformation> Create(IEnumerator<TransformedNumber<TInner, TTransformation>> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
+		}
+		
+        int ICollection<TransformedNumber<TInner, TTransformation>>.Count => 1;
+
+        bool ICollection<TransformedNumber<TInner, TTransformation>>.IsReadOnly => true;
+
+        int IReadOnlyCollection<TransformedNumber<TInner, TTransformation>>.Count => 1;
+
+        TransformedNumber<TInner, TTransformation> IReadOnlyList<TransformedNumber<TInner, TTransformation>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        TransformedNumber<TInner, TTransformation> IList<TransformedNumber<TInner, TTransformation>>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TransformedNumber<TInner, TTransformation>>.IndexOf(TransformedNumber<TInner, TTransformation> item)
+        {
+            return Equals(item) ? 0 : -1;
+        }
+
+        void IList<TransformedNumber<TInner, TTransformation>>.Insert(int index, TransformedNumber<TInner, TTransformation> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TransformedNumber<TInner, TTransformation>>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TransformedNumber<TInner, TTransformation>>.Add(TransformedNumber<TInner, TTransformation> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TransformedNumber<TInner, TTransformation>>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TransformedNumber<TInner, TTransformation>>.Contains(TransformedNumber<TInner, TTransformation> item)
+        {
+            return Equals(item);
+        }
+
+        void ICollection<TransformedNumber<TInner, TTransformation>>.CopyTo(TransformedNumber<TInner, TTransformation>[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<TransformedNumber<TInner, TTransformation>>.Remove(TransformedNumber<TInner, TTransformation> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<TransformedNumber<TInner, TTransformation>> IEnumerable<TransformedNumber<TInner, TTransformation>>.GetEnumerator()
+        {
+            yield return this;
+        }
+	}
+
+	partial struct TransformedNumber<TInner, TComponent, TTransformation> : IWrapperNumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TComponent>, IWrapperNumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TTransformation : struct, TransformedNumber<TInner, TTransformation>.ITransformation
+	{
+        TransformedNumber<TInner, TComponent, TTransformation> IWrapperNumber<TransformedNumber<TInner, TComponent, TTransformation>>.Value => this;
+
+		TransformedNumber<TInner, TComponent, TTransformation> IExtendedNumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>>.CallReversed(StandardBinaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> num)
+		{
+			return num.Call(operation, this);
+		}
+
+		TransformedNumber<TInner, TComponent, TTransformation> INumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>>.CallComponent(StandardUnaryOperation operation)
+		{
+			return Call(operation);
+		}
+		
+        IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>> IExtendedNumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TComponent> IExtendedNumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TComponent>.GetOperations()
+        {
+            return Operations.Instance;
+        }		
+
+		INumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>> INumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>> IExtendedNumber<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>>.GetOperations()
+        {
+            return Operations.Instance;
+        }
+
+		partial class Operations : IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TComponent>, IExtendedNumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>>
+		{
+            TransformedNumber<TInner, TComponent, TTransformation> INumberOperations<TransformedNumber<TInner, TComponent, TTransformation>, TransformedNumber<TInner, TComponent, TTransformation>>.CallComponent(StandardUnaryOperation operation, in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num.Call(operation);
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Create(in TransformedNumber<TInner, TComponent, TTransformation> num)
+            {
+                return num;
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Create(in TransformedNumber<TInner, TComponent, TTransformation> realUnit, in TransformedNumber<TInner, TComponent, TTransformation> otherUnits, in TransformedNumber<TInner, TComponent, TTransformation> someUnitsCombined, in TransformedNumber<TInner, TComponent, TTransformation> allUnitsCombined)
+            {
+                return realUnit;
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Create(IEnumerable<TransformedNumber<TInner, TComponent, TTransformation>> units)
+            {
+                var ienum = units.GetEnumerator();
+                ienum.MoveNext();
+                return ienum.Current;
+            }
+
+            public virtual TransformedNumber<TInner, TComponent, TTransformation> Create(IEnumerator<TransformedNumber<TInner, TComponent, TTransformation>> units)
+            {
+                var value = units.Current;
+                units.MoveNext();
+                return value;
+            }
+		}
+		
+        int ICollection<TransformedNumber<TInner, TComponent, TTransformation>>.Count => 1;
+
+        bool ICollection<TransformedNumber<TInner, TComponent, TTransformation>>.IsReadOnly => true;
+
+        int IReadOnlyCollection<TransformedNumber<TInner, TComponent, TTransformation>>.Count => 1;
+
+        TransformedNumber<TInner, TComponent, TTransformation> IReadOnlyList<TransformedNumber<TInner, TComponent, TTransformation>>.this[int index] => index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+
+        TransformedNumber<TInner, TComponent, TTransformation> IList<TransformedNumber<TInner, TComponent, TTransformation>>.this[int index]
+        {
+            get{
+                return index == 0 ? this : throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            set{
+                throw new NotSupportedException();
+            }
+        }
+
+        int IList<TransformedNumber<TInner, TComponent, TTransformation>>.IndexOf(TransformedNumber<TInner, TComponent, TTransformation> item)
+        {
+            return Equals(item) ? 0 : -1;
+        }
+
+        void IList<TransformedNumber<TInner, TComponent, TTransformation>>.Insert(int index, TransformedNumber<TInner, TComponent, TTransformation> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void IList<TransformedNumber<TInner, TComponent, TTransformation>>.RemoveAt(int index)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TransformedNumber<TInner, TComponent, TTransformation>>.Add(TransformedNumber<TInner, TComponent, TTransformation> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        void ICollection<TransformedNumber<TInner, TComponent, TTransformation>>.Clear()
+        {
+            throw new NotSupportedException();
+        }
+
+        bool ICollection<TransformedNumber<TInner, TComponent, TTransformation>>.Contains(TransformedNumber<TInner, TComponent, TTransformation> item)
+        {
+            return Equals(item);
+        }
+
+        void ICollection<TransformedNumber<TInner, TComponent, TTransformation>>.CopyTo(TransformedNumber<TInner, TComponent, TTransformation>[] array, int arrayIndex)
+        {
+            array[arrayIndex] = this;
+        }
+
+        bool ICollection<TransformedNumber<TInner, TComponent, TTransformation>>.Remove(TransformedNumber<TInner, TComponent, TTransformation> item)
+        {
+            throw new NotSupportedException();
+        }
+
+        IEnumerator<TransformedNumber<TInner, TComponent, TTransformation>> IEnumerable<TransformedNumber<TInner, TComponent, TTransformation>>.GetEnumerator()
+        {
+            yield return this;
+        }
+	}
+
 	partial struct WrapperNumber<TInner> : IWrapperNumber<WrapperNumber<TInner>, WrapperNumber<TInner>>, IWrapperNumber<WrapperNumber<TInner>, WrapperNumber<TInner>, WrapperNumber<TInner>> where TInner : struct, INumber<TInner>
 	{
         WrapperNumber<TInner> IWrapperNumber<WrapperNumber<TInner>>.Value => this;
