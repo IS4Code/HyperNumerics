@@ -437,5 +437,30 @@ namespace IS4.HyperNumerics.NumberTypes
                 return Operations.Create(Neg(Operations.GetSecondReference(num)), Operations.GetFirstReference(num));
             }
         }
+
+        public struct Skew<THyperNumber, TInner, TComponent, TCoefficients> : TransformedNumber<THyperNumber, Skew<THyperNumber, TInner, TComponent, TCoefficients>>.ITransformation where THyperNumber : struct, IHyperNumber<THyperNumber, TInner> where TInner : struct, INumber<TInner, TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent> where TCoefficients : struct, ISkewCoefficients<TComponent>
+        {
+            static TCoefficients coefficients = default;
+            static IHyperNumberOperations<THyperNumber, TInner> Operations => HyperMath.Operations.ForHyper<THyperNumber, TInner>.Instance;
+
+            THyperNumber TransformedNumber<THyperNumber, Skew<THyperNumber, TInner, TComponent, TCoefficients>>.ITransformation.TransformInput(in THyperNumber num)
+            {
+                return Operations.Create(Add(Operations.GetFirstReference(num), MulVal(Operations.GetSecondReference(num), coefficients.InputX)), Add(Operations.GetSecondReference(num), MulVal(Operations.GetFirstReference(num), coefficients.InputY)));
+            }
+
+            THyperNumber TransformedNumber<THyperNumber, Skew<THyperNumber, TInner, TComponent, TCoefficients>>.ITransformation.TransformOutput(in THyperNumber num)
+            {
+                return Operations.Create(Add(Operations.GetFirstReference(num), MulVal(Operations.GetSecondReference(num), coefficients.OutputX)), Add(Operations.GetSecondReference(num), MulVal(Operations.GetFirstReference(num), coefficients.OutputY)));
+            }
+        }
+
+        public interface ISkewCoefficients<TComponent> where TComponent : struct, IEquatable<TComponent>, IComparable<TComponent>
+        {
+            TComponent InputX { get; }
+            TComponent InputY { get; }
+
+            TComponent OutputX { get; }
+            TComponent OutputY { get; }
+        }
     }
 }
