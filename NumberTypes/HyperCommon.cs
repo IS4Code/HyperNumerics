@@ -71,9 +71,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperComplex<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperComplex<TInner> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperComplex<TInner>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperComplex<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperComplex<TInner>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperComplex<TInner> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperComplex<TInner>(first, HyperMath.Call(operation, other, second));
         }
 		
         public HyperComplex<TInner> FirstCall(StandardUnaryOperation operation)
@@ -159,6 +169,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperComplex<TInner>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperComplex<TInner> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperComplex<TInner> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperComplex<TInner> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperComplex<TInner> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperComplex<TInner> WithFirst(in HyperComplex<TInner> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperComplex<TInner> WithSecond(in HyperComplex<TInner> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperComplex<TInner> FirstCall(StandardUnaryOperation operation, in HyperComplex<TInner> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperComplex<TInner> SecondCall(StandardUnaryOperation operation, in HyperComplex<TInner> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperComplex<TInner> FirstCall(StandardBinaryOperation operation, in HyperComplex<TInner> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperComplex<TInner> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperComplex<TInner> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperComplex<TInner> SecondCall(StandardBinaryOperation operation, in HyperComplex<TInner> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperComplex<TInner> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperComplex<TInner> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
 
             public virtual HyperComplex<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -300,9 +370,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperComplex<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperComplex<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperComplex<TInner, TComponent>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperComplex<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperComplex<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperComplex<TInner, TComponent>(first, HyperMath.Call(operation, other, second));
         }
 				
         public HyperComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
@@ -310,9 +390,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperComplex<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
+        public HyperComplex<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperComplex<TInner, TComponent>(HyperMath.CallComponentReversed(operation, other, first), second);
+        }
+
         public HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperComplex<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
+        }
+
+        public HyperComplex<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperComplex<TInner, TComponent>(first, HyperMath.CallComponentReversed(operation, other, second));
         }
 		
         public HyperComplex<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
@@ -403,7 +493,87 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperComplex<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperComplex<TInner, TComponent>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperComplex<TInner, TComponent> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperComplex<TInner, TComponent> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperComplex<TInner, TComponent> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperComplex<TInner, TComponent> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperComplex<TInner, TComponent> WithFirst(in HyperComplex<TInner, TComponent> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> WithSecond(in HyperComplex<TInner, TComponent> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> FirstCall(StandardUnaryOperation operation, in HyperComplex<TInner, TComponent> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> SecondCall(StandardUnaryOperation operation, in HyperComplex<TInner, TComponent> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperComplex<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperComplex<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
+			
+			public virtual HyperComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent num1, in HyperComplex<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperComplex<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent num1, in HyperComplex<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
+            }
 			
             public virtual HyperComplex<TInner, TComponent> Create(in TComponent num)
             {
@@ -497,9 +667,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDiagonal<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperDiagonal<TInner> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDiagonal<TInner>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperDiagonal<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDiagonal<TInner>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperDiagonal<TInner> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDiagonal<TInner>(first, HyperMath.Call(operation, other, second));
         }
 		
         public HyperDiagonal<TInner> FirstCall(StandardUnaryOperation operation)
@@ -585,6 +765,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDiagonal<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDiagonal<TInner>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperDiagonal<TInner> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperDiagonal<TInner> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperDiagonal<TInner> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperDiagonal<TInner> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperDiagonal<TInner> WithFirst(in HyperDiagonal<TInner> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperDiagonal<TInner> WithSecond(in HyperDiagonal<TInner> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperDiagonal<TInner> FirstCall(StandardUnaryOperation operation, in HyperDiagonal<TInner> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperDiagonal<TInner> SecondCall(StandardUnaryOperation operation, in HyperDiagonal<TInner> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperDiagonal<TInner> FirstCall(StandardBinaryOperation operation, in HyperDiagonal<TInner> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperDiagonal<TInner> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperDiagonal<TInner> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperDiagonal<TInner> SecondCall(StandardBinaryOperation operation, in HyperDiagonal<TInner> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperDiagonal<TInner> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperDiagonal<TInner> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
 
             public virtual HyperDiagonal<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -726,9 +966,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDiagonal<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperDiagonal<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDiagonal<TInner, TComponent>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDiagonal<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperDiagonal<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDiagonal<TInner, TComponent>(first, HyperMath.Call(operation, other, second));
         }
 				
         public HyperDiagonal<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
@@ -736,9 +986,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDiagonal<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
+        public HyperDiagonal<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperDiagonal<TInner, TComponent>(HyperMath.CallComponentReversed(operation, other, first), second);
+        }
+
         public HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperDiagonal<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
+        }
+
+        public HyperDiagonal<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperDiagonal<TInner, TComponent>(first, HyperMath.CallComponentReversed(operation, other, second));
         }
 		
         public HyperDiagonal<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
@@ -829,7 +1089,87 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDiagonal<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperDiagonal<TInner, TComponent>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperDiagonal<TInner, TComponent> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperDiagonal<TInner, TComponent> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperDiagonal<TInner, TComponent> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperDiagonal<TInner, TComponent> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperDiagonal<TInner, TComponent> WithFirst(in HyperDiagonal<TInner, TComponent> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> WithSecond(in HyperDiagonal<TInner, TComponent> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> FirstCall(StandardUnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> SecondCall(StandardUnaryOperation operation, in HyperDiagonal<TInner, TComponent> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperDiagonal<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperDiagonal<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
+			
+			public virtual HyperDiagonal<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent num1, in HyperDiagonal<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperDiagonal<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperDiagonal<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent num1, in HyperDiagonal<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
+            }
 			
             public virtual HyperDiagonal<TInner, TComponent> Create(in TComponent num)
             {
@@ -923,9 +1263,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDual<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperDual<TInner> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDual<TInner>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperDual<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDual<TInner>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperDual<TInner> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDual<TInner>(first, HyperMath.Call(operation, other, second));
         }
 		
         public HyperDual<TInner> FirstCall(StandardUnaryOperation operation)
@@ -1011,6 +1361,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDual<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperDual<TInner>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperDual<TInner> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperDual<TInner> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperDual<TInner> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperDual<TInner> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperDual<TInner> WithFirst(in HyperDual<TInner> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperDual<TInner> WithSecond(in HyperDual<TInner> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperDual<TInner> FirstCall(StandardUnaryOperation operation, in HyperDual<TInner> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperDual<TInner> SecondCall(StandardUnaryOperation operation, in HyperDual<TInner> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperDual<TInner> FirstCall(StandardBinaryOperation operation, in HyperDual<TInner> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperDual<TInner> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperDual<TInner> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperDual<TInner> SecondCall(StandardBinaryOperation operation, in HyperDual<TInner> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperDual<TInner> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperDual<TInner> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
 
             public virtual HyperDual<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -1152,9 +1562,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDual<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperDual<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDual<TInner, TComponent>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperDual<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperDual<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperDual<TInner, TComponent>(first, HyperMath.Call(operation, other, second));
         }
 				
         public HyperDual<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
@@ -1162,9 +1582,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperDual<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
+        public HyperDual<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperDual<TInner, TComponent>(HyperMath.CallComponentReversed(operation, other, first), second);
+        }
+
         public HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperDual<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
+        }
+
+        public HyperDual<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperDual<TInner, TComponent>(first, HyperMath.CallComponentReversed(operation, other, second));
         }
 		
         public HyperDual<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
@@ -1255,7 +1685,87 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperDual<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperDual<TInner, TComponent>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperDual<TInner, TComponent> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperDual<TInner, TComponent> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperDual<TInner, TComponent> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperDual<TInner, TComponent> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperDual<TInner, TComponent> WithFirst(in HyperDual<TInner, TComponent> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> WithSecond(in HyperDual<TInner, TComponent> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> FirstCall(StandardUnaryOperation operation, in HyperDual<TInner, TComponent> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> SecondCall(StandardUnaryOperation operation, in HyperDual<TInner, TComponent> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperDual<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperDual<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
+			
+			public virtual HyperDual<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent num1, in HyperDual<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperDual<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperDual<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent num1, in HyperDual<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
+            }
 			
             public virtual HyperDual<TInner, TComponent> Create(in TComponent num)
             {
@@ -1349,9 +1859,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperSplitComplex<TInner>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperSplitComplex<TInner> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperSplitComplex<TInner>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperSplitComplex<TInner> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperSplitComplex<TInner>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperSplitComplex<TInner> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperSplitComplex<TInner>(first, HyperMath.Call(operation, other, second));
         }
 		
         public HyperSplitComplex<TInner> FirstCall(StandardUnaryOperation operation)
@@ -1437,6 +1957,66 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperSplitComplex<TInner> Create(in TInner first, in TInner second)
             {
                 return new HyperSplitComplex<TInner>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperSplitComplex<TInner> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperSplitComplex<TInner> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperSplitComplex<TInner> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperSplitComplex<TInner> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperSplitComplex<TInner> WithFirst(in HyperSplitComplex<TInner> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperSplitComplex<TInner> WithSecond(in HyperSplitComplex<TInner> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperSplitComplex<TInner> FirstCall(StandardUnaryOperation operation, in HyperSplitComplex<TInner> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperSplitComplex<TInner> SecondCall(StandardUnaryOperation operation, in HyperSplitComplex<TInner> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperSplitComplex<TInner> FirstCall(StandardBinaryOperation operation, in HyperSplitComplex<TInner> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperSplitComplex<TInner> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperSplitComplex<TInner> SecondCall(StandardBinaryOperation operation, in HyperSplitComplex<TInner> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperSplitComplex<TInner> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
 
             public virtual HyperSplitComplex<TInner> Create(in TInner realUnit, in TInner otherUnits, in TInner someUnitsCombined, in TInner allUnitsCombined)
@@ -1578,9 +2158,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call(operation, first, other), second);
         }
 
+        public HyperSplitComplex<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperSplitComplex<TInner, TComponent>(HyperMath.Call(operation, other, first), second);
+        }
+
         public HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public HyperSplitComplex<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.Call(operation, other, second));
         }
 				
         public HyperSplitComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent other)
@@ -1588,9 +2178,19 @@ namespace IS4.HyperNumerics.NumberTypes
             return new HyperSplitComplex<TInner, TComponent>(HyperMath.CallComponent(operation, first, other), second);
         }
 
+        public HyperSplitComplex<TInner, TComponent> FirstCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperSplitComplex<TInner, TComponent>(HyperMath.CallComponentReversed(operation, other, first), second);
+        }
+
         public HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.CallComponent(operation, second, other));
+        }
+
+        public HyperSplitComplex<TInner, TComponent> SecondCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new HyperSplitComplex<TInner, TComponent>(first, HyperMath.CallComponentReversed(operation, other, second));
         }
 		
         public HyperSplitComplex<TInner, TComponent> FirstCall(StandardUnaryOperation operation)
@@ -1681,7 +2281,87 @@ namespace IS4.HyperNumerics.NumberTypes
             public virtual HyperSplitComplex<TInner, TComponent> Create(in TInner first, in TInner second)
             {
                 return new HyperSplitComplex<TInner, TComponent>(first, second);
+            }
+
+			public virtual TInner GetFirst(in HyperSplitComplex<TInner, TComponent> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in HyperSplitComplex<TInner, TComponent> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in HyperSplitComplex<TInner, TComponent> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in HyperSplitComplex<TInner, TComponent> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual HyperSplitComplex<TInner, TComponent> WithFirst(in HyperSplitComplex<TInner, TComponent> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> WithSecond(in HyperSplitComplex<TInner, TComponent> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> FirstCall(StandardUnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> SecondCall(StandardUnaryOperation operation, in HyperSplitComplex<TInner, TComponent> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TInner num1, in HyperSplitComplex<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }			
+			
+			public virtual HyperSplitComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> FirstCall(StandardBinaryOperation operation, in TComponent num1, in HyperSplitComplex<TInner, TComponent> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in HyperSplitComplex<TInner, TComponent> num1, in TComponent num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual HyperSplitComplex<TInner, TComponent> SecondCall(StandardBinaryOperation operation, in TComponent num1, in HyperSplitComplex<TInner, TComponent> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
+            }
 			
             public virtual HyperSplitComplex<TInner, TComponent> Create(in TComponent num)
             {

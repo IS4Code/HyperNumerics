@@ -124,9 +124,19 @@ foreach(var info in data)
             return new <#=fullname#>(HyperMath.Call(operation, first, other), second);
         }
 
+        public <#=fullname#> FirstCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new <#=fullname#>(HyperMath.Call(operation, other, first), second);
+        }
+
         public <#=fullname#> SecondCall(StandardBinaryOperation operation, in TInner other)
         {
             return new <#=fullname#>(first, HyperMath.Call(operation, second, other));
+        }
+
+        public <#=fullname#> SecondCallReversed(StandardBinaryOperation operation, in TInner other)
+        {
+            return new <#=fullname#>(first, HyperMath.Call(operation, other, second));
         }
 		<# if(component) { #>
 		
@@ -135,9 +145,19 @@ foreach(var info in data)
             return new <#=fullname#>(HyperMath.CallComponent(operation, first, other), second);
         }
 
+        public <#=fullname#> FirstCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new <#=fullname#>(HyperMath.CallComponentReversed(operation, other, first), second);
+        }
+
         public <#=fullname#> SecondCall(StandardBinaryOperation operation, in TComponent other)
         {
             return new <#=fullname#>(first, HyperMath.CallComponent(operation, second, other));
+        }
+
+        public <#=fullname#> SecondCallReversed(StandardBinaryOperation operation, in TComponent other)
+        {
+            return new <#=fullname#>(first, HyperMath.CallComponentReversed(operation, other, second));
         }
 		<# } #>
 
@@ -231,8 +251,88 @@ foreach(var info in data)
             public virtual <#=fullname#> Create(in TInner first, in TInner second)
             {
                 return new <#=fullname#>(first, second);
+            }
+
+			public virtual TInner GetFirst(in <#=fullname#> num)
+			{
+				return num.first;
+			}
+
+			public virtual ref readonly TInner GetFirstReference(in <#=fullname#> num)
+			{
+				return ref num.first;
+			}
+
+			public virtual TInner GetSecond(in <#=fullname#> num)
+			{
+				return num.second;
+			}
+
+			public virtual ref readonly TInner GetSecondReference(in <#=fullname#> num)
+			{
+				return ref num.second;
+			}
+			
+			public virtual <#=fullname#> WithFirst(in <#=fullname#> num, in TInner first)
+            {
+                return num.WithFirst(first);
+            }
+			
+			public virtual <#=fullname#> WithSecond(in <#=fullname#> num, in TInner second)
+            {
+                return num.WithSecond(second);
+            }
+			
+			public virtual <#=fullname#> FirstCall(StandardUnaryOperation operation, in <#=fullname#> num)
+            {
+                return num.FirstCall(operation);
+            }
+			
+			public virtual <#=fullname#> SecondCall(StandardUnaryOperation operation, in <#=fullname#> num)
+            {
+                return num.SecondCall(operation);
+            }
+			
+			public virtual <#=fullname#> FirstCall(StandardBinaryOperation operation, in <#=fullname#> num1, in TInner num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual <#=fullname#> FirstCall(StandardBinaryOperation operation, in TInner num1, in <#=fullname#> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual <#=fullname#> SecondCall(StandardBinaryOperation operation, in <#=fullname#> num1, in TInner num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual <#=fullname#> SecondCall(StandardBinaryOperation operation, in TInner num1, in <#=fullname#> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
             }<# if(component) { #>
 			
+			
+			public virtual <#=fullname#> FirstCall(StandardBinaryOperation operation, in <#=fullname#> num1, in TComponent num2)
+            {
+                return num1.FirstCall(operation, num2);
+            }
+			
+			public virtual <#=fullname#> FirstCall(StandardBinaryOperation operation, in TComponent num1, in <#=fullname#> num2)
+            {
+                return num2.FirstCallReversed(operation, num1);
+            }
+			
+			public virtual <#=fullname#> SecondCall(StandardBinaryOperation operation, in <#=fullname#> num1, in TComponent num2)
+            {
+                return num1.SecondCall(operation, num2);
+            }
+			
+			public virtual <#=fullname#> SecondCall(StandardBinaryOperation operation, in TComponent num1, in <#=fullname#> num2)
+            {
+                return num2.SecondCallReversed(operation, num1);
+            }
 			
             public virtual <#=fullname#> Create(in TComponent num)
             {

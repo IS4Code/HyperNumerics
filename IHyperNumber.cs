@@ -66,6 +66,15 @@ namespace IS4.HyperNumerics
         TNumber FirstCall(StandardBinaryOperation operation, in TInner other);
 
         /// <summary>
+        /// Invokes a binary operation on <paramref name="other"/> and the first component of the number.
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="other">The first argument to the operation.</param>
+        /// <returns>The result of the operation when invoked on the first component, with the second component unchanged.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber FirstCallReversed(StandardBinaryOperation operation, in TInner other);
+
+        /// <summary>
         /// Invokes a unary operation on the second component of the number.
         /// </summary>
         /// <param name="operation">The operation that will be invoked.</param>
@@ -81,6 +90,15 @@ namespace IS4.HyperNumerics
         /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
         TNumber SecondCall(StandardBinaryOperation operation, in TInner other);
+
+        /// <summary>
+        /// Invokes a binary operation on <paramref name="other"/> and the second component of the number .
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="other">The first argument to the operation.</param>
+        /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber SecondCallReversed(StandardBinaryOperation operation, in TInner other);
 
         /// <summary>
         /// Retrieves an instance of <see cref="IHyperNumberOperations{TNumber, TInner}"/> providing the supported operations on this type.
@@ -107,6 +125,15 @@ namespace IS4.HyperNumerics
         TNumber FirstCall(StandardBinaryOperation operation, in TComponent other);
 
         /// <summary>
+        /// Invokes a binary operation on <paramref name="other"/> and the first component of the number.
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="other">The first argument to the operation.</param>
+        /// <returns>The result of the operation when invoked on the first component, with the second component unchanged.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber FirstCallReversed(StandardBinaryOperation operation, in TComponent other);
+
+        /// <summary>
         /// Invokes a binary operation on the second component of the number and <paramref name="other"/>.
         /// </summary>
         /// <param name="operation">The operation that will be invoked.</param>
@@ -114,6 +141,15 @@ namespace IS4.HyperNumerics
         /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
         /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
         TNumber SecondCall(StandardBinaryOperation operation, in TComponent other);
+
+        /// <summary>
+        /// Invokes a binary operation on <paramref name="other"/> and the second component of the number.
+        /// </summary>
+        /// <param name="operation">The operation that will be invoked.</param>
+        /// <param name="other">The first argument to the operation.</param>
+        /// <returns>The result of the operation when invoked on the second component, with the first component unchanged.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown if the operation is not supported.</exception>
+        TNumber SecondCallReversed(StandardBinaryOperation operation, in TComponent other);
 
         /// <summary>
         /// Retrieves an instance of <see cref="IHyperNumberOperations{TNumber, TInner, TComponent}"/> providing the supported operations on this type.
