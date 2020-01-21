@@ -399,12 +399,12 @@ namespace IS4.HyperNumerics.NumberTypes
     {
         public struct Negate<TNumber> : TransformedNumber<TNumber, Negate<TNumber>>.ITransformation where TNumber : struct, INumber<TNumber>
         {
-            public TNumber TransformInput(in TNumber num)
+            TNumber TransformedNumber<TNumber, Negate<TNumber>>.ITransformation.TransformInput(in TNumber num)
             {
                 return Neg(num);
             }
 
-            public TNumber TransformOutput(in TNumber num)
+            TNumber TransformedNumber<TNumber, Negate<TNumber>>.ITransformation.TransformOutput(in TNumber num)
             {
                 return Neg(num);
             }
@@ -412,12 +412,12 @@ namespace IS4.HyperNumerics.NumberTypes
 
         public struct Inverse<TNumber> : TransformedNumber<TNumber, Inverse<TNumber>>.ITransformation where TNumber : struct, INumber<TNumber>
         {
-            public TNumber TransformInput(in TNumber num)
+            TNumber TransformedNumber<TNumber, Inverse<TNumber>>.ITransformation.TransformInput(in TNumber num)
             {
                 return Inv(num);
             }
 
-            public TNumber TransformOutput(in TNumber num)
+            TNumber TransformedNumber<TNumber, Inverse<TNumber>>.ITransformation.TransformOutput(in TNumber num)
             {
                 return Inv(num);
             }
@@ -427,14 +427,14 @@ namespace IS4.HyperNumerics.NumberTypes
         {
             static IHyperNumberOperations<THyperNumber, TInner> Operations => HyperMath.Operations.ForHyper<THyperNumber, TInner>.Instance;
 
-            public THyperNumber TransformInput(in THyperNumber num)
+            THyperNumber TransformedNumber<THyperNumber, Perpendicular<THyperNumber, TInner>>.ITransformation.TransformInput(in THyperNumber num)
             {
-                return Operations.Create(num.Second, num.First.Call(StandardUnaryOperation.Negate));
+                return Operations.Create(Operations.GetSecondReference(num), Neg(Operations.GetFirstReference(num)));
             }
 
-            public THyperNumber TransformOutput(in THyperNumber num)
+            THyperNumber TransformedNumber<THyperNumber, Perpendicular<THyperNumber, TInner>>.ITransformation.TransformOutput(in THyperNumber num)
             {
-                return Operations.Create(num.Second.Call(StandardUnaryOperation.Negate), num.First);
+                return Operations.Create(Neg(Operations.GetSecondReference(num)), Operations.GetFirstReference(num));
             }
         }
     }

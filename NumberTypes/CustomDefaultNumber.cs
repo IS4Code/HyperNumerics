@@ -583,55 +583,55 @@ namespace IS4.HyperNumerics.NumberTypes
         public struct Zero<TNumber> : CustomDefaultNumber<TNumber, Zero<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.Zero;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, Zero<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct One<TNumber> : CustomDefaultNumber<TNumber, One<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.One;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, One<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct NegativeOne<TNumber> : CustomDefaultNumber<TNumber, NegativeOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.NegativeOne;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, NegativeOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct Two<TNumber> : CustomDefaultNumber<TNumber, Two<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.Two;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, Two<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct SpecialOne<TNumber> : CustomDefaultNumber<TNumber, SpecialOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.SpecialOne;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, SpecialOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct UnitsOne<TNumber> : CustomDefaultNumber<TNumber, UnitsOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.UnitsOne;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, UnitsOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct NonRealUnitsOne<TNumber> : CustomDefaultNumber<TNumber, NonRealUnitsOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.NonRealUnitsOne;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, NonRealUnitsOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct CombinedOne<TNumber> : CustomDefaultNumber<TNumber, CombinedOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.CombinedOne;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, CombinedOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
         public struct AllOne<TNumber> : CustomDefaultNumber<TNumber, AllOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
             public const StandardNumber Value = StandardNumber.AllOne;
-            public TNumber DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
+            TNumber CustomDefaultNumber<TNumber, AllOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
     }
 }
