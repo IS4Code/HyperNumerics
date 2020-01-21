@@ -578,59 +578,104 @@ namespace IS4.HyperNumerics.NumberTypes
         }
     }
 
-    namespace Components
+    namespace Parameters
     {
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.Zero"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct Zero<TNumber> : CustomDefaultNumber<TNumber, Zero<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.Zero;
+            const StandardNumber Value = StandardNumber.Zero;
             TNumber CustomDefaultNumber<TNumber, Zero<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.One"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct One<TNumber> : CustomDefaultNumber<TNumber, One<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.One;
+            const StandardNumber Value = StandardNumber.One;
             TNumber CustomDefaultNumber<TNumber, One<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.NegativeOne"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct NegativeOne<TNumber> : CustomDefaultNumber<TNumber, NegativeOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.NegativeOne;
+            const StandardNumber Value = StandardNumber.NegativeOne;
             TNumber CustomDefaultNumber<TNumber, NegativeOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.Two"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct Two<TNumber> : CustomDefaultNumber<TNumber, Two<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.Two;
+            const StandardNumber Value = StandardNumber.Two;
             TNumber CustomDefaultNumber<TNumber, Two<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.SpecialOne"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct SpecialOne<TNumber> : CustomDefaultNumber<TNumber, SpecialOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.SpecialOne;
+            const StandardNumber Value = StandardNumber.SpecialOne;
             TNumber CustomDefaultNumber<TNumber, SpecialOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.UnitsOne"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct UnitsOne<TNumber> : CustomDefaultNumber<TNumber, UnitsOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.UnitsOne;
+            const StandardNumber Value = StandardNumber.UnitsOne;
             TNumber CustomDefaultNumber<TNumber, UnitsOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.NonRealUnitsOne"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct NonRealUnitsOne<TNumber> : CustomDefaultNumber<TNumber, NonRealUnitsOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.NonRealUnitsOne;
+            const StandardNumber Value = StandardNumber.NonRealUnitsOne;
             TNumber CustomDefaultNumber<TNumber, NonRealUnitsOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.CombinedOne"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct CombinedOne<TNumber> : CustomDefaultNumber<TNumber, CombinedOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.CombinedOne;
+            const StandardNumber Value = StandardNumber.CombinedOne;
             TNumber CustomDefaultNumber<TNumber, CombinedOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
 
+        /// <summary>
+        /// Parameter type for <see cref="CustomDefaultNumber{TInner, TProvider}"/> or <see cref="CustomDefaultNumber{TInner, TComponent, TProvider}"/>
+        /// that initializes the default value with <see cref="StandardNumber.AllOne"/>.
+        /// </summary>
+        /// <typeparam name="TNumber">The produced number type.</typeparam>
         public struct AllOne<TNumber> : CustomDefaultNumber<TNumber, AllOne<TNumber>>.IDefaultValueProvider where TNumber : struct, INumber<TNumber>
         {
-            public const StandardNumber Value = StandardNumber.AllOne;
+            const StandardNumber Value = StandardNumber.AllOne;
             TNumber CustomDefaultNumber<TNumber, AllOne<TNumber>>.IDefaultValueProvider.DefaultValue => HyperMath.Operations.For<TNumber>.Instance.Create(Value);
         }
     }
